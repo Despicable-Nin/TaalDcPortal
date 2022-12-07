@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="AggregatesModel" />
     <Folder Include="Events" />
-    <Folder Include="Exceptions" />
   </ItemGroup>
 
   <ItemGroup>
