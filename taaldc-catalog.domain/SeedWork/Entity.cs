@@ -1,24 +1,14 @@
 using MediatR;
 
-namespace taaldc_domain.SeedWork;
+namespace taaldc_catalog.domain.SeedWork;
 
-public abstract class Entity 
+public abstract class Entity
 {
-     int? _requestedHashCode;
-    string _Id;
-    public virtual string Id
-    {
-        get
-        {
-            return _Id;
-        }
-        protected set
-        {
-            _Id = value;
-        }
-    }
-
     private List<INotification> _domainEvents;
+    private int? _requestedHashCode;
+
+    public virtual string Id { get; protected set; }
+
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
 
     public void AddDomainEvent(INotification eventItem)
@@ -39,7 +29,7 @@ public abstract class Entity
 
     public bool IsTransient()
     {
-        return this.Id == default;
+        return Id == default;
     }
 
     public override bool Equals(object obj)
@@ -47,18 +37,17 @@ public abstract class Entity
         if (obj == null || !(obj is Entity))
             return false;
 
-        if (object.ReferenceEquals(this, obj))
+        if (ReferenceEquals(this, obj))
             return true;
 
-        if (this.GetType() != obj.GetType())
+        if (GetType() != obj.GetType())
             return false;
 
-        Entity item = (Entity)obj;
+        var item = (Entity)obj;
 
-        if (item.IsTransient() || this.IsTransient())
+        if (item.IsTransient() || IsTransient())
             return false;
-        else
-            return item.Id == this.Id;
+        return item.Id == Id;
     }
 
     public override int GetHashCode()
@@ -66,20 +55,21 @@ public abstract class Entity
         if (!IsTransient())
         {
             if (!_requestedHashCode.HasValue)
-                _requestedHashCode = this.Id.GetHashCode() ^ 31; // XOR for random distribution (http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx)
+                _requestedHashCode =
+                    Id.GetHashCode() ^
+                    31; // XOR for random distribution (http://blogs.msdn.com/b/ericlippert/archive/2011/02/28/guidelines-and-rules-for-gethashcode.aspx)
 
             return _requestedHashCode.Value;
         }
-        else
-            return base.GetHashCode();
 
+        return base.GetHashCode();
     }
+
     public static bool operator ==(Entity left, Entity right)
     {
-        if (Object.Equals(left, null))
-            return (Object.Equals(right, null)) ? true : false;
-        else
-            return left.Equals(right);
+        if (Equals(left, null))
+            return Equals(right, null) ? true : false;
+        return left.Equals(right);
     }
 
     public static bool operator !=(Entity left, Entity right)

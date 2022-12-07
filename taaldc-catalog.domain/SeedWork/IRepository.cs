@@ -1,4 +1,4 @@
-namespace taaldc_domain.SeedWork;
+namespace taaldc_catalog.domain.SeedWork;
 
 public interface IRepository<T> where T : IAggregateRoot
 {

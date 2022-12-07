@@ -5,7 +5,7 @@ VisualStudioVersion = 25.0.1704.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taaldc-mvc", "taaldc-mvc\taaldc-mvc.csproj", "{096A9626-6E00-4D00-9EE8-92EEC14CEEF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taaldc-domain", "taaldc-domain\taaldc-domain.csproj", "{BC6BF225-CA28-4936-9A9D-31CC004D864F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taaldc-catalog.domain", "taaldc-catalog.domain\taaldc-catalog.domain.csproj", "{BC6BF225-CA28-4936-9A9D-31CC004D864F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taaldc-app.infrastructure", "taaldc-app.infrastructure\taaldc-app.infrastructure.csproj", "{4E010812-DBB4-4845-9386-A4F314153618}"
 EndProject
