@@ -1,18 +1,17 @@
+using taaldc_catalog.domain.Exceptions;
+
 namespace Taaldc.Catalog.Domain.SeedWork;
 
-public abstract class Entity
+public abstract class Entity : IAuditable
 {
 
     private int? _requestedHashCode;
 
     public virtual string Id { get; protected set; }
+    
 
-
-
-    public bool IsTransient()
-    {
-        return Id == default;
-    }
+    public bool IsTransient() => Id == default;
+    
 
     public override bool Equals(object obj)
     {
@@ -29,6 +28,7 @@ public abstract class Entity
 
         if (item.IsTransient() || IsTransient())
             return false;
+        
         return item.Id == Id;
     }
 
@@ -57,5 +57,41 @@ public abstract class Entity
     public static bool operator !=(Entity left, Entity right)
     {
         return !(left == right);
+    }
+
+    //implementation of IAuditable
+    public string CreatedBy { get; private set; }
+    public DateTimeOffset CreatedOn { get; private set;}
+    public string ModifiedBy { get; private set;}
+    public DateTimeOffset ModifiedOn { get;private set; }
+    public bool IsActive { get; private set;}
+
+    public void AuditOnCreate(string user)
+    {
+        
+        //fail-fast guard clause
+        if (string.IsNullOrWhiteSpace(user))
+            throw new CatalogDomainException(nameof(AuditOnCreate),
+                new ArgumentNullException("user field should not be empty."));
+
+        CreatedBy = user;
+        ModifiedBy = user;
+
+        var now = DateTimeOffset.Now;
+        CreatedOn = now;
+        ModifiedOn = now;
+    }
+
+    public void AuditOnUpdate(string user, bool isActive)
+    {
+        //fail-fast guard clause
+        if (string.IsNullOrWhiteSpace(user))
+            throw new CatalogDomainException(nameof(AuditOnUpdate),
+                new ArgumentNullException("user field should not be empty."));
+        
+        ModifiedBy = user;
+        ModifiedOn = DateTimeOffset.Now;;
+        IsActive = isActive;
+
     }
 }
