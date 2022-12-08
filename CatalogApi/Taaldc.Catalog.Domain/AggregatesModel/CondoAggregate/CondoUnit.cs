@@ -8,6 +8,9 @@ public sealed class CondoUnit : Entity
     public string Floor { get; private set; }
     public double FloorArea { get; private set; }
     public decimal StartingPrice { get; private set; }
+
+    private int _condoPropertyId;
+    public int? GetPropertyId => _condoPropertyId;
     
     
 }
