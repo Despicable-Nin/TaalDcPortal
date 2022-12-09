@@ -10,4 +10,5 @@ public interface IAuditable
 
     void AuditOnCreate(string user);
     void AuditOnUpdate(string user, bool isActive);
+    void Deactivate();
 }

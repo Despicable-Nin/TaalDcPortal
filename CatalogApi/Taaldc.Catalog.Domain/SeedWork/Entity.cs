@@ -94,4 +94,6 @@ public abstract class Entity : IAuditable
         IsActive = isActive;
 
     }
+
+    public void Deactivate() => IsActive = false;
 }
