@@ -5,7 +5,7 @@ namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
 
 public class UpsertFloorCommand : IRequest<string>
 {
-    public UpsertFloorCommand(string towerId, int unitTypeId, int scenicView, string unitNo, int level, double floorArea, decimal price)
+    public UpsertFloorCommand(int? floorId, int towerId, int unitTypeId, int scenicView, string unitNo, int level, double floorArea, decimal price)
     {
         TowerId = towerId;
         UnitTypeId = unitTypeId;
@@ -16,11 +16,13 @@ public class UpsertFloorCommand : IRequest<string>
         Price = price;
     }
 
-    [DataMember] public string TowerId { get; set; }
+    [DataMember] public int TowerId { get; set; }
+    [DataMember] public int? FloorId { get; set; }
     [DataMember] public int UnitTypeId { get; set; }
     [DataMember] public int ScenicView { get; set; }
     [DataMember] public string UnitNo { get; set; }
     [DataMember] public int Level { get; set; }
     [DataMember] public double FloorArea { get; set; }
     [DataMember] public decimal Price { get; set; }
+    
 }

@@ -5,16 +5,16 @@ namespace Taaldc.Mvc.Application.Commands.UpsertUnitType;
 
 public class UpsertUnitTypeCommand : IRequest<string>
 {
-    public UpsertUnitTypeCommand(int? id, string name, string shortCode)
+    public UpsertUnitTypeCommand(int? unitId, string name, string shortCode)
     {
-        Id = id;
+        UnitId = unitId;
         Name = name;
         ShortCode = shortCode;
     }
 
-    [DataMember] public int? Id { get; set; }
+    [DataMember] public int? UnitId { get; set; }
     [DataMember] public string Name { get; set; }
     [DataMember] public string ShortCode { get; set; }
 
-    public bool IsNew() => !Id.HasValue;
+    public bool IsNew() => !UnitId.HasValue;
 }
