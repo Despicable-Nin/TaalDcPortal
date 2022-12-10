@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Commands.UpdateProject;
+namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyCommand, string>
 {

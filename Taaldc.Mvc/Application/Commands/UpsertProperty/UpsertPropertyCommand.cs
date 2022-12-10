@@ -1,7 +1,7 @@
 using System.Runtime.Serialization;
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Commands.UpdateProject;
+namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommand : IRequest<string>
 {
