@@ -3,7 +3,7 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
-public class Property : Entity
+public sealed class Property : Entity
 {
     public string Name { get; private set; }
     public double LandArea { get; private set; }
