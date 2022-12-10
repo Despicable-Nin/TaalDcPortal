@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1704.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "taaldc-mvc", "taaldc-mvc\taaldc-mvc.csproj", "{096A9626-6E00-4D00-9EE8-92EEC14CEEF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Mvc", "Taaldc.Mvc\Taaldc.Mvc.csproj", "{096A9626-6E00-4D00-9EE8-92EEC14CEEF2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CatalogApi", "CatalogApi", "{E89957EF-466A-4188-8DCD-C3AC29A85B61}"
 EndProject
