@@ -1,3 +1,4 @@
+using System.Xml;
 using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
@@ -15,13 +16,7 @@ public sealed class Unit : Entity
     private int _unitTypeId;
     public UnitType UnitType { get; private set; }
 
-}
+    private int _unitStatus;
+    public UnitStatus UnitStatus { get; private set; }
 
-public sealed class UnitType : Enumeration
-{
-    public string ShortCode { get; private set; }
-    public UnitType(int id, string name, string shortCode) : base(id, name)
-    {
-        ShortCode = shortCode;
-    }
 }
