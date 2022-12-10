@@ -11,7 +11,7 @@ public sealed class ScenicView : Enumeration
         new ScenicView(3, "Taal View"),
         new ScenicView(4, "Manila Skyline")
     };
-    
+
     public ScenicView(int id, string name) : base(id, name)
     {
     }

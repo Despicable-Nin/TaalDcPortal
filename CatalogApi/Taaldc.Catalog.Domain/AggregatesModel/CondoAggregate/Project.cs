@@ -1,5 +1,4 @@
 using System.Data;
-using System.Transactions;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.SeedWork;
 
@@ -7,11 +6,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
 public sealed class Project : Entity
 {
-    public string Name { get; private set; }
-    public string Developer { get; private set; }
-    
-    private List<Property> _properties;
-    public IReadOnlyCollection<Property> Properties => _properties.AsReadOnly();
+    private readonly List<Property> _properties;
 
     public Project(string name, string developer) : this()
     {
@@ -23,6 +18,10 @@ public sealed class Project : Entity
     {
         _properties = new List<Property>();
     }
+
+    public string Name { get; private set; }
+    public string Developer { get; private set; }
+    public IReadOnlyCollection<Property> Properties => _properties.AsReadOnly();
 
     public static Project NewProject()
     {
@@ -37,7 +36,10 @@ public sealed class Project : Entity
         Name = name;
     }
 
-    public void SetDeveloper( string developer) => Developer = developer;
+    public void SetDeveloper(string developer)
+    {
+        Developer = developer;
+    }
 
     public void AddProperty(string name, double landArea)
     {
@@ -52,7 +54,7 @@ public sealed class Project : Entity
         //TODO: update child entity (building)
     }
 
-    public void RemoveProperty(string id, bool hardDelete = false)
+    public void RemoveProperty(int id, bool hardDelete = false)
     {
         var remove = _properties.SingleOrDefault(x => x.Id.Equals(id));
 
@@ -60,13 +62,8 @@ public sealed class Project : Entity
             throw new CatalogDomainException(nameof(id), new KeyNotFoundException("{id} is not found."));
 
         if (hardDelete)
-        {
             _properties.Remove(remove);
-        }
         else
-        {
             _properties.Where(x => x.Id == id).FirstOrDefault().Deactivate();
-        }
     }
-   
 }

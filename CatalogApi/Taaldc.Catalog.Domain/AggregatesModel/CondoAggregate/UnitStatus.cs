@@ -11,6 +11,7 @@ public sealed class UnitStatus : Enumeration
         new UnitStatus(3, "sold"),
         new UnitStatus(4, "blocked")
     };
+
     public UnitStatus(int id, string name) : base(id, name)
     {
     }

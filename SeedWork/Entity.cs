@@ -1,4 +1,3 @@
-using taaldc_catalog.domain.Exceptions;
 
 namespace Taaldc.Catalog.Domain.SeedWork;
 
@@ -7,7 +6,7 @@ public abstract class Entity : IAuditable
 
     private int? _requestedHashCode;
 
-    public virtual string Id { get; protected set; }
+    public virtual int Id { get; protected set; }
     
 
     public bool IsTransient() => Id == default;
@@ -71,7 +70,7 @@ public abstract class Entity : IAuditable
         
         //fail-fast guard clause
         if (string.IsNullOrWhiteSpace(user))
-            throw new CatalogDomainException(nameof(AuditOnCreate),
+            throw new ArgumentNullException(nameof(AuditOnCreate),
                 new ArgumentNullException("user field should not be empty."));
 
         CreatedBy = user;
@@ -86,7 +85,7 @@ public abstract class Entity : IAuditable
     {
         //fail-fast guard clause
         if (string.IsNullOrWhiteSpace(user))
-            throw new CatalogDomainException(nameof(AuditOnUpdate),
+            throw new ArgumentNullException(nameof(AuditOnUpdate),
                 new ArgumentNullException("user field should not be empty."));
         
         ModifiedBy = user;

@@ -4,15 +4,18 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
 public sealed class Floor : Entity
 {
+    private readonly string _towerId;
+
     public Floor(string towerId, string name)
     {
         _towerId = towerId;
         Name = name;
     }
 
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    private string _towerId;
-    public string GetTowerId() => _towerId;
-
+    public string GetTowerId()
+    {
+        return _towerId;
+    }
 }
