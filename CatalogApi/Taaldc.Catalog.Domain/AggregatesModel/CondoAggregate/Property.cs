@@ -8,8 +8,8 @@ public class Property : Entity
     public string Name { get; private set; }
     public double LandArea { get; private set; }
 
-    private List<Building> _towers;
-    public IReadOnlyCollection<Building> Towers => _towers.AsReadOnly();
+    private List<Tower> _towers;
+    public IReadOnlyCollection<Tower> Towers => _towers.AsReadOnly();
 
     private string _projectId;
     public string GetProjectId() => _projectId;

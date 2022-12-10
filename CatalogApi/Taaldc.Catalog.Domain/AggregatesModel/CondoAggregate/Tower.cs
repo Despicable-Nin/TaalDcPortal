@@ -3,7 +3,7 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
-public sealed class Building : Entity
+public sealed class Tower : Entity
 {
     public string Name { get; private set; }
     public int Number { get; private set; } 
@@ -13,7 +13,7 @@ public sealed class Building : Entity
  
   
     
-    public Building(string name, int number, string address, string propertyId)
+    public Tower(string name, int number, string address, string propertyId)
     {
         Name = name;
         Number = number;
