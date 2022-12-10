@@ -30,7 +30,13 @@ public sealed class Project : Entity
         return project;
     }
 
-    public void SetName(string name) => Name = name;
+    public void SetName(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+            throw new CatalogDomainException(nameof(name), new ArgumentNullException("name should not be empty"));
+        Name = name;
+    }
+
     public void SetDeveloper( string developer) => Developer = developer;
 
     public void AddProperty(string name, double landArea)
@@ -39,6 +45,11 @@ public sealed class Project : Entity
             throw new CatalogDomainException(nameof(name), new DuplicateNameException($"Duplicate value for '{name}'"));
 
         _properties.Add(new Property(name, landArea));
+    }
+
+    public void UpdateProperty(string id, Property property)
+    {
+        //TODO: update child entity (building)
     }
 
     public void RemoveProperty(string id, bool hardDelete = false)
@@ -56,7 +67,6 @@ public sealed class Project : Entity
         {
             _properties.Where(x => x.Id == id).FirstOrDefault().Deactivate();
         }
-
     }
    
 }
