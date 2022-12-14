@@ -9,6 +9,7 @@
         <AssemblyName>Taaldc.Mvc</AssemblyName>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'taaldc_mvc' " />
     <ItemGroup>
         <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     </ItemGroup>
@@ -20,6 +21,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11" />
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
