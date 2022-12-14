@@ -1,4 +1,20 @@
 # TaalDcPortal
+## Projects
+
+### Seedwork
+This project contains reusable classes and components to implement value-objects especially when doing domain-driven design
+<br/>
+
+### Domain
+Contains business entities relating to database persistence with self-evaluating behaviours and guard clauses.
+<br/>
+
+### Infrastructure
+This contains dependencies that are external in nature -- such as database persistence, email, message queues and pipelines etc.
+<br/>
+
+### Mvc (Application)
+Entry point of the application -- but for an api-based application this is the API.
 
 ## Local Setup
 
@@ -67,19 +83,3 @@ See link: https://www.twilio.com/blog/using-sql-server-on-macos-with-docker
 
 <br/>
 
-# Projects
-
-### Seedwork
-This project contains reusable classes and components to implement value-objects especially when doing domain-driven design
-<br/>
-
-### Domain
-Contains business entities relating to database persistence with self-evaluating behaviours and guard clauses.
-<br/>
-
-### Infrastructure
-This contains dependencies that are external in nature -- such as database persistence, email, message queues and pipelines etc.
-<br/>
-
-### Mvc (Application)
-Entry point of the application -- but for an api-based application this is the API.
