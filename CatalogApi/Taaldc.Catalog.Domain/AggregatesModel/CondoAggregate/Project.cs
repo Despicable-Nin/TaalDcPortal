@@ -7,7 +7,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 public sealed class Project : Entity
 {
     private readonly List<Property> _properties;
-
+    
     public Project(string name, string developer) : this()
     {
         Name = name;

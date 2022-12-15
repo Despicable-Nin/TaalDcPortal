@@ -17,5 +17,5 @@ public sealed class Unit : Entity
 
     private int _unitTypeId;
     public UnitType UnitType { get; private set; }
-    
+
 }

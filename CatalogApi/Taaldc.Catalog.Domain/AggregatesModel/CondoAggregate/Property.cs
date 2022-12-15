@@ -5,28 +5,20 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
 public sealed class Property : Entity
 {
-    private string _projectId;
+    private readonly List<Tower> _towers;
 
-   
-
-    public Property(string name, double landArea)
+    public Property(string name, double landArea) : this()
     {
         if (name == default)
             throw new CatalogDomainException(nameof(name), new ArgumentNullException("name is null or empty."));
-
-
+        
         Name = name;
         LandArea = landArea;
     }
 
+    private Property() => _towers = new List<Tower>();
+
     public string Name { get; private set; }
     public double LandArea { get; private set; }
-    //
-    // private List<Tower> _towers;
-    // public IReadOnlyCollection<Tower> Towers => _towers.AsReadOnly();
-
-    public string GetProjectId()
-    {
-        return _projectId;
-    }
+    public IReadOnlyCollection<Tower> Towers => _towers.AsReadOnly();
 }

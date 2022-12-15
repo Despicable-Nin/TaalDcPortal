@@ -14,10 +14,15 @@ public class PropertyEntityTypeConfiguration : IEntityTypeConfiguration<Property
         builder.Property(b => b.Name).IsRequired();
         builder.HasIndex(b => b.Name).IsUnique();
 
-        builder.Property(b => b.IsActive).HasDefaultValue(true);
 
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
-        builder.Property<int>("ProjectId").IsRequired();
+        builder.Property<int>("ProjectId")
+            .IsRequired();
+        
+        //matches ProjectId config on TowerEntityTypeConfiguration
+        builder.Metadata
+            .FindNavigation(nameof(Property.Towers))
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
 
 
     }
