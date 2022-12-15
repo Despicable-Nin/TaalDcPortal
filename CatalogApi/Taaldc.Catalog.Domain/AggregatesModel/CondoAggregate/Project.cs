@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
-public sealed class Project : Entity
+public sealed class Project : Entity, IAggregateRoot
 {
     private readonly List<Property> _properties;
     
@@ -20,7 +20,7 @@ public sealed class Project : Entity
     }
 
     public string Name { get; private set; }
-    public string Developer { get; private set; }
+    public string Developer { get;  set; }
     public IReadOnlyCollection<Property> Properties => _properties.AsReadOnly();
 
     public static Project NewProject()
@@ -35,12 +35,7 @@ public sealed class Project : Entity
             throw new CatalogDomainException(nameof(name), new ArgumentNullException("name should not be empty"));
         Name = name;
     }
-
-    public void SetDeveloper(string developer)
-    {
-        Developer = developer;
-    }
-
+    
     public void AddProperty(string name, double landArea)
     {
         if (_properties.Any(x => x.Name.ToLower() == name.ToLower()))
