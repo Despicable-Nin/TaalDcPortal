@@ -9,5 +9,5 @@ public sealed class UnitType : Enumeration
         ShortCode = shortCode;
     }
 
-    public string ShortCode { get; }
+    public string ShortCode { get; private set; }
 }

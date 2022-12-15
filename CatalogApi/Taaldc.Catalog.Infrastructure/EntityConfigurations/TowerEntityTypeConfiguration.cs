@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
-
-public class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
+class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
 {
     public void Configure(EntityTypeBuilder<Tower> builder)
     {
@@ -17,5 +16,11 @@ public class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
 
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
         builder.Property<int>("PropertyId").IsRequired();
+        
+        //matches TowerId config on UnitEntityTypeConfiguration
+        builder.Metadata
+            .FindNavigation(nameof(Tower.Units))
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+
     }
 }

@@ -17,9 +17,8 @@ public sealed class Tower : Entity
     public int Number { get; private set; }
     public string Address { get; private set; }
     
-    //TODO: Uncomment
-    // private List<Unit> _units;
-    // public IReadOnlyCollection<Unit> Units => _units.AsReadOnly(); 
+    private List<Unit> _units;
+    public IReadOnlyCollection<Unit> Units => _units.AsReadOnly(); 
     
 
     public void Update(string name, int number, string address)

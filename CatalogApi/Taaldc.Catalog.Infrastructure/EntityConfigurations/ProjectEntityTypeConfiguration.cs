@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
-
-public class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
+class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
 {
     public void Configure(EntityTypeBuilder<Project> builder)
     {
