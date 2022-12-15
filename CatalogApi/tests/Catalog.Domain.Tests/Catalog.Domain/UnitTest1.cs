@@ -16,8 +16,7 @@ public class UnitTest1
         var project = Project.NewProject();
 
         project.SetName("just another name");
-        project.SetDeveloper("taal dc");
-
+        
         project.ShouldNotBeNull();
         project.Name.ShouldNotBeNull();
         project.Name.ShouldBe("just another name");
