@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Taaldc.Catalog.Domain\Taaldc.Catalog.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories" />
-  </ItemGroup>
-
 </Project>

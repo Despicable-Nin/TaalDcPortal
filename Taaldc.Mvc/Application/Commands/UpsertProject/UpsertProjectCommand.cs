@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertProject;
 
-public class UpsertProjectCommand : IRequest<string>
+public class UpsertProjectCommand : IRequest<CommandResult>
 {
     [DataMember] public string Name { get; set; }
     [DataMember] public string Developer { get; set; }
