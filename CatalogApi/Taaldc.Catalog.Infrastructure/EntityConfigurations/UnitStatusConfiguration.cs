@@ -20,5 +20,13 @@ class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
         builder.Property(b => b.Name)
             .HasMaxLength(30)
             .IsRequired();
+
+        builder.HasData(new[]
+        {
+            new UnitStatus(1,"available"),
+            new UnitStatus(2,"sold"),
+            new UnitStatus(3,"reserved"),
+            new UnitStatus(4,"blocked")
+        });
     }
 }
