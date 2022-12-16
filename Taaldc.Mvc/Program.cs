@@ -1,30 +1,41 @@
 ﻿using System.Reflection;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using taaldc_mvc.Areas;
 using taaldc_mvc.Data;
 using taaldc_mvc.Extensions.DI;
+using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+using Taaldc.Catalog.Infrastructure.Repositories;
 using Taaldc.Mvc.Application.Behaviors;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
+var configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//     options.UseSqlite(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// builder.Services.AddControllersWithViews();
+// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services
+    .AddApplicationInsights(builder.Configuration)
+    .AddCustomDbContext(builder.Configuration)
+    .AddDatabaseDeveloperPageExceptionFilter()
+    .AddControllersWithViews();
+    
 
-builder.Services.AddCustomDbContext(builder.Configuration);
-builder.Services.AddControllersWithViews();
-
+//register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+//register repositories
+builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
+
 
 var app = builder.Build();
 
