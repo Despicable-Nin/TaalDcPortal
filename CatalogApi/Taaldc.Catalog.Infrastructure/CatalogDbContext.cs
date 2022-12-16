@@ -12,11 +12,7 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     private readonly IMediator _mediator;
  
     public DbSet<Project> Projects { get; set; }
-
-    public CatalogDbContext(DbContextOptions options) : base(options)
-    {
-
-    }
+    
     
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMediator mediator) : base(options)
     {
