@@ -1,8 +1,9 @@
 using System.Data;
 using taaldc_catalog.domain.Exceptions;
+using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class Project : Entity, IAggregateRoot
 {
@@ -37,24 +38,14 @@ public sealed class Project : Entity, IAggregateRoot
     }
 
     public Property GetPropertyById(int propertyId) => Properties.FirstOrDefault(i => i.Id == propertyId);
-    
-    public Property UpsertProperty(string name, double landArea, int? propertyId)
-    {
-        var property = _properties.FirstOrDefault(x => x.Id == propertyId);
 
-        if (property == null)
-        {
-            property = new Property(name, landArea);
-            _properties.Add(property);
-        }
-        else
-        {
-            property.Update(name, landArea);
-        }
+    public Property AddProperty(string name, double landArea)
+    {
+        var property = new Property(name, landArea);
+        _properties.Add(property);
 
         return property;
     }
-    
 
     public void RemoveProperty(int id, bool hardDelete = false)
     {

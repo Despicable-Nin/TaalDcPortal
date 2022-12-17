@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>

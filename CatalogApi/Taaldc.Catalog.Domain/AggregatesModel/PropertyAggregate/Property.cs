@@ -1,9 +1,10 @@
 using taaldc_catalog.domain.Exceptions;
+using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 
-public sealed class Property : Entity
+public sealed class Property : Entity, IAggregateRoot
 {
     private readonly List<Tower> _towers;
 
@@ -11,7 +12,7 @@ public sealed class Property : Entity
     {
         if (name == default)
             throw new CatalogDomainException(nameof(name), new ArgumentNullException("name is null or empty."));
-        
+
         Name = name;
         LandArea = landArea;
     }
@@ -32,5 +33,6 @@ public sealed class Property : Entity
     {
         _towers.Add(tower);
     }
-    
+
+
 }

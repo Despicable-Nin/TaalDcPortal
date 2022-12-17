@@ -1,7 +1,7 @@
 using Microsoft.VisualBasic.CompilerServices;
 using Shouldly;
 using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 namespace Catalog.Domain.Tests;
 

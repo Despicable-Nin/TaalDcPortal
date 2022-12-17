@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Newtonsoft.Json;
-using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 namespace Taaldc.Mvc.Application.Commands;
 

@@ -1,9 +1,10 @@
 using taaldc_catalog.domain.Exceptions;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 
-public sealed class Tower : Entity
+public sealed class Tower : Entity, IAggregateRoot
 {
 
     private Tower() => _floors = new List<Floor>();
