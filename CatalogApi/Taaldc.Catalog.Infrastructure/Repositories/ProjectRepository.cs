@@ -35,7 +35,8 @@ public class ProjectRepository : IProjectRepository
             .ThenInclude(i => i.Towers)
             .ThenInclude(i => i.Floors)
             .ThenInclude(i => i.Units)
+            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
 
-    public IEnumerable<Project> GetListAsync() => _context.Projects.AsEnumerable();
+    public IEnumerable<Project> GetListAsync() => _context.Projects.AsNoTracking().AsEnumerable();
 }

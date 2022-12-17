@@ -20,9 +20,9 @@ public class PropertyRepository : IPropertyRepository
     public Property Update(Property project) => _context.Update(project).Entity;
 
     public async Task<Property> GetAsync(int id) =>
-        await _context.Properties.Include(i => i.Towers).FirstOrDefaultAsync(i => i.Id == id);
+        await _context.Properties.Include(i => i.Towers).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
 
-    public IEnumerable<Property> GetListAsync() => _context.Properties.Include(i=> i.Towers).AsEnumerable();
+    public IEnumerable<Property> GetListAsync() => _context.Properties.Include(i=> i.Towers).AsNoTracking().AsEnumerable();
     
   
 }

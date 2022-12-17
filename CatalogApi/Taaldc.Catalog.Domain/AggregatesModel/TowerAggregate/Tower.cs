@@ -27,4 +27,22 @@ public sealed class Tower : Entity, IAggregateRoot
         Name = name;
         Address = address;
     }
+
+    public void AddFloor(string name, string description)
+    {
+        _floors.Add(new Floor(name, description));
+    }
+    
+    public void RemoveFloor(int id, bool hardDelete = false)
+    {
+        var remove = _floors.SingleOrDefault(x => x.Id.Equals(id));
+
+        if (remove == default)
+            throw new CatalogDomainException(nameof(id), new KeyNotFoundException("Floor with id:{id} is not found."));
+
+        if (hardDelete)
+            _floors.Remove(remove);
+        else
+            _floors.Where(x => x.Id == id).FirstOrDefault().Deactivate();
+    }
 }

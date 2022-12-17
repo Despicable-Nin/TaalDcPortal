@@ -8,6 +8,4 @@ public interface ITowerRepository : IRepository<Tower>
     Tower Update(Tower project);
     Task<Tower> GetAsync(int id);
     IEnumerable<Tower> GetListAsync();
-    void AddFloor(string name, double landArea);
-    void RemoveFloor(int propertyId);
 }

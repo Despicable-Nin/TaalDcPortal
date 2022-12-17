@@ -13,7 +13,7 @@ public sealed class Unit : Entity
         Price = price;
     }
 
-    public string Identifier { get; private set; }
+    public string Identifier { get; set; }
     public decimal Price { get; private set; }
     
     private int _scenicViewId;
@@ -24,5 +24,13 @@ public sealed class Unit : Entity
     
     private int _unitTypeId;
     public UnitType UnitType { get; private set; }
+
+    public void SetPrice(decimal newPrice) => Price = newPrice;
+
+    public void SetUnitType(int unitTypeId) => _unitTypeId = unitTypeId;
+
+    public void SetUnitStatus(int unitStatusId) => _unitStatusId = unitStatusId;
+
+    public void SetView(int viewId) => _scenicViewId = viewId;
 
 }

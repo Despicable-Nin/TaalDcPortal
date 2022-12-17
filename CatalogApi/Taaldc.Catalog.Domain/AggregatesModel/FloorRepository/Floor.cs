@@ -1,8 +1,9 @@
+using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
-public sealed class Floor : Entity
+public sealed class Floor : Entity, IAggregateRoot
 {
 
     private Floor() => _units = new List<Unit>();
@@ -23,5 +24,23 @@ public sealed class Floor : Entity
     {
         Name = name;
         Description = description;
+    }
+    
+    public void AddUnit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price)
+    {
+        _units.Add(new Unit(scenicViewId, unitStatusId, unitTypeId,identifier, price));
+    }
+    
+    public void RemoveUnit(int id, bool hardDelete = false)
+    {
+        var remove = _units.SingleOrDefault(x => x.Id.Equals(id));
+
+        if (remove == default)
+            throw new CatalogDomainException(nameof(id), new KeyNotFoundException("Unit with id:{id} is not found."));
+
+        if (hardDelete)
+            _units.Remove(remove);
+        else
+            _units.Where(x => x.Id == id).FirstOrDefault().Deactivate();
     }
 }
