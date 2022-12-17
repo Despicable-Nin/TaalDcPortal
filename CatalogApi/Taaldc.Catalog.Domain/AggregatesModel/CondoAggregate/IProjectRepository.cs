@@ -7,4 +7,5 @@ public interface IProjectRepository : IRepository<Project>
     Project Add(Project project);
     Project Update(Project project);
     Task<Project> GetAsync(int id);
+
 }
