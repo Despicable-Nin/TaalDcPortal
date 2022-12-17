@@ -26,8 +26,12 @@ public class ProjectRepository : IProjectRepository
     }
 
     public Project Update(Project project) => _context.Projects.Update(project).Entity;
-    public Task<Project> GetAsync(int id)
+    public async Task<Project> GetAsync(int id)
     {
-        throw new NotImplementedException();
+        return _context.Projects
+            .Include(i => i.Properties)
+            .ThenInclude(i => i.Towers)
+            .FirstOrDefault();
+        //.ThenInclude(i => i.Fl)
     }
 }

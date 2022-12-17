@@ -6,7 +6,8 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 public sealed class Tower : Entity
 {
 
-    public Tower(string name, int number, string address)
+    private Tower() => _floors = new List<Floor>();
+    public Tower(string name, int number, string address) : this()
     {
         Name = name;
         Number = number;
@@ -17,8 +18,8 @@ public sealed class Tower : Entity
     public int Number { get; private set; }
     public string Address { get; private set; }
     
-    private List<Unit> _units;
-    public IReadOnlyCollection<Unit> Units => _units.AsReadOnly(); 
+    private List<Floor> _floors;
+    public IReadOnlyCollection<Floor> Floors => _floors.AsReadOnly(); 
     
 
     public void Update(string name, int number, string address)

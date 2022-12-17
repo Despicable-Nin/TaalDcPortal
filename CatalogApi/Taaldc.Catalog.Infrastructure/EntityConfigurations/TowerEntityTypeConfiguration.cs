@@ -19,7 +19,7 @@ class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
         
         //matches TowerId config on UnitEntityTypeConfiguration
         builder.Metadata
-            .FindNavigation(nameof(Tower.Units))
+            .FindNavigation(nameof(Tower.Floors))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
     }
