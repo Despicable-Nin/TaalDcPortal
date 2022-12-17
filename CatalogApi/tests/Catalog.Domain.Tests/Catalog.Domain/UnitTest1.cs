@@ -59,16 +59,18 @@ public class UnitTest1
         project.Properties.Count.ShouldBe(1);
     }
 
-    // [Fact]
-    // public void Can_remove_property()
-    // {
-    //     var project = CreateProjectWithOneProperty();
-    //
-    //     var remove = project.Properties.SingleOrDefault(x => x.Name == "one tolention east residences");
-    //
-    //     project.RemoveProperty(remove);
-    //
-    // }
+    [Fact]
+    public void Can_remove_property()
+    {
+        var project = CreateProjectWithOneProperty();
+    
+        var remove = project.Properties.SingleOrDefault(x => x.Name == "one tolentino east residences");
+
+        project.RemoveProperty(remove.Id);
+
+        project.Properties.Any(x => x.Id == remove.Id);
+
+    }
 
     private Project CreateProjectWithOneProperty()
     {
