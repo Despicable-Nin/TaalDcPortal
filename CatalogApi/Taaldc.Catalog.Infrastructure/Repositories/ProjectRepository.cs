@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
@@ -25,7 +26,8 @@ public class ProjectRepository : IProjectRepository
     }
 
     public Project Update(Project project) => _context.Projects.Update(project).Entity;
-    
-    public async Task<Project> GetAsync(int id) => await _context.Projects.FindAsync(id);
-    
+    public Task<Project> GetAsync(int id)
+    {
+        throw new NotImplementedException();
+    }
 }
