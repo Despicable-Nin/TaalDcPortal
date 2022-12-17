@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
