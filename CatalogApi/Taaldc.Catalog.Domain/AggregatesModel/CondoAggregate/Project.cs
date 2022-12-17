@@ -35,19 +35,26 @@ public sealed class Project : Entity, IAggregateRoot
             throw new CatalogDomainException(nameof(name), new ArgumentNullException("name should not be empty"));
         Name = name;
     }
+
+    public Property GetPropertyById(int propertyId) => Properties.FirstOrDefault(i => i.Id == propertyId);
     
-    public void AddProperty(string name, double landArea)
+    public Property UpsertProperty(string name, double landArea, int? propertyId)
     {
-        if (_properties.Any(x => x.Name.ToLower() == name.ToLower()))
-            throw new CatalogDomainException(nameof(name), new DuplicateNameException($"Duplicate value for '{name}'"));
+        var property = _properties.FirstOrDefault(x => x.Id == propertyId);
 
-        _properties.Add(new Property(name, landArea));
-    }
+        if (property == null)
+        {
+            property = new Property(name, landArea);
+            _properties.Add(property);
+        }
+        else
+        {
+            property.Update(name, landArea);
+        }
 
-    public void UpdateProperty(string id, Property property)
-    {
-        //TODO: update child entity (building)
+        return property;
     }
+    
 
     public void RemoveProperty(int id, bool hardDelete = false)
     {

@@ -21,4 +21,10 @@ public sealed class Property : Entity
     public string Name { get; private set; }
     public double LandArea { get; private set; }
     public IReadOnlyCollection<Tower> Towers => _towers.AsReadOnly();
+
+    public void Update(string name, double landArea)
+    {
+        Name = name;
+        LandArea = landArea;
+    }
 }
