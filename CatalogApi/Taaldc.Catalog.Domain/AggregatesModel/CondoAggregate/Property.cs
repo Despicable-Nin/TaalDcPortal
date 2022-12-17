@@ -27,4 +27,10 @@ public sealed class Property : Entity
         Name = name;
         LandArea = landArea;
     }
+
+    public void AddTower(Tower tower)
+    {
+        _towers.Add(tower);
+    }
+    
 }

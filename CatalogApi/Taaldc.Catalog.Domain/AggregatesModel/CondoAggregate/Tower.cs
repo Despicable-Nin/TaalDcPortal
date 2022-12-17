@@ -7,10 +7,9 @@ public sealed class Tower : Entity
 {
 
     private Tower() => _floors = new List<Floor>();
-    public Tower(string name, int number, string address) : this()
+    public Tower(string name,  string address) : this()
     {
         Name = name;
-        Number = number;
         Address = address;
     }
 
@@ -22,10 +21,9 @@ public sealed class Tower : Entity
     public IReadOnlyCollection<Floor> Floors => _floors.AsReadOnly(); 
     
               
-    public void Update(string name, int number, string address)
+    public void Update(string name, string address)
     {
         Name = name;
-        Number = number;
         Address = address;
     }
 }

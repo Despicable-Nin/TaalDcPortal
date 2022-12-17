@@ -31,7 +31,9 @@ public class ProjectRepository : IProjectRepository
         return _context.Projects
             .Include(i => i.Properties)
             .ThenInclude(i => i.Towers)
-            .FirstOrDefault();
+            .ThenInclude(i => i.Floors)
+            .ThenInclude(i => i.Units)
+            .FirstOrDefault(i => i.Id == id);
         //.ThenInclude(i => i.Fl)
     }
 }

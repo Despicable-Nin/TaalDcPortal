@@ -19,6 +19,5 @@ public class UpsertTowerCommand : IRequest<CommandResult>
     [DataMember] public string Name { get; set; }
     [DataMember] public string Address { get; set; }
     [DataMember] public int? TowerId { get; set; }
-
-   
+  
 }
