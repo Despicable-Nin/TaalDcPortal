@@ -3,26 +3,22 @@ using MediatR;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
 
-public class UpsertFloorCommand : IRequest<string>
+public class UpsertFloorCommand : IRequest<CommandResult>
 {
-    public UpsertFloorCommand(int? floorId, int towerId, int unitTypeId, int scenicView, string unitNo, int level, double floorArea, decimal price)
+    public UpsertFloorCommand(int projectId, int propertyId, int towerId, int? floorId, string name, string description)
     {
+        ProjectId = projectId;
+        PropertyId = propertyId;
         TowerId = towerId;
-        UnitTypeId = unitTypeId;
-        ScenicView = scenicView;
-        UnitNo = unitNo;
-        Level = level;
-        FloorArea = floorArea;
-        Price = price;
+        FloorId = floorId;
+        Name = name;
+        Description = description;
     }
 
+    [DataMember] public int ProjectId { get; set; }
+    [DataMember] public int PropertyId { get; set; }
     [DataMember] public int TowerId { get; set; }
     [DataMember] public int? FloorId { get; set; }
-    [DataMember] public int UnitTypeId { get; set; }
-    [DataMember] public int ScenicView { get; set; }
-    [DataMember] public string UnitNo { get; set; }
-    [DataMember] public int Level { get; set; }
-    [DataMember] public double FloorArea { get; set; }
-    [DataMember] public decimal Price { get; set; }
-    
+    [DataMember] public string Name { get; set; }
+    [DataMember] public string Description { get; set; }
 }
