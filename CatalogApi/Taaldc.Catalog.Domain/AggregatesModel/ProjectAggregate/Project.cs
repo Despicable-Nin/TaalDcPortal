@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Data;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
@@ -39,13 +40,12 @@ public sealed class Project : Entity, IAggregateRoot
 
     public Property GetPropertyById(int propertyId) => Properties.FirstOrDefault(i => i.Id == propertyId);
 
-    public Property AddProperty(string name, double landArea)
+    public void AddProperty(string name, double landArea)
     {
         var property = new Property(name, landArea);
         _properties.Add(property);
-
-        return property;
     }
+    
 
     public void RemoveProperty(int id, bool hardDelete = false)
     {

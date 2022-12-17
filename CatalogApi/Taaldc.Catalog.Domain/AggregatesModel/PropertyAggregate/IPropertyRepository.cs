@@ -4,10 +4,9 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 
 public interface IPropertyRepository : IRepository<Property>
 {
-    Property Add(Property project);
-    Property Update(Property project);
+    Property Add(Property property);
+    Property Update(Property property);
     Task<Property> GetAsync(int id);
     IEnumerable<Property> GetListAsync();
-    Task AddTower(string name, double landArea);
-    Task RemoveTower(int propertyId);
+    
 }

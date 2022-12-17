@@ -25,7 +25,7 @@ public class ProjectRepository : IProjectRepository
             return _context.Projects.Add(project).Entity;
         }
 
-        throw new CatalogDomainException(nameof(ProjectRepository.Add), new Exception("Data already exists."));
+        throw new CatalogDomainException(nameof(ProjectRepository.Add), new Exception("Project already exists."));
     }
 
     public Project Update(Project project) => _context.Projects.Update(project).Entity;
@@ -38,36 +38,4 @@ public class ProjectRepository : IProjectRepository
             .FirstOrDefaultAsync(i => i.Id == id);
 
     public IEnumerable<Project> GetListAsync() => _context.Projects.AsEnumerable();
-
-    public async Task<int> AddProperty(int projectId, string name, double landArea)
-    {
-        var project = await _context.Projects.FirstOrDefaultAsync(i => i.Id == projectId);
-
-        if (project == default)
-            throw new CatalogDomainException(nameof(projectId),
-                new KeyNotFoundException($"Project id: {projectId} not found."));
-
-        var property = project.AddProperty(name, landArea);
-
-        _context.Update(project);
-
-        await _context.SaveChangesAsync(CancellationToken.None);
-
-        return property.Id;
-
-    }
-
-    public async Task RemoveProperty(int projectId, int propertyId)
-    {
-        var project = await _context.Projects.FirstOrDefaultAsync(i => i.Id == projectId);
-
-        if (project == default)
-            throw new CatalogDomainException(nameof(projectId),
-                new KeyNotFoundException($"Project id: {projectId} not found."));
-
-        if (project.Properties.Any(i => i.Id == propertyId))
-        {
-            project.RemoveProperty(propertyId);
-        }
-    }
 }

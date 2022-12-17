@@ -1,32 +1,49 @@
 using MediatR;
 using Microsoft.VisualBasic;
-using Taaldc.Catalog.Domain.AggregatesModel.CondoAggregate;
+using taaldc_catalog.domain.Exceptions;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyCommand, CommandResult>
 {
-    private readonly IProjectRepository _repository;
+    private readonly IPropertyRepository _propertyRepository;
 
-    public UpsertPropertyCommandHandler(IProjectRepository repository)
+
+    public UpsertPropertyCommandHandler(IPropertyRepository propertyRepository)
     {
-        _repository = repository;
+        _propertyRepository = propertyRepository;
     }
 
     public async Task<CommandResult> Handle(UpsertPropertyCommand request, CancellationToken cancellationToken)
     {
-        var project = await _repository.GetAsync(request.PropertyId.Value);
+        Property property = default;
+        if (request.PropertyId.HasValue)
+        {
+            //this will be an update attempt
+            property = await _propertyRepository.GetAsync(request.PropertyId.Value);
 
-        if (project == default) return CommandResult.Failed(request.PropertyId.Value, $"Project with Id:{request.ProjectId} does not exist.");
+            if (property == null)
+                throw new CatalogDomainException(nameof(request.PropertyId),
+                    new KeyNotFoundException($"Property with id:{request.PropertyId} not found."));
 
-        var property = project.UpsertProperty(request.Name, request.LandArea, request.PropertyId.Value);
+            property.Update(request.Name, request.LandArea);
 
-        _repository.Update(project);
+            _propertyRepository.Update(property);
+        }
+        else
+        {
+            //this will be an add attempt
 
-        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
-        
+            property = new(request.Name, request.LandArea);
+            _propertyRepository.Add(property);
+        }
+
+        await _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
         return CommandResult.Success(property.Id);
-
     }
 }
