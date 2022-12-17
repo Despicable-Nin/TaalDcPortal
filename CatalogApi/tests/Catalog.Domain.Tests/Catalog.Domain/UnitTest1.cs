@@ -2,6 +2,7 @@ using Microsoft.VisualBasic.CompilerServices;
 using Shouldly;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Catalog.Domain.Tests;
 
@@ -54,7 +55,7 @@ public class UnitTest1
     {
         var project = new Project(name, developer);
         
-        project.UpsertProperty("one tolentino east residences", 1000, null);
+        project.AddProperty("one tolentino east residences", 1000);
         project.Properties.ShouldNotBeNull();
         project.Properties.Count.ShouldBe(1);
     }
@@ -76,7 +77,7 @@ public class UnitTest1
     {
         var project = new Project(name, developer);
         
-        project.UpsertProperty("one tolentino east residences", 1000, null);
+        project.AddProperty("one tolentino east residences", 1000);
         return project;
     }
 }
