@@ -16,8 +16,8 @@ public sealed class Floor : Entity
     public string Name { get; private set; }
     public string Description { get; private set; }
 
-     private List<Unit> _units;
-    // public IReadOnlyCollection<Unit> Units => _units.AsReadOnly();
+    private List<Unit> _units;
+    public IReadOnlyCollection<Unit> Units => _units.AsReadOnly();
 
     public void Update(string name, string description)
     {

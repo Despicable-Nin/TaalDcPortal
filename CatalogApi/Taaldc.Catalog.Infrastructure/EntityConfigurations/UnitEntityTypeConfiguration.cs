@@ -14,13 +14,11 @@ class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
         builder.Property(b => b.Identifier).IsRequired();
         builder.HasIndex(b => b.Identifier).IsUnique();
 
-        builder.Property(b => b.Floor).IsRequired();
-        builder.Property(b => b.FloorArea).IsRequired().HasMaxLength(7);
-
         builder.Property(b => b.Price).IsRequired();
         
-        //matches Tower.Properties configuration on ProjectEntityTypeConfiguration
-        builder.Property<int>("TowerId").IsRequired();
+        //matches Floor.Units configuration on FloorEntityTypeConfiguration
+        builder.Property<int>("FloorId").IsRequired();
+        
 
         //to provide an immutable FK id 
         builder.Property<int>("_scenicViewId")

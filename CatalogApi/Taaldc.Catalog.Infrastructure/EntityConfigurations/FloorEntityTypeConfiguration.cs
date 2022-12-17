@@ -16,9 +16,9 @@ class FloorEntityTypeConfiguration : IEntityTypeConfiguration<Floor>
         //matches Toower.Floors configuration on FloorEntityTypeConfiguration
         builder.Property<int>("TowerId").IsRequired();
         
-        //matches TowerId config on UnitEntityTypeConfiguration
-        // builder.Metadata
-        //     .FindNavigation(nameof(Floor.Units))
-        //     .SetPropertyAccessMode(PropertyAccessMode.Field);
+        //matches Floor config on UnitEntityTypeConfiguration
+         builder.Metadata
+             .FindNavigation(nameof(Floor.Units))
+             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }
