@@ -8,9 +8,10 @@ using taaldc_mvc.Areas;
 using taaldc_mvc.Data;
 using taaldc_mvc.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
 using Taaldc.Mvc.Application.Behaviors;
-using IProjectRepository = Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.IProjectRepository;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
