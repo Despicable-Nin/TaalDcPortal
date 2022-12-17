@@ -16,6 +16,7 @@ public class UnitTest1
         var project = Project.NewProject();
 
         project.SetName("just another name");
+        project.Developer = "taal dc";
         
         project.ShouldNotBeNull();
         project.Name.ShouldNotBeNull();
@@ -53,7 +54,7 @@ public class UnitTest1
     {
         var project = new Project(name, developer);
         
-        project.AddProperty("one tolentino east residences", 1000);
+        project.UpsertProperty("one tolentino east residences", 1000, null);
         project.Properties.ShouldNotBeNull();
         project.Properties.Count.ShouldBe(1);
     }
@@ -73,7 +74,7 @@ public class UnitTest1
     {
         var project = new Project(name, developer);
         
-        project.AddProperty("one tolentino east residences", 1000);
+        project.UpsertProperty("one tolentino east residences", 1000, null);
         return project;
     }
 }
