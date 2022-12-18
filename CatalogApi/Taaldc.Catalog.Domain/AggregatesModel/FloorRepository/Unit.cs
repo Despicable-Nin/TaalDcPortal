@@ -4,17 +4,19 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 public sealed class Unit : Entity
 {
-    public Unit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price)
+    public Unit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price, double floorArea)
     {
         _scenicViewId = scenicViewId;
         _unitStatusId = unitStatusId;
         _unitTypeId = unitTypeId;
         Identifier = identifier;
         Price = price;
+        FloorArea = floorArea;
     }
 
     public string Identifier { get; set; }
     public decimal Price { get; private set; }
+    public double FloorArea { get; private set; }
     
     private int _scenicViewId;
     public ScenicView ScenicView { get; private set; }
