@@ -1,11 +1,20 @@
 using MediatR;
+using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertUnit;
 
-public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, string>
+public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, CommandResult>
 {
-    public Task<string> Handle(UpsertUnitCommand request, CancellationToken cancellationToken)
+    private readonly IFloorRepository _repository;
+
+    public UpsertUnitCommandHandler(IFloorRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+
+    public async Task<CommandResult> Handle(UpsertUnitCommand request, CancellationToken cancellationToken)
+    {
+        if(request.u)
     }
 }
