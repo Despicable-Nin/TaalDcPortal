@@ -23,10 +23,12 @@ class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
 
         builder.HasData(new[]
         {
-            new ScenicView(1, "TAAL"),
-            new ScenicView(2, "HIGHLANDS"),
-            new ScenicView(3, "MANILA SKYLINE"),
-            new ScenicView(4, "ROTONDA")
+            new ScenicView(1, "N/A"),
+            new ScenicView(2, "TAAL"),
+            new ScenicView(3, "HIGHLANDS"),
+            new ScenicView(4, "MANILA SKYLINE"),
+            new ScenicView(5, "ROTONDA"),
+            
         });
     }
 }
