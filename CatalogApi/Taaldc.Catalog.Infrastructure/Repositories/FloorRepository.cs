@@ -23,4 +23,5 @@ public class FloorRepository : IFloorRepository
         await _context.Floors.Include(i => i.Units).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
 
     public IEnumerable<Floor> GetListAsync() => _context.Floors.Include(i => i.Units).AsNoTracking().AsEnumerable();
+    
 }
