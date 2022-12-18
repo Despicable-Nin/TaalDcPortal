@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
 
@@ -13,24 +14,13 @@ public class FloorRepository : IFloorRepository
     }
 
     public IUnitOfWork UnitOfWork => _context;
-    
-    public Floor Add(Floor floor)
-    {
-        throw new NotImplementedException();
-    }
 
-    public Floor Update(Floor floor)
-    {
-        throw new NotImplementedException();
-    }
+    public Floor Add(Floor floor) => _context.Floors.Add(floor).Entity;
 
-    public Task<Floor> GetAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public Floor Update(Floor floor) => _context.Floors.Update(floor).Entity;
 
-    public IEnumerable<Floor> GetListAsync()
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Floor> GetAsync(int id) =>
+        await _context.Floors.Include(i => i.Units).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+
+    public IEnumerable<Floor> GetListAsync() => _context.Floors.Include(i => i.Units).AsNoTracking().AsEnumerable();
 }
