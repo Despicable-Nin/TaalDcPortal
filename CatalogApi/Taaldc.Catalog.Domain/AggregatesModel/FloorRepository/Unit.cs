@@ -4,10 +4,12 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 public sealed class Unit : Entity
 {
-    public Unit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price, double floorArea)
+
+    
+    public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea)
     {
         _scenicViewId = scenicViewId;
-        _unitStatusId = unitStatusId;
+        _unitStatusId = (int) UnitStatus.UnitStatusEnum.AVAILABLE;
         _unitTypeId = unitTypeId;
         Identifier = identifier;
         Price = price;
@@ -34,5 +36,21 @@ public sealed class Unit : Entity
     public void SetUnitStatus(int unitStatusId) => _unitStatusId = unitStatusId;
 
     public void SetView(int viewId) => _scenicViewId = viewId;
+    
+    public void Update(int scenicViewId,  int unitTypeId, string identifier, decimal price, double floorArea){
+        _scenicViewId = scenicViewId;
+        _unitTypeId = unitTypeId;
+        Identifier = identifier;
+        Price = price;
+        FloorArea = floorArea;
+    }
+
+    public bool IsSold() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.SOLD;
+    
+    public bool IsAvailable() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.AVAILABLE;
+    
+    public bool IsReserved() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.RESERVED;
+    
+    public bool IsBlocked() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.BLOCKED;
 
 }

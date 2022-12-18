@@ -4,13 +4,14 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 public sealed class UnitStatus : Enumeration
 {
-    public static readonly IEnumerable<UnitStatus> UNIT_STATUS = new[]
+    public enum UnitStatusEnum : int
     {
-        new UnitStatus(1, "available"),
-        new UnitStatus(2, "reserved"),
-        new UnitStatus(3, "sold"),
-        new UnitStatus(4, "blocked")
-    };
+        AVAILABLE = 1,
+        SOLD = 2,
+        RESERVED = 3,
+        BLOCKED = 4
+    }
+
 
     public UnitStatus(int id, string name) : base(id, name)
     {
