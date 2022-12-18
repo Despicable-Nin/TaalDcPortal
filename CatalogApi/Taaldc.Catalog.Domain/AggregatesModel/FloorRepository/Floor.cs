@@ -26,9 +26,9 @@ public sealed class Floor : Entity, IAggregateRoot
         Description = description;
     }
     
-    public void AddUnit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price)
+    public void AddUnit(int scenicViewId, int unitStatusId, int unitTypeId, string identifier, decimal price, double floorArea)
     {
-        _units.Add(new Unit(scenicViewId, unitStatusId, unitTypeId,identifier, price));
+        _units.Add(new Unit(scenicViewId, unitStatusId, unitTypeId,identifier, price, floorArea));
     }
     
     public void RemoveUnit(int id, bool hardDelete = false)
