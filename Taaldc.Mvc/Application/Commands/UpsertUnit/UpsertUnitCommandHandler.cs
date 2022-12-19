@@ -11,18 +11,16 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
 {
     private readonly IProjectRepository _repository;
 
-    public UpsertUnitCommandHandler(IFloorRepository repository)
+    public UpsertUnitCommandHandler(IProjectRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<CommandResult> Handle(UpsertUnitCommand request, CancellationToken cancellationToken)
     {
-        var floor = await _repository.GetAsync(request.FloorId);
-        
-        if(floor == default)
-            throw new CatalogDomainException(nameof(request.FloorId),
-                new KeyNotFoundException($"Floor with id:{request.FloorId} not found."));
+        var floor = await _repository.GetFloorAsync(request.FloorId);
+
+        if (floor == default) return CommandResult.Failed(request.FloorId, typeof(Floor));
         
         Unit unit = default;
         //check if update or add
@@ -32,16 +30,9 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
             unit = floor.Units.FirstOrDefault(i => i.Id == request.UnitId.Value);
 
             //if has value --then update
-          
-            if(unit == null) 
-                throw new CatalogDomainException(nameof(request.UnitId),
-                    new KeyNotFoundException($"Unit with id:{request.UnitId} not found."));
+            if (unit == null) return CommandResult.Failed(request.UnitId.Value, typeof(Unit));
 
-            if (!unit.IsAvailable())
-            {
-                throw new CatalogDomainException(nameof(unit),
-                    new InvalidOperationException("Cannot update the Unit in it's current state."));
-            }
+            if (!unit.IsAvailable()) return CommandResult.Failed(request.UnitId.Value, "Cannot process Unit. It's either sold, reserved or blocked.");
             
             //we can only modify or make updates if it is still available
             unit.Update(request.ScenicViewId, request.UnitTypeId, request.UnitNo, request.SellingPrice,
@@ -53,7 +44,7 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
                 request.FloorArea);
         }
         
-        _repository.Update(floor);
+        _repository.UpdateFloor(floor);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

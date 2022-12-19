@@ -1,5 +1,3 @@
-
-
 using Microsoft.EntityFrameworkCore;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
@@ -8,72 +6,50 @@ using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 using Taaldc.Catalog.Domain.SeedWork;
 
-
 namespace Taaldc.Catalog.Infrastructure.Repositories;
 
 public class ProjectRepository : IProjectRepository
 {
     private readonly CatalogDbContext _context;
-    public IUnitOfWork UnitOfWork => _context;
 
     public ProjectRepository(CatalogDbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public Project Add(Project project) 
-    {
-        if (project.IsTransient())
-        {
-            return _context.Projects.Add(project).Entity;
-        }
+    public IUnitOfWork UnitOfWork => _context;
 
-        throw new CatalogDomainException(nameof(ProjectRepository.Add), new Exception("Project already exists."));
+    public Project Add(Project project)
+    {
+        if (project.IsTransient()) return _context.Projects.Add(project).Entity;
+
+        throw new CatalogDomainException(nameof(Add), new Exception("Project already exists."));
     }
 
-    public Project Update(Project project) => _context.Projects.Update(project).Entity;
-    
-    public async Task<Project> GetAsync(int id) => await  _context.Projects
+    public Project Update(Project project)
+    {
+        return _context.Projects.Update(project).Entity;
+    }
+
+    public async Task<Project> GetAsync(int id)
+    {
+        return await _context.Projects
             .Include(i => i.Properties)
             .ThenInclude(i => i.Towers)
             .ThenInclude(i => i.Floors)
             .ThenInclude(i => i.Units)
             .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
-
-    public IEnumerable<Project> GetListAsync() => _context.Projects.AsNoTracking().AsEnumerable();
-    
-    public Property UpdateProperty(Property property) => _context.Properties.Update(property).Entity;
-    
-
-    public Property AddProperty(int projectId, string name, double landArea)
-    {
-        var project = _context.Projects.Include(i => i.Properties).FirstOrDefault(i => i.Id == projectId);
-        var property = project.AddProperty(name, landArea);
-        
-        //you may be thinking this line of code
-        //--> _context.Properties.Add(property);
-        //--> _context.Properties.Add(new Property(name, landArea));
-        //!!! DOING THESE CODE ABOVE MAY RESULT FOR A FOREIGN KEY EXCEPTION -- NO RELATIONSHIP TO PROJECT !!!
-
-        _context.Projects.Update(project);
-
-        return property;
-
     }
 
-    public void RemoveProperty(int projectId, int propertyId)
+    public IEnumerable<Project> GetListAsync()
     {
-        var project = _context.Projects.Include(i => i.Properties).FirstOrDefault(i => i.Id == projectId);
+        return _context.Projects.AsNoTracking().AsEnumerable();
+    }
 
-        project.RemoveProperty(propertyId, true);
-
-        _context.Projects.Update(project);
-
-        var property = _context.Properties.FirstOrDefault(i => i.Id == propertyId);
-
-        _context.Properties.Remove(property);
-        
+    public Property UpdateProperty(Property property)
+    {
+        return _context.Properties.Update(property).Entity;
     }
 
     public Tower AddTower(int propertyId, string name, string address)
@@ -100,6 +76,13 @@ public class ProjectRepository : IProjectRepository
         _context.Towers.Remove(tower);
     }
 
+    public Tower UpdateTower(Tower tower) => _context.Towers.Update(tower).Entity;
+
+    public async Task<Floor> GetFloorAsync(int floorId)
+    {
+        return await _context.Floors.Include(i => i.Units).FirstOrDefaultAsync(i => i.Id == floorId);
+    }
+
     public Floor AddFloor(int towerId, string name, string description)
     {
         var tower = _context.Towers.Include(i => i.Floors).FirstOrDefault(i => i.Id == towerId);
@@ -123,9 +106,17 @@ public class ProjectRepository : IProjectRepository
 
         _context.Towers.Remove(tower);
     }
-    
 
-    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea)
+    public Floor UpdateFloor(Floor floor)
+    {
+        return _context.Floors.Update(floor).Entity;
+    }
+
+    public async Task<Unit> GetUnitAsync(int unitId) => await _context.Units.FirstOrDefaultAsync(i => i.Id == unitId);
+
+
+    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price,
+        double floorArea)
     {
         var floor = _context.Floors.Include(i => i.Units).FirstOrDefault(i => i.Id == floorId);
 
@@ -149,13 +140,46 @@ public class ProjectRepository : IProjectRepository
         _context.Units.Remove(unit);
     }
 
-    public async Task<Property> GetPropertyAsync(int propertyId) =>  
-        await _context.Properties
+    public async Task<Property> GetPropertyAsync(int propertyId)
+    {
+        return await _context.Properties
             .Include(i => i.Towers)
             .FirstOrDefaultAsync(i => i.Id == propertyId);
+    }
 
-    public async Task<Tower> GetTowerAsync(int towerId) =>
-        await _context.Towers
+    public async Task<Tower> GetTowerAsync(int towerId)
+    {
+        return await _context.Towers
             .Include(i => i.Floors)
             .FirstOrDefaultAsync(i => i.Id == towerId);
+    }
+
+
+    public Property AddProperty(int projectId, string name, double landArea)
+    {
+        var project = _context.Projects.Include(i => i.Properties).FirstOrDefault(i => i.Id == projectId);
+        var property = project.AddProperty(name, landArea);
+
+        //you may be thinking this line of code
+        //--> _context.Properties.Add(property);
+        //--> _context.Properties.Add(new Property(name, landArea));
+        //!!! DOING THESE CODE ABOVE MAY RESULT FOR A FOREIGN KEY EXCEPTION -- NO RELATIONSHIP TO PROJECT !!!
+
+        _context.Projects.Update(project);
+
+        return property;
+    }
+
+    public void RemoveProperty(int projectId, int propertyId)
+    {
+        var project = _context.Projects.Include(i => i.Properties).FirstOrDefault(i => i.Id == projectId);
+
+        project.RemoveProperty(propertyId, true);
+
+        _context.Projects.Update(project);
+
+        var property = _context.Properties.FirstOrDefault(i => i.Id == propertyId);
+
+        _context.Properties.Remove(property);
+    }
 }
