@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 using FluentValidation;
 using MediatR;
+using Taaldc.Library.Common.Constants;
 using Taaldc.Mvc.Application.Commands.UpsertProject;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
@@ -26,8 +27,8 @@ public class UpsertPropertyCommandValidator : AbstractValidator<UpsertPropertyCo
 {
     public UpsertPropertyCommandValidator()
     {
-        RuleFor(i => i.ProjectId).NotEmpty().WithMessage("No project id found.");
-        RuleFor(i => i.Name).NotEmpty().WithMessage("Name is required.");
-        RuleFor(i => i.LandArea).NotEmpty().WithMessage("Land area is required.");
+        RuleFor(i => i.ProjectId).NotEmpty().WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(UpsertPropertyCommand.ProjectId)));
+        RuleFor(i => i.Name).NotEmpty().WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(UpsertPropertyCommand.Name)));
+        RuleFor(i => i.LandArea).NotEmpty().WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(UpsertPropertyCommand.LandArea)));
     }
 }

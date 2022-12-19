@@ -19,3 +19,10 @@ public class UpsertProjectCommand : IRequest<CommandResult>
 }
 
 //TODO: Add validator(s)
+public class UpsertProjectCommandValidator : AbstractValidator<UpsertProjectCommand>
+{
+    public UpsertProjectCommandValidator()
+    {
+        RuleFor(i => i.Name).NotEmpty();
+    }
+}

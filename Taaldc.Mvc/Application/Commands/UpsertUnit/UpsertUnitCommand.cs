@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertUnit;
@@ -22,4 +23,17 @@ public class UpsertUnitCommand : IRequest<CommandResult>
     public int FloorId { get; private set; }
     public double FloorArea { get; private set; }
     public decimal SellingPrice { get; private set; }
+}
+
+public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
+{
+    public UpsertUnitCommandValidator()
+    {
+        RuleFor(i => i.UnitTypeId).NotEmpty();
+        RuleFor(i => i.ScenicViewId).NotEmpty();
+        RuleFor(i => i.UnitNo).NotEmpty();
+        RuleFor(i => i.FloorId).NotEmpty();
+        RuleFor(i => i.FloorArea).NotEmpty();
+        RuleFor(i => i.SellingPrice).NotEmpty();
+    }
 }

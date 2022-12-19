@@ -37,6 +37,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\CatalogApi\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
+      <ProjectReference Include="..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
     </ItemGroup>
 
 </Project>
