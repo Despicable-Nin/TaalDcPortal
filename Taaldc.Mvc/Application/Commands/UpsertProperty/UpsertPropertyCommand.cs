@@ -7,10 +7,10 @@ namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommand : IRequest<CommandResult>
 {
-    [DataMember] public int ProjectId { get; set; }
-    [DataMember] public int? PropertyId { get; set; }
-    [DataMember] public string Name { get; set; }
-    [DataMember] public double LandArea { get; set; }
+    [DataMember] public int ProjectId { get;private set; }
+    [DataMember] public int? PropertyId { get;private set; }
+    [DataMember] public string Name { get;private set; }
+    [DataMember] public double LandArea { get;private set; }
 
     public UpsertPropertyCommand(int? propertyId, int projectId,string name, double landArea)
     {

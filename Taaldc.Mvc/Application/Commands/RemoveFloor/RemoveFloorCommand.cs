@@ -10,6 +10,6 @@ public class RemoveFloorCommand : IRequest<CommandResult>
         TowerId = towerId;
     }
 
-    public int FloorId { get; set; }
-    public int TowerId { get; set; }
+    public int FloorId { get; private set; }
+    public int TowerId { get;private set; }
 }

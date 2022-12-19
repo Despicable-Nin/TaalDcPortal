@@ -6,9 +6,9 @@ namespace Taaldc.Mvc.Application.Commands.UpsertProject;
 
 public class UpsertProjectCommand : IRequest<CommandResult>
 {
-    [DataMember] public string Name { get; set; }
-    [DataMember] public string Developer { get; set; }
-    [DataMember] public int? ProjectId { get; set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Developer { get;private set; }
+    [DataMember] public int? ProjectId { get;private set; }
 
     public UpsertProjectCommand(int? projectId, string name, string developer)
     {
