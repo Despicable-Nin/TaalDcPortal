@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Newtonsoft.Json;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Mvc.Application.Commands;
 
@@ -18,6 +19,12 @@ public record CommandResult
     public static CommandResult Success(int? id) => CommandResult.Create(true, default, id);
 
     public static CommandResult Failed(int? id, string errorMessage) => CommandResult.Create(false, errorMessage, id);
+
+    public static CommandResult Failed(int? id, Type type) =>
+        Failed(id, $"{type} with {id} not found.");
+
+    public static CommandResult EntityNotFoundResult(Entity entity) =>
+        CommandResult.Failed(entity.Id, entity.GetType());
 
     public string ErrorMessage { get; private set; }
     public bool IsSuccess { get; private set; }
