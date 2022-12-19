@@ -4,7 +4,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
 public sealed class UnitStatus : Enumeration
 {
-    public enum UnitStatusEnum : int
+    public enum UnitIs : int
     {
         AVAILABLE = 1,
         SOLD = 2,

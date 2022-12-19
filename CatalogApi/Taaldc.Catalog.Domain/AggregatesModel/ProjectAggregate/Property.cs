@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 
-public sealed class Property : Entity, IAggregateRoot
+public sealed class Property : Entity
 {
     private readonly List<Tower> _towers;
 
@@ -29,10 +29,12 @@ public sealed class Property : Entity, IAggregateRoot
         LandArea = landArea;
     }
 
-    public void AddTower(string name, string  address)
+    public Tower AddTower(string name, string  address)
     {
         var tower = new Tower(name, address);
         _towers.Add(tower);
+
+        return tower;
     }
 
     public void RemoveTower(int towerId)

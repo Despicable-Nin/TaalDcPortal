@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 
-public sealed class Tower : Entity, IAggregateRoot
+public sealed class Tower : Entity
 {
 
     private Tower() => _floors = new List<Floor>();
@@ -28,9 +28,12 @@ public sealed class Tower : Entity, IAggregateRoot
         Address = address;
     }
 
-    public void AddFloor(string name, string description)
+    public Floor AddFloor(string name, string description)
     {
-        _floors.Add(new Floor(name, description));
+        var floor = new Floor(name, description);
+        _floors.Add(floor);
+
+        return floor;
     }
     
     public void RemoveFloor(int id, bool hardDelete = false)

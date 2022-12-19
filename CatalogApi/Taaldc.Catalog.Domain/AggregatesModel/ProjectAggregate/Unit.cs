@@ -9,7 +9,7 @@ public sealed class Unit : Entity
     public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea)
     {
         _scenicViewId = scenicViewId;
-        _unitStatusId = (int) UnitStatus.UnitStatusEnum.AVAILABLE;
+        _unitStatusId = (int) UnitStatus.UnitIs.AVAILABLE;
         _unitTypeId = unitTypeId;
         Identifier = identifier;
         Price = price;
@@ -45,12 +45,18 @@ public sealed class Unit : Entity
         FloorArea = floorArea;
     }
 
-    public bool IsSold() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.SOLD;
+    public void MarkAsSold() => _unitStatusId = (int)UnitStatus.UnitIs.SOLD;
     
-    public bool IsAvailable() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.AVAILABLE;
+    public void MarkAsReserved() => _unitStatusId = (int)UnitStatus.UnitIs.RESERVED;
     
-    public bool IsReserved() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.RESERVED;
+    public void Block() => _unitStatusId = (int)UnitStatus.UnitIs.BLOCKED;
+
+    public bool IsSold() => _unitStatusId == (int) UnitStatus.UnitIs.SOLD;
     
-    public bool IsBlocked() => _unitStatusId == (int) UnitStatus.UnitStatusEnum.BLOCKED;
+    public bool IsAvailable() => _unitStatusId == (int) UnitStatus.UnitIs.AVAILABLE;
+    
+    public bool IsReserved() => _unitStatusId == (int) UnitStatus.UnitIs.RESERVED;
+    
+    public bool IsBlocked() => _unitStatusId == (int) UnitStatus.UnitIs.BLOCKED;
 
 }
