@@ -1,38 +1,42 @@
 using MediatR;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
 
 public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, CommandResult>
 {
-    private readonly IFloorRepository _repository;
+    private readonly IProjectRepository _repository;
 
-    public UpsertFloorCommandHandler(IFloorRepository repository)
+    public UpsertFloorCommandHandler(IProjectRepository repository)
     {
         _repository = repository;
     }
 
     public async Task<CommandResult> Handle(UpsertFloorCommand request, CancellationToken cancellationToken)
     {
+        var tower = await _repository.GetTowerAsync(request.TowerId);
+
+        if (tower == default) return CommandResult.Failed(request.TowerId, typeof(Tower));
+        
         Floor floor = default;
+
         if (request.FloorId.HasValue)
         {
-            floor = await _repository.GetAsync(request.FloorId.Value);
-            
-            if (floor == null)
-                throw new CatalogDomainException(nameof(request.FloorId),
-                    new KeyNotFoundException($"Floor with id:{request.FloorId} not found."));
+            floor = tower.Floors.FirstOrDefault(i => i.Id == request.FloorId.Value);
+
+            if (floor == null) return CommandResult.Failed(request.FloorId.Value, typeof(Floor));
 
             floor.Update(request.Name, request.Description);
-
-            _repository.Update(floor);
         }
         else
         {
             floor = new(request.Name, request.Description);
-            _repository.Add(floor);
         }
+
+        _repository.UpdateTower(tower);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
         
