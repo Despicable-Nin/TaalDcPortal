@@ -40,13 +40,14 @@ public sealed class Project : Entity, IAggregateRoot
 
     public Property GetPropertyById(int propertyId) => Properties.FirstOrDefault(i => i.Id == propertyId);
 
-    public void AddProperty(string name, double landArea)
+    public Property AddProperty(string name, double landArea)
     {
         var property = new Property(name, landArea);
         _properties.Add(property);
+
+        return property;
     }
     
-
     public void RemoveProperty(int id, bool hardDelete = false)
     {
         var remove = _properties.SingleOrDefault(x => x.Id.Equals(id));
