@@ -23,10 +23,10 @@ class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
 
         builder.HasData(new[]
         {
-            new UnitStatus(1,UnitStatus.UnitStatusEnum.AVAILABLE.ToString()),
-            new UnitStatus(2,UnitStatus.UnitStatusEnum.SOLD.ToString()),
-            new UnitStatus(3,UnitStatus.UnitStatusEnum.RESERVED.ToString()),
-            new UnitStatus(4,UnitStatus.UnitStatusEnum.BLOCKED.ToString())
+            new UnitStatus(1,UnitStatus.UnitIs.AVAILABLE.ToString()),
+            new UnitStatus(2,UnitStatus.UnitIs.SOLD.ToString()),
+            new UnitStatus(3,UnitStatus.UnitIs.RESERVED.ToString()),
+            new UnitStatus(4,UnitStatus.UnitIs.BLOCKED.ToString())
         });
     }
 }
