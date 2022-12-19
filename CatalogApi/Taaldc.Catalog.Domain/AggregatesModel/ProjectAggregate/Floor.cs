@@ -3,16 +3,19 @@ using Taaldc.Catalog.Domain.SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 
-public sealed class Floor : Entity, IAggregateRoot
+public sealed class Floor : Entity
 {
-
+    
     private Floor() => _units = new List<Unit>();
 
     public Floor(string name, string description) : this()
     {
         Name = name;
         Description = description;
+        Id = new Random().Next(1, 999999);
     }
+    
+    
 
     public string Name { get; private set; }
     public string Description { get; private set; }
