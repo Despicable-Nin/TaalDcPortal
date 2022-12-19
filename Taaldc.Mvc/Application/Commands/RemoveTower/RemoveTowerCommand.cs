@@ -4,19 +4,12 @@ namespace Taaldc.Mvc.Application.Commands.RemoveTower;
 
 public class RemoveTowerCommand : IRequest<CommandResult>
 {
-    public RemoveTowerCommand(int towerId)
+    public RemoveTowerCommand(int towerId, int propertyId)
     {
         TowerId = towerId;
+        PropertyId = propertyId;
     }
 
     public int TowerId { get; set; }
-    
-}
-
-public class RemoveTowerCommandHandler : IRequestHandler<RemoveTowerCommand, CommandResult>
-{
-    public Task<CommandResult> Handle(RemoveTowerCommand request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public int PropertyId { get; set; }
 }
