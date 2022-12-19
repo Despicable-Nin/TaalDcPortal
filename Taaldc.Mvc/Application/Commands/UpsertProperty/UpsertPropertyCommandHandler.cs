@@ -10,10 +10,10 @@ namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyCommand, CommandResult>
 {
-    private readonly IPropertyRepository _propertyRepository;
+    private readonly IProjectRepository _propertyRepository;
 
 
-    public UpsertPropertyCommandHandler(IPropertyRepository propertyRepository)
+    public UpsertPropertyCommandHandler(IProjectRepository propertyRepository)
     {
         _propertyRepository = propertyRepository;
     }
@@ -21,28 +21,34 @@ public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyComman
     public async Task<CommandResult> Handle(UpsertPropertyCommand request, CancellationToken cancellationToken)
     {
         Property property = default;
+
+        var project = await _propertyRepository.GetAsync(request.ProjectId);
+
+        if (project == default) return CommandResult.Failed(request.ProjectId, typeof(Project));
+
         if (request.PropertyId.HasValue)
         {
-            //this will be an update attempt
-            property = await _propertyRepository.GetAsync(request.PropertyId.Value);
+            //if this has value then update
+            //were going to check the navigation instead of the dbset(s)
+            //as a Property entity cannot exist outside a Project's properties
+            property = project.Properties.FirstOrDefault(i => i.Id == request.PropertyId.Value);
 
-            if (property == null)
-                throw new CatalogDomainException(nameof(request.PropertyId),
-                    new KeyNotFoundException($"Property with id:{request.PropertyId} not found."));
+            if (property == default) return CommandResult.Failed(request.PropertyId, typeof(Property));
 
+            //update
             property.Update(request.Name, request.LandArea);
 
-            _propertyRepository.Update(property);
+            _propertyRepository.Update(project);
         }
         else
         {
-            //this will be an add attempt
+            //this will a new thru the root aggregate
+            property = project.AddProperty(request.Name, request.LandArea);
 
-            property = new(request.Name, request.LandArea);
-            _propertyRepository.Add(property);
+            _propertyRepository.Update(project);
         }
 
-        await _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return CommandResult.Success(property.Id);
     }

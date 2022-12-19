@@ -24,7 +24,7 @@ public class UpsertProjectCommandHandler : IRequestHandler<UpsertProjectCommand,
             //get Project entity having id = request.ProjectId
             _project = await _repository.GetAsync(request.ProjectId.Value);
 
-            if (_project == default) return CommandResult.Failed(request.ProjectId, $"ProjectId ({request.ProjectId.Value}) does not exist.");
+            if (_project == default) return CommandResult.Failed(request.ProjectId, typeof(Project));
 
             //this is just to show that we can do different styles of assignment 
             //per use case

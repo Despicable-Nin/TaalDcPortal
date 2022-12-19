@@ -1,6 +1,7 @@
 using MediatR;
 using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 using Unit = Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Unit;
 
@@ -8,7 +9,7 @@ namespace Taaldc.Mvc.Application.Commands.UpsertUnit;
 
 public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, CommandResult>
 {
-    private readonly IFloorRepository _repository;
+    private readonly IProjectRepository _repository;
 
     public UpsertUnitCommandHandler(IFloorRepository repository)
     {
