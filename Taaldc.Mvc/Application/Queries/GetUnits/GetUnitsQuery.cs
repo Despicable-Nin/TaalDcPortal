@@ -18,16 +18,17 @@ public record GetUnitsResult
         Units = units;
     }
 
-    public int PageSize { get; private set; }
-    public int PageNumber { get; private set; }
-    public int TotalCount { get; private set; }
-    
-    public IEnumerable<UnitDto> Units { get; private set; }
+    public int PageSize { get; }
+    public int PageNumber { get; }
+    public int TotalCount { get; }
+
+    public IEnumerable<UnitDto> Units { get; }
 }
 
 public record UnitDto
 {
-    public UnitDto(string property, int propertyId, string unitType, int unitTypeId, string floor, int floorId, double floorArea, string unitNo, decimal price, string availability)
+    public UnitDto(string property, int propertyId, string unitType, int unitTypeId, string floor, int floorId,
+        double floorArea, string unitNo, decimal price, string availability)
     {
         Property = property;
         PropertyId = propertyId;
@@ -41,14 +42,14 @@ public record UnitDto
         Availability = availability;
     }
 
-    public string Property { get; private set; }
-    public int PropertyId { get; private set; }
-    public string UnitType { get; private set; }
-    public int UnitTypeId { get; private set; }
-    public string Floor { get; private set; }
-    public  int FloorId { get; private set; }
-    public double FloorArea { get; private set; }
-    public string UnitNo { get; private set; }
-    public decimal Price { get; private set; }
-    public string Availability { get; private set; }
+    public string Property { get; }
+    public int PropertyId { get; }
+    public string UnitType { get; }
+    public int UnitTypeId { get; }
+    public string Floor { get; }
+    public int FloorId { get; }
+    public double FloorArea { get; }
+    public string UnitNo { get; }
+    public decimal Price { get; }
+    public string Availability { get; }
 }

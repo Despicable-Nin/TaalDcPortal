@@ -1,5 +1,7 @@
 using System.Runtime.Serialization;
+using FluentValidation;
 using MediatR;
+using Taaldc.Library.Common.Constants;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
 
@@ -13,8 +15,20 @@ public class UpsertFloorCommand : IRequest<CommandResult>
         Description = description;
     }
 
-    [DataMember] public int TowerId { get; set; }
-    [DataMember] public int? FloorId { get; set; }
-    [DataMember] public string Name { get; set; }
-    [DataMember] public string Description { get; set; }
+    [DataMember] public int TowerId { get; private set; }
+    [DataMember] public int? FloorId { get; private set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Description { get; private set; }
+}
+
+public class UpsertFloorCommandValidator : AbstractValidator<UpsertFloorCommand>
+{
+    public UpsertFloorCommandValidator()
+    {
+        RuleFor(i => i.TowerId).NotEmpty()
+            .WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(UpsertFloorCommand.TowerId)));
+
+        RuleFor(i => i.Name).NotEmpty()
+            .WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(UpsertFloorCommand.Name)));
+    }
 }

@@ -18,24 +18,27 @@ public class CatalogDbContextFactory : IDesignTimeDbContextFactory<CatalogDbCont
         var connectionString = config.GetConnectionString("DefaultConnection");
 
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>();
-        optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
+        optionsBuilder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
 
         return new CatalogDbContext(optionsBuilder.Options, new NoMediator());
     }
 }
-class NoMediator : IMediator
+
+internal class NoMediator : IMediator
 {
-    public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
+        CancellationToken cancellationToken = default)
     {
-        return default(IAsyncEnumerable<TResponse>);
+        return default;
     }
 
     public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
     {
-        return default(IAsyncEnumerable<object?>);
+        return default;
     }
 
-    public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
+    public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        where TNotification : INotification
     {
         return Task.CompletedTask;
     }
@@ -45,9 +48,9 @@ class NoMediator : IMediator
         return Task.CompletedTask;
     }
 
-    public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
+    public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<TResponse>(default(TResponse));
+        return Task.FromResult<TResponse>(default);
     }
 
     public Task<object> Send(object request, CancellationToken cancellationToken = default)

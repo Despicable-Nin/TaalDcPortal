@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using FluentValidation;
 using MediatR;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertTower;
@@ -12,10 +13,18 @@ public class UpsertTowerCommand : IRequest<CommandResult>
         Address = address;
         TowerId = towerId;
     }
-    
-    [DataMember] public int PropertyId { get; set; }
-    [DataMember] public string Name { get; set; }
-    [DataMember] public string Address { get; set; }
-    [DataMember] public int? TowerId { get; set; }
-  
+
+    [DataMember] public int PropertyId { get; private set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Address { get; private set; }
+    [DataMember] public int? TowerId { get; private set; }
+}
+
+public class UpsertTowerCommandValidator : AbstractValidator<UpsertTowerCommand>
+{
+    public UpsertTowerCommandValidator()
+    {
+        RuleFor(i => i.PropertyId).NotEmpty();
+        RuleFor(i => i.Name).NotEmpty();
+    }
 }

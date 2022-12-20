@@ -1,22 +1,28 @@
+using FluentValidation;
 using MediatR;
+using Taaldc.Library.Common.Constants;
 
 namespace Taaldc.Mvc.Application.Commands.RemoveTower;
 
 public class RemoveTowerCommand : IRequest<CommandResult>
 {
-    public RemoveTowerCommand(int towerId)
+    public RemoveTowerCommand(int towerId, int propertyId)
     {
         TowerId = towerId;
+        PropertyId = propertyId;
     }
 
-    public int TowerId { get; set; }
-    
+    public int TowerId { get; private set; }
+    public int PropertyId { get; private set; }
 }
 
-public class RemoveTowerCommandHandler : IRequestHandler<RemoveTowerCommand, CommandResult>
+public class RemoveTowerCommandValidator : AbstractValidator<RemoveTowerCommand>
 {
-    public Task<CommandResult> Handle(RemoveTowerCommand request, CancellationToken cancellationToken)
+    public RemoveTowerCommandValidator()
     {
-        throw new NotImplementedException();
+        RuleFor(i => i.PropertyId).NotEmpty()
+            .WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(RemoveTowerCommand.PropertyId)));
+        RuleFor(i => i.TowerId).NotEmpty()
+            .WithMessage(ValidationConstants.NotEmptyErrorMessage(nameof(RemoveTowerCommand.TowerId)));
     }
 }

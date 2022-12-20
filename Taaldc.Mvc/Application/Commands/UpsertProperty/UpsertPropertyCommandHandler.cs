@@ -1,10 +1,6 @@
 using MediatR;
-using Microsoft.VisualBasic;
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
-using Taaldc.Catalog.Infrastructure.Repositories;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
 

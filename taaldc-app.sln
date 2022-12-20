@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityApi", "IdentityApi"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedWork", "SeedWork\SeedWork.csproj", "{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Library.Common", "Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj", "{A4B9E868-4623-4747-BA89-EE71C349FC94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4B9E868-4623-4747-BA89-EE71C349FC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4B9E868-4623-4747-BA89-EE71C349FC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4B9E868-4623-4747-BA89-EE71C349FC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4B9E868-4623-4747-BA89-EE71C349FC94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

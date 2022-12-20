@@ -1,5 +1,4 @@
 using MediatR;
-using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
@@ -20,7 +19,7 @@ public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, Com
         var tower = await _repository.GetTowerAsync(request.TowerId);
 
         if (tower == default) return CommandResult.Failed(request.TowerId, typeof(Tower));
-        
+
         Floor floor = default;
 
         if (request.FloorId.HasValue)
@@ -33,13 +32,13 @@ public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, Com
         }
         else
         {
-            floor = new(request.Name, request.Description);
+            floor = new Floor(request.Name, request.Description);
         }
 
         _repository.UpdateTower(tower);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
-        
+
         return CommandResult.Success(floor.Id);
     }
 }

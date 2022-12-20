@@ -12,9 +12,12 @@ public class UpsertUnitTypeCommand : IRequest<string>
         ShortCode = shortCode;
     }
 
-    [DataMember] public int? UnitId { get; set; }
-    [DataMember] public string Name { get; set; }
-    [DataMember] public string ShortCode { get; set; }
+    [DataMember] public int? UnitId { get; private set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string ShortCode { get; private set; }
 
-    public bool IsNew() => !UnitId.HasValue;
+    public bool IsNew()
+    {
+        return !UnitId.HasValue;
+    }
 }

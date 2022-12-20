@@ -1,17 +1,19 @@
 {
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:6375",
-      "sslPort": 44325
+      "applicationUrl": "http://localhost:44797",
+      "sslPort": 44335
     }
   },
   "profiles": {
-    "taaldc_mvc": {
+    "test": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:7253;http://localhost:5025",
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7203;http://localhost:5207",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -19,6 +21,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
