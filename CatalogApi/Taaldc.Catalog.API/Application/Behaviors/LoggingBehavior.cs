@@ -1,7 +1,7 @@
 using MediatR;
 using taaldc_mvc.Extensions;
 
-namespace taaldc_mvc.Areas;
+namespace Taaldc.Catalog.API.Application.Behaviors;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

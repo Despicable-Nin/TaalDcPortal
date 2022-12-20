@@ -2,7 +2,7 @@ using MediatR;
 using taaldc_mvc.Extensions;
 using Taaldc.Catalog.Infrastructure;
 
-namespace Taaldc.Mvc.Application.Behaviors;
+namespace Taaldc.Catalog.API.Application.Behaviors;
 
 public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

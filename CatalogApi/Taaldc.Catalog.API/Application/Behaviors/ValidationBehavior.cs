@@ -3,7 +3,7 @@ using MediatR;
 using taaldc_catalog.domain.Exceptions;
 using taaldc_mvc.Extensions;
 
-namespace Taaldc.Mvc.Application.Behaviors;
+namespace Taaldc.Catalog.API.Application.Behaviors;
 
 public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

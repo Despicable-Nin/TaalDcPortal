@@ -5,8 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-taaldc_mvc-cd036eb3-5b34-4211-ad09-18c31b1ca3ea</UserSecretsId>
-        <RootNamespace>Taaldc.Mvc</RootNamespace>
-        <AssemblyName>Taaldc.Mvc</AssemblyName>
+        <RootNamespace>Taaldc.Catalog.API</RootNamespace>
+        <AssemblyName>Taaldc.Catalog.API</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'taaldc_mvc' " />
@@ -37,11 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CatalogApi\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
-      <ProjectReference Include="..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\favicon.ico" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
@@ -61,6 +56,11 @@
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE" />
       <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
+      <ProjectReference Include="..\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
