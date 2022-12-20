@@ -1,4 +1,4 @@
-namespace Taaldc.Library.Common.Constants;
+namespace TaalDc.Library.Common.Constants;
 
 public class ValidationConstants
 {

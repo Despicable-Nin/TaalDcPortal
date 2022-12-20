@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
 
-namespace Taaldc.Mvc.Application.Commands;
+namespace Taaldc.Catalog.API.Application.Commands;
 
 public record CommandResult
 {
@@ -18,7 +18,7 @@ public record CommandResult
 
     private static CommandResult Create(bool isSuccess, string errorMessage, int? id)
     {
-        return new(isSuccess, errorMessage, id);
+        return new CommandResult(isSuccess, errorMessage, id);
     }
 
     public static CommandResult Success(int? id)

@@ -1,9 +1,8 @@
 using MediatR;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
-using Unit = Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Unit;
+using Unit = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertUnit;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 
 public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, CommandResult>
 {

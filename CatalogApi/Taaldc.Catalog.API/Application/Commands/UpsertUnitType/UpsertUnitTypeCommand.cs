@@ -1,7 +1,7 @@
 using System.Runtime.Serialization;
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertUnitType;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertUnitType;
 
 public class UpsertUnitTypeCommand : IRequest<string>
 {

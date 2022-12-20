@@ -1,5 +1,5 @@
 
-namespace Taaldc.Catalog.Domain.SeedWork;
+namespace SeedWork;
 
 public abstract class Entity : IAuditable
 {

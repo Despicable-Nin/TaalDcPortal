@@ -1,8 +1,8 @@
 using FluentValidation;
 using MediatR;
-using Taaldc.Library.Common.Constants;
+using TaalDc.Library.Common.Constants;
 
-namespace Taaldc.Mvc.Application.Commands.RemoveTower;
+namespace Taaldc.Catalog.API.Application.Commands.RemoveTower;
 
 public class RemoveTowerCommand : IRequest<CommandResult>
 {

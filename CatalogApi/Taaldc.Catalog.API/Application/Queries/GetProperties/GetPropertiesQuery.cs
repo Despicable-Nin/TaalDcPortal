@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Queries.GetProperties;
+namespace Taaldc.Catalog.API.Application.Queries.GetProperties;
 
 public class GetPropertiesQuery : IRequest<GetPropertiesResult>
 {

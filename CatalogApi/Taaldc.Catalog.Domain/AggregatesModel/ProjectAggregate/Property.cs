@@ -1,8 +1,7 @@
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
+using Taaldc.Catalog.Domain.Exceptions;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class Property : Entity
 {

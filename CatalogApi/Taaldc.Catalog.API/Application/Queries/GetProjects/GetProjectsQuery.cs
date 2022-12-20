@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Queries.GetProjects;
+namespace Taaldc.Catalog.API.Application.Queries.GetProjects;
 
 public class GetProjectsQuery : IRequest<GetProjectsResult>
 {

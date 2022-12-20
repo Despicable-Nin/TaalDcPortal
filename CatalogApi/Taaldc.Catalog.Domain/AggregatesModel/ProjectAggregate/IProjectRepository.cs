@@ -1,7 +1,4 @@
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 

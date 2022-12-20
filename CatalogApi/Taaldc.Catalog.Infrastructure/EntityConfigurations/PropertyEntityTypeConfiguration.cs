@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
-using Property = Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property;
+using Property = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 class PropertyEntityTypeConfiguration : IEntityTypeConfiguration<Property>

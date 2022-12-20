@@ -1,10 +1,8 @@
-using Microsoft.VisualBasic.CompilerServices;
 using Shouldly;
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.Exceptions;
 
-namespace Catalog.Domain.Tests;
+namespace Catalog.Domain.Tests.Catalog.Domain;
 
 public class UnitTest1
 {

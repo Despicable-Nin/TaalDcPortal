@@ -1,8 +1,7 @@
 using System.ComponentModel;
 using System.Data;
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
+using Taaldc.Catalog.Domain.Exceptions;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Queries.GetTowers;
+namespace Taaldc.Catalog.API.Application.Queries.GetTowers;
 
 public class GetTowersHandler : IRequestHandler<GetTowersQuery, GetTowersResult>
 {

@@ -1,8 +1,7 @@
 using MediatR;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyCommand, CommandResult>
 {

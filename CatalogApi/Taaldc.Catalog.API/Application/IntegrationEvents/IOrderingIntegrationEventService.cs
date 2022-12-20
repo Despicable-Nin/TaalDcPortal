@@ -1,4 +1,4 @@
-namespace Taaldc.Mvc.Application.IntegrationEvents;
+namespace Taaldc.Catalog.API.Application.IntegrationEvents;
 
 public interface IOrderingIntegrationEventService
 {

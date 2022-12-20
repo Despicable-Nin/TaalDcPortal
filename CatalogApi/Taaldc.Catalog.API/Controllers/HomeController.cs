@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace taaldc_mvc.Controllers;
+namespace Taaldc.Catalog.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]

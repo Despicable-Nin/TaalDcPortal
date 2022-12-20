@@ -1,10 +1,8 @@
 using MediatR;
-using taaldc_catalog.domain.Exceptions;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
+using Taaldc.Catalog.Domain.Exceptions;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertTower;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertTower;
 
 public class UpsertTowerCommandHandler : IRequestHandler<UpsertTowerCommand, CommandResult>
 {

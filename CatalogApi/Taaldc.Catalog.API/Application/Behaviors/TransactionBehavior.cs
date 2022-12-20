@@ -1,5 +1,5 @@
 using MediatR;
-using taaldc_mvc.Extensions;
+using Taaldc.Catalog.API.Extensions;
 using Taaldc.Catalog.Infrastructure;
 
 namespace Taaldc.Catalog.API.Application.Behaviors;

@@ -1,7 +1,7 @@
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
+using Taaldc.Catalog.Domain.Exceptions;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class Floor : Entity
 {

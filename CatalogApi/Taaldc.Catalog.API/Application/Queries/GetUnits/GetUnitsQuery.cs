@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Queries.GetUnits;
+namespace Taaldc.Catalog.API.Application.Queries.GetUnits;
 
 public class GetUnitsQuery : IRequest<GetUnitsResult>
 {

@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
 using FluentValidation;
 using MediatR;
-using Taaldc.Library.Common.Constants;
+using TaalDc.Library.Common.Constants;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 
 public class UpsertFloorCommand : IRequest<CommandResult>
 {

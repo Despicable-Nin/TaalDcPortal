@@ -1,7 +1,7 @@
 using MediatR;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertProject;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertProject;
 
 public class UpsertProjectCommandHandler : IRequestHandler<UpsertProjectCommand, CommandResult>
 {

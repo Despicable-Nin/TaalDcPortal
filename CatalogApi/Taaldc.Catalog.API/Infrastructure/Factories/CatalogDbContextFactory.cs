@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Taaldc.Catalog.Infrastructure;
 
-namespace Taaldc.Mvc.Infrastructure.Factories;
+namespace Taaldc.Catalog.API.Infrastructure.Factories;
 
 public class CatalogDbContextFactory : IDesignTimeDbContextFactory<CatalogDbContext>
 {

@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertUnit;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 
 public class UpsertUnitCommand : IRequest<CommandResult>
 {

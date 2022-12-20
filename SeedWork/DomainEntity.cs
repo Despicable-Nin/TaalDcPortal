@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Catalog.Domain.SeedWork;
+namespace SeedWork;
 
 public abstract class DomainEntity : IDomainEvent
 {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Taaldc.Catalog.Infrastructure;
 
-namespace taaldc_mvc.Extensions.DI;
+namespace Taaldc.Catalog.API.Extensions.DI;
 
 public static class IServiceCollectionExtensions
 {

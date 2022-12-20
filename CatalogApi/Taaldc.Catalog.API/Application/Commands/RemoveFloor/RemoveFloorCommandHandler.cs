@@ -1,7 +1,7 @@
 using MediatR;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.RemoveFloor;
+namespace Taaldc.Catalog.API.Application.Commands.RemoveFloor;
 
 public class RemoveFloorCommandHandler : IRequestHandler<RemoveFloorCommand, CommandResult>
 {

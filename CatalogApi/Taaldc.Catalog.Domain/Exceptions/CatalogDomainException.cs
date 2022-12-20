@@ -1,4 +1,4 @@
-namespace taaldc_catalog.domain.Exceptions;
+namespace Taaldc.Catalog.Domain.Exceptions;
 
 public class CatalogDomainException : Exception
 {

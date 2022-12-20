@@ -1,7 +1,7 @@
 using MediatR;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.RemoveUnit;
+namespace Taaldc.Catalog.API.Application.Commands.RemoveUnit;
 
 public class RemoveUnitCommandHandler : IRequestHandler<RemoveUnitCommand, CommandResult>
 {

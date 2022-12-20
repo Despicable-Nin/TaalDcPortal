@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
-using taaldc_catalog.domain.Exceptions;
-using taaldc_mvc.Extensions;
+using Taaldc.Catalog.API.Extensions;
+using Taaldc.Catalog.Domain.Exceptions;
 
 namespace Taaldc.Catalog.API.Application.Behaviors;
 

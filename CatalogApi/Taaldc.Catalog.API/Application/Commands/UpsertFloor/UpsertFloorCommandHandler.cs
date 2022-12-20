@@ -1,9 +1,7 @@
 using MediatR;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertFloor;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 
 public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, CommandResult>
 {

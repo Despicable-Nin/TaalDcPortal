@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 using FluentValidation;
 using MediatR;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertTower;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertTower;
 
 public class UpsertTowerCommand : IRequest<CommandResult>
 {

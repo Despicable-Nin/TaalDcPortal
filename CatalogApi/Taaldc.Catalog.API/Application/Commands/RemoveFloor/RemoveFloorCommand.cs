@@ -1,8 +1,8 @@
 using FluentValidation;
 using MediatR;
-using Taaldc.Library.Common.Constants;
+using TaalDc.Library.Common.Constants;
 
-namespace Taaldc.Mvc.Application.Commands.RemoveFloor;
+namespace Taaldc.Catalog.API.Application.Commands.RemoveFloor;
 
 public class RemoveFloorCommand : IRequest<CommandResult>
 {

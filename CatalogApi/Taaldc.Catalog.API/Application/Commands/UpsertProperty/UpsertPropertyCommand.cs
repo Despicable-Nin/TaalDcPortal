@@ -1,9 +1,9 @@
 using System.Runtime.Serialization;
 using FluentValidation;
 using MediatR;
-using Taaldc.Library.Common.Constants;
+using TaalDc.Library.Common.Constants;
 
-namespace Taaldc.Mvc.Application.Commands.UpsertProperty;
+namespace Taaldc.Catalog.API.Application.Commands.UpsertProperty;
 
 public class UpsertPropertyCommand : IRequest<CommandResult>
 {

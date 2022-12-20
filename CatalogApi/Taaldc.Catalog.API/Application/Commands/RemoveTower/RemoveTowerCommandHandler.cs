@@ -1,7 +1,7 @@
 using MediatR;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
-namespace Taaldc.Mvc.Application.Commands.RemoveTower;
+namespace Taaldc.Catalog.API.Application.Commands.RemoveTower;
 
 public class RemoveTowerCommandHandler : IRequestHandler<RemoveTowerCommand, CommandResult>
 {
