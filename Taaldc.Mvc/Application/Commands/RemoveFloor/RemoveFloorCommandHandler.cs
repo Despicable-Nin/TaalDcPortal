@@ -14,8 +14,8 @@ public class RemoveFloorCommandHandler : IRequestHandler<RemoveFloorCommand, Com
 
     public async Task<CommandResult> Handle(RemoveFloorCommand request, CancellationToken cancellationToken)
     {
-        _repository.RemoveFloor(request.TowerId,request.FloorId);
-        
+        _repository.RemoveFloor(request.TowerId, request.FloorId);
+
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return CommandResult.Success(request.FloorId);

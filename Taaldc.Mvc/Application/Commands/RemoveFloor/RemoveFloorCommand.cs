@@ -1,4 +1,3 @@
-using Azure.Core;
 using FluentValidation;
 using MediatR;
 using Taaldc.Library.Common.Constants;
@@ -14,7 +13,7 @@ public class RemoveFloorCommand : IRequest<CommandResult>
     }
 
     public int FloorId { get; private set; }
-    public int TowerId { get;private set; }
+    public int TowerId { get; private set; }
 }
 
 public class RemoveFloorCommandValidator : AbstractValidator<RemoveFloorCommand>

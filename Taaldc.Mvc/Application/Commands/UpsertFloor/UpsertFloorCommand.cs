@@ -15,10 +15,10 @@ public class UpsertFloorCommand : IRequest<CommandResult>
         Description = description;
     }
 
-    [DataMember] public int TowerId { get;private set; }
-    [DataMember] public int? FloorId { get;private set; }
-    [DataMember] public string Name { get;private set; }
-    [DataMember] public string Description { get;private set; }
+    [DataMember] public int TowerId { get; private set; }
+    [DataMember] public int? FloorId { get; private set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Description { get; private set; }
 }
 
 public class UpsertFloorCommandValidator : AbstractValidator<UpsertFloorCommand>

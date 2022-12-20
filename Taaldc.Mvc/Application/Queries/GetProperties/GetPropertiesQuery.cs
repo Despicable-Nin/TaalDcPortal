@@ -18,12 +18,12 @@ public record GetPropertiesResult
         Properties = properties;
     }
 
-    public int PageSize { get; private set; }
-    public int PageNumber { get; private set; }
-    public int TotalCount { get; private set; }
-    
+    public int PageSize { get; }
+    public int PageNumber { get; }
+    public int TotalCount { get; }
 
-    public IEnumerable<PropertyDto> Properties { get; private set; }
+
+    public IEnumerable<PropertyDto> Properties { get; }
 }
 
 public record PropertyDto
@@ -35,7 +35,7 @@ public record PropertyDto
         Towers = towers;
     }
 
-    public string Name { get; private set; }
-    public double LandArea { get; private set; }
-    public int Towers { get; private set; }
+    public string Name { get; }
+    public double LandArea { get; }
+    public int Towers { get; }
 }

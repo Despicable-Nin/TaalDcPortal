@@ -1,6 +1,4 @@
 using MediatR;
-using taaldc_catalog.domain.Exceptions;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Taaldc.Mvc.Application.Commands.UpsertProject;
@@ -18,7 +16,7 @@ public class UpsertProjectCommandHandler : IRequestHandler<UpsertProjectCommand,
     public async Task<CommandResult> Handle(UpsertProjectCommand request, CancellationToken cancellationToken)
     {
         Project _project = default;
-        
+
         if (request.ProjectId.HasValue)
         {
             //get Project entity having id = request.ProjectId
@@ -32,12 +30,11 @@ public class UpsertProjectCommandHandler : IRequestHandler<UpsertProjectCommand,
             _project.Developer = request.Developer;
 
             _repository.Update(_project);
-
         }
         else
         {
             _project = new Project(request.Name, request.Developer);
-            _repository.Add(_project );
+            _repository.Add(_project);
         }
 
         await _repository.UnitOfWork.SaveChangesAsync(CancellationToken.None);

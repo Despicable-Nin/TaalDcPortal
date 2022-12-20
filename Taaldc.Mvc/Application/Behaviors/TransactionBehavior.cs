@@ -4,13 +4,12 @@ using Taaldc.Catalog.Infrastructure;
 
 namespace Taaldc.Mvc.Application.Behaviors;
 
-
 public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-
     private readonly CatalogDbContext _dbContext;
+
+    private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
     //private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
 
     public TransactionBehaviour(CatalogDbContext dbContext,
@@ -22,7 +21,8 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
         var response = default(TResponse);
         var typeName = request.GetGenericTypeName();
@@ -30,7 +30,6 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
 
         try
         {
-
             //remove this when TODO is uncommented
             return await next();
 

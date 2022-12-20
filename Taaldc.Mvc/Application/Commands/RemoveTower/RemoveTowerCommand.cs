@@ -12,8 +12,8 @@ public class RemoveTowerCommand : IRequest<CommandResult>
         PropertyId = propertyId;
     }
 
-    public int TowerId { get;private set; }
-    public int PropertyId { get;private set; }
+    public int TowerId { get; private set; }
+    public int PropertyId { get; private set; }
 }
 
 public class RemoveTowerCommandValidator : AbstractValidator<RemoveTowerCommand>

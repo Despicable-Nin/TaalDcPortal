@@ -13,12 +13,11 @@ public class UpsertTowerCommand : IRequest<CommandResult>
         Address = address;
         TowerId = towerId;
     }
-    
-    [DataMember] public int PropertyId { get;private set; }
-    [DataMember] public string Name { get;private set; }
-    [DataMember] public string Address { get;private set; }
-    [DataMember] public int? TowerId { get;private set; }
-  
+
+    [DataMember] public int PropertyId { get; private set; }
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Address { get; private set; }
+    [DataMember] public int? TowerId { get; private set; }
 }
 
 public class UpsertTowerCommandValidator : AbstractValidator<UpsertTowerCommand>

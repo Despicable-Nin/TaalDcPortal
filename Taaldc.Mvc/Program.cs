@@ -1,33 +1,25 @@
 ﻿using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using taaldc_mvc.Areas;
-using taaldc_mvc.Data;
 using taaldc_mvc.Extensions.DI;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
 using Taaldc.Mvc.Application.Behaviors;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-// builder.Services.AddControllersWithViews();
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddControllers();
+
 
 builder.Services
     .AddApplicationInsights(builder.Configuration)
-    .AddCustomDbContext(builder.Configuration)
-    .AddDatabaseDeveloperPageExceptionFilter()
-    .AddControllersWithViews();
-    
+    .AddCustomDbContext(builder.Configuration);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -44,14 +36,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
-else
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -61,9 +49,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    "default",
-    "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages();
+app.MapControllers();
 
 app.Run();

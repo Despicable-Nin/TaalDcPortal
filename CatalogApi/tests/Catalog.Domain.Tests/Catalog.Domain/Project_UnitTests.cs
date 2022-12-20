@@ -67,6 +67,8 @@ public class UnitTest1
     
         var remove = project.Properties.SingleOrDefault(x => x.Name == "one tolentino east residences");
 
+        remove.ShouldNotBeNull();
+
         project.RemoveProperty(remove.Id);
 
         project.Properties.Any(x => x.Id == remove.Id);
