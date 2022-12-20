@@ -11,13 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Catalog.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Domain.Tests", "CatalogApi\tests\Catalog.Domain.Tests\Catalog.Domain.Tests.csproj", "{F9D1D9C3-7F32-4C9E-A8B4-33EFCA8BE939}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityApi", "IdentityApi", "{55785DAE-00FB-4768-8FFD-E4FD3CD41D3F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedWork", "SeedWork\SeedWork.csproj", "{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Library.Common", "Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj", "{A4B9E868-4623-4747-BA89-EE71C349FC94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Catalog.API", "CatalogApi\Taaldc.Catalog.API\Taaldc.Catalog.API.csproj", "{EB1843DF-6053-451C-9374-C9A339EAD95F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MarketingApi", "MarketingApi", "{64B0E492-5994-4A0F-9464-701A8B3A9136}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
