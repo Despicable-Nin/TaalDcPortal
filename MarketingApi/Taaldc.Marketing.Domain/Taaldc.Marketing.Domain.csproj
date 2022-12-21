@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="AggregatesModel" />
       <Folder Include="Events" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
     </ItemGroup>
 
 </Project>
