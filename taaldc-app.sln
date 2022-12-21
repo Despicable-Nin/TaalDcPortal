@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.Domain", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.Infrastructure", "MarketingApi\Taaldc.Marketing.Infrastructure\Taaldc.Marketing.Infrastructure.csproj", "{286683B1-365D-481A-9A49-80CD06D81E49}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portal", "Portal", "{18228AA3-9609-4C01-9771-20B89A0FA358}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{AD194972-5E5A-40A4-999E-C56C76D36511}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{286683B1-365D-481A-9A49-80CD06D81E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{286683B1-365D-481A-9A49-80CD06D81E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{286683B1-365D-481A-9A49-80CD06D81E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD194972-5E5A-40A4-999E-C56C76D36511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD194972-5E5A-40A4-999E-C56C76D36511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD194972-5E5A-40A4-999E-C56C76D36511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD194972-5E5A-40A4-999E-C56C76D36511}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,5 +83,6 @@ Global
 		{EB1843DF-6053-451C-9374-C9A339EAD95F} = {E89957EF-466A-4188-8DCD-C3AC29A85B61}
 		{5E2F9BC6-B568-4B78-A68D-203846C20B1D} = {64B0E492-5994-4A0F-9464-701A8B3A9136}
 		{286683B1-365D-481A-9A49-80CD06D81E49} = {64B0E492-5994-4A0F-9464-701A8B3A9136}
+		{AD194972-5E5A-40A4-999E-C56C76D36511} = {18228AA3-9609-4C01-9771-20B89A0FA358}
 	EndGlobalSection
 EndGlobal
