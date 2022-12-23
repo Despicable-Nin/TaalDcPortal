@@ -5,8 +5,7 @@ namespace Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 
 public class Inquiry : Entity, IAggregateRoot
 {
-    private int _inquiryTypeId;
-
+   
     public Inquiry(int inquiryTypeId, string message, int propertyId, string property,  string remarks, Customer customer)
     {
         _inquiryTypeId = inquiryTypeId;
@@ -17,7 +16,8 @@ public class Inquiry : Entity, IAggregateRoot
         Customer = customer ??
                    throw new MarketingDomainException(nameof(Customer), new Exception("Customer required."));
     }
-
+    
+    private int _inquiryTypeId;
     public InquiryType InquiryType { get; private set; }
     
     public string Message { get; private set; }
