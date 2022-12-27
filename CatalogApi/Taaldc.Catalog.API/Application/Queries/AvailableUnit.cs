@@ -12,9 +12,4 @@ public record AvailableUnit
     public string Status { get; }
     public string Type { get; }
     public string TypeCode { get; }
-    private int TotalCount { get; }
-    private int PageSize { get; }
-    private int PageNumber { get; }
-
-    public int GetTotalCount => TotalCount;
 }
