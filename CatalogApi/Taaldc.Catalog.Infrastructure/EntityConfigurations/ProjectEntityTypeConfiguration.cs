@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
@@ -14,8 +13,10 @@ class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
 
         builder.Property(b => b.Name).IsRequired();
         builder.HasIndex(b => b.Name).IsUnique();
-
-        builder.Property(b => b.IsActive).HasDefaultValue(true);
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("projectseq", CatalogDbContext.DEFAULT_SCHEMA);
         
         //matches ProjectId config on PropertyEntityTypeConfiguration
         builder.Metadata

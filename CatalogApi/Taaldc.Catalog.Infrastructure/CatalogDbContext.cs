@@ -1,11 +1,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using SeedWork;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
-using Taaldc.Catalog.Domain.SeedWork;
-using Unit = Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Unit;
+using Unit = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit;
 
 namespace Taaldc.Catalog.Infrastructure;
 

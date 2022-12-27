@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-taaldc_mvc-cd036eb3-5b34-4211-ad09-18c31b1ca3ea</UserSecretsId>
+        <RootNamespace>Taaldc.Catalog.API</RootNamespace>
+        <AssemblyName>Taaldc.Catalog.API</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'taaldc_mvc' " />
+    <ItemGroup>
+        <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="6.4.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+        <PackageReference Include="MediatR" Version="11.1.0" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.Kubernetes" Version="3.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="wwwroot\favicon.ico" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\bootstrap\LICENSE" />
+        <_ContentIncludedByDefault Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
+        <ProjectReference Include="..\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

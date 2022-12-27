@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AggregatesModel\FloorRepository" />
     <Folder Include="Events" />
   </ItemGroup>
 

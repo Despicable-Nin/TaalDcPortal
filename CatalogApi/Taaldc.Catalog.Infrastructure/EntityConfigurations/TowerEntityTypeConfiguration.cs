@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
-using Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
@@ -14,6 +13,11 @@ class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
         
         builder.Property(b => b.Name).IsRequired();
         builder.HasIndex(b => b.Name).IsUnique();
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("towerseq");
+
 
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
         builder.Property<int>("PropertyId").IsRequired();

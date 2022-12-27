@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
@@ -15,6 +15,11 @@ class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
         builder.HasIndex(b => b.Identifier).IsUnique();
 
         builder.Property(b => b.Price).IsRequired();
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("unitseq");
+
         
         //matches Floor.Units configuration on FloorEntityTypeConfiguration
         builder.Property<int>("FloorId").IsRequired();

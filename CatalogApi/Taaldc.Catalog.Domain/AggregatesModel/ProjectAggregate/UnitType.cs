@@ -1,6 +1,6 @@
-using Taaldc.Catalog.Domain.SeedWork;
+using SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class UnitType : Enumeration
 {

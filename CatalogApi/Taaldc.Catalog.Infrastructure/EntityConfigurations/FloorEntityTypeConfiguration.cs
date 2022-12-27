@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
@@ -12,6 +12,11 @@ class FloorEntityTypeConfiguration : IEntityTypeConfiguration<Floor>
         builder.HasKey(b => b.Id);
         
         builder.Property(b => b.Name).IsRequired();
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("floorseq");
+
 
         //matches Toower.Floors configuration on FloorEntityTypeConfiguration
         builder.Property<int>("TowerId").IsRequired();

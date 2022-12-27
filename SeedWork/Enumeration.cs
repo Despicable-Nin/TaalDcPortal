@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Taaldc.Catalog.Domain.SeedWork;
+namespace SeedWork;
 
 public abstract class Enumeration : IComparable
 {

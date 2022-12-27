@@ -1,7 +1,7 @@
 
-namespace Taaldc.Catalog.Domain.SeedWork;
+namespace SeedWork;
 
-public abstract class Entity : IAuditable
+public abstract class Entity //: IAuditable
 {
 
     private int? _requestedHashCode;
@@ -59,11 +59,11 @@ public abstract class Entity : IAuditable
     }
 
     //implementation of IAuditable
-    public string CreatedBy { get; private set; }
-    public DateTimeOffset CreatedOn { get; private set;}
-    public string ModifiedBy { get; private set;}
-    public DateTimeOffset ModifiedOn { get;private set; }
-    public bool IsActive { get; private set;}
+    public string CreatedBy { get; private set; } = string.Empty;
+    public DateTimeOffset CreatedOn { get; private set;} = DateTimeOffset.Now;
+    public string ModifiedBy { get; private set; } = string.Empty;
+    public DateTimeOffset ModifiedOn { get;private set; } = DateTimeOffset.Now;
+    public bool IsActive { get; private set; } = true;
 
     public void AuditOnCreate(string user)
     {

@@ -1,4 +1,4 @@
-namespace Taaldc.Catalog.Domain.SeedWork;
+namespace SeedWork;
 
 public interface IUnitOfWork : IDisposable
 {

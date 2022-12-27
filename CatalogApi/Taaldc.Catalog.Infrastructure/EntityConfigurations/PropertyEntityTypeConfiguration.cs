@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate;
-using Property = Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property;
+using Property = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 class PropertyEntityTypeConfiguration : IEntityTypeConfiguration<Property>
@@ -13,8 +12,11 @@ class PropertyEntityTypeConfiguration : IEntityTypeConfiguration<Property>
         
         builder.Property(b => b.Name).IsRequired();
         builder.HasIndex(b => b.Name).IsUnique();
-
-
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("propertyseq");
+        
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
         builder.Property<int>("ProjectId")
             .IsRequired();
