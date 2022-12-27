@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 using Taaldc.Catalog.API.DTO;
@@ -6,6 +7,10 @@ namespace Taaldc.Catalog.API.Controllers;
 
 public class FloorsController : ApiBaseController<FloorsController>
 {
+    public FloorsController(ILogger<FloorsController> logger, IMediator mediator) : base(logger, mediator)
+    {
+    }
+
     [HttpPost("{id}/units")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]

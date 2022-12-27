@@ -33,15 +33,15 @@ public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyComman
             //update
             property.Update(request.Name, request.LandArea);
 
-            _propertyRepository.Update(project);
+           
         }
         else
         {
             //this will a new thru the root aggregate
             property = project.AddProperty(request.Name, request.LandArea);
-
-            _propertyRepository.Update(project);
         }
+        
+        _propertyRepository.Update(project);
 
         _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

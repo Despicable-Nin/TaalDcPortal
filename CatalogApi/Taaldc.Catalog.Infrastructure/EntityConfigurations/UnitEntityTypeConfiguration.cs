@@ -16,6 +16,11 @@ class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
 
         builder.Property(b => b.Price).IsRequired();
         
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("unitseq");
+
+        
         //matches Floor.Units configuration on FloorEntityTypeConfiguration
         builder.Property<int>("FloorId").IsRequired();
         

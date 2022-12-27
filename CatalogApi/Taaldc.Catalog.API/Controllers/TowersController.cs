@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 using Taaldc.Catalog.API.DTO;
@@ -7,6 +8,10 @@ namespace Taaldc.Catalog.API.Controllers;
 
 public class TowersController : ApiBaseController<TowersController>
 {
+    public TowersController(ILogger<TowersController> logger, IMediator mediator) : base(logger, mediator)
+    {
+    }
+
     [HttpPost("{id}/floors")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
