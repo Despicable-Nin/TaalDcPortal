@@ -22,19 +22,19 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("floorseq")
+            modelBuilder.HasSequence("floorseq", "catalog")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("projectseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("propertyseq")
+            modelBuilder.HasSequence("propertyseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("towerseq")
+            modelBuilder.HasSequence("towerseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("unitseq")
+            modelBuilder.HasSequence("unitseq", "catalog")
                 .IncrementsBy(10);
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
@@ -43,7 +43,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "floorseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "floorseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -127,7 +127,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "propertyseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "propertyseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -215,7 +215,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "towerseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "towerseq", "catalog");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -264,7 +264,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()

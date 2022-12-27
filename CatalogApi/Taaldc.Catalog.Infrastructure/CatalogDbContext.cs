@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
@@ -32,9 +33,18 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
     }
+    
+    
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Entity> entry in
+                 ChangeTracker.Entries<Entity>())
+        {
+            Debug.Print($"Checking states: {entry.Entity.GetType()}{entry.State}");
+        }
+        
+
         return base.SaveChangesAsync(cancellationToken);
     }
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)

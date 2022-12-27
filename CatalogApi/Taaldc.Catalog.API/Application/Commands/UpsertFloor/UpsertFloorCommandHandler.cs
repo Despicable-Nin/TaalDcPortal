@@ -30,7 +30,9 @@ public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, Com
         }
         else
         {
-            floor = new Floor(request.Name, request.Description);
+            //floor = new Floor(request.Name, request.Description);
+
+            floor = tower.AddFloor(request.Name, request.Description);
         }
 
         _repository.UpdateTower(tower);

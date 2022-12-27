@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Taaldc.Catalog.API.Application.Commands.UpsertProperty;
 using Taaldc.Catalog.API.Application.Commands.UpsertTower;
 using Taaldc.Catalog.API.DTO;
 
@@ -11,11 +12,19 @@ public class PropertiesController : ApiBaseController<PropertiesController>
     {
     }
 
-    [HttpPost("{id}/towers")]
+ 
+
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertTower(int id, UpsertTowerDTO model)
+    public async Task<IActionResult> UpsertProperty(UpsertPropertyDTO model)
     {
-        return Ok(await _mediator.Send(new UpsertTowerCommand(id, model.Name, model.Address, model.TowerId)));
+        return Ok(
+            await _mediator.Send(
+                new UpsertPropertyCommand(
+                    model.PropertyId, 
+                    model.ProjectId, 
+                    model.Name,
+                    model.LandArea)));
     }
 }
