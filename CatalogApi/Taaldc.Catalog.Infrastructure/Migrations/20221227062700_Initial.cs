@@ -18,6 +18,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             migrationBuilder.CreateSequence(
                 name: "floorseq",
+                schema: "catalog",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
@@ -27,14 +28,17 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             migrationBuilder.CreateSequence(
                 name: "propertyseq",
+                schema: "catalog",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
                 name: "towerseq",
+                schema: "catalog",
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
                 name: "unitseq",
+                schema: "catalog",
                 incrementBy: 10);
 
             migrationBuilder.CreateTable(
@@ -377,20 +381,24 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog");
 
             migrationBuilder.DropSequence(
-                name: "floorseq");
+                name: "floorseq",
+                schema: "catalog");
 
             migrationBuilder.DropSequence(
                 name: "projectseq",
                 schema: "catalog");
 
             migrationBuilder.DropSequence(
-                name: "propertyseq");
+                name: "propertyseq",
+                schema: "catalog");
 
             migrationBuilder.DropSequence(
-                name: "towerseq");
+                name: "towerseq",
+                schema: "catalog");
 
             migrationBuilder.DropSequence(
-                name: "unitseq");
+                name: "unitseq",
+                schema: "catalog");
         }
     }
 }

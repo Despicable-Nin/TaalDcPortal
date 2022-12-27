@@ -16,7 +16,7 @@ class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
         
         //IMPORTANT: this is need for auto-increment of ID
         builder.Property(o => o.Id)
-            .UseHiLo("towerseq");
+            .UseHiLo("towerseq", CatalogDbContext.DEFAULT_SCHEMA);
 
 
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration

@@ -144,24 +144,9 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Towers
             .Include(i => i.Floors)
-            .FirstOrDefaultAsync(i => i.Id == towerId);
+            .SingleOrDefaultAsync(i => i.Id == towerId);
     }
-
-
-    public Property AddProperty(int projectId, string name, double landArea)
-    {
-        var project = _context.Projects.Include(i => i.Properties).FirstOrDefault(i => i.Id == projectId);
-        var property = project.AddProperty(name, landArea);
-
-        //you may be thinking this line of code
-        //--> _context.Properties.Add(property);
-        //--> _context.Properties.Add(new Property(name, landArea));
-        //!!! DOING THESE CODE ABOVE MAY RESULT FOR A FOREIGN KEY EXCEPTION -- NO RELATIONSHIP TO PROJECT !!!
-
-        _context.Projects.Update(project);
-
-        return property;
-    }
+    
 
     public void RemoveProperty(int projectId, int propertyId)
     {
