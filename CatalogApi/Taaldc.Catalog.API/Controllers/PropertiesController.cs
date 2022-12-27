@@ -6,7 +6,7 @@ namespace Taaldc.Catalog.API.Controllers;
 
 public class PropertiesController : ApiBaseController<PropertiesController>
 {
-    [HttpPost("{id}")]
+    [HttpPost("{id}/towers")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> UpsertTower(int id, UpsertTowerDTO model)

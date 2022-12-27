@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-taaldc_mvc-cd036eb3-5b34-4211-ad09-18c31b1ca3ea</UserSecretsId>
         <RootNamespace>Taaldc.Catalog.API</RootNamespace>

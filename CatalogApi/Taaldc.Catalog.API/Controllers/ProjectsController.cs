@@ -15,7 +15,7 @@ public class ProjectsController : ApiBaseController<ProjectsController>
         return Ok(await _mediator.Send(new UpsertProjectCommand(model.ProjectId, model.Name, model.Developer)));
     }
 
-    [HttpPost("{id}")]
+    [HttpPost("{id}/properties")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> UpsertProperty(int id, UpsertPropertyDTO model)
