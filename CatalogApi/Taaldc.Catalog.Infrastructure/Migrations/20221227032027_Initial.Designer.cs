@@ -12,7 +12,7 @@ using Taaldc.Catalog.Infrastructure;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20221219131733_Initial")]
+    [Migration("20221227032027_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,13 +25,28 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Floor", b =>
+            modelBuilder.HasSequence("floorseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("projectseq", "catalog")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("propertyseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("towerseq")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("unitseq")
+                .IncrementsBy(10);
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "floorseq");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -68,7 +83,93 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.ToTable("floors", "catalog");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.ScenicView", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "projectseq", "catalog");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Developer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("project", "catalog");
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "propertyseq");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("LandArea")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("property", "catalog");
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.ScenicView", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int")
@@ -111,13 +212,62 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Unit", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "towerseq");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("tower", "catalog");
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -177,7 +327,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.ToTable("unit", "catalog");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.UnitStatus", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitStatus", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int")
@@ -215,7 +365,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.UnitType", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int")
@@ -280,173 +430,54 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Project", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Developer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("ModifiedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("project", "catalog");
-                });
-
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("LandArea")
-                        .HasColumnType("float");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("ModifiedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("property", "catalog");
-                });
-
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate.Tower", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTimeOffset>("ModifiedOn")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("PropertyId");
-
-                    b.ToTable("tower", "catalog");
-                });
-
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Floor", b =>
-                {
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate.Tower", null)
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", null)
                         .WithMany("Floors")
                         .HasForeignKey("TowerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Unit", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property", b =>
                 {
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Floor", null)
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Project", null)
+                        .WithMany("Properties")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
+                {
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property", null)
+                        .WithMany("Towers")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit", b =>
+                {
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", null)
                         .WithMany("Units")
                         .HasForeignKey("FloorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.ScenicView", "ScenicView")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.ScenicView", "ScenicView")
                         .WithMany()
                         .HasForeignKey("_scenicViewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.UnitStatus", "UnitStatus")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitStatus", "UnitStatus")
                         .WithMany()
                         .HasForeignKey("_unitStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.UnitType", "UnitType")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", "UnitType")
                         .WithMany()
                         .HasForeignKey("_unitTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,25 +490,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.Navigation("UnitType");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property", b =>
-                {
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Project", null)
-                        .WithMany("Properties")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate.Tower", b =>
-                {
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property", null)
-                        .WithMany("Towers")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.FloorAggregate.Floor", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
                     b.Navigation("Units");
                 });
@@ -487,12 +500,12 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.Navigation("Properties");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.PropertyAggregate.Property", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Property", b =>
                 {
                     b.Navigation("Towers");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.TowerAggregate.Tower", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
                 {
                     b.Navigation("Floors");
                 });

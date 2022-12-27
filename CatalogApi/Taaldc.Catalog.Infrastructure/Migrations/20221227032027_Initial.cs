@@ -16,20 +16,40 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "catalog");
 
+            migrationBuilder.CreateSequence(
+                name: "floorseq",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "projectseq",
+                schema: "catalog",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "propertyseq",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "towerseq",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "unitseq",
+                incrementBy: 10);
+
             migrationBuilder.CreateTable(
                 name: "project",
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Developer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,8 +101,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LandArea = table.Column<double>(type: "float", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
@@ -109,8 +128,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -138,8 +156,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TowerId = table.Column<int>(type: "int", nullable: false),
@@ -166,8 +183,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Identifier = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FloorArea = table.Column<double>(type: "float", nullable: false),
@@ -359,6 +375,22 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "project",
                 schema: "catalog");
+
+            migrationBuilder.DropSequence(
+                name: "floorseq");
+
+            migrationBuilder.DropSequence(
+                name: "projectseq",
+                schema: "catalog");
+
+            migrationBuilder.DropSequence(
+                name: "propertyseq");
+
+            migrationBuilder.DropSequence(
+                name: "towerseq");
+
+            migrationBuilder.DropSequence(
+                name: "unitseq");
         }
     }
 }

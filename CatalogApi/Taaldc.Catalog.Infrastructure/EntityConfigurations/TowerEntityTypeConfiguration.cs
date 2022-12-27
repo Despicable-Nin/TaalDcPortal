@@ -13,6 +13,11 @@ class TowerEntityTypeConfiguration : IEntityTypeConfiguration<Tower>
         
         builder.Property(b => b.Name).IsRequired();
         builder.HasIndex(b => b.Name).IsUnique();
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("towerseq");
+
 
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
         builder.Property<int>("PropertyId").IsRequired();

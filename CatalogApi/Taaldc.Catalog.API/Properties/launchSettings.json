@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "test": {
+    "catalog-api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
