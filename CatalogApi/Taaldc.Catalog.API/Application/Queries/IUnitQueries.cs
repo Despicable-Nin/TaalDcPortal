@@ -24,9 +24,6 @@ public class UnitQueries : IUnitQueries
     {
         string query =
             " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode] ";
-        //query += " (SELECT COUNT(*) FROM [taaldb].[catalog].unit WHERE UnitStatus = 1) [TotalCount], ";
-        //query += $" (SELECT {pageNumber}) [PageNumber], ";
-        //query += $" (SELECT {pageSize}) [PageSize] ";
         query += " FROM [taaldb].[catalog].[unit] U JOIN [taaldb].[catalog].floors F ON U.FloorId = F.Id ";
         query += " JOIN [taaldb].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
         query += " JOIN [taaldb].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
@@ -34,33 +31,17 @@ public class UnitQueries : IUnitQueries
 
         var clauses = new List<string>();
       
-        if (unitTypeId.HasValue)
-        {
-            clauses.Add($"UT.Id = {unitTypeId.Value}");
-        }
+        if (unitTypeId.HasValue) clauses.Add($"UT.Id = {unitTypeId.Value}");
 
-        if (viewId.HasValue)
-        {
-            clauses.Add($"S.Id = {viewId.Value}");
-        }
+        if (viewId.HasValue) clauses.Add($"S.Id = {viewId.Value}");
         
-        if (floorId.HasValue)
-        {
-            clauses.Add($"F.Id = {floorId.Value}");
-        }
-
-      
-            clauses.Add($"(U.Price BETWEEN {min} AND {max})");
+        if (floorId.HasValue) clauses.Add($"F.Id = {floorId.Value}");
         
-        
+        clauses.Add($"(U.Price BETWEEN {min} AND {max})");
         clauses.Add($"US.Id = 1");
 
         var where = string.Empty;
-        if (clauses.Any())
-        {
-            where = " WHERE " + string.Join(" AND ", clauses.ToArray());
-        }
-
+        if (clauses.Any()) where = " WHERE " + string.Join(" AND ", clauses.ToArray());
         if (!string.IsNullOrWhiteSpace(where)) query += where;
         
         query += $" ORDER BY U.Id OFFSET {pageNumber - 1} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
