@@ -15,7 +15,7 @@ class PropertyEntityTypeConfiguration : IEntityTypeConfiguration<Property>
         
         //IMPORTANT: this is need for auto-increment of ID
         builder.Property(o => o.Id)
-            .UseHiLo("propertyseq");
+            .UseHiLo("propertyseq", CatalogDbContext.DEFAULT_SCHEMA);
         
         //matches Project.Properties configuration on ProjectEntityTypeConfiguration
         builder.Property<int>("ProjectId")

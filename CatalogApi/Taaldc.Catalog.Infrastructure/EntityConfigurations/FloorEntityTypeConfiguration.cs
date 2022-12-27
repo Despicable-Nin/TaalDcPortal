@@ -15,7 +15,7 @@ class FloorEntityTypeConfiguration : IEntityTypeConfiguration<Floor>
         
         //IMPORTANT: this is need for auto-increment of ID
         builder.Property(o => o.Id)
-            .UseHiLo("floorseq");
+            .UseHiLo("floorseq", CatalogDbContext.DEFAULT_SCHEMA);
 
 
         //matches Toower.Floors configuration on FloorEntityTypeConfiguration
