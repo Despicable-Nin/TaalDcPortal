@@ -23,10 +23,10 @@ public class UnitQueries : IUnitQueries
         int max = 999999999, int pageSize = 20, int pageNumber = 1)
     {
         string query =
-            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode], ";
-        query += " (SELECT COUNT(*) FROM [taaldb].[catalog].unit WHERE UnitStatus = 1) [TotalCount], ";
-        query += $" (SELECT {pageNumber}) [PageNumber], ";
-        query += $" (SELECT {pageSize}) [PageSize] ";
+            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode] ";
+        //query += " (SELECT COUNT(*) FROM [taaldb].[catalog].unit WHERE UnitStatus = 1) [TotalCount], ";
+        //query += $" (SELECT {pageNumber}) [PageNumber], ";
+        //query += $" (SELECT {pageSize}) [PageSize] ";
         query += " FROM [taaldb].[catalog].[unit] U JOIN [taaldb].[catalog].floors F ON U.FloorId = F.Id ";
         query += " JOIN [taaldb].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
         query += " JOIN [taaldb].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
