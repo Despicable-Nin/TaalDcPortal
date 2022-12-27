@@ -1,7 +1,7 @@
 
 namespace SeedWork;
 
-public abstract class Entity : IAuditable
+public abstract class Entity //: IAuditable
 {
 
     private int? _requestedHashCode;
@@ -59,40 +59,7 @@ public abstract class Entity : IAuditable
     }
 
     //implementation of IAuditable
-    public string CreatedBy { get; private set; }
-    public DateTimeOffset CreatedOn { get; private set;}
-    public string ModifiedBy { get; private set;}
-    public DateTimeOffset ModifiedOn { get;private set; }
     public bool IsActive { get; private set;}
-
-    public void AuditOnCreate(string user)
-    {
-        
-        //fail-fast guard clause
-        if (string.IsNullOrWhiteSpace(user))
-            throw new ArgumentNullException(nameof(AuditOnCreate),
-                new ArgumentNullException("user field should not be empty."));
-
-        CreatedBy = user;
-        ModifiedBy = user;
-
-        var now = DateTimeOffset.Now;
-        CreatedOn = now;
-        ModifiedOn = now;
-    }
-
-    public void AuditOnUpdate(string user, bool isActive)
-    {
-        //fail-fast guard clause
-        if (string.IsNullOrWhiteSpace(user))
-            throw new ArgumentNullException(nameof(AuditOnUpdate),
-                new ArgumentNullException("user field should not be empty."));
-        
-        ModifiedBy = user;
-        ModifiedOn = DateTimeOffset.Now;;
-        IsActive = isActive;
-
-    }
 
     public void Deactivate() => IsActive = false;
 }
