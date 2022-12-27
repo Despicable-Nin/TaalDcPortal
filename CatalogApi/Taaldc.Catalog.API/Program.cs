@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using MediatR;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
@@ -28,6 +29,11 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBeha
 
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
+builder.Services.AddScoped<IUnitQueries>(i =>
+{
+    return new UnitQueries(connectionString);
+    
+});
 
 
 var app = builder.Build();
