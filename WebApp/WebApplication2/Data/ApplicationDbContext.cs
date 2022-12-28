@@ -11,10 +11,9 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
-}
 
-public class AppUser : IdentityUser<int>
-{
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
 }

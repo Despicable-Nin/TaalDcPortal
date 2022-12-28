@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
+using WebApplication2.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+Seed.Initialize(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
