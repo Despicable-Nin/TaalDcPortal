@@ -17,7 +17,7 @@ class InquiryConfiguration : IEntityTypeConfiguration<Inquiry>
         {
             // Explicit configuration of the shadow key property in the owned type 
             // as a workaround for a documented issue in EF Core 5: https://github.com/dotnet/efcore/issues/20740
-            a.Property("InquiryId").UseHiLo("inquiryseq", "Marketing");
+            a.Property("InquiryId").UseHiLo("inquiryseq", MarketingDbContext.DEFAULT_SCHEMA);
             a.WithOwner();
 
         });
