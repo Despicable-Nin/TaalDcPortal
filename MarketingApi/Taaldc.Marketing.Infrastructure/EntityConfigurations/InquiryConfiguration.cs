@@ -27,16 +27,7 @@ class InquiryConfiguration : IEntityTypeConfiguration<Inquiry>
 
         });
         
-        //to provide an immutable FK id 
-        builder.Property<int>("_inquiryTypeId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("InquiryType")
-            .IsRequired();
-
-        //mapped to a navigation property -- that is immutable as well
-        builder.HasOne(b => b.InquiryType)
-            .WithMany()
-            .HasForeignKey("_inquiryTypeId");
+   
         
         //to provide an immutable FK id 
         builder.Property<int>("_statusId")

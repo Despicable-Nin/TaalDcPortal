@@ -5,11 +5,8 @@ namespace Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 
 public class Inquiry : Entity, IAggregateRoot
 {
-   
-    
-    
-    private int _inquiryTypeId;
-    public InquiryType InquiryType { get; private set; }
+
+    public string TypeOfInquiry { get; private set; }
     
     private int _statusId;
     public InquiryStatus Status { get; private set; }
@@ -19,9 +16,9 @@ public class Inquiry : Entity, IAggregateRoot
         _statusId = 1;
         AttendedBy = string.Empty;
     }
-    public Inquiry(int inquiryTypeId, string message, int propertyId, string property, string remarks, Customer customer) : this()
+    public Inquiry(string typeOfInquiry, string message, int propertyId, string property, string remarks, Customer customer) : this()
     {
-        _inquiryTypeId = inquiryTypeId;
+        TypeOfInquiry = typeOfInquiry;
         Message = message;
         PropertyId = propertyId;
         Property = property;
@@ -39,7 +36,7 @@ public class Inquiry : Entity, IAggregateRoot
     public Customer Customer { get; private set; }
     
     public void SetStatus(int status) => _statusId = status;
-    public void SetType(int inquiryTypeId) => _inquiryTypeId = inquiryTypeId;
+    public void SetType(string inquiryType) =>TypeOfInquiry = inquiryType;
     public void Attend(string email) => AttendedBy = email;
 
 }

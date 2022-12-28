@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Marketing.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Marketing.Infrastructure;
 namespace Taaldc.Marketing.Infrastructure.Migrations
 {
     [DbContext(typeof(MarketingDbContext))]
-    partial class MarketingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221228042101_type_of_inquiry_is_string")]
+    partial class typeofinquiryisstring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

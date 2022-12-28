@@ -6,9 +6,9 @@ namespace Taaldc.Marketing.API.DTO;
 
 public class AddInquiryDto
 {
-    [JsonPropertyName("inquiry_type_id")]
+    [JsonPropertyName("inquiry_type")]
     [JsonProperty(Required = Required.Always)]
-    public int InquiryTypeId { get; set; }
+    public string InquiryType { get; set; }
     
     [JsonPropertyName("message")]
     [JsonProperty(Required = Required.Always)]

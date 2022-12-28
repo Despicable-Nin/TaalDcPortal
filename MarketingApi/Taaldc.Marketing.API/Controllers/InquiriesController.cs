@@ -26,13 +26,12 @@ public class InquiriesController : Controller
    {
       var result = await _dbContext.Inquiries
          .Include(i => i.Customer)
-         .Include(i => i.InquiryType)
          .Include(i => i.Status)
          .AsNoTracking()
          .ToListAsync();
 
       var records =  result.Select(i => new InquiryDto(i.Message, i.PropertyId, i.Property, i.AttendedBy, i.Remarks,
-         i.InquiryType.Id, i.InquiryType.Name, i.Status.Id, i.Status.Name, i.Customer.Salutation, i.Customer.FirstName,
+         0, i.TypeOfInquiry, i.Status.Id, i.Status.Name, i.Customer.Salutation, i.Customer.FirstName,
          i.Customer.LastName, i.Customer.EmailAddress, i.Customer.ContactNo, i.Customer.Country, i.Customer.Province,
          i.Customer.TownCity)).AsEnumerable();
       
@@ -44,7 +43,7 @@ public class InquiriesController : Controller
    [ProducesErrorResponseType(typeof(BadRequestResult))]
    public async Task<IActionResult> PostInquiries( AddInquiryDto dto )
    {
-      Inquiry entity = new(dto.InquiryTypeId, dto.Message, dto.PropertyId, dto.Property, dto.Remarks,
+      Inquiry entity = new(dto.InquiryType, dto.Message, dto.PropertyId, dto.Property, dto.Remarks,
          new Customer(dto.Salutation, dto.FirstName, dto.LastName, dto.EmailAddress, dto.ContactNo, dto.Country,
             dto.Province, dto.TownCity));
       
@@ -52,4 +51,6 @@ public class InquiriesController : Controller
        await _dbContext.SaveChangesAsync();
       return Ok();
    }
+   
+
 }
