@@ -71,3 +71,4 @@ public class UnitQueries : IUnitQueries
             return new AvailableUnitQueryResult(pageSize, pageNumber, temp.Single(), result.ToArray());
         }
     }
+}
