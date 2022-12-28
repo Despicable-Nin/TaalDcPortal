@@ -25,13 +25,10 @@ public class UnitQueries : IUnitQueries
     {
         string query =
             " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode] ";
-        //query += " (SELECT COUNT(*) FROM [taaldb].[catalog].unit WHERE UnitStatus = 1) [TotalCount], ";
-        //query += $" (SELECT {pageNumber}) [PageNumber], ";
-        //query += $" (SELECT {pageSize}) [PageSize] ";
-        query += " FROM [taaldb].[catalog].[unit] U JOIN [taaldb].[catalog].floors F ON U.FloorId = F.Id ";
-        query += " JOIN [taaldb].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
-        query += " JOIN [taaldb].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
-        query += " JOIN taaldb.[catalog].unittype UT ON U.UnitType = UT.Id ";
+        query += " FROM [taaldb_admin].[catalog].[unit] U JOIN [taaldb_admin].[catalog].floors F ON U.FloorId = F.Id ";
+        query += " JOIN [taaldb_admin].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
+        query += " JOIN [taaldb_admin].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
+        query += " JOIN taaldb_admin.[catalog].unittype UT ON U.UnitType = UT.Id ";
 
         var clauses = new List<string>();
       
@@ -64,7 +61,7 @@ public class UnitQueries : IUnitQueries
 
         if (!string.IsNullOrWhiteSpace(where)) query += where;
         
-        query += $" ORDER BY U.Id OFFSET {pageNumber - 1} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
+        query += $" ORDER BY U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
 
         using var connection = new SqlConnection(_connectionstring);
         await connection.OpenAsync(CancellationToken.None);
@@ -72,10 +69,10 @@ public class UnitQueries : IUnitQueries
         var result = await connection.QueryAsync<AvailableUnit>(query);
         
         string countQuery = " SELECT COUNT(*) [Total] ";
-        countQuery += " FROM [taaldb].[catalog].[unit] U JOIN [taaldb].[catalog].floors F ON U.FloorId = F.Id ";
-        countQuery += " JOIN [taaldb].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
-        countQuery += " JOIN [taaldb].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
-        countQuery += " JOIN taaldb.[catalog].unittype UT ON U.UnitType = UT.Id ";
+        countQuery += " FROM [taaldb_admin].[catalog].[unit] U JOIN [taaldb_admin].[catalog].floors F ON U.FloorId = F.Id ";
+        countQuery += " JOIN [taaldb_admin].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
+        countQuery += " JOIN [taaldb_admin].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
+        countQuery += " JOIN taaldb_admin.[catalog].unittype UT ON U.UnitType = UT.Id ";
         countQuery += where;
 
         var temp = await connection.QueryAsync<int>(countQuery);

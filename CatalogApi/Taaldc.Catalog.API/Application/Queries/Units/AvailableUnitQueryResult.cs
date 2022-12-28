@@ -1,17 +1,23 @@
+using System.Text.Json.Serialization;
+
 namespace Taaldc.Catalog.API.Application.Queries.Units;
 
 public record AvailableUnitQueryResult
 {
-    public AvailableUnitQueryResult(int pageSize, int pageNumber, int pageCount, IEnumerable<AvailableUnit> units)
+    public AvailableUnitQueryResult(int pageSize, int pageNumber, int totalCount, IEnumerable<AvailableUnit> units)
     {
         PageSize = pageSize;
         PageNumber = pageNumber;
-        PageCount = pageCount;
+        TotalCount = totalCount;
         Units = units;
     }
 
+    [JsonPropertyName("page_size")]
     public int PageSize { get; }
+    [JsonPropertyName("page_number")]
     public int PageNumber { get; }
-    public int PageCount { get; }
+    [JsonPropertyName("total")]
+    public int TotalCount { get; }
+    [JsonPropertyName("units")]
     public IEnumerable<AvailableUnit> Units { get; }
 }
