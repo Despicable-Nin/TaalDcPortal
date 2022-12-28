@@ -1,9 +1,9 @@
-namespace Taaldc.Catalog.API.Application.Queries;
+namespace Taaldc.Catalog.API.Application.Queries.Units;
 
 public record AvailableUnit
 {
-    public int Id { get;  }
-    public string Identifier { get;  }
+    public int Id { get; }
+    public string Identifier { get; }
     public decimal Price { get; }
     public double FloorArea { get; }
     public string Floor { get; }
