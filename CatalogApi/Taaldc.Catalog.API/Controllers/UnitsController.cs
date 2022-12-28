@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
-using Taaldc.Catalog.API.Application.Queries;
+using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.DTO;
 
 namespace Taaldc.Catalog.API.Controllers;

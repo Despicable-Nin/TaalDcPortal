@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using MediatR;
 using Taaldc.Catalog.API.Application.Behaviors;
-using Taaldc.Catalog.API.Application.Queries;
+using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;

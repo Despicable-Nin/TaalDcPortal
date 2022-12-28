@@ -1,4 +1,4 @@
-namespace Taaldc.Catalog.API.Application.Queries;
+namespace Taaldc.Catalog.API.Application.Queries.Units;
 
 public record AvailableUnitQueryResult
 {

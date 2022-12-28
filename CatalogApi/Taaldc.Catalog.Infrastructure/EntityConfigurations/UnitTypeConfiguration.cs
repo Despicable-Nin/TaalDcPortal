@@ -30,10 +30,11 @@ class UnitTypeConfiguration : IEntityTypeConfiguration<UnitType>
             new UnitType(1,"NOT APPLICABLE", "N/A"),
             new UnitType(2, "ONE BEDROOM", "1BR"),
             new UnitType(3, "TWO BEDROOM", "2BR"),
-            new UnitType(4, "PENTHOUSE", "PH"),
-            new UnitType(5,"RESIDENTIAL PARKING", "RP"),
-            new UnitType(6, "MOTORCYCLE PARKING", "MP"),
-            new UnitType(7, "COMMERCIAL SPACE", "CS")
+			new UnitType(4, "THREE BEDROOM", "3BR"),
+			new UnitType(5, "PENTHOUSE", "PH"),
+            new UnitType(6,"RESIDENTIAL PARKING", "RP"),
+            new UnitType(7, "MOTORCYCLE PARKING", "MP"),
+            new UnitType(8, "COMMERCIAL SPACE", "CS")
         });
     }
 }
