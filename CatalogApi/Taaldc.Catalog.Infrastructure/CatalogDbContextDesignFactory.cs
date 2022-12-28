@@ -9,7 +9,7 @@ public class CatalogDbContextDesignFactory : IDesignTimeDbContextFactory<Catalog
     public CatalogDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>()
-            .UseSqlServer("Server=localhost;Database=taaldb;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
+            .UseSqlServer("Server=localhost;Database=taaldb_admin;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
 
         return new CatalogDbContext(optionsBuilder.Options, new NoMediator());
     }

@@ -12,8 +12,8 @@ using Taaldc.Marketing.Infrastructure;
 namespace Taaldc.Marketing.Infrastructure.Migrations
 {
     [DbContext(typeof(MarketingDbContext))]
-    [Migration("20221228042101_type_of_inquiry_is_string")]
-    partial class typeofinquiryisstring
+    [Migration("20221228054110_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -55,7 +55,7 @@ namespace Taaldc.Marketing.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    InquiryType = table.Column<int>(type: "int", nullable: false),
+                    TypeOfInquiry = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PropertyId = table.Column<int>(type: "int", nullable: false),
@@ -84,13 +84,6 @@ namespace Taaldc.Marketing.Infrastructure.Migrations
                         column: x => x.Status,
                         principalSchema: "marketing",
                         principalTable: "inquirystatus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_inquiry_inqurytype_InquiryType",
-                        column: x => x.InquiryType,
-                        principalSchema: "marketing",
-                        principalTable: "inqurytype",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -124,12 +117,6 @@ namespace Taaldc.Marketing.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_inquiry_InquiryType",
-                schema: "marketing",
-                table: "inquiry",
-                column: "InquiryType");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_inquiry_Status",
                 schema: "marketing",
                 table: "inquiry",
@@ -158,11 +145,11 @@ namespace Taaldc.Marketing.Infrastructure.Migrations
                 schema: "marketing");
 
             migrationBuilder.DropTable(
-                name: "inquirystatus",
+                name: "inqurytype",
                 schema: "marketing");
 
             migrationBuilder.DropTable(
-                name: "inqurytype",
+                name: "inquirystatus",
                 schema: "marketing");
 
             migrationBuilder.DropSequence(

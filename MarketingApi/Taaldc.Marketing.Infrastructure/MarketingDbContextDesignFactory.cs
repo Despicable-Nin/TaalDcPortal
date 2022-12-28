@@ -9,7 +9,7 @@ public class MarketingDbContextDesignFactory : IDesignTimeDbContextFactory<Marke
     public MarketingDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<MarketingDbContext>()
-            .UseSqlServer("Server=localhost;Database=taaldb-marketing;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
+            .UseSqlServer("Server=localhost;Database=taaldb_marketing;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Marketing.Infrastructure"));
 
         return new MarketingDbContext(optionsBuilder.Options, new NoMediator());
     }
