@@ -1,6 +1,7 @@
 using System.Text;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Taaldc.Catalog.API.Application.Queries.Units;
 
 namespace Taaldc.Catalog.API.Application.Queries;
 
