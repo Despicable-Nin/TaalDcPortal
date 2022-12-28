@@ -21,14 +21,14 @@ class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.HasData(new[]
-        {
-            new ScenicView(1, "N/A"),
-            new ScenicView(2, "TAAL"),
-            new ScenicView(3, "HIGHLANDS"),
-            new ScenicView(4, "MANILA SKYLINE"),
-            new ScenicView(5, "ROTONDA"),
-            
-        });
+        // builder.HasData(new[]
+        // {
+        //     new ScenicView(1, "N/A"),
+        //     new ScenicView(2, "TAAL"),
+        //     new ScenicView(3, "HIGHLANDS"),
+        //     new ScenicView(4, "MANILA SKYLINE"),
+        //     new ScenicView(5, "ROTONDA"),
+        //     
+        // });
     }
 }

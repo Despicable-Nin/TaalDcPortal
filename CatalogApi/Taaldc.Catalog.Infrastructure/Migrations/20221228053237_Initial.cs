@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -232,46 +230,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         principalTable: "unittype",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                schema: "catalog",
-                table: "scenicview",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "N/A" },
-                    { 2, "TAAL" },
-                    { 3, "HIGHLANDS" },
-                    { 4, "MANILA SKYLINE" },
-                    { 5, "ROTONDA" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "catalog",
-                table: "unitstatus",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "AVAILABLE" },
-                    { 2, "SOLD" },
-                    { 3, "RESERVED" },
-                    { 4, "BLOCKED" }
-                });
-
-            migrationBuilder.InsertData(
-                schema: "catalog",
-                table: "unittype",
-                columns: new[] { "Id", "Name", "ShortCode" },
-                values: new object[,]
-                {
-                    { 1, "NOT APPLICABLE", "N/A" },
-                    { 2, "ONE BEDROOM", "1BR" },
-                    { 3, "TWO BEDROOM", "2BR" },
-                    { 4, "PENTHOUSE", "PH" },
-                    { 5, "RESIDENTIAL PARKING", "RP" },
-                    { 6, "MOTORCYCLE PARKING", "MP" },
-                    { 7, "COMMERCIAL SPACE", "CS" }
                 });
 
             migrationBuilder.CreateIndex(

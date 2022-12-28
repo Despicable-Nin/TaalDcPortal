@@ -12,8 +12,8 @@ using Taaldc.Catalog.Infrastructure;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20221228020022_added-3br-unittype")]
-    partial class added3brunittype
+    [Migration("20221228053237_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,33 +183,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("scenicview", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "N/A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "TAAL"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "HIGHLANDS"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "MANILA SKYLINE"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "ROTONDA"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
@@ -341,28 +314,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("unitstatus", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "AVAILABLE"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "SOLD"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "RESERVED"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "BLOCKED"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", b =>
@@ -384,56 +335,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("unittype", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "NOT APPLICABLE",
-                            ShortCode = "N/A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "ONE BEDROOM",
-                            ShortCode = "1BR"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "TWO BEDROOM",
-                            ShortCode = "2BR"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "THREE BEDROOM",
-                            ShortCode = "3BR"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "PENTHOUSE",
-                            ShortCode = "PH"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "RESIDENTIAL PARKING",
-                            ShortCode = "RP"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "MOTORCYCLE PARKING",
-                            ShortCode = "MP"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "COMMERCIAL SPACE",
-                            ShortCode = "CS"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>

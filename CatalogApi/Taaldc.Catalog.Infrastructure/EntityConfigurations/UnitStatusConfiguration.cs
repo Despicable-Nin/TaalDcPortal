@@ -21,12 +21,12 @@ class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
             .HasMaxLength(30)
             .IsRequired();
 
-        builder.HasData(new[]
-        {
-            new UnitStatus(1,UnitStatus.UnitIs.AVAILABLE.ToString()),
-            new UnitStatus(2,UnitStatus.UnitIs.SOLD.ToString()),
-            new UnitStatus(3,UnitStatus.UnitIs.RESERVED.ToString()),
-            new UnitStatus(4,UnitStatus.UnitIs.BLOCKED.ToString())
-        });
+        // builder.HasData(new[]
+        // {
+        //     new UnitStatus(1,UnitStatus.UnitIs.AVAILABLE.ToString()),
+        //     new UnitStatus(2,UnitStatus.UnitIs.SOLD.ToString()),
+        //     new UnitStatus(3,UnitStatus.UnitIs.RESERVED.ToString()),
+        //     new UnitStatus(4,UnitStatus.UnitIs.BLOCKED.ToString())
+        // });
     }
 }
