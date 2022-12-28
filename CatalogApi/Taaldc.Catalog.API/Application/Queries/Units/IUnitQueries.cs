@@ -1,8 +1,9 @@
 using System.Text;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Taaldc.Catalog.API.Application.Queries.Units;
 
-namespace Taaldc.Catalog.API.Application.Queries.Units;
+namespace Taaldc.Catalog.API.Application.Queries;
 
 public interface IUnitQueries
 {
@@ -18,7 +19,7 @@ public class UnitQueries : IUnitQueries
     {
         _connectionstring = string.IsNullOrWhiteSpace(connectionString) ? throw new ArgumentNullException(nameof(connectionString)) : connectionString;
     }
-
+    
     public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(int? unitTypeId, int? viewId, int? floorId, int min = 0,
         int max = 999999999, int pageSize = 20, int pageNumber = 1)
     {
@@ -33,7 +34,7 @@ public class UnitQueries : IUnitQueries
         query += " JOIN taaldb.[catalog].unittype UT ON U.UnitType = UT.Id ";
 
         var clauses = new List<string>();
-
+      
         if (unitTypeId.HasValue)
         {
             clauses.Add($"UT.Id = {unitTypeId.Value}");
@@ -43,16 +44,16 @@ public class UnitQueries : IUnitQueries
         {
             clauses.Add($"S.Id = {viewId.Value}");
         }
-
+        
         if (floorId.HasValue)
         {
             clauses.Add($"F.Id = {floorId.Value}");
         }
 
-
-        clauses.Add($"(U.Price BETWEEN {min} AND {max})");
-
-
+      
+            clauses.Add($"(U.Price BETWEEN {min} AND {max})");
+        
+        
         clauses.Add($"US.Id = 1");
 
         var where = string.Empty;
@@ -62,14 +63,14 @@ public class UnitQueries : IUnitQueries
         }
 
         if (!string.IsNullOrWhiteSpace(where)) query += where;
-
+        
         query += $" ORDER BY U.Id OFFSET {pageNumber - 1} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
 
         using var connection = new SqlConnection(_connectionstring);
         await connection.OpenAsync(CancellationToken.None);
 
         var result = await connection.QueryAsync<AvailableUnit>(query);
-
+        
         string countQuery = " SELECT COUNT(*) [Total] ";
         countQuery += " FROM [taaldb].[catalog].[unit] U JOIN [taaldb].[catalog].floors F ON U.FloorId = F.Id ";
         countQuery += " JOIN [taaldb].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
@@ -80,5 +81,5 @@ public class UnitQueries : IUnitQueries
         var temp = await connection.QueryAsync<int>(countQuery);
 
         return new AvailableUnitQueryResult(pageSize, pageNumber, temp.First(), result.ToArray());
-    }
+    }   
 }

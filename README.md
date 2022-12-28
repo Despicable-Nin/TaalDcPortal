@@ -55,6 +55,13 @@ dotnet ef database update
 <br/>
 <br/>
 
+#### ON RIDER
+
+Why I can't see my project in a `Startup projects` field?
+If you can't see your project in the "Startup project" dropdown, check that your project satisfies the requirements:
+`Microsoft.EntityFrameworkCore.Design` or `Microsoft.EntityFrameworkCore.Tools` NuGet package is installed.
+Project's TargetFramework is at least `netcoreapp3.1`.
+
 #### Connection String
 
 Important to note that `TrustCertificate=true;MultiSubNetFailover=True` must be set if using `Docker` instance of SQL Server

@@ -16,7 +16,7 @@ public class Customer : ValueObject
         TownCity = townCity;
     }
     
-    private Customer(){}
+    public Customer(){}
 
     public string Salutation { get; private set; }
     public string FirstName { get; private set; }

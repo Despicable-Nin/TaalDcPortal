@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Taaldc.Catalog.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/adm/[controller]")]
 public class ApiBaseController<T> : ControllerBase where T : ControllerBase
 {
     protected readonly ILogger<T> _logger;

@@ -1,18 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using SeedWork;
+using Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 
 namespace Taaldc.Marketing.Infrastructure;
 
 public class MarketingDbContext : DbContext, IUnitOfWork
 {
+    private readonly IMediator _mediator;
+    
     public const string DEFAULT_SCHEMA = "marketing";
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+
+    public MarketingDbContext(DbContextOptions options, IMediator mediator) : base(options)
     {
-        throw new NotImplementedException();
+        _mediator = mediator;
     }
+
+    public DbSet<Inquiry> Inquiries { get; set; }
+    public DbSet<InquiryType> InquiryTypes { get; set; }
+    public DbSet<InquiryStatus> InquiryStatus { get; set; }
+
+
 
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MarketingDbContext).Assembly);
     }
 }
