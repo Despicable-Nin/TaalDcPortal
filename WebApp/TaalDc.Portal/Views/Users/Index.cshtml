@@ -1,0 +1,16 @@
+@model TaalDc.Portal.ViewModels.Users.UserIndexViewModel
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "_Layout";
+}
+
+
+@foreach (var i in Model.ListOfUsers)
+{
+    <p>@i.Username | @i.GetRolesAsString()</p>
+}
+
+<h2>Create a table that displays Users (Email) and their Role(s)/Clickable button that where you can deactivate and update role assignments --</h2>
+<p>No user can have zero roles -- the minimum is Guest role</p>
+<strong>Admin (seeded) shoudl not be able to be removed by anyone; nor it can be demoted even by itself</strong>

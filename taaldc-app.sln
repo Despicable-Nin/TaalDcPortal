@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portal", "Portal", "{18228A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.API", "MarketingApi\Taaldc.Marketing.API\Taaldc.Marketing.API.csproj", "{85A62F45-1788-4366-B953-5E3757F6B89A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApp\WebApplication2\WebApplication2.csproj", "{7A878D5B-9C30-42EE-BF74-049799590BEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaalDc.Portal", "WebApp\TaalDc.Portal\TaalDc.Portal.csproj", "{7A878D5B-9C30-42EE-BF74-049799590BEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
