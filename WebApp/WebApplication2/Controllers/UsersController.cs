@@ -27,10 +27,8 @@ namespace WebApplication2.Controllers
             var vm = await _accountService.GetListOfUsersWithRoles();
             return View(vm);
         }
-        
-        
-        
-        
+
+    
         
         
         

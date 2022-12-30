@@ -8,8 +8,8 @@ using WebApplication2.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 //Add Serilog
-builder.Host.UseSerilog((ctx, lc) => 
-    lc.WriteTo.Console()
+builder.Host.UseSerilog((ctx, lc) => lc
+        .WriteTo.Console()
         .WriteTo.Seq("http://localhost:5341"));
 
 // Add services to the container.
