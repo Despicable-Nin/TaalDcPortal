@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
+        <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-WebApplication2-0A09D225-A242-41BE-8F1B-50352E5EB4C4</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -16,10 +16,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.11" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.12" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
+        <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
     </ItemGroup>
 
     <ItemGroup>
