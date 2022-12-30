@@ -5,7 +5,7 @@ using WebApplication2.Data;
 
 namespace WebApplication2.Seed;
 
-public static class Seed
+public class Seed
 {
     public const string ADMIN = nameof(ADMIN);
     public const string MARKETING = nameof(MARKETING);
@@ -48,92 +48,67 @@ public static class Seed
             throw;
         }
     }
+    
 
-    public static async Task CreateUsers(UserManager<IdentityUser> userManager)
+    public static async Task CreateUsers(UserManager<IdentityUser> userManager,string role, string id, string email,string password)
     {
 
-        const string ADMIN_ID = "4940CDBE-BAD7-47BB-BEE5-15DDB92939BA";
-        const string GUEST_ID = "05F633F6-1674-4322-A347-4A8C6EEFADFE";
+        Log.Information($"Start seeding user with {role} role.");
+        
+        //check if ID exists
+        Log.Information($"Checking if admin with id:{id} exists...");
+        IdentityUser user = await userManager.FindByEmailAsync(email);
 
-
-        Log.Information("Trying to add new admin user.");
-        if (!userManager.Users.Any(u => u.Id == ADMIN))
+        if (user == default)
         {
-            var admin = new IdentityUser()
+            user = new  ()
             {
-                UserName = "admin@strator.com",
-                Email = "admin@strator.com",
+                UserName = email,
+                Email = email,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                Id = "4940CDBE-BAD7-47BB-BEE5-15DDB92939BA",
+                Id = id,
             };
             
-            if (await userManager.FindByEmailAsync(admin.Email) == null)
-            {
-                var createResult = await userManager.CreateAsync(admin, "@dmini$trat0R2023!");
+            var createResult = await userManager.CreateAsync(user,password);
 
-                if (!createResult.Succeeded)
-                {
-                    Log.Warning(string.Join(Environment.NewLine, createResult.Errors));
-
-                    Log.Warning("Seeding ADMIN identity failed.");
-                    return;
-                }
-            }
-            
-            Log.Information($"Assigning {ADMIN} role to {admin.UserName} user.");
-            var addToRoleResult = await userManager.AddToRoleAsync(admin, Seed.ADMIN);
-            
-            if (!addToRoleResult.Succeeded)
+            if (!createResult.Succeeded)
             {
-                Log.Warning(string.Join(Environment.NewLine, addToRoleResult.Errors));
-                Log.Information("Adding of new admin user failed.");
+                Log.Warning(string.Join(Environment.NewLine, createResult.Errors));
+                Log.Warning($"Seeding {role} identity failed.");
+
+                return;
             }
         }
-        Log.Information("Admin user account has been seeded.");
-        Log.Information("==========================================================================");
-        Log.Information("Trying to add guest/default user.");
-
-        if (!userManager.Users.Any(u => u.Id == GUEST_ID))
+        
+        //if successfully created or fetched -- try to check if user has a role, if not, assign role
+        if (await userManager.IsInRoleAsync(user, role))
         {
-            var guest = new IdentityUser()
-            {
-                UserName = "guest@taaldc.com",
-                Email = "guest@taaldc.com",
-                EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                Id = "05F633F6-1674-4322-A347-4A8C6EEFADFE",
-            };
-            if (await userManager.FindByEmailAsync(guest.Email) == null)
-            {
-                
-                var createResult = await userManager.CreateAsync(guest, "guesT1234!");
-                if (!createResult.Succeeded)
-                {
-                    Log.Warning(string.Join(Environment.NewLine, createResult.Errors));
-
-                    Log.Warning("Seeding GUEST identity failed.");
-                    return;
-                }
-                
-                await userManager.AddToRoleAsync(guest, Seed.ADMIN);
-                
-                Log.Information($"Assigning {ADMIN} role to {guest.UserName} user.");
-                var addToRoleResult = await userManager.AddToRoleAsync(guest, Seed.GUEST);
-            
-                if (!addToRoleResult.Succeeded)
-                {
-                    Log.Warning(string.Join(Environment.NewLine, addToRoleResult.Errors));
-                    Log.Information("Adding of guest / default user failed.");
-                }
-            }
+            Log.Information($"User has been assigned a role already. {user.Email}-{role}");
+            return;
         }
-        Log.Information("Guest / Default user account has been seeded.");
+
+        var assignRoleResult = await userManager.AddToRoleAsync(user, role);
+        if (!assignRoleResult.Succeeded)
+        {
+            Log.Warning(string.Join(",",assignRoleResult.Errors));
+        }
+
+        Log.Information("Finished seeding identity...");
     }
 
     public static async Task Initialize(WebApplication app)
     {
         
+        const string ADMIN_ID = "4940CDBE-BAD7-47BB-BEE5-15DDB92939BA";
+        const string GUEST_ID = "05F633F6-1674-4322-A347-4A8C6EEFADFE";
+
+        const string ADMIN_EMAIL = "admin@strator.com";
+        const string GUEST_EMAIL = "guest@taaldc.com";
+
+        const string ADMIN_PASSWORD = "@dmini$trat0R2023!";
+        const string GUEST_PASSWORD = "guesT1234!";
+
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
@@ -143,9 +118,9 @@ public static class Seed
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
                 await Seed.CreateRoles(roleManager);
-
-                await Seed.CreateUsers(userManager);
-
+                
+                await Seed.CreateUsers(userManager, ADMIN, ADMIN_ID,ADMIN_EMAIL, ADMIN_PASSWORD);
+                await Seed.CreateUsers(userManager, GUEST, GUEST_ID,GUEST_EMAIL, GUEST_PASSWORD);
             } 
             catch (Exception ex)
             {
