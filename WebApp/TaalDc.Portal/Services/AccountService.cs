@@ -37,9 +37,10 @@ public class AccountService : IAccountService
 
         return vm;
     }
-}
 
-public interface IAccountService
-{
-    Task<UserIndexViewModel> GetListOfUsersWithRoles();
+    public async Task<string> GetToken()
+    {
+        
+        return string.Empty;
+    }
 }

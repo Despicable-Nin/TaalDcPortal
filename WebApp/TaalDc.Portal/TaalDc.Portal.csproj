@@ -30,7 +30,17 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure" />
+      <Folder Include="DTO\Catalog" />
+      <Folder Include="DTO\Marketing" />
+      <Folder Include="Pages" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Catalogs\Index.cshtml" />
     </ItemGroup>
 
 </Project>
