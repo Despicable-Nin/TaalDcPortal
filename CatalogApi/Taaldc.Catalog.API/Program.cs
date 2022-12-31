@@ -2,6 +2,8 @@
 using MediatR;
 using Taaldc.Catalog.API.Application.Behaviors;
 using Taaldc.Catalog.API.Application.Queries;
+using Taaldc.Catalog.API.Application.Queries.Floors;
+using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
@@ -34,6 +36,17 @@ builder.Services.AddScoped<IUnitQueries>(i =>
 {
     return new UnitQueries(connectionString);
     
+});
+
+builder.Services.AddScoped<IFloorQueries>(i =>
+{
+	return new FloorQueries(connectionString);
+
+});
+
+builder.Services.AddScoped<IScenicViewQueries>(i =>
+{
+	return new ScenicViewQueries(connectionString);
 });
 
 

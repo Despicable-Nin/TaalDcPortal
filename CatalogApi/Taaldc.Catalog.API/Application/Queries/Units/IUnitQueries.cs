@@ -51,7 +51,7 @@ public class UnitQueries : IUnitQueries
 
         if (!string.IsNullOrWhiteSpace(where)) query += where;
 
-        query += $" ORDER BY U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
+        query += $" ORDER BY F.Id, U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
 
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);
