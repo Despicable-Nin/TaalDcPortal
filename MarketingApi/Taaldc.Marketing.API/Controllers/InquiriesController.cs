@@ -1,3 +1,6 @@
+using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Taaldc.Marketing.API.DTO;
@@ -6,6 +9,7 @@ using Taaldc.Marketing.Infrastructure;
 
 namespace Taaldc.Marketing.API.Controllers;
 
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [ApiController]
 [Route("api/mkt/[controller]")]
 public class InquiriesController : Controller
@@ -22,7 +26,7 @@ public class InquiriesController : Controller
    [HttpGet]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesErrorResponseType(typeof(BadRequestResult))]
-   public async Task<IActionResult> GetInquiries(int pageSize, int pageNumber )
+   public async Task<IActionResult> GetInquiries(int pageSize = 10, int pageNumber = 1)
    {
       var result = await _dbContext.Inquiries
          .Include(i => i.Customer)

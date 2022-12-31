@@ -7,6 +7,7 @@ using SeedWork;
 using Serilog;
 using TaalDc.Portal;
 using TaalDc.Portal.Data;
+using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.Seed;
 
@@ -60,7 +61,11 @@ builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
 builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddHttpClient();
+builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+
+builder.Services.AddHttpClient<IMarketingService, MarketingService>()
+    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOptions();

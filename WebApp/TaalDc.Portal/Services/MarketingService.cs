@@ -31,7 +31,6 @@ public class MarketingService : IMarketingService
     public async Task<InquriesResult> GetInquiries(int pageSize, int pageNumber)
     {
         var uri = API.Marketing.GetInquiries(_removeServiceBaseUrl, pageSize, pageNumber);
-
         var responseString = await _httpClient.GetStringAsync(uri);
         
         var result = JsonSerializer.Deserialize<InquriesResult>(responseString, new JsonSerializerOptions(){PropertyNameCaseInsensitive = true});

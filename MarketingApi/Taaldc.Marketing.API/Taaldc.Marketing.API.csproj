@@ -12,6 +12,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
         <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
@@ -24,6 +25,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Taaldc.Marketing.Infrastructure\Taaldc.Marketing.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Authentication.JwtBearer">
+        <HintPath>..\..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.authentication.jwtbearer\6.0.12\lib\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
