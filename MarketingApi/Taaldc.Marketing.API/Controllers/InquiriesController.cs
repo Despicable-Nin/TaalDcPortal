@@ -37,6 +37,7 @@ public class InquiriesController : Controller
          .AsNoTracking()
          .Skip(pageSize * (pageNumber -1))
          .Take(pageSize)
+         .OrderBy(i => i.Id)
          .ToListAsync();
 
       var total = await _dbContext.Inquiries.AsNoTracking().CountAsync();
