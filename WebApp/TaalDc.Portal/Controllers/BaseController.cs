@@ -17,5 +17,6 @@ public class BaseController<T> : Controller where T : Controller
         LoggerInstance = loggerInstance;
         CurrentUser = currentUser;
         Token = CurrentUser.GetToken().Result;
+        
     }
 }

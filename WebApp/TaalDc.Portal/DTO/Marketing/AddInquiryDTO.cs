@@ -2,40 +2,13 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace Taaldc.Marketing.API.DTO;
+namespace TaalDc.Portal.DTO.Marketing;
 
-public record InquriesResult
+public class AddInquiryDto
 {
-
-    [JsonPropertyName("inquiries")] public ICollection<InquiryDto> Inquiries { get; set; } 
-
-    [JsonPropertyName("page_size")] public int PageSize { get; set; }
-
-    [JsonPropertyName("page_number")] public int PageNumber { get; set; }
-
-    [JsonPropertyName("total")] public int Total { get; set; }
-}
-
-public record InquiryDto
-{
-    
-
-    [JsonPropertyName("attended_by")]
-    public string AttendBy { get; set; }
-
-    [JsonPropertyName("status_id")]
-    private int StatusId { get; set; }
-    
-    [JsonPropertyName("status")]
-    public string Status { get; set; }
-
-    
     [JsonPropertyName("inquiry_type")]
     [JsonProperty(Required = Required.Always)]
     public string InquiryType { get; set; }
-    
-    [JsonPropertyName("inquiry_type_id")]
-    public int InquiryTypeId { get; set; }
     
     [JsonPropertyName("message")]
     [JsonProperty(Required = Required.Always)]

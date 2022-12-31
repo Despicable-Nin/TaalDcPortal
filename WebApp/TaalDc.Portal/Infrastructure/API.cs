@@ -6,7 +6,7 @@ public static class API
 {
     public static class Marketing
     {
-        public static string GetInquiries(string baseUri) => $"{baseUri}/api/mkt/inquiries";
+        public static string GetInquiries(string baseUri, int pageSize, int pageNumber) => $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}";
         public static string PostInquiry(string baseUri) => $"{baseUri}/api/mkt/inquiries";
     }
 

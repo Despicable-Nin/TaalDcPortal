@@ -2,10 +2,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace Taaldc.Marketing.API.DTO;
+namespace TaalDc.Portal.DTO.Marketing;
 
 public record InquriesResult
 {
+    public InquriesResult()
+    {
+        Inquiries = new List<InquiryDto>();
+    }
 
     [JsonPropertyName("inquiries")] public ICollection<InquiryDto> Inquiries { get; set; } 
 
@@ -18,7 +22,6 @@ public record InquriesResult
 
 public record InquiryDto
 {
-    
 
     [JsonPropertyName("attended_by")]
     public string AttendBy { get; set; }
