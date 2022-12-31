@@ -32,7 +32,6 @@
 
     <ItemGroup>
       <Folder Include="DTO\Catalog" />
-      <Folder Include="DTO\Marketing" />
       <Folder Include="Pages" />
     </ItemGroup>
 

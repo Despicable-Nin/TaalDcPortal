@@ -22,20 +22,39 @@ public class InquiriesController : Controller
    [HttpGet]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesErrorResponseType(typeof(BadRequestResult))]
-   public async Task<IActionResult> GetInquiries( )
+   public async Task<IActionResult> GetInquiries(int pageSize, int pageNumber )
    {
       var result = await _dbContext.Inquiries
          .Include(i => i.Customer)
          .Include(i => i.Status)
          .AsNoTracking()
+         .Skip(pageSize * (pageNumber -1))
+         .Take(pageSize)
          .ToListAsync();
 
-      var records =  result.Select(i => new InquiryDto(i.Message, i.PropertyId, i.Property, i.AttendedBy, i.Remarks,
-         0, i.TypeOfInquiry, i.Status.Id, i.Status.Name, i.Customer.Salutation, i.Customer.FirstName,
-         i.Customer.LastName, i.Customer.EmailAddress, i.Customer.ContactNo, i.Customer.Country, i.Customer.Province,
-         i.Customer.TownCity)).AsEnumerable();
+      var total = await _dbContext.Inquiries.AsNoTracking().CountAsync();
+
+      var records =  result.Select(i => new InquiryDto
+      {
+         Country = i.Customer.Country,
+         Message = i.Message,
+         Property = i.Property,
+         Province = i.Customer?.Province,
+         Remarks = i.Remarks,
+         Salutation = i.Customer?.Salutation,
+         Status = i.Status?.Name,
+         ContactNo = i.Customer?.ContactNo,
+         EmailAddress = i.Customer?.EmailAddress,
+         FirstName = i.Customer?.FirstName,
+         LastName = i.Customer?.LastName,
+         InquiryType = i.TypeOfInquiry,
+         PropertyId = i.PropertyId,
+         TownCity = i.Customer?.TownCity,
+         AttendBy = i.AttendedBy,
+         InquiryTypeId = 0 //used to be a table but made into a string
+      }).AsEnumerable();
       
-      return Ok(records);
+      return Ok(new InquriesResult{ PageSize =pageSize, PageNumber = pageNumber, Total = total, Inquiries = records.ToList()});
    }
    
    [HttpPost]

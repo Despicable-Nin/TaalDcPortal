@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SeedWork;
 using Serilog;
+using TaalDc.Portal;
 using TaalDc.Portal.Data;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.Seed;
@@ -55,9 +56,15 @@ builder.Services.AddControllersWithViews();
 
 //dependency injection for services
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
 builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddOptions();
+builder.Services.Configure<AppSettings>(configuration);
 
 
 var app = builder.Build();
