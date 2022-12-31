@@ -2,12 +2,12 @@ namespace SeedWork;
 
 public interface IAmCurrentUser
 {
-    public bool IsMarketing { get; }
-    public bool IsBroker { get; }
-    public bool IsSales { get; }
-    public bool IsAdmin { get; }
+    bool IsMarketing { get; }
+    bool IsBroker { get; }
+    bool IsSales { get; }
+    bool IsAdmin { get; }
     
-    public string Email { get; }
-    public string IdentityId { get; }
-    public string GetToken();
+    string Email { get; }
+    string IdentityId { get; }
+    Task<string> GetToken();
 }

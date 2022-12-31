@@ -1,22 +1,27 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SeedWork;
+using TaalDc.Portal.Controllers;
 using TaalDc.Portal.Services;
 
 namespace WebApplication2.Controllers;
 
-public class UsersController : Controller
+[Authorize]
+public class UsersController : BaseController<UsersController>
 {
     private readonly IAccountService _accountService;
-    private readonly ILogger<UsersController> _logger;
 
-    public UsersController(ILogger<UsersController> logger, IAccountService accountService)
+
+    public UsersController( ILogger<UsersController> loggerInstance, IAmCurrentUser currentUser, IAccountService accountService) : base(loggerInstance, currentUser)
     {
-        _logger = logger;
         _accountService = accountService;
     }
 
     public async Task<IActionResult> Index()
     {
+        var token = CurrentUser.GetToken();
         var vm = await _accountService.GetListOfUsersWithRoles();
         return View(vm);
     }
+    
 }
