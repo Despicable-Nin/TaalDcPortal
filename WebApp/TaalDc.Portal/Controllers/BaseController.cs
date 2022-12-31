@@ -8,15 +8,10 @@ public class BaseController<T> : Controller where T : Controller
 {
     protected readonly string Token;
     protected ILogger<T> LoggerInstance;
-    protected IAmCurrentUser CurrentUser;
-    
 
-
-    public BaseController(ILogger<T> loggerInstance, IAmCurrentUser currentUser)
+    public BaseController(ILogger<T> loggerInstance)
     {
         LoggerInstance = loggerInstance;
-        CurrentUser = currentUser;
-        Token = CurrentUser.GetToken().Result;
-        
+
     }
 }

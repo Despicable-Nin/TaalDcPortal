@@ -12,7 +12,7 @@ public class UsersController : BaseController<UsersController>
     private readonly IAccountService _accountService;
 
 
-    public UsersController( ILogger<UsersController> loggerInstance, IAmCurrentUser currentUser, IAccountService accountService) : base(loggerInstance, currentUser)
+    public UsersController( ILogger<UsersController> loggerInstance,  IAccountService accountService) : base(loggerInstance)
     {
         _accountService = accountService;
     }

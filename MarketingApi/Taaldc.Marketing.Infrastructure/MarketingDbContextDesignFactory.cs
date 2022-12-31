@@ -11,7 +11,7 @@ public class MarketingDbContextDesignFactory : IDesignTimeDbContextFactory<Marke
         var optionsBuilder = new DbContextOptionsBuilder<MarketingDbContext>()
             .UseSqlServer("Server=localhost;Database=taaldb_marketing;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Marketing.Infrastructure"));
 
-        return new MarketingDbContext(optionsBuilder.Options, new NoMediator());
+        return new MarketingDbContext(optionsBuilder.Options, new NoMediator(), default);
     }
 
     class NoMediator : IMediator
