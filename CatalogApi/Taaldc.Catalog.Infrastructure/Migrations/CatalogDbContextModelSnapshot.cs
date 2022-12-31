@@ -22,19 +22,19 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("floorseq")
+            modelBuilder.HasSequence("floorseq", "catalog")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("projectseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("propertyseq")
+            modelBuilder.HasSequence("propertyseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("towerseq")
+            modelBuilder.HasSequence("towerseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("unitseq")
+            modelBuilder.HasSequence("unitseq", "catalog")
                 .IncrementsBy(10);
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
@@ -43,7 +43,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "floorseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "floorseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -127,7 +127,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "propertyseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "propertyseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -180,33 +180,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("scenicview", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "N/A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "TAAL"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "HIGHLANDS"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "MANILA SKYLINE"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "ROTONDA"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
@@ -215,7 +188,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "towerseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "towerseq", "catalog");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -264,7 +237,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq", "catalog");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -338,28 +311,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("unitstatus", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "AVAILABLE"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "SOLD"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "RESERVED"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "BLOCKED"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", b =>
@@ -381,50 +332,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("unittype", "catalog");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "NOT APPLICABLE",
-                            ShortCode = "N/A"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "ONE BEDROOM",
-                            ShortCode = "1BR"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "TWO BEDROOM",
-                            ShortCode = "2BR"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "PENTHOUSE",
-                            ShortCode = "PH"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "RESIDENTIAL PARKING",
-                            ShortCode = "RP"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "MOTORCYCLE PARKING",
-                            ShortCode = "MP"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "COMMERCIAL SPACE",
-                            ShortCode = "CS"
-                        });
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>

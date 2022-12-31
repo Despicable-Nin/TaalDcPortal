@@ -12,7 +12,6 @@ public sealed class Floor : Entity
     {
         Name = name;
         Description = description;
-        Id = new Random().Next(1, 999999);
     }
     
     

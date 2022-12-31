@@ -1,0 +1,22 @@
+@model TaalDc.Portal.DTO.Marketing.InquriesResult
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+
+<table>
+    <tbody>
+        @foreach (var i in Model.Inquiries)
+        {
+            <tr>
+                <td>@i.FirstName</td>
+                <td>@i.LastName</td>
+                <td>@i.EmailAddress</td>
+                <td>@i.Message</td>
+            </tr>
+        }
+    </tbody>
+</table>

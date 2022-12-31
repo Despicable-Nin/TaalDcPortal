@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using FluentValidation;
 using MediatR;
 
 namespace Taaldc.Catalog.API.Application.Commands.UpsertUnitType;
@@ -19,5 +20,14 @@ public class UpsertUnitTypeCommand : IRequest<string>
     public bool IsNew()
     {
         return !UnitId.HasValue;
+    }
+}
+
+public class UpsertUnitTypeCommandValidator : AbstractValidator<UpsertUnitTypeCommand>
+{
+    public UpsertUnitTypeCommandValidator()
+    {
+        RuleFor(i => i.Name).NotEmpty();
+        RuleFor(i => i.ShortCode).NotEmpty();
     }
 }

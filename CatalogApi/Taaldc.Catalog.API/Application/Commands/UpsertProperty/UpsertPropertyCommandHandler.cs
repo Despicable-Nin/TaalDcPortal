@@ -43,7 +43,7 @@ public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyComman
         
         _propertyRepository.Update(project);
 
-        _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        await  _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         return CommandResult.Success(property.Id);
     }

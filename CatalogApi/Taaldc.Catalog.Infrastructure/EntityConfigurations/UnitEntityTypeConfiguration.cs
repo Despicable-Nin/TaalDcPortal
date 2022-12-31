@@ -18,7 +18,7 @@ class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
         
         //IMPORTANT: this is need for auto-increment of ID
         builder.Property(o => o.Id)
-            .UseHiLo("unitseq");
+            .UseHiLo("unitseq",CatalogDbContext.DEFAULT_SCHEMA);
 
         
         //matches Floor.Units configuration on FloorEntityTypeConfiguration

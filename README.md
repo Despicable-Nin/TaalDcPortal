@@ -55,6 +55,13 @@ dotnet ef database update
 <br/>
 <br/>
 
+#### ON RIDER
+
+Why I can't see my project in a `Startup projects` field?
+If you can't see your project in the "Startup project" dropdown, check that your project satisfies the requirements:
+`Microsoft.EntityFrameworkCore.Design` or `Microsoft.EntityFrameworkCore.Tools` NuGet package is installed.
+Project's TargetFramework is at least `netcoreapp3.1`.
+
 #### Connection String
 
 Important to note that `TrustCertificate=true;MultiSubNetFailover=True` must be set if using `Docker` instance of SQL Server
@@ -114,3 +121,9 @@ docker run
 
 ### Note on Password Strength
 If you find your image starts but then immediately stops or you get an error such as setup failed with error code 1`, then it may be you haven't created a strong enough password. SQL Server really means it when it requests a strong password. Ensure good length with a mixture of upper and lower case, and a mix of alphanumeric characters. For more information on password requirements take a look at the Microsoft documentation.
+
+### Logging
+
+https://blog.datalust.co/using-serilog-in-net-6/
+
+https://hub.docker.com/r/datalust/seq

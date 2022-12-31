@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
@@ -20,24 +21,30 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     public DbSet<UnitType> UnitTypes { get; set; }
     public DbSet<ScenicView> ScenicViews { get; set; }
 
-
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        System.Diagnostics.Debug.WriteLine("OrderingContext::ctor ->" + this.GetHashCode());
+        System.Diagnostics.Debug.WriteLine("CatalogDbContext::ctor ->" + this.GetHashCode());
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        // foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Entity> entry in
+        //          ChangeTracker.Entries<Entity>())
+        // {
+        //     Debug.Print($"Checking states: {entry.Entity.GetType()}{entry.State}");
+        // }
+        //
         return base.SaveChangesAsync(cancellationToken);
     }
-    public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+    
+    public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
