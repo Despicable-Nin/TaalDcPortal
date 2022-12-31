@@ -23,7 +23,7 @@ public class UnitsController : ApiBaseController<UnitsController>
         return Ok(await _mediator.Send(new UpsertUnitCommand(model.UnitId, model.UnitTypeId, model.ScenicViewId,model.UnitNo, model.FloorId, model.FloorArea, model.Price)));
     }
 
-    [HttpGet]
+    [HttpGet("available")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetAvailableUnits(int? unitTypeId, int? viewId, int? floorId, int min = 0,
