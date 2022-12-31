@@ -21,7 +21,7 @@ public class MarketingDbContextFactory : IDesignTimeDbContextFactory<MarketingDb
         var optionsBuilder = new DbContextOptionsBuilder<MarketingDbContext>();
         optionsBuilder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Taaldc.Marketing.Infrastructure"));
 
-        return new MarketingDbContext(optionsBuilder.Options, new NoMediator());
+        return new MarketingDbContext(optionsBuilder.Options, new NoMediator(), default);
     }
 }
 

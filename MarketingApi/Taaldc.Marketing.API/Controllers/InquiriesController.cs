@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SeedWork;
 using Taaldc.Marketing.API.DTO;
 using Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 using Taaldc.Marketing.Infrastructure;
@@ -15,12 +16,14 @@ namespace Taaldc.Marketing.API.Controllers;
 public class InquiriesController : Controller
 {
    private readonly ILogger<InquiriesController> _logger;
+   private readonly IAmCurrentUser _currentUser;
    private readonly MarketingDbContext _dbContext;
 
-   public InquiriesController(ILogger<InquiriesController> logger, MarketingDbContext dbContext)
+   public InquiriesController(ILogger<InquiriesController> logger, IAmCurrentUser currentUser, MarketingDbContext dbContext)
    {
       _logger = logger;
       _dbContext = dbContext;
+      _currentUser = currentUser;
    }
 
    [HttpGet]

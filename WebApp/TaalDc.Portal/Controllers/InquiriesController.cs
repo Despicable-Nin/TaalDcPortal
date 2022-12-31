@@ -9,7 +9,7 @@ namespace TaalDc.Portal.Controllers;
 public class InquiriesController : BaseController<InquiriesController>
 {
     private readonly IMarketingService _marketingService;
-    public InquiriesController(IMarketingService marketingService, ILogger<InquiriesController> loggerInstance, IAmCurrentUser currentUser) : base(loggerInstance, currentUser)
+    public InquiriesController(IMarketingService marketingService, ILogger<InquiriesController> loggerInstance) : base(loggerInstance)
     {
         _marketingService = marketingService;
     }
