@@ -19,7 +19,6 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Index()
     {
-        var token = CurrentUser.GetToken();
         var vm = await _accountService.GetListOfUsersWithRoles();
         return View(vm);
     }
