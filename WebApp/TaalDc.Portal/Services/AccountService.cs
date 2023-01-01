@@ -45,6 +45,7 @@ public class AccountService : IAccountService
         //to list so that it doesn't end up null like array
         var vm = brokers.Select(i => new BrokerListsViewModel(i.NormalizedUserName, i.NormalizedEmail, i.Id)).ToList();
 
+        //we can try to store this in localstorage
         return vm.ToArray();
     }
 }

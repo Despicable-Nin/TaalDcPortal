@@ -5,5 +5,5 @@ namespace TaalDc.Portal.Services;
 public interface IAccountService
 {
     Task<UserIndexViewModel> GetListOfUsersWithRoles();
-    Task<string> GetToken();
+    Task<IEnumerable<BrokerListsViewModel>> GetBrokers();
 }
