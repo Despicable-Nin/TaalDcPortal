@@ -10,7 +10,7 @@ public class TransactionPurpose : Enumeration
 
     public static IDictionary<int, string> Dictionary = new Dictionary<int, string>()
     {
-        { 1, ForAcquisition },
+        { 1, ForReservation },
         { 2, ForAcquisition }
     };
 

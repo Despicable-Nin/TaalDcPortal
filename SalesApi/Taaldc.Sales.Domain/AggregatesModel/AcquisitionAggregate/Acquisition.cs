@@ -13,6 +13,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
         Broker = broker;
         Remarks = remarks;
         _buyerId = buyerId;
+        _statusId = AcquisitionStatus.GetIdByName(AcquisitionStatus.New);
+
     }
 
     protected Acquisition()
@@ -27,9 +29,10 @@ public class Acquisition : DomainEntity, IAggregateRoot
     public decimal SellingPrice { get; private set; }
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
+    public bool IsRefundable { get; private set; } = true;
 
-    private int _productStatusId;
-    public ProductStatus ProductStatus { get; private set; }
+    private int _statusId;
+    public AcquisitionStatus Status { get; private set; }
 
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
@@ -43,6 +46,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
         
         _payments.Add(payment);
     }
+
+    public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
