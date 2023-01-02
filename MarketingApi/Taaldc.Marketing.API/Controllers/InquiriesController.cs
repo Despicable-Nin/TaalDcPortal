@@ -65,6 +65,7 @@ public class InquiriesController : Controller
       return Ok(new InquriesResult{ PageSize =pageSize, PageNumber = pageNumber, Total = total, Inquiries = records.ToList()});
    }
    
+   [AllowAnonymous]
    [HttpPost]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesErrorResponseType(typeof(BadRequestResult))]
