@@ -2,7 +2,7 @@ using SeedWork;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-public class Acquisition : Entity
+public class Acquisition : DomainEntity, IAggregateRoot
 {
     public Acquisition(int unitId, string unitDescription, string code, decimal sellingPrice, string broker, string remarks, int? buyerId) : this()
     {
@@ -35,10 +35,6 @@ public class Acquisition : Entity
 
     private int? _buyerId;
     public int? GetBuyerId => _buyerId;
-    
-
-    private List<Payment> _payments;
-    public IEnumerable<Payment> Payments => _payments.AsReadOnly();
 
     public void AddPayment(int paymentTypeId, int purposeId, int statusId, DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
@@ -47,6 +43,10 @@ public class Acquisition : Entity
         
         _payments.Add(payment);
     }
+    
+    private List<Payment> _payments;
+    public IEnumerable<Payment> Payments => _payments.AsReadOnly();
+
 
     private List<Penalty> _penalties;
     public IEnumerable<Penalty> Penalties => _penalties.AsReadOnly();

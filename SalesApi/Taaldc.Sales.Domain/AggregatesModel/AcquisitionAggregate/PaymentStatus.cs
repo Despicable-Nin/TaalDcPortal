@@ -7,7 +7,7 @@ public class PaymentStatus : Enumeration
     public const string Accepted = nameof(Accepted);
     public const string Pending = nameof(Pending);
     public const string Rejected = nameof(Rejected);
-    public const string Deleted = nameof(Deleted);
+    public const string Void = nameof(Void);
 
     public static int GetStatusId(string name) => PaymentStatus.Dictionary.FirstOrDefault(i => i.Value == name).Key;
 
@@ -16,7 +16,7 @@ public class PaymentStatus : Enumeration
         { 1, Accepted },
         { 2, Pending },
         { 3, Rejected },
-        { 4, Deleted }
+        { 4, Void }
     };
     
     public PaymentStatus(int id, string name) : base(id, name)

@@ -1,6 +1,6 @@
 using SeedWork;
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
-public class Buyer : DomainEntity
+public class Buyer : Entity, IAggregateRoot
 {
     public Buyer(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
         string country, string province, string townCity, string zipCode)
@@ -27,11 +27,4 @@ public class Buyer : DomainEntity
     public string Province { get; private set; }
     public string TownCity { get; private set; }
     public string ZipCode { get; private set; }
-}
-
-public interface IBuyerRepository
-{
-    Buyer GetByEmail(string email);
-    Buyer GetById(int id);
-    Buyer Upsert(Buyer buyer);
 }

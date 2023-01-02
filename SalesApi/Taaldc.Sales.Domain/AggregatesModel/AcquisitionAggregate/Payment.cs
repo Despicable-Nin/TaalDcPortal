@@ -38,9 +38,21 @@ public class Payment : Entity
     
     public string CorrelationId { get; private set; }
 
-    public void VerifyPayment(string verifiedBy, int status)
+    public void VerifyPayment(string verifiedBy)
     {
         VerifiedBy = verifiedBy;
-        _statusId = status;
+        _statusId = PaymentStatus.GetStatusId(PaymentStatus.Accepted);
+    }
+
+    public void RejectPayment(string verifiedBy)
+    {
+        VerifiedBy = verifiedBy;
+        _statusId = PaymentStatus.GetStatusId(PaymentStatus.Rejected);
+    }
+
+    public void VoidPayment(string verififed)
+    {
+        VerifiedBy = verififed;
+        _statusId = PaymentStatus.GetStatusId(PaymentStatus.Void);
     }
 }
