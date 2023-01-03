@@ -1,4 +1,4 @@
-USE taaldb
+USE taaldb_admin
 GO
 
 --Populate Tables
