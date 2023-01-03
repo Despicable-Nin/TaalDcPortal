@@ -19,6 +19,8 @@ public class Payment : Entity
     
 
     public DateTime TransactionDate { get; private set; }
+    public DateTime? DueDate { get; private set; }
+    
     public string ConfirmationNumber { get; private set; }
 
     private int _paymentTypeId;
