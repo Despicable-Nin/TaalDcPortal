@@ -4,29 +4,17 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class Acquisition : DomainEntity, IAggregateRoot
 {
-    public Acquisition(int unitId, string unitDescription, string code, decimal sellingPrice, string broker, string remarks, int? buyerId) : this()
-    {
-        UnitId = unitId;
-        UnitDescription = unitDescription;
-        Code = code;
-        SellingPrice = sellingPrice;
-        Broker = broker;
-        Remarks = remarks;
-        _buyerId = buyerId;
-        _statusId = AcquisitionStatus.GetIdByName(AcquisitionStatus.New);
-
-    }
-
     protected Acquisition()
     {
         _payments = new List<Payment>();
         _penalties = new List<Penalty>();
     }
 
-    public int UnitId { get; private set; }
-    public string UnitDescription { get; private set; }
+
+    private int? _unitId;
+    public int? GetUnitId => _unitId;
+    
     public string Code { get; private set; }
-    public decimal SellingPrice { get; private set; }
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
     public bool IsRefundable { get; private set; } = true;
