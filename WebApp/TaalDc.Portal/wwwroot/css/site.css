@@ -1,18 +1,224 @@
-html {
-    font-size: 14px;
+*{
+    margin: 0;
+    padding: 0;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+:root {
+    font-size: 16px;
+}
+
+@font-face {
+    font-family: "Inter Regular";
+    src: url("/fonts/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Inter Semibold";
+    src: url("/fonts/Inter-SemiBold.ttf");
+}
+
+@font-face {
+    font-family: "Inter Extrabold";
+    src: url("/fonts/Inter-ExtraBold.ttf");
+}
+
+.primary-color {
+    color: #516C5B !important;
+}
+
+
+body {
+    font-family: 'Inter Regular', Arial, sans-serif;
+    font-size: 1rem;
+}
+
+h1 {
+    font-size: 2.63rem;
+}
+
+h2 {
+    font-size: 2.25rem;
+}
+
+h3 {
+    font-size: 1.88rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+h6 {
+    font-size: 1.125rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+.alink {
+    color: #6AB0F8;
+    cursor: pointer;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+/*X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.88rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+    }
+
+    h5 {
+        font-size: 1.125rem;
+    }
+
+    h6 {
+        font-size: 1rem;
+    }
+
+    p {
+        font-size: .9rem;
     }
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+strong {
+    font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 
-body {
-    margin-bottom: 60px;
+.hide {
+    display: none;
+}
+
+a {
+    color: #6AB0F8;
+    text-decoration: unset;
+}
+
+    a:hover {
+        color: #7BA8D1;
+    }
+
+
+ul.noliststyle {
+    padding-left: 0;
+}
+
+    ul.noliststyle > li {
+        list-style: none;
+        margin-bottom: .5rem;
+    }
+
+
+/*Button Styles*/
+.btn-primary {
+    background-color: #516C5B;
+    color: white;
+    border-color: #516C5B;
+    border-radius: 0px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+
+    .btn-primary:hover,
+    .btn-primary:active,
+    .btn-primary:focus {
+        background-color: #678B75 !important;
+        color: white;
+        border-color: #678B75 !important;
+        box-shadow: none;
+    }
+
+.form-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.form-section {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.taaldc-sidenav {
+    background-color: #678B75 !important;
+    z-index: 1;
+}
+
+    .taaldc-sidenav .nav-link {
+        color: #FFFF !important;
+        text-decoration: unset;
+    }
+
+    .taaldc-sidenav .nav-item{
+        margin-bottom: 0.75rem !important;
+    }
+
+
+main {
+    background-color: #F6F6F6;
+    height: 100%;
+}
+
+.content-wrapper{
+    padding-top: 100px;
+}
+
+.main-nav {
+    position: fixed;
+    width: 100%;
+    background-color: #ffff !important;
+}
+
+
+.nav-tabs .nav-item{
+    min-width: 170px;
+    text-align: center;
+}
+
+.nav-link{
+    color: #252525 !important;
+}
+
+.nav-link.active {
+    color: #678B75 !important;
+    font-family: 'Inter Extrabold', Arial, sans-serif;
+}
+
+.tab-content {
+    border: 1px solid #dee2e6;
+    border-top: none;
+    background-color: #ffff;
+    padding: 1.5rem !important;
+}
+
+
+.float-right{
+    float: right;
 }

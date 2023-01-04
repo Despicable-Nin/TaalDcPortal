@@ -20,9 +20,9 @@ public class FloorsController : ApiBaseController<FloorsController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertTower( UpsertFloorDTO model)
+    public async Task<IActionResult> UpsertFloor( UpsertFloorDTO model)
     {
-        return Ok(await _mediator.Send(new UpsertFloorCommand(model.TowerId, model.FloorId,model.Name, model.Description)));
+        return Ok(await _mediator.Send(new UpsertFloorCommand(model.TowerId, model.FloorId,model.Name, model.Description, model.FloorPlanFilePath)));
     }
 
 	[HttpGet("available")]

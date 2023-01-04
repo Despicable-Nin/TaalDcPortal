@@ -28,7 +28,7 @@ public sealed class Unit : Entity
     
     private int _unitTypeId;
     public UnitType UnitType { get; private set; }
-
+    public string Remarks { get; private set; }
     public void SetPrice(decimal newPrice) => Price = newPrice;
 
     public void SetUnitType(int unitTypeId) => _unitTypeId = unitTypeId;
@@ -43,6 +43,11 @@ public sealed class Unit : Entity
         Identifier = identifier;
         Price = price;
         FloorArea = floorArea;
+    }
+
+    public void AddRemarks(string remarks)
+    {
+        this.Remarks = remarks;
     }
 
     public void MarkAsSold() => _unitStatusId = (int)UnitStatus.UnitIs.SOLD;

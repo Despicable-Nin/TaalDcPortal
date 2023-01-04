@@ -18,6 +18,7 @@ public sealed class Floor : Entity
 
     public string Name { get; private set; }
     public string Description { get; private set; }
+    public string FloorPlanFilePath { get; private set; }
 
     private List<Unit> _units;
     public IReadOnlyCollection<Unit> Units => _units.AsReadOnly();
@@ -26,6 +27,11 @@ public sealed class Floor : Entity
     {
         Name = name;
         Description = description;
+    }
+
+    public void AddFloorPlan(string floorPlanFilePath)
+    {
+        FloorPlanFilePath = floorPlanFilePath;
     }
     
     public Unit AddUnit(int scenicViewId,  int unitTypeId, string identifier, decimal price, double floorArea)

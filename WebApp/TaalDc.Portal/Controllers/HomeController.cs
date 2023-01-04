@@ -15,6 +15,8 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        if (!User.Identity.IsAuthenticated) return RedirectToPage("/Account/Login", new { area = "Identity" });
+
         return View();
     }
 

@@ -6,8 +6,14 @@ namespace Taaldc.Catalog.API.Application.Queries;
 
 public interface IUnitQueries
 {
-    Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(int? unitTypeId, int? viewId, int? floorId, int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1);
+    Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+        int? unitTypeId, 
+        int? viewId, 
+        int? floorId, 
+        string location, 
+        int min = 0,
+        int max = 999999999, 
+        int pageSize = 20, int pageNumber = 1);
 
     Task<IEnumerable<UnitTypeAvailability>> GetUnitTypeAvailabilityByTowerId(int towerId);
 }
@@ -23,12 +29,17 @@ public class UnitQueries : IUnitQueries
             : connectionString;
     }
 
-    public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(int? unitTypeId, int? viewId, int? floorId,
+    public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+        int? unitTypeId, 
+        int? viewId, 
+        int? floorId,
+        string location,
         int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1)
+        int max = 999999999, 
+        int pageSize = 20, int pageNumber = 1)
     {
         var query =
-            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode] ";
+            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode], U.Remarks [Remarks]";
         query += " FROM [taaldb_admin].[catalog].[unit] U JOIN [taaldb_admin].[catalog].floors F ON U.FloorId = F.Id ";
         query += " JOIN [taaldb_admin].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
         query += " JOIN [taaldb_admin].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
@@ -42,6 +53,8 @@ public class UnitQueries : IUnitQueries
         if (viewId.HasValue) clauses.Add($"S.Id = {viewId.Value}");
 
         if (floorId.HasValue) clauses.Add($"F.Id = {floorId.Value}");
+
+        if(!string.IsNullOrEmpty(location)) clauses.Add($"U.Remarks LIKE '%{location}%'");
 
         clauses.Add($"(U.Price BETWEEN {min} AND {max})");
         clauses.Add("US.Id = 1");

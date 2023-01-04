@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Towers";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Properties" asp-action="Index">Properties</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="Towers">Towers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="Floors">Floors</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" asp-controller="Properties" asp-action="Units">Units</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="UnitTypes">Unit Types</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="text-end">
+            <a class="btn btn-primary">New Unit</a>
+        </div>
+    </div>
+</div>

@@ -22,8 +22,10 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 		}
 		public async Task<IEnumerable<AvailableFloor>> GetAvailableFloorsByUnitType(int? unitTypeId)
 		{
-			var availableFloorsQuery = $"SELECT DISTINCT(f.Id) AS FloorId, " +
-			$"f.Name AS FloorName " +
+			var availableFloorsQuery = $"SELECT " +
+			$"DISTINCT(f.Id) AS FloorId, " +
+			$"f.Name AS FloorName, " +
+			$"f.FloorPlanFilePath AS FloorPlanFilePath " +
 			$"FROM taaldb_admin.catalog.floors f " +
 			$"LEFT JOIN catalog.unit u " +
 			$"ON u.FloorId = f.Id " +

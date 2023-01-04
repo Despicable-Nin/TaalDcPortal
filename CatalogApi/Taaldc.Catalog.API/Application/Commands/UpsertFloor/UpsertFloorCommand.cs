@@ -7,18 +7,21 @@ namespace Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 
 public class UpsertFloorCommand : IRequest<CommandResult>
 {
-    public UpsertFloorCommand(int towerId, int? floorId, string name, string description)
+    public UpsertFloorCommand(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
     {
         TowerId = towerId;
         FloorId = floorId;
         Name = name;
         Description = description;
-    }
+        FloorPlanFilePath = floorPlanFilePath;
+
+	}
 
     [DataMember] public int TowerId { get; private set; }
     [DataMember] public int? FloorId { get; private set; }
     [DataMember] public string Name { get; private set; }
     [DataMember] public string Description { get; private set; }
+	[DataMember] public string FloorPlanFilePath { get; private set; }
 }
 
 public class UpsertFloorCommandValidator : AbstractValidator<UpsertFloorCommand>

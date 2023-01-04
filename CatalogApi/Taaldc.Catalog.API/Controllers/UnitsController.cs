@@ -26,9 +26,14 @@ public class UnitsController : ApiBaseController<UnitsController>
     [HttpGet("available")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> GetAvailableUnits(int? unitTypeId, int? viewId, int? floorId, int min = 0,
+    public async Task<IActionResult> GetAvailableUnits(
+        int? unitTypeId, 
+        int? viewId, 
+        int? floorId, 
+        string location,
+        int min = 0,
         int max = 999999999, int pageSize = 20, int pageNumber = 1)
     {
-        return Ok(await _unitQueries.GetAvailableUnitsAsync(unitTypeId, viewId, floorId, min, max, pageSize, pageNumber));
+        return Ok(await _unitQueries.GetAvailableUnitsAsync(unitTypeId, viewId, floorId, location, min, max, pageSize, pageNumber));
     }
 }
