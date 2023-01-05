@@ -3,6 +3,7 @@ using MediatR;
 using Taaldc.Catalog.API.Application.Behaviors;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
+using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
@@ -32,6 +33,12 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBeha
 
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
+
+builder.Services.AddScoped<IPropertyQueries>(i =>
+{
+    return new PropertyQueries(connectionString);
+});
+
 builder.Services.AddScoped<IUnitQueries>(i =>
 {
     return new UnitQueries(connectionString);

@@ -222,3 +222,30 @@ main {
 .float-right{
     float: right;
 }
+
+.action-btn, .action-section {
+    margin-bottom: 1rem;
+}
+
+.action-edit, .action-delete {
+    margin-right: 1rem;
+}
+
+
+.data-section {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.action-edit {
+    color: #06AE2B;
+}
+
+.action-delete {
+    color: #AE1006;
+}
+
+.action-search {
+    float: right;
+}
+

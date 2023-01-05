@@ -23,8 +23,89 @@
     </ul>
 
     <div class="tab-content">
-        <div class="text-end">
-            <a class="btn btn-primary">New Property</a>
+        <div class="action-section">
+            <div class="action-btn text-end">
+                <a class="btn btn-primary">New Property</a>
+            </div>
+
+            <div class="action-search">
+                <form>
+                    <input class="form-control" placeholder="Search..." />
+                </form>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <div class="table-responsive w-100 mb-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Property Name</th>
+                            <th>Land Area</th>
+                            <th>Towers</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>One Tolentino East Residences</td>
+                            <td>1000 sqm.</td>
+                            <td>1</td>
+                            <td>
+                                <a class="action-edit" href="#">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>One Tolentino East Residences</td>
+                            <td>1000 sqm.</td>
+                            <td>1</td>
+                            <td>
+                                <a class="action-edit" href="#">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>One Tolentino East Residences</td>
+                            <td>1000 sqm.</td>
+                            <td>1</td>
+                            <td>
+                                <a class="action-edit" href="#">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link alink noselect">Prev</a>
+                    </li>
+
+                    <li class="page-item"><a class="noselect page-link alink active">1</a></li>
+                    <li class="page-item"><a class="noselect page-link alink ">2</a></li>
+                    <li class="page-item"><a class="noselect page-link alink ">3</a></li>
+                    <li class="page-item"><a class="noselect page-link alink ">4</a></li>
+                    <li class="page-item"><a class="noselect page-link alink ">5</a></li>
+
+
+                    <li class="page-item ">
+                        <a class="page-link alink noselect">Next</a>
+                    </li>
+
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+    </script>
+}
