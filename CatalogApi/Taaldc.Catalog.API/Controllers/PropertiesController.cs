@@ -26,8 +26,8 @@ public class PropertiesController : ApiBaseController<PropertiesController>
         return Ok(
             await _mediator.Send(
                 new UpsertPropertyCommand(
-                    model.PropertyId, 
-                    model.ProjectId, 
+                    model.PropertyId,
+                    model.ProjectId,
                     model.Name,
                     model.LandArea)));
     }
@@ -41,4 +41,14 @@ public class PropertiesController : ApiBaseController<PropertiesController>
         return Ok(await _propertyQueries.GetActiveProperties(filter, sortBy, sortOrder, pageNumber, pageSize));
     }
 
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetPropertyById(int id)
+    {
+        var property = await _propertyQueries.GetPropertyById(id);
+        if (property == null) return NotFound();
+        return Ok(property);
+    }
 }

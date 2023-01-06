@@ -13,6 +13,8 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
             int pageNumber = 1,
             int pageSize = 10
         );
+
+        Task<PropertyDTO> GetPropertyById(int id);
     }
 
 
@@ -60,6 +62,31 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
             var temp = await connection.QueryAsync<int>(countQuery);
 
             return new PaginationQueryResult<PropertyDTO>(pageSize, pageNumber, temp.Single(), result);
+        }
+
+        public async Task<PropertyDTO> GetPropertyById(int id)
+        {
+            var query = $"SELECT p.Id," +
+                $"p.[Name] AS PropertyName," +
+                $"p.[LandArea]," +
+                $"COUNT(t.[Id]) AS Towers " +
+                $"FROM catalog.property p  " +
+                $"LEFT JOIN catalog.tower t " +
+                $"ON t.PropertyId = p.Id AND t.IsActive = '1'" +
+                $"WHERE p.Id = '{id}' " +
+                $"GROUP BY p.Id, p.Name, p.LandArea, t.Id, t.IsActive";
+
+            await using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync(CancellationToken.None);
+
+            try {
+                var result = await connection.QueryFirstAsync<PropertyDTO>(query);
+                return result;
+            }
+            catch(Exception err)
+            {
+                return null;
+            }
         }
     }
 }
