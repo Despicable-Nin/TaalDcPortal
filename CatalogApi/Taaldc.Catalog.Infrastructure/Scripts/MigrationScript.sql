@@ -1,12 +1,12 @@
-USE taaldb
+USE taaldb_admin
 GO
 
 --Populate Tables
+EXEC sp_MSforeachtable 'if ("?" NOT IN ("[dbo].[__EFMigrationsHistory]"))
+         DELETE FROM ?'
 EXEC sp_MSForEachTable 'DISABLE TRIGGER ALL ON ?'
 GO
 EXEC sp_MSForEachTable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
-GO
-EXEC sp_MSForEachTable 'DELETE FROM ?'
 GO
 EXEC sp_MSForEachTable 'ALTER TABLE ? CHECK CONSTRAINT ALL'
 GO
@@ -40,7 +40,7 @@ VALUES (1,'OTE', 'TAALDC', GETDATE(),'','','','1')
 
 
 
-    INSERT INTO catalog.property
+INSERT INTO catalog.property
 ([Id], [Name], [LandArea], [ProjectId], [CreatedOn],[CreatedBy],[ModifiedBy],[ModifiedOn],[IsActive])
 VALUES (1, 'One Tolentino East Residences', '9221', '1', GETDATE(),'','','','1')
 
@@ -85,22 +85,22 @@ INSERT INTO @Floors VALUES (4),(5),(6),(7),(8),(9),(10),(11),(12),(14),(15),(16)
 
 INSERT INTO catalog.floors
 ([Id], [Name], [Description], [TowerId],[CreatedOn],[CreatedBy],[ModifiedBy],[ModifiedOn],[IsActive])
-SELECT
-        flr.FloorNo + 4 AS Id,
-        CAST(flr.FloorNo AS VARCHAR(10)) + CASE
-                                               WHEN flr.FloorNo % 100 IN (11,12,13) THEN 'th' 
+SELECT 
+	flr.FloorNo + 4 AS Id,
+	CAST(flr.FloorNo AS VARCHAR(10)) + CASE 
+					WHEN flr.FloorNo % 100 IN (11,12,13) THEN 'th' 
 					WHEN flr.FloorNo % 10 = 1 THEN 'st' 
 					WHEN flr.FloorNo % 10 = 2 THEN 'nd' 
 					WHEN flr.FloorNo % 10 = 3 THEN 'rd' 
-					ELSE 'th'
-END AS [Name],
+					ELSE 'th' 
+				END AS [Name],
 	CAST(flr.FloorNo AS VARCHAR(10)) + CASE 
 					WHEN flr.FloorNo % 100 IN (11,12,13) THEN 'th Floor' 
 					WHEN flr.FloorNo % 10 = 1 THEN 'st Floor' 
 					WHEN flr.FloorNo % 10 = 2 THEN 'nd Floor' 
 					WHEN flr.FloorNo % 10 = 3 THEN 'rd Floor' 
-					ELSE 'th Floor'
-END AS [Description],
+					ELSE 'th Floor' 
+				END AS [Description],
 	1 AS TowerId,
 	 GETDATE(),'','','','1'
 FROM @Floors flr
@@ -697,25 +697,25 @@ UPDATE catalog.unit
 SET CreatedOn = GETDATE()
 
 --
-SELECT
-    prop.Name AS Property,
-    twr.Name AS Tower,
-    flr.Name AS Floor,
-    unit.Identifier AS UnitNo,
-    ut.Name AS UnitType,
-    sv.Name AS [View],
+SELECT 
+	prop.Name AS Property,
+	twr.Name AS Tower,
+	flr.Name AS Floor,
+	unit.Identifier AS UnitNo,
+	ut.Name AS UnitType,
+	sv.Name AS [View],
 	us.Name AS [Status],
 	unit.CreatedOn
 FROM catalog.unit unit
-    JOIN catalog.floors flr
+JOIN catalog.floors flr
 on flr.Id = unit.FloorId
-    JOIN catalog.unittype ut
-    on ut.Id = unit.UnitType
-    JOIN catalog.scenicview sv
-    on sv.Id = unit.ScenicViewId
-    JOIN catalog.tower twr
-    ON twr.Id = flr.TowerId
-    JOIN catalog.property prop
-    ON prop.Id = twr.PropertyId
-    JOIN catalog.unitstatus us
-    ON us.Id = unit.UnitStatus
+JOIN catalog.unittype ut
+on ut.Id = unit.UnitType
+JOIN catalog.scenicview sv
+on sv.Id = unit.ScenicViewId
+JOIN catalog.tower twr
+ON twr.Id = flr.TowerId
+JOIN catalog.property prop
+ON prop.Id = twr.PropertyId
+JOIN catalog.unitstatus us
+ON us.Id = unit.UnitStatus
