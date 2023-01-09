@@ -34,13 +34,18 @@ public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, Com
             //floor = new Floor(request.Name, request.Description);
 
             floor = tower.AddFloor(request.Name, request.Description);
-			floor.AddFloorPlan(request.FloorPlanFilePath);
-		}
+
+            floor.AddFloorPlan(request.FloorPlanFilePath);
+        }
 
         _repository.UpdateTower(tower);
 
-        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-        return CommandResult.Success(floor.Id);
+        try { 
+            await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+            return CommandResult.Success(floor.Id);
+        }catch(Exception err)
+        {
+            return CommandResult.Failed(request.FloorId.Value, err.Message);
+        }
     }
 }

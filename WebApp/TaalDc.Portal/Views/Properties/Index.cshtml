@@ -1,6 +1,14 @@
-﻿@{
+﻿@using TaalDc.Portal.DTO.Catalog;
+@using TaalDc.Portal.Models;
+@model PaginationQueryResult<PropertyDTO>
+
+@{
     ViewBag.Title = "Properties";
     Layout = "_Layout";
+
+    var filter = Context.Request.Query["filter"].FirstOrDefault();
+    var sortBy = Context.Request.Query["sortBy"].FirstOrDefault();
+    var sortOrder = Context.Request.Query["sortOrder "].FirstOrDefault();
 }
 
 <div class="container-fluid">
@@ -25,12 +33,12 @@
     <div class="tab-content">
         <div class="action-section">
             <div class="action-btn text-end">
-                <a class="btn btn-primary">New Property</a>
+                <a asp-controller="Properties" asp-action="CreateProperty" class="btn btn-primary">New Property</a>
             </div>
 
             <div class="action-search">
                 <form>
-                    <input class="form-control" placeholder="Search..." />
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
                 </form>
             </div>
         </div>
@@ -48,36 +56,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>One Tolentino East Residences</td>
-                            <td>1000 sqm.</td>
-                            <td>1</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>One Tolentino East Residences</td>
-                            <td>1000 sqm.</td>
-                            <td>1</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>One Tolentino East Residences</td>
-                            <td>1000 sqm.</td>
-                            <td>1</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
+                        @foreach(var prop in Model.Data)
+                        {
+                            <tr>
+                                <td>@prop.Id</td>
+                                <td>@prop.PropertyName</td>
+                                <td>@prop.LandArea sqm.</td>
+                                <td>@prop.Towers</td>
+                                <td>
+                                    <a class="action-edit" href="#">Edit</a>
+                                    <a class="action-delete" href="#">Delete</a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -87,12 +78,12 @@
                         <a class="page-link alink noselect">Prev</a>
                     </li>
 
-                    <li class="page-item"><a class="noselect page-link alink active">1</a></li>
-                    <li class="page-item"><a class="noselect page-link alink ">2</a></li>
-                    <li class="page-item"><a class="noselect page-link alink ">3</a></li>
-                    <li class="page-item"><a class="noselect page-link alink ">4</a></li>
-                    <li class="page-item"><a class="noselect page-link alink ">5</a></li>
+                    @for(int i = 0; i<Model.TotalPages; i++)
+                    {
+                        var active = (i + 1) == Model.PageNumber;
 
+                        <li class="page-item"><a href="?pageNumber=@(i+1)" class="noselect page-link alink @(active? "active": "")">@(i+1)</a></li>
+                    }
 
                     <li class="page-item ">
                         <a class="page-link alink noselect">Next</a>

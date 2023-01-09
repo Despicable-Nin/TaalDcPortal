@@ -34,9 +34,17 @@ public sealed class Floor : Entity
         FloorPlanFilePath = floorPlanFilePath;
     }
     
-    public Unit AddUnit(int scenicViewId,  int unitTypeId, string identifier, decimal price, double floorArea)
+    public Unit AddUnit(
+        int scenicViewId,  
+        int unitTypeId, 
+        string identifier, 
+        decimal price, 
+        double floorArea, 
+        double balconyArea,
+        string remarks)
     {
-        var unit = new Unit(scenicViewId, unitTypeId, identifier, price, floorArea);
+        var unit = new Unit(scenicViewId, unitTypeId, identifier, price, floorArea, balconyArea);
+        unit.AddRemarks(remarks);
         _units.Add(unit);
 
         return unit;

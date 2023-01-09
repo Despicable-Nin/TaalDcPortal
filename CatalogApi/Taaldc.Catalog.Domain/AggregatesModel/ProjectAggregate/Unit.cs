@@ -6,7 +6,7 @@ public sealed class Unit : Entity
 {
 
     
-    public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea)
+    public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea, double balconyArea)
     {
         _scenicViewId = scenicViewId;
         _unitStatusId = (int) UnitStatus.UnitIs.AVAILABLE;
@@ -14,11 +14,13 @@ public sealed class Unit : Entity
         Identifier = identifier;
         Price = price;
         FloorArea = floorArea;
+        BalconyArea = balconyArea;
     }
 
     public string Identifier { get; set; }
     public decimal Price { get; private set; }
     public double FloorArea { get; private set; }
+    public double BalconyArea { get; private set; }
     
     private int _scenicViewId;
     public ScenicView ScenicView { get; private set; }
@@ -37,12 +39,14 @@ public sealed class Unit : Entity
 
     public void SetView(int viewId) => _scenicViewId = viewId;
     
-    public void Update(int scenicViewId,  int unitTypeId, string identifier, decimal price, double floorArea){
+    public void Update(int scenicViewId,  int unitTypeId, string identifier, decimal price, double floorArea, double balconyArea, string remarks){
         _scenicViewId = scenicViewId;
         _unitTypeId = unitTypeId;
         Identifier = identifier;
         Price = price;
         FloorArea = floorArea;
+        BalconyArea = balconyArea;
+        Remarks = remarks;
     }
 
     public void AddRemarks(string remarks)

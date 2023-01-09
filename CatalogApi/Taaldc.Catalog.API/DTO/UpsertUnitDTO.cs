@@ -24,7 +24,11 @@ public class UpsertUnitDTO
     [JsonPropertyName("floor_area")] 
     [JsonProperty(Required = Required.Always)]
     public double FloorArea { get;set; }
-    
+
+    [JsonPropertyName("balcony_area")]
+    [JsonProperty(Required = Required.Always)]
+    public double BalconyArea { get; set; }
+
     [JsonPropertyName("price")]
     [JsonProperty(Required = Required.Always)]
     public decimal Price { get;set; }
@@ -32,4 +36,7 @@ public class UpsertUnitDTO
     [JsonPropertyName("floor_id")] 
     [JsonProperty(Required = Required.Always)]
     public int FloorId { get; set; }
+
+    [JsonPropertyName("remarks")]
+    public string Remarks { get; set; }
 }

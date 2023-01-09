@@ -46,14 +46,14 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
                 $"ON t.PropertyId = p.Id and t.IsActive = '1'" +
                 $"WHERE p.IsActive = '1' AND p.[Name] LIKE '%' + ISNULL('{filter}',p.[Name]) + '%' " +
                 $"GROUP BY p.Id, p.Name, p.LandArea, t.Id, t.IsActive " +
-                $"ORDER BY {PropertyHelper.GetPropertySorterName(sortBy, sortOrder)} OFFSET {pageNumber - 1} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+                $"ORDER BY {PropertyHelper.GetPropertySorterName(sortBy, sortOrder)} OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
             var result = await connection.QueryAsync<PropertyDTO>(query);
 
-            var countQuery = $"SELECT COUNT(p.Id) " +
+            var countQuery = $"SELECT COUNT(*) " +
                 $"FROM [taaldb_admin].[catalog].property p " +
                 $"LEFT JOIN [taaldb_admin].[catalog].[tower] t " +
                 $"ON t.PropertyId = p.Id AND t.IsActive = '1' " +
@@ -61,7 +61,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
 
             var temp = await connection.QueryAsync<int>(countQuery);
 
-            return new PaginationQueryResult<PropertyDTO>(pageSize, pageNumber, temp.Single(), result);
+            return new PaginationQueryResult<PropertyDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
         }
 
         public async Task<PropertyDTO> GetPropertyById(int id)

@@ -13,7 +13,7 @@ public class UpsertFloorCommand : IRequest<CommandResult>
         FloorId = floorId;
         Name = name;
         Description = description;
-        FloorPlanFilePath = floorPlanFilePath;
+        FloorPlanFilePath = !string.IsNullOrEmpty(floorPlanFilePath)? floorPlanFilePath: "";
 
 	}
 

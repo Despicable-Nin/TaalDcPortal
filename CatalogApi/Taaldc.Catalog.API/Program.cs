@@ -5,6 +5,7 @@ using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
+using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
@@ -48,6 +49,12 @@ builder.Services.AddScoped<IUnitQueries>(i =>
 builder.Services.AddScoped<IFloorQueries>(i =>
 {
 	return new FloorQueries(connectionString);
+
+});
+
+builder.Services.AddScoped<ITowerQueries>(i =>
+{
+    return new TowerQueries(connectionString);
 
 });
 
