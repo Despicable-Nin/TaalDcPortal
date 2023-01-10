@@ -4,6 +4,7 @@ using Taaldc.Catalog.API.Application.Behaviors;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.Properties;
+using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
@@ -62,6 +63,12 @@ builder.Services.AddScoped<IScenicViewQueries>(i =>
 {
 	return new ScenicViewQueries(connectionString);
 });
+
+builder.Services.AddScoped<IUnitTypeQueries>(i =>
+{
+    return new UnitTypeQueries(connectionString);
+});
+
 
 
 var app = builder.Build();

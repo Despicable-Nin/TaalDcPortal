@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using System.Drawing.Printing;
+using System.Globalization;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -155,14 +158,13 @@ namespace TaalDc.Portal.Controllers
             int pageSize = 10)
         {
             var units = await _catalogService.GetUnits(filter,floorId,unitTypeId,viewId,statusId, sortBy, sortOrder, pageNumber, pageSize);
-
             return View(units);
         }
-
-
-        public IActionResult UnitTypes()
+        public async Task<IActionResult> UnitTypes()
         {
-            return View();
+            var unitTypes = await _catalogService.GetUnitTypes();
+
+            return View(unitTypes);
         }
     }
 }

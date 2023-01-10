@@ -111,6 +111,24 @@ namespace TaalDc.Portal.Services
             }
         }
 
+        public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
+        {
+            var uri = API.Catalog.GetUnitTypes(_removeServiceBaseUrl);
+
+            try
+            {
+                var responseString = await _httpClient.GetStringAsync(uri);
+
+                var result = JsonSerializer.Deserialize<IEnumerable<UnitTypeDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                return result;
+            }
+            catch (Exception err)
+            {
+                throw new Exception(err.Message);
+            }
+        }
+
 
 
 
@@ -180,6 +198,5 @@ namespace TaalDc.Portal.Services
 
             throw new Exception("Unit cannot be created.");
         }
-
     }
 }

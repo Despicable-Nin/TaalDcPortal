@@ -36,6 +36,9 @@ namespace TaalDc.Portal.Services
              int pageSize = 10);
 
 
+        Task<IEnumerable<UnitTypeDTO>> GetUnitTypes();
+
+
 
         Task<CommandResult> CreateProperty(PropertyCreateDTO model);
         Task<CommandResult> CreateTower(TowerCreateDTO model);
