@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using SeedWork;
 
-namespace Taaldc.Marketing.API;
+namespace Taaldc.Sales.Api;
 
 public class CurrentUser : IAmCurrentUser
 {
@@ -15,8 +15,10 @@ public class CurrentUser : IAmCurrentUser
         Roles = httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)?.Select(i => i.Value).ToArray();
         _isAuthenticated = !string.IsNullOrEmpty(Email);
     }
-    
+
+
     public string[] Roles { get; }
     public string Email { get; }
     public string IdentityId { get; }
+
 }

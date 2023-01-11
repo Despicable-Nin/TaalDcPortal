@@ -38,9 +38,14 @@ public class AccountService : IAccountService
         return vm;
     }
 
-    public async Task<string> GetToken()
+    public async Task<IEnumerable<BrokerListsViewModel>> GetBrokers()
     {
-        
-        return string.Empty;
+        var brokers = await _userManager.GetUsersInRoleAsync(Seed.Seed.BROKER);
+
+        //to list so that it doesn't end up null like array
+        var vm = brokers.Select(i => new BrokerListsViewModel(i.NormalizedUserName, i.NormalizedEmail, i.Id)).ToList();
+
+        //we can try to store this in localstorage
+        return vm.ToArray();
     }
 }
