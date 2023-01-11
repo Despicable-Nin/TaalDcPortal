@@ -55,6 +55,19 @@ namespace TaalDc.Portal.Services
             return result;
         }
 
+        public async Task<PropertyDTO> GetPropertyById(int id)
+        {
+            var uri = API.Catalog.GetProperties(_removeServiceBaseUrl);
+
+            uri = uri + $"/{id}";
+
+            var responseString = await _httpClient.GetStringAsync(uri);
+
+            var result = JsonSerializer.Deserialize<PropertyDTO>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
+
         public async Task<PaginationQueryResult<TowerDTO>> GetTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             var uri = API.Catalog.GetTowers(_removeServiceBaseUrl);
@@ -198,5 +211,7 @@ namespace TaalDc.Portal.Services
 
             throw new Exception("Unit cannot be created.");
         }
+
+        
     }
 }

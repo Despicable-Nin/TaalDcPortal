@@ -22,6 +22,8 @@ public record InquriesResult
 
 public record InquiryDto
 {
+    [JsonPropertyName("inquiry_id")]
+    public int Id { get; set; }
 
     [JsonPropertyName("attended_by")]
     public string AttendBy { get; set; }

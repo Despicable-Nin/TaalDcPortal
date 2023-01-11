@@ -61,16 +61,18 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 
             var result = await connection.QueryAsync<FloorDTO>(query);
 
-            var countQuery = $"SELECT COUNT(*)  " +
+            var countQuery = $"WITH floor_cte AS (" +
+				$"SELECT f.Id, t.Id AS TowerId, p.Id AS PropertyId " +
 				$"FROM catalog.floors f " +
 				$"JOIN catalog.tower t " +
 				$"ON f.TowerId = t.Id " +
 				$"JOIN catalog.property p " +
 				$"ON t.PropertyId = p.Id " +
-				$"WHERE f.IsActive = '1'  " +
+				$"WHERE f.IsActive = '1' " +
 				$"AND p.IsActive = '1' " +
-				$"AND (f.[Name] LIKE '%' + ISNULL('{filter}',f.[Name]) + '%' " +
-				$"OR  f.[Description] LIKE '%' + ISNULL('{filter}',f.[Description]) + '%')";
+				$"AND (f.[Name] LIKE '%' + COALESCE('{filter}',f.[Name]) + '%' OR  " +
+				$"f.[Description] LIKE '%' + COALESCE('{filter}',f.[Description]) + '%'))  " +
+				$"SELECT TOP 1 COUNT(f.Id) FROM floor_cte f";
 
             var temp = await connection.QueryAsync<int>(countQuery);
 

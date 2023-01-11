@@ -29,7 +29,7 @@
                 @foreach (var i in Model.Inquiries)
                 {
                     <tr>
-                        <td>1</td>
+                        <td>@i.Id</td>
                         <td>@i.InquiryType</td>
                         <td>@i.FirstName @i.LastName</td>
                         <td>@i.EmailAddress</td>

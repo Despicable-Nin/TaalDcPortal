@@ -32,6 +32,7 @@ public class ProjectRepository : IProjectRepository
     {
         return await _context.Projects
             .Include(i => i.Properties)
+            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 

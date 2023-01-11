@@ -7,6 +7,9 @@ namespace TaalDc.Portal.DTO.Catalog
         [JsonPropertyName("property_id")]
         public int Id { get; set; }
 
+        [JsonPropertyName("project_id")]
+        public int ProjectId { get; set; }
+
         [JsonPropertyName("property_name")]
         public string PropertyName { get; set; }
 

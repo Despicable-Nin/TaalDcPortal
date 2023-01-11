@@ -52,7 +52,7 @@ public class UnitQueries : IUnitQueries
         SortOrderEnum sortOrder, 
         int pageNumber = 1, 
         int pageSize = 10)
-    {
+     {
         var query = $"SELECT u.Id " +
             $",p.[Id] AS PropertyId " +
             $",p.[Name] AS PropertyName " +
@@ -98,27 +98,33 @@ public class UnitQueries : IUnitQueries
 
         var result = await connection.QueryAsync<UnitDTO>(query);
 
-        var countQuery = $"SELECT COUNT(*)" +
-           $"FROM catalog.unit u " +
-           $"JOIN catalog.floors f " +
-           $"ON u.FloorId = f.Id " +
-           $"JOIN catalog.tower t " +
-           $"ON f.TowerId = t.Id " +
-           $"JOIN catalog.property p " +
-           $"ON t.PropertyId = p.Id " +
-           $"JOIN catalog.unittype ut " +
-           $"ON u.UnitType = ut.Id " +
-           $"JOIN catalog.scenicview sv ON " +
-           $"u.ScenicViewId = sv.Id " +
-           $"JOIN catalog.unitstatus us " +
-           $"ON u.UnitStatus = us.Id " +
-           $"WHERE u.IsActive = '1' AND f.IsActive = '1' AND t.IsActive = '1' AND p.IsActive = '1' " +
-           $"AND u.Identifier LIKE '%' + ISNULL('{filter}',u.Identifier) + '%' " +
-           $"AND f.Id = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")},f.Id) " +
-           $"AND ut.Id = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")},ut.Id) " +
-           $"AND sv.Id = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")}, sv.Id) " +
-           $"AND us.Id = ISNULL({(statusId > 0 ? $"'{statusId}'" : "NULL")},us.Id) ";
-
+        var countQuery = $"WITH unit_cte AS (SELECT u.Id," +
+            $"f.Id AS FloorId," +
+            $"t.Id AS TowerId," +
+            $"p.Id AS PropertyId," +
+            $"ut.Id AS UnitTypeId," +
+            $"sv.Id AS ScenicViewId," +
+            $"us.Id AS UnitStatusId " +
+            $"FROM catalog.unit u " +
+            $"JOIN catalog.floors f " +
+            $"ON u.FloorId = f.Id " +
+            $"JOIN catalog.tower t " +
+            $"ON f.TowerId = t.Id " +
+            $"JOIN catalog.property p " +
+            $"ON t.PropertyId = p.Id " +
+            $"JOIN catalog.unittype ut " +
+            $"ON u.UnitType = ut.Id " +
+            $"JOIN catalog.scenicview sv " +
+            $"ON u.ScenicViewId = sv.Id " +
+            $"JOIN catalog.unitstatus us " +
+            $"ON u.UnitStatus = us.Id " +
+            $"WHERE u.IsActive = '1' " +
+            $"AND u.Identifier LIKE '%' + COALESCE('{filter}',u.Identifier) + '%' " +
+            $"AND u.FloorId = COALESCE({(floorId > 0 ? $"'{floorId}'" : "NULL")},u.FloorId) " +
+            $"AND u.UnitType = COALESCE({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")},u.UnitType) " +
+            $"AND u.ScenicViewId = COALESCE({(viewId > 0 ? $"'{viewId}'" : "NULL")}, u.ScenicViewId) " +
+            $"AND u.UnitStatus = COALESCE({(statusId > 0 ? $"'{statusId}'" : "NULL")},u.UnitStatus))  " +
+            $"SELECT TOP 1 COUNT(u.Id) FROM unit_cte u";
 
         var temp = await connection.QueryAsync<int>(countQuery);
 

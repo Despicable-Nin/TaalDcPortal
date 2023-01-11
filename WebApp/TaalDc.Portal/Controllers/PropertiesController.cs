@@ -46,6 +46,37 @@ namespace TaalDc.Portal.Controllers
             return Ok(result);
         }
 
+        public async Task<IActionResult> EditProperty(int id)
+        {
+            try
+            {
+                var result = await _catalogService.GetPropertyById(id);
+
+                if (result == null) RedirectToAction("Index");
+
+                var propertyCreateDTO = new PropertyCreateDTO(result.ProjectId, result.Id, result.PropertyName, result.LandArea);
+
+                return View(propertyCreateDTO);
+
+            }catch(Exception err)
+            {
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProperty(PropertyCreateDTO model)
+        {
+            var result = await _catalogService.CreateProperty(model);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
+        }
+
         public async Task<IActionResult> Towers(string filter,
             string sortBy,
             SortOrderEnum sortOrder,
