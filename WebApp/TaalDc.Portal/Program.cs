@@ -37,6 +37,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+builder.Services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
 builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
 
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();

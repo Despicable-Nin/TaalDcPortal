@@ -1,15 +1,34 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Taaldc.Catalog.API.Application.Common.Models;
 using Taaldc.Catalog.API.Application.Queries.Units;
 
 namespace Taaldc.Catalog.API.Application.Queries;
 
 public interface IUnitQueries
 {
-    Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(int? unitTypeId, int? viewId, int? floorId, int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1);
+    Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+        int? unitTypeId, 
+        int? viewId, 
+        int? floorId, 
+        string location, 
+        int min = 0,
+        int max = 999999999, 
+        int pageSize = 20, int pageNumber = 1);
 
     Task<IEnumerable<UnitTypeAvailability>> GetUnitTypeAvailabilityByTowerId(int towerId);
+
+    Task<PaginationQueryResult<UnitDTO>> GetActiveUnits(
+             string filter,
+             int? floorId,
+             int? unitTypeId,
+             int? viewId,
+             int? statusId,
+             string sortBy,
+             SortOrderEnum sortOrder,
+             int pageNumber = 1,
+             int pageSize = 10
+        );
 }
 
 public class UnitQueries : IUnitQueries
@@ -23,12 +42,106 @@ public class UnitQueries : IUnitQueries
             : connectionString;
     }
 
-    public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(int? unitTypeId, int? viewId, int? floorId,
+    public async Task<PaginationQueryResult<UnitDTO>> GetActiveUnits(
+        string filter,
+        int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int? statusId,
+        string sortBy, 
+        SortOrderEnum sortOrder, 
+        int pageNumber = 1, 
+        int pageSize = 10)
+     {
+        var query = $"SELECT u.Id " +
+            $",p.[Id] AS PropertyId " +
+            $",p.[Name] AS PropertyName " +
+            $",t.[Id] AS TowerId" +
+            $",t.[Name] AS TowerName " +
+            $",u.UnitType AS UnitTypeId" +
+            $",ut.ShortCode AS UnitType" +
+            $",u.ScenicViewId AS ScenicViewId" +
+            $",sv.Name AS ScenicView" +
+            $",u.FloorId AS FloorId" +
+            $",f.[Name] AS FloorName" +
+            $",u.FloorArea+u.BalconyArea AS TotalArea" +
+            $",u.FloorArea" +
+            $",u.BalconyArea" +
+            $",u.Identifier," +
+            $"u.Price," +
+            $"u.UnitStatus AS UnitStatusId" +
+            $",us.[Name] AS UnitStatus " +
+            $"FROM catalog.unit u " +
+            $"JOIN catalog.floors f " +
+            $"ON u.FloorId = f.Id " +
+            $"JOIN catalog.tower t " +
+            $"ON f.TowerId = t.Id " +
+            $"JOIN catalog.property p " +
+            $"ON t.PropertyId = p.Id " +
+            $"JOIN catalog.unittype ut " +
+            $"ON u.UnitType = ut.Id " +
+            $"JOIN catalog.scenicview sv ON " +
+            $"u.ScenicViewId = sv.Id " +
+            $"JOIN catalog.unitstatus us " +
+            $"ON u.UnitStatus = us.Id " +
+            $"WHERE u.IsActive = '1' AND f.IsActive = '1' AND t.IsActive = '1' AND p.IsActive = '1' " +
+            $"AND u.Identifier LIKE '%' + ISNULL('{filter}',u.Identifier) + '%' " +
+            $"AND f.Id = ISNULL({(floorId > 0? $"'{floorId}'": "NULL")},f.Id) " +
+            $"AND ut.Id = ISNULL({(unitTypeId > 0? $"'{unitTypeId}'": "NULL")},ut.Id) " +
+            $"AND sv.Id = ISNULL({(viewId > 0? $"'{viewId}'" : "NULL")}, sv.Id) " +
+            $"AND us.Id = ISNULL({(statusId > 0? $"'{statusId}'": "NULL")},us.Id) " +
+            $"ORDER BY {PropertyHelper.GetUnitSorterName(sortBy, sortOrder)} " +
+            $"OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<UnitDTO>(query);
+
+        var countQuery = $"WITH unit_cte AS (SELECT u.Id," +
+            $"f.Id AS FloorId," +
+            $"t.Id AS TowerId," +
+            $"p.Id AS PropertyId," +
+            $"ut.Id AS UnitTypeId," +
+            $"sv.Id AS ScenicViewId," +
+            $"us.Id AS UnitStatusId " +
+            $"FROM catalog.unit u " +
+            $"JOIN catalog.floors f " +
+            $"ON u.FloorId = f.Id " +
+            $"JOIN catalog.tower t " +
+            $"ON f.TowerId = t.Id " +
+            $"JOIN catalog.property p " +
+            $"ON t.PropertyId = p.Id " +
+            $"JOIN catalog.unittype ut " +
+            $"ON u.UnitType = ut.Id " +
+            $"JOIN catalog.scenicview sv " +
+            $"ON u.ScenicViewId = sv.Id " +
+            $"JOIN catalog.unitstatus us " +
+            $"ON u.UnitStatus = us.Id " +
+            $"WHERE u.IsActive = '1' " +
+            $"AND u.Identifier LIKE '%' + COALESCE('{filter}',u.Identifier) + '%' " +
+            $"AND u.FloorId = COALESCE({(floorId > 0 ? $"'{floorId}'" : "NULL")},u.FloorId) " +
+            $"AND u.UnitType = COALESCE({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")},u.UnitType) " +
+            $"AND u.ScenicViewId = COALESCE({(viewId > 0 ? $"'{viewId}'" : "NULL")}, u.ScenicViewId) " +
+            $"AND u.UnitStatus = COALESCE({(statusId > 0 ? $"'{statusId}'" : "NULL")},u.UnitStatus))  " +
+            $"SELECT TOP 1 COUNT(u.Id) FROM unit_cte u";
+
+        var temp = await connection.QueryAsync<int>(countQuery);
+
+        return new PaginationQueryResult<UnitDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+    }
+
+    public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+        int? unitTypeId, 
+        int? viewId, 
+        int? floorId,
+        string location,
         int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1)
+        int max = 999999999, 
+        int pageSize = 20, int pageNumber = 1)
     {
         var query =
-            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode] ";
+            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode], U.Remarks [Remarks]";
         query += " FROM [taaldb_admin].[catalog].[unit] U JOIN [taaldb_admin].[catalog].floors F ON U.FloorId = F.Id ";
         query += " JOIN [taaldb_admin].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
         query += " JOIN [taaldb_admin].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
@@ -42,6 +155,8 @@ public class UnitQueries : IUnitQueries
         if (viewId.HasValue) clauses.Add($"S.Id = {viewId.Value}");
 
         if (floorId.HasValue) clauses.Add($"F.Id = {floorId.Value}");
+
+        if(!string.IsNullOrEmpty(location)) clauses.Add($"U.Remarks LIKE '%{location}%'");
 
         clauses.Add($"(U.Price BETWEEN {min} AND {max})");
         clauses.Add("US.Id = 1");

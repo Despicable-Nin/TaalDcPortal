@@ -29,8 +29,10 @@ public class CatalogDbContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
+
+        modelBuilder.HasSequence<int>("unitseq", DEFAULT_SCHEMA)
+                  .StartsAt(2000).IncrementsBy(1);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

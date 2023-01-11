@@ -44,6 +44,7 @@ public class InquiriesController : Controller
 
       var records =  result.Select(i => new InquiryDto
       {
+         Id = i.Id,
          Country = i.Customer.Country,
          Message = i.Message,
          Property = i.Property,

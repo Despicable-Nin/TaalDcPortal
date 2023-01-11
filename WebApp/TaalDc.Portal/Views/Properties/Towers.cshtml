@@ -1,0 +1,100 @@
+﻿@using TaalDc.Portal.DTO.Catalog;
+@using TaalDc.Portal.Models;
+@model PaginationQueryResult<TowerDTO>
+
+@{
+    ViewBag.Title = "Towers";
+    Layout = "_Layout";
+
+    var filter = Context.Request.Query["filter"].FirstOrDefault();
+    var sortBy = Context.Request.Query["sortBy"].FirstOrDefault();
+    var sortOrder = Context.Request.Query["sortOrder "].FirstOrDefault();
+}
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Properties" asp-action="Index">Properties</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" asp-controller="Properties" asp-action="Towers">Towers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="Floors">Floors</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="Units">Units</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-controller="Properties" asp-action="UnitTypes">Unit Types</a>
+        </li>
+    </ul>
+
+
+    <div class="tab-content">
+        <div class="action-section">
+            <div class="action-btn text-end">
+                <a asp-controller="Properties" asp-action="CreateTower" class="btn btn-primary">New Tower</a>
+            </div>
+
+            <div class="action-search">
+                <form>
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
+                </form>
+            </div>
+        </div>
+
+        <div class="data-section">
+            <div class="table-responsive w-100 mb-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Property Name</th>
+                            <th>Tower Name</th>
+                            <th>Address</th>
+                            <th>Units</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prop in Model.Data)
+                        {
+                            <tr>
+                                <td>@prop.Id</td>
+                                <td>@prop.PropertyName</td>
+                                <td>@prop.TowerName</td>
+                                <td>@prop.Address</td>
+                                <td>@prop.Units</td>
+                                <td>
+                                    <a class="action-edit" href="#">Edit</a>
+                                    <a class="action-delete" href="#">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link alink noselect">Prev</a>
+                    </li>
+
+                    @for (int i = 0; i < Model.TotalPages; i++)
+                    {
+                        var active = (i + 1) == Model.PageNumber;
+
+                        <li class="page-item"><a href="?pageNumber=@(i+1)" class="noselect page-link alink @(active? "active": "")">@(i + 1)</a></li>
+                    }
+
+                    <li class="page-item ">
+                        <a class="page-link alink noselect">Next</a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

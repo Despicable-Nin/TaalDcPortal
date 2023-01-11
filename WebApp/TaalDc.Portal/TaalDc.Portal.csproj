@@ -31,7 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTO\Catalog" />
       <Folder Include="Pages" />
     </ItemGroup>
 
