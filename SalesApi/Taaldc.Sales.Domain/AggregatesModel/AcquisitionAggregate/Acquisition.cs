@@ -11,8 +11,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
     }
 
 
-    private int? _unitId;
-    public int? GetUnitId => _unitId;
+    private int _unitId;
+    public int GetUnitId => _unitId;
     
     public string Code { get; private set; }
     public string Broker { get; private set; }
@@ -24,8 +24,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
 
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
-    private int? _buyerId;
-    public int? GetBuyerId => _buyerId;
+    private int _buyerId;
+    public int GetBuyerId => _buyerId;
 
     public void AddPayment(int paymentTypeId, int purposeId, int statusId, DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
@@ -33,6 +33,12 @@ public class Acquisition : DomainEntity, IAggregateRoot
             amountPaid, remarks, correlationId);
         
         _payments.Add(payment);
+    }
+
+    public void VoidPayment(int paymentId, string user)
+    {
+       
+        _payments.FirstOrDefault(i => i.Id == paymentId).VoidPayment(user);
     }
 
     public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;

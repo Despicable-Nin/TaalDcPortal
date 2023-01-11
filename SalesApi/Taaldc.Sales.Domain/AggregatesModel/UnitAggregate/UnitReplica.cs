@@ -25,8 +25,3 @@ public class UnitReplica : Entity, IAggregateRoot
     public decimal OriginalPrice { get; private set; }
     public decimal SellingPrice { get; private set; }
 }
-
-public interface IUnitReplicaRepository : IRepository<UnitReplica>
-{
-    
-}
