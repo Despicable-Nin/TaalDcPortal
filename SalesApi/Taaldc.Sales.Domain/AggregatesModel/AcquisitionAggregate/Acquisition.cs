@@ -11,8 +11,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
     }
 
 
-    private int _unitId;
-    public int GetUnitId => _unitId;
+    private int? _unitId;
+    public int? GetUnitId => _unitId;
     
     public string Code { get; private set; }
     public string Broker { get; private set; }
@@ -22,10 +22,13 @@ public class Acquisition : DomainEntity, IAggregateRoot
     private int _statusId;
     public AcquisitionStatus Status { get; private set; }
 
+    private int _purposeId;
+    public TransactionPurpose Purpose { get; private set; }
+
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
-    private int _buyerId;
-    public int GetBuyerId => _buyerId;
+    private int? _buyerId;
+    public int? GetBuyerId => _buyerId;
 
     public void AddPayment(int paymentTypeId, int purposeId, int statusId, DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {

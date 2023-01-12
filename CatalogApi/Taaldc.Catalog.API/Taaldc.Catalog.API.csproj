@@ -7,6 +7,7 @@
         <UserSecretsId>aspnet-taaldc_mvc-cd036eb3-5b34-4211-ad09-18c31b1ca3ea</UserSecretsId>
         <RootNamespace>Taaldc.Catalog.API</RootNamespace>
         <AssemblyName>Taaldc.Catalog.API</AssemblyName>
+        <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(RunConfiguration)' == 'taaldc_mvc' " />
@@ -36,7 +37,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-        <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
@@ -65,6 +66,12 @@
     <ItemGroup>
         <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
         <ProjectReference Include="..\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

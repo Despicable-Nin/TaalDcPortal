@@ -2,7 +2,7 @@ using MediatR;
 
 namespace SeedWork;
 
-public abstract class DomainEntity : IDomainEvent
+public abstract class DomainEntity : Entity, IDomainEvent
 {
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();
