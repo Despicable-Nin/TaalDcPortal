@@ -32,13 +32,10 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options => {
-        options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
-    });
-}
+app.UseSwagger();
+app.UseSwaggerUI(options => {
+    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
+});
 
 app.UseHttpsRedirection();
 

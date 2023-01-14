@@ -68,6 +68,12 @@ public class UnitsController : ApiBaseController<UnitsController>
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetUnitTypes()
     {
-        return Ok(await _unitTypeQueries.GetUnitTypes());
+        try {
+            var unitTypes = await _unitTypeQueries.GetUnitTypes();
+            return Ok(unitTypes);
+        }catch(Exception err)
+        {
+            return BadRequest(err.Message);
+        }
     }
 }
