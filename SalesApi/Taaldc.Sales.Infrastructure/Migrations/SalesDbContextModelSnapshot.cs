@@ -86,9 +86,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TransactionTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("_buyerId")
                         .HasColumnType("int")
                         .HasColumnName("BuyerId");
@@ -97,17 +94,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("StatusId");
 
-                    b.Property<int>("_transactionTypeId")
-                        .HasColumnType("int")
-                        .HasColumnName("TransactionTypeId");
-
                     b.Property<int>("_unitId")
                         .HasColumnType("int")
                         .HasColumnName("UnitId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TransactionTypeId");
 
                     b.HasIndex("_buyerId");
 
@@ -115,11 +106,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.HasIndex("_unitId");
 
-                    b.ToTable("acquisition", "sales", t =>
-                        {
-                            t.Property("TransactionTypeId")
-                                .HasColumnName("TransactionTypeId1");
-                        });
+                    b.ToTable("acquisition", "sales");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.AcquisitionStatus", b =>
@@ -247,7 +234,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymentseq", "sales");
 
-                    b.Property<int?>("AcquisitionId")
+                    b.Property<int>("AcquisitionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ActualPaymentDate")
@@ -525,12 +512,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Acquisition", b =>
                 {
-                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.TransactionType", "TransactionType")
-                        .WithMany()
-                        .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
                         .WithMany()
                         .HasForeignKey("_buyerId")
@@ -550,15 +531,15 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Status");
-
-                    b.Navigation("TransactionType");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Payment", b =>
                 {
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Acquisition", null)
                         .WithMany("Payments")
-                        .HasForeignKey("AcquisitionId");
+                        .HasForeignKey("AcquisitionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.PaymentType", "PaymentType")
                         .WithMany()

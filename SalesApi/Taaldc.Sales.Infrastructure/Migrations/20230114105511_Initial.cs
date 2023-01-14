@@ -177,9 +177,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsRefundable = table.Column<bool>(type: "bit", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
-                    TransactionTypeId1 = table.Column<int>(type: "int", nullable: false),
                     BuyerId = table.Column<int>(type: "int", nullable: false),
-                    TransactionTypeId = table.Column<int>(type: "int", nullable: false),
                     UnitId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -202,12 +200,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         column: x => x.BuyerId,
                         principalSchema: "sales",
                         principalTable: "buyer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_acquisition_transactiontype_TransactionTypeId1",
-                        column: x => x.TransactionTypeId1,
-                        principalTable: "transactiontype",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -234,7 +226,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     AmountPaid = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CorrelationId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AcquisitionId = table.Column<int>(type: "int", nullable: true),
+                    AcquisitionId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -249,7 +241,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         column: x => x.AcquisitionId,
                         principalSchema: "sales",
                         principalTable: "acquisition",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_payment_paymentstatus_StatusId",
                         column: x => x.StatusId,
@@ -327,12 +320,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 column: "StatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_acquisition_TransactionTypeId1",
-                schema: "sales",
-                table: "acquisition",
-                column: "TransactionTypeId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_acquisition_UnitId",
                 schema: "sales",
                 table: "acquisition",
@@ -396,15 +383,15 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 name: "paymenttype");
 
             migrationBuilder.DropTable(
+                name: "transactiontype");
+
+            migrationBuilder.DropTable(
                 name: "acquisitionstatus",
                 schema: "sales");
 
             migrationBuilder.DropTable(
                 name: "buyer",
                 schema: "sales");
-
-            migrationBuilder.DropTable(
-                name: "transactiontype");
 
             migrationBuilder.DropTable(
                 name: "unitreplica",

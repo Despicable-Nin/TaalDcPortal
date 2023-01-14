@@ -4,7 +4,7 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public interface IAcquisitionRepository : IRepository<Acquisition>
 {
-    void Transact(int unitId, string unitDescription, string code, decimal sellingPrice, string broker,
-        string remarks, int? buyerId);
-    
+    Task Acquire(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks);
+    Task VerifyPayment( int paymentId, string verifiedBy);
+
 }

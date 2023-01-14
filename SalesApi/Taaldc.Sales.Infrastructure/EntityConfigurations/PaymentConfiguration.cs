@@ -16,6 +16,10 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique();
 
+        builder.Property<int>("AcquisitionId")
+            .IsRequired();
+            
+
         //1.A - mapped to a navigation property -- that is immutable as well
         builder.HasOne(b => b.PaymentType)
             .WithMany()

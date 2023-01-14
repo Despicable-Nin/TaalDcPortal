@@ -14,7 +14,8 @@ public class SalesDbContext : DbContext, IUnitOfWork
     public DbSet<Buyer> Buyers { get; set; }
     public DbSet<UnitReplica> Units { get; set; }
     public DbSet<Acquisition> Acquisitions { get; set; }
-    //public DbSet<AcquisitionStatus> AcquisitionStatus { get; set; }
+    public DbSet<AcquisitionStatus> AcquisitionStatus { get; set; }
+    public DbSet<Payment> Payments { get; set; }
     public DbSet<PaymentType> PaymentTypes { get; set; }
     public DbSet<PaymentStatus> PaymentStatus { get; set; }
     public DbSet<TransactionType> TransactionTypes { get; set; }
