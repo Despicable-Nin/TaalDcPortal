@@ -10,40 +10,61 @@ class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
     {
         builder.ToTable("acquisition", SalesDbContext.DEFAULT_SCHEMA);
         builder.HasKey(b => b.Id);
+        
+        //IMPORTANT: this is need for auto-increment of ID
+        builder.Property(o => o.Id)
+            .UseHiLo("acquisitionseq", SalesDbContext.DEFAULT_SCHEMA);
 
-        builder.Property<int>("_buyerId")
+        builder
+            .Property<int>("_buyerId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("BuyerId")
-            .IsRequired(false);
+            .IsRequired();
+        
         //there is no direct reference to this object so we add relationship here
-        builder.HasOne<Buyer>()
+        builder
+            .HasOne<Buyer>()
             .WithMany()
             .HasForeignKey("_buyerId");
         
-        builder.Property<int>("_unitId")
+        builder
+            .Property<int>("_unitId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("UnitId")
-            .IsRequired(false);
+            .IsRequired();
 
         //there is no direct reference to this object so we add relationship here
-        builder.HasOne<UnitReplica>()
+        builder
+            .HasOne<UnitReplica>()
             .WithMany()
             .HasForeignKey("_unitId");
         
         //this field works a shadow property of the readonly Entity (Purpose)
-        builder.Property<int>("_statusId")
+        builder
+            .Property<int>("_statusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("StatusId")
             .IsRequired();
         
         //this field works a shadow property of the readonly Entity (Purpose)
-        builder.Property<int>("_purposeId")
+        builder
+            .Property<int>("_transactionType")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("PurposeId")
+            .HasColumnName("TransactionType")
             .IsRequired();
 
+        builder
+            .Metadata
+            .FindNavigation(nameof(Acquisition.Payments))
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+        // builder
+        //     .Metadata
+        //     .FindNavigation(nameof(Acquisition.Penalties))
+        //     .SetPropertyAccessMode(PropertyAccessMode.Field);
 
 
 
     }
 }
+

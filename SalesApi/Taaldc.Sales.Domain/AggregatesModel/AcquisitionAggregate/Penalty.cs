@@ -18,6 +18,7 @@ public class Penalty : Entity
     private int _statusId;
     public PaymentStatus Status { get; private set; }
     public string ConfirmationNumber { get; private set; }
+    
 
     public bool IsPaid() => _statusId == PaymentStatus.GetStatusId(PaymentStatus.Accepted);
 }

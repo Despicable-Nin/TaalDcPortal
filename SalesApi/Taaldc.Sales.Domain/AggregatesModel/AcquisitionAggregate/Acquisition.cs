@@ -7,12 +7,24 @@ public class Acquisition : DomainEntity, IAggregateRoot
     protected Acquisition()
     {
         _payments = new List<Payment>();
-        _penalties = new List<Penalty>();
+        //_penalties = new List<Penalty>();
     }
 
 
-    private int? _unitId;
-    public int? GetUnitId => _unitId;
+ 
+    public Acquisition(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks)
+    {
+        _unitId = unitId;
+        _transactionTypeId = transactionTypeId;
+        _buyerId = buyerId;
+        Code = code;
+        Broker = broker;
+        Remarks = remarks;
+        _statusId = AcquisitionStatus.GetIdByName(AcquisitionStatus.New);
+    }
+    
+    private int _unitId;
+    public int GetUnitId => _unitId;
     
     public string Code { get; private set; }
     public string Broker { get; private set; }
@@ -22,19 +34,19 @@ public class Acquisition : DomainEntity, IAggregateRoot
     private int _statusId;
     public AcquisitionStatus Status { get; private set; }
 
-    private int _purposeId;
-    public TransactionPurpose Purpose { get; private set; }
+    private int _transactionTypeId;
+    public TransactionType TransactionType { get; private set; }
 
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
-    private int? _buyerId;
-    public int? GetBuyerId => _buyerId;
+    private int _buyerId;
+    public int GetBuyerId => _buyerId;
 
-    public void AddPayment(int paymentTypeId, int purposeId, int statusId, DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
+    public void AddPayment(int paymentTypeId, int purposeId,  DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
-        Payment payment = new(paymentTypeId, purposeId, statusId, transactionDate, confirmationNumber, paymentMethod,
+        Payment payment = new(paymentTypeId, purposeId, transactionDate, confirmationNumber, paymentMethod,
             amountPaid, remarks, correlationId);
-        
+
         _payments.Add(payment);
     }
 
@@ -50,6 +62,6 @@ public class Acquisition : DomainEntity, IAggregateRoot
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
 
 
-    private List<Penalty> _penalties;
-    public IEnumerable<Penalty> Penalties => _penalties.AsReadOnly();
+    //private List<Penalty> _penalties;
+    //public IEnumerable<Penalty> Penalties => _penalties.AsReadOnly();
 }
