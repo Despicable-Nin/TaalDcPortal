@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.4.0" />
         <PackageReference Include="MediatR" Version="11.1.0" />
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
@@ -27,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
       <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
       <ProjectReference Include="..\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj" />
     </ItemGroup>

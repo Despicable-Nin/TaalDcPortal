@@ -1,8 +1,7 @@
 using MediatR;
-using Taaldc.Catalog.API.Extensions;
 using Taaldc.Library.Common.Extensions;
 
-namespace Taaldc.Catalog.API.Application.Behaviors;
+namespace Taaldc.Sales.API.Application.Behaviors;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace Taaldc.Catalog.API.Infrastructure.Factories;
+namespace TaalDc.Library.Common.Mediator;
 
-internal class NoMediator : IMediator
+public class NoMediator : IMediator
 {
     public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
         CancellationToken cancellationToken = default)
