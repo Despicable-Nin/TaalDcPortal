@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Taaldc.Sales.Api.DTO;
 
 namespace Taaldc.Sales.Api.Controllers
 {
@@ -20,9 +21,19 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post([FromBody] AddSaleDTO dto)
         {
             return Ok();
         }
+        
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> ProcessPayment([FromBody] ProcessPaymentDTO dto)
+        {
+            return Ok();
+        }
+        
+       
     }
 }
