@@ -5,7 +5,7 @@ namespace Taaldc.Sales.API.Application.Commands;
 
 public record CommandResult
 {
-    private CommandResult(bool isSuccess, string errorMessage, int? id)
+    protected CommandResult(bool isSuccess, string errorMessage, int? id)
     {
         ErrorMessage = errorMessage;
         IsSuccess = isSuccess;
@@ -25,6 +25,7 @@ public record CommandResult
     {
         return Create(true, default, id);
     }
+    
 
     public static CommandResult Failed(int? id, string errorMessage)
     {
@@ -44,5 +45,24 @@ public record CommandResult
     public override string ToString()
     {
         return JsonConvert.SerializeObject(this);
+    }
+}
+
+public record SellUnitCommandResult : CommandResult
+{
+    private SellUnitCommandResult(bool isSuccess, string errorMessage, IDictionary<string,object> ret) : base(isSuccess,errorMessage,null)
+    {
+        ErrorMessage = errorMessage;
+        IsSuccess = isSuccess;
+        Ret = ret;
+    }
+
+    public string ErrorMessage { get; }
+    public bool IsSuccess { get; }
+    public  IDictionary<string,object> Ret { get; }
+
+    public static SellUnitCommandResult Create(bool isSuccess, string errorMessage, IDictionary<string, object> ret)
+    {
+        return new SellUnitCommandResult(isSuccess, errorMessage, ret);
     }
 }

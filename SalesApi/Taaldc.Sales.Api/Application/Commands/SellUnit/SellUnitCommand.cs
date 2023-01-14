@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
-public class SellUnitCommand : IRequest<CommandResult>
+public class SellUnitCommand : IRequest<SellUnitCommandResult>
 {
     public SellUnitCommand(string code, string broker, bool isRefundable, int unitId, decimal sellingPrice, string salutation, string firstName, string lastName, string emailAddress, string contactNo, string country, string province, string townCity, string zipCode, decimal reservation, string reservationConfirmNo, decimal downPayment, string downPaymentConfirmNo, DateTime paymentDate, string paymentMethod, string remarks)
     {

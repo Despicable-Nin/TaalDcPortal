@@ -1,9 +1,11 @@
+using FluentValidation;
 using MediatR;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
-public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandResult>
+public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
 {
     private readonly IAcquisitionRepository _salesRepository;
     private readonly IBuyerRepository _buyerRepository;
@@ -16,7 +18,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+    public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         Buyer buyer = _buyerRepository.GetByEmail(request.EmailAddress);
         int? buyerId = default;
@@ -34,9 +36,9 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             request.EmailAddress,
             request.ContactNo, request.Country, request.Province, request.TownCity, request.ZipCode, buyerId);
 
-        _buyerRepository.UnitOfWork.SaveChangesAsync();
+        await _buyerRepository.UnitOfWork.SaveChangesAsync();
 
-        if (request.ReservationConfirmNo == string.Empty || request.DownPaymentConfirmNo) throw new ArgumentNullException(nameof(SellUnitCommand));
+        if (request.ReservationConfirmNo == string.Empty) throw new ArgumentNullException(nameof(SellUnitCommand));
 
         var sale = await _salesRepository.SellUnit(request.UnitId,
             TransactionType.GetTypeId(TransactionType.ForReservation),
@@ -44,6 +46,13 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             request.Code,
             request.Broker,
             request.Remarks);
+
+        var reservation = sale.Payments
+            .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForReservation));
+
+        if (reservation != default)
+            throw new SalesDomainException(nameof(SellUnitCommandHandler),
+                new ValidationException("Reservation already exists."));
 
         if (request.Reservation != default)
         {
@@ -59,9 +68,18 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.Remarks,
                 default);
         }
-
+        
+        
         if (request.DownPayment != default)
         {
+              
+            var downpayment = sale.Payments
+                .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForAcquisition));
+
+            if (downpayment != default)
+                throw new SalesDomainException(nameof(SellUnitCommandHandler),
+                    new ValidationException("Downpayment already exists."));
+            
             //add payment fore acquisition
             sale.AddPayment(
                 PaymentType.GetId(PaymentType.PartialDownPayment),
@@ -73,8 +91,18 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.Remarks,
                 default);
         }
+        
+        await _salesRepository.UnitOfWork.SaveChangesAsync(default);
+        
+        //publish these data
+        //unitId, sellingPrice,
+        //sale.AddDomainEvent();
 
 
-        return CommandResult.Success(buyer.Id);
+        return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
+        {
+            { "UnitId", sale.GetUnitId },
+
+        });
     }
 }

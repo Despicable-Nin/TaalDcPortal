@@ -26,11 +26,13 @@ public class Payment : Entity
 
     private int _transactionTypeId;
     public TransactionType TransactionType { get; private set; }
+    public int GetTransactionTypeId() => _transactionTypeId;
 
     public string VerifiedBy { get; private set; }
 
     private int _statusId;
     public PaymentStatus Status { get; private set; }
+    public int GetPaymentStatusId() => _statusId;
     
     public string PaymentMethod { get; private set; }
     public decimal AmountPaid { get; private set; }
