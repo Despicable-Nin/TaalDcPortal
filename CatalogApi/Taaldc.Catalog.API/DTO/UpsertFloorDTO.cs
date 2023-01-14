@@ -19,4 +19,6 @@ public class UpsertFloorDTO
     
     [JsonPropertyName("description")] 
     public string Description { get; set; }
+	[JsonPropertyName("floor_plan_file_path")]
+	public string FloorPlanFilePath { get; set; }
 }

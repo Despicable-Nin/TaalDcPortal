@@ -35,18 +35,23 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
 
             //we can only modify or make updates if it is still available
             unit.Update(request.ScenicViewId, request.UnitTypeId, request.UnitNo, request.SellingPrice,
-                request.FloorArea);
+                request.FloorArea, request.BalconyArea, request.Remarks);
         }
         else
         {
             unit = floor.AddUnit(request.ScenicViewId, request.UnitTypeId, request.UnitNo, request.SellingPrice,
-                request.FloorArea);
+                request.FloorArea, request.BalconyArea, request.Remarks);
         }
 
         _repository.UpdateFloor(floor);
 
-        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        try { 
+            await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        return CommandResult.Success(unit.Id);
+            return CommandResult.Success(unit.Id);
+        }catch(Exception err)
+        {
+            return CommandResult.Failed(request.UnitId.Value, err.Message);
+        }
     }
 }

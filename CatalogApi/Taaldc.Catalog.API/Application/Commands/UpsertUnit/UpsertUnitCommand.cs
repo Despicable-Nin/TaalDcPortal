@@ -5,8 +5,16 @@ namespace Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 
 public class UpsertUnitCommand : IRequest<CommandResult>
 {
-    public UpsertUnitCommand(int? unitId, int unitTypeId, int scenicViewId, string unitNo, int floorId,
-        double floorArea, decimal sellingPrice)
+    public UpsertUnitCommand(
+        int? unitId, 
+        int unitTypeId, 
+        int scenicViewId, 
+        string unitNo, 
+        int floorId,
+        double floorArea, 
+        double balconyArea, 
+        decimal sellingPrice,
+        string remarks)
     {
         UnitId = unitId;
         UnitTypeId = unitTypeId;
@@ -14,7 +22,9 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         UnitNo = unitNo;
         FloorId = floorId;
         FloorArea = floorArea;
+        BalconyArea = balconyArea;
         SellingPrice = sellingPrice;
+        Remarks = !string.IsNullOrEmpty(remarks)? remarks: "";
     }
 
     public int? UnitId { get; }
@@ -23,7 +33,9 @@ public class UpsertUnitCommand : IRequest<CommandResult>
     public string UnitNo { get; }
     public int FloorId { get; }
     public double FloorArea { get; }
+    public double BalconyArea { get; set; }
     public decimal SellingPrice { get; }
+    public string Remarks { get; set; }
 }
 
 public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
@@ -35,6 +47,7 @@ public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
         RuleFor(i => i.UnitNo).NotEmpty();
         RuleFor(i => i.FloorId).NotEmpty();
         RuleFor(i => i.FloorArea).NotEmpty();
+        RuleFor(i => i.BalconyArea).NotEmpty();
         RuleFor(i => i.SellingPrice).NotEmpty();
     }
 }

@@ -24,5 +24,7 @@ public record AvailableUnit
     public string Type { get; }
     [JsonPropertyName("type_short_code")]
     public string TypeCode { get; }
-    
+	[JsonPropertyName("remarks")]
+	public string Remarks { get; }
+
 }

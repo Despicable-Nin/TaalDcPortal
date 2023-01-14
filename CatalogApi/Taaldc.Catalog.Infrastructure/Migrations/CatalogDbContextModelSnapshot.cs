@@ -34,8 +34,8 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.HasSequence("towerseq", "catalog")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("unitseq", "catalog")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("unitseq", "catalog")
+                .StartsAt(2000L);
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
@@ -53,6 +53,10 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FloorPlanFilePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -239,6 +243,9 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq", "catalog");
 
+                    b.Property<double>("BalconyArea")
+                        .HasColumnType("float");
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -268,6 +275,10 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("_scenicViewId")
                         .HasColumnType("int")

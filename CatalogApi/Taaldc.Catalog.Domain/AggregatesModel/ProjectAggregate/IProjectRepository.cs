@@ -24,6 +24,6 @@ public interface IProjectRepository : IRepository<Project>
     Floor UpdateFloor(Floor floor);
 
     Task<Unit> GetUnitAsync(int unitId);
-    Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea);
+    Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea, double balconyArea, string remarks);
     void RemoveUnit(int floorId, int roomId);
 }

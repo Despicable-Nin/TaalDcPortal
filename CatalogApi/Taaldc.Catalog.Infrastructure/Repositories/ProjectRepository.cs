@@ -28,10 +28,11 @@ public class ProjectRepository : IProjectRepository
         return _context.Projects.Update(project).Entity;
     }
 
-    public async Task<Project> GetAsync(int id)
+    public async Task<Project?> GetAsync(int id)
     {
         return await _context.Projects
             .Include(i => i.Properties)
+            .AsNoTracking()
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
@@ -108,12 +109,11 @@ public class ProjectRepository : IProjectRepository
     public async Task<Unit> GetUnitAsync(int unitId) => await _context.Units.FirstOrDefaultAsync(i => i.Id == unitId);
 
 
-    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price,
-        double floorArea)
+    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea, double balconyArea, string remarks)
     {
         var floor = _context.Floors.Include(i => i.Units).FirstOrDefault(i => i.Id == floorId);
 
-        var unit = floor.AddUnit(scenicViewId, unitTypeId, identifier, price, floorArea);
+        var unit = floor.AddUnit(scenicViewId, unitTypeId, identifier, price, floorArea, balconyArea, remarks);
 
         _context.Floors.Update(floor);
 

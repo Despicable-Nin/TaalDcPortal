@@ -1,0 +1,210 @@
+﻿@using TaalDc.Portal.ViewModels.Catalog
+@using TaalDc.Portal.DTO.Catalog
+@model UnitCreateDTO
+
+@{
+    ViewBag.Title = "Create Unit";
+    Layout = "_Layout";
+
+    List<FloorDTO> floors = ViewBag.Floors;
+}
+
+
+<div class="container-fluid">
+    <h4 class="primary-color mb-3">
+        <strong>
+            New Unit
+        </strong>
+    </h4>
+
+    <div>
+        <form id="unitForm" method="post" class="row mb-5 needs-validation" asp-action="CreateUnit" asp-controller="Properties">
+            <div class="mb-3 col-lg-8">
+                <label asp-for="UnitTypeId" class="form-label"><strong>Unit Type</strong></label>
+                <select asp-for="UnitTypeId" class="form-control form-select" required>
+                    <option value="1">
+                        Not Applicable
+                    </option>
+                    <option value="2">
+                       One Bedroom
+                    </option>
+                    <option value="3">
+                        Two Bedroom
+                    </option>
+                    <option value="4">
+                        Penthouse
+                    </option>
+                    <option value="5">
+                        Residential Parking
+                    </option>
+                    <option value="6">
+                        Motorcycle Parking
+                    </option>
+                    <option value="7">
+                        Commercial Space
+                    </option>
+                </select>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            
+            <div class="mb-3 col-lg-8">
+                <label asp-for="ScenicViewId" class="form-label"><strong>Facing View</strong></label>
+                
+                <select asp-for="ScenicViewId" class="form-control form-select" required>
+                    <option value="1">
+                        Not Applicable
+                    </option>
+                    <option value="2">
+                        TAAL
+                    </option>
+                    <option value="3">
+                        HIGHLANDS
+                    </option>
+                     <option value="4">
+                        MANILA SKYLINE
+                    </option>
+                    <option value="5">
+                        ROTONDA
+                    </option>
+                </select>
+
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            
+            <div class="mb-3 col-lg-8">
+                <label asp-for="UnitNo" class="form-label"><strong>Unit No.</strong></label>
+                <input asp-for="UnitNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-8">
+                <label asp-for="FloorId" class="form-label"><strong>Floor No.</strong></label>
+
+                <select asp-for="FloorId" class="form-control form-select" required>
+                    @foreach(var floor in floors)
+                    {
+                        <option value="@floor.Id">
+                            @floor.FloorDescription
+                        </option>
+                    }
+                </select>
+
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-8">
+                <label asp-for="FloorArea" class="form-label"><strong>Floor Area</strong></label>
+                <input asp-for="FloorArea" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-8">
+                <label asp-for="BalconyArea" class="form-label"><strong>Balcony Area</strong></label>
+                <input asp-for="BalconyArea" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            
+            <div class="mb-3 col-lg-8">
+                <label asp-for="SellingPrice" class="form-label"><strong>Selling Price</strong></label>
+                <input asp-for="SellingPrice" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <input id="unit-form-submit" class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const form = document.getElementById('unitForm');
+        form.addEventListener('submit', onPropertyFormSubmit);
+
+        function onPropertyFormSubmit(event) {
+            event.preventDefault();
+
+            var btn = document.getElementById("unit-form-submit");
+
+            btn.disabled = true;
+
+            const data = new FormData(event.target);
+
+            const value = Object.fromEntries(data.entries());
+
+            console.log('form values', value);
+
+            var isFormValid = event.target.checkValidity();
+
+            console.log('form validity', isFormValid);
+
+            event.target.classList.add("was-validated");
+
+            if (isFormValid) {
+                var formAction = event.target.action
+
+                $.ajax({
+                    type: 'POST',
+                    url: formAction,
+                    data: value,
+                    success: function (data, status, xhr) {
+                        console.log('tower post', data);
+                        Toastify({
+                            text: "Submitted successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#6AB0F8",
+                            },
+                            onClick: function () { } // Callback after click
+                        }).showToast();
+                    }, error: function () {
+                        Toastify({
+                            text: "Something went wrong. Please try again later.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "center", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#D01818",
+                            },
+                            onClick: function () { } // Callback after click
+                        }).showToast();
+
+                        btn.disabled = false;
+                    }
+                });
+            } else {
+                btn.disabled = false;
+            }
+            return false;
+        }
+    </script>
+
+}

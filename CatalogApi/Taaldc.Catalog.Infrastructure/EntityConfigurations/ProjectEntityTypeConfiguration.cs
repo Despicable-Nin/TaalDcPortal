@@ -23,6 +23,7 @@ class ProjectEntityTypeConfiguration : IEntityTypeConfiguration<Project>
             .FindNavigation(nameof(Project.Properties))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
         
+     
         
     }
 }

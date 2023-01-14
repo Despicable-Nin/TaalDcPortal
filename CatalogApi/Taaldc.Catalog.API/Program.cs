@@ -3,7 +3,10 @@ using MediatR;
 using Taaldc.Catalog.API.Application.Behaviors;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
+using Taaldc.Catalog.API.Application.Queries.Properties;
+using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
+using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
@@ -32,6 +35,12 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBeha
 
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
+
+builder.Services.AddScoped<IPropertyQueries>(i =>
+{
+    return new PropertyQueries(connectionString);
+});
+
 builder.Services.AddScoped<IUnitQueries>(i =>
 {
     return new UnitQueries(connectionString);
@@ -44,10 +53,22 @@ builder.Services.AddScoped<IFloorQueries>(i =>
 
 });
 
+builder.Services.AddScoped<ITowerQueries>(i =>
+{
+    return new TowerQueries(connectionString);
+
+});
+
 builder.Services.AddScoped<IScenicViewQueries>(i =>
 {
 	return new ScenicViewQueries(connectionString);
 });
+
+builder.Services.AddScoped<IUnitTypeQueries>(i =>
+{
+    return new UnitTypeQueries(connectionString);
+});
+
 
 
 var app = builder.Build();

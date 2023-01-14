@@ -18,8 +18,12 @@ var configuration = builder.Configuration;
 
 //Add Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
+    .Enrich.FromLogContext()
+#if DEBUG
+    .MinimumLevel.Verbose()
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
+#endif
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -37,6 +41,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+builder.Services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
 builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
 
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
