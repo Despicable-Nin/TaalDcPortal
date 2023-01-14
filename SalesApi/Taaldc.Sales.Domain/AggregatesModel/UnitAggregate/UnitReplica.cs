@@ -26,6 +26,7 @@ public class UnitReplica : DomainEntity, IAggregateRoot
         SellingPrice = originalPrice;
         
     }
+    
 
     public int PropertyId { get; private set; }
     public int TowerId { get; private set; }
