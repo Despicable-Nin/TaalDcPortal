@@ -18,8 +18,12 @@ var configuration = builder.Configuration;
 
 //Add Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
+    .Enrich.FromLogContext()
+#if DEBUG
+    .MinimumLevel.Verbose()
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
+#endif
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
