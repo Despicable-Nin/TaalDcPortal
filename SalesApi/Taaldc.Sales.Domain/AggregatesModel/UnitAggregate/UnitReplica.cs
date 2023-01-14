@@ -2,8 +2,32 @@ using SeedWork;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-public class UnitReplica : Entity, IAggregateRoot
+public class UnitReplica : DomainEntity, IAggregateRoot
 {
+    public UnitReplica(int propertyId, int towerId, int floorId, int unitId, int scenicViewId, int unitTypeId, string property, string tower, string floor, string unit, string scenicView, string unitType, double unitArea, double balconyArea, string unitStatus, int unitStatusId, decimal originalPrice)
+    {
+        PropertyId = propertyId;
+        TowerId = towerId;
+        FloorId = floorId;
+        UnitId = unitId;
+        ScenicViewId = scenicViewId;
+        UnitTypeId = unitTypeId;
+        Property = property;
+        Tower = tower;
+        Floor = floor;
+        Unit = unit;
+        ScenicView = scenicView;
+        UnitType = unitType;
+        UnitArea = unitArea;
+        BalconyArea = balconyArea;
+        UnitStatus = unitStatus;
+        UnitStatusId = unitStatusId;
+        OriginalPrice = originalPrice;
+        SellingPrice = originalPrice;
+        
+    }
+    
+
     public int PropertyId { get; private set; }
     public int TowerId { get; private set; }
     public int FloorId { get; private set; }
@@ -24,4 +48,5 @@ public class UnitReplica : Entity, IAggregateRoot
 
     public decimal OriginalPrice { get; private set; }
     public decimal SellingPrice { get; private set; }
+    
 }

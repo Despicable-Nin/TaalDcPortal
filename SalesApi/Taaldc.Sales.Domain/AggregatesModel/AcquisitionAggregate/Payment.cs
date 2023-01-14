@@ -4,12 +4,12 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class Payment : Entity
 {
-    public Payment(int paymentTypeId, int purposeId, int statusId, DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
+    public Payment(int paymentTypeId, int transactionTypeId,  DateTime actualPaymentDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
         _paymentTypeId = paymentTypeId;
-        _purposeId = purposeId;
-        _statusId = statusId;
-        TransactionDate = transactionDate;
+        _transactionTypeId = transactionTypeId;
+        _statusId = PaymentStatus.GetStatusId(PaymentStatus.Pending);
+        ActualPaymentDate = actualPaymentDate;
         ConfirmationNumber = confirmationNumber;
         PaymentMethod = paymentMethod;
         AmountPaid = amountPaid;
@@ -18,16 +18,16 @@ public class Payment : Entity
     }
     
 
-    public DateTime TransactionDate { get; private set; }
-    public DateTime? DueDate { get; private set; }
+    public DateTime? ActualPaymentDate { get; private set; }
+    public DateTime? ScheduledPaymentDate { get; private set; }
     
     public string ConfirmationNumber { get; private set; }
 
     private int _paymentTypeId;
     public PaymentType PaymentType { get; private set; }
 
-    private int _purposeId;
-    public TransactionPurpose Purpose { get; private set; }
+    private int _transactionTypeId;
+    public TransactionType TransactionType { get; private set; }
 
     public string VerifiedBy { get; private set; }
 
