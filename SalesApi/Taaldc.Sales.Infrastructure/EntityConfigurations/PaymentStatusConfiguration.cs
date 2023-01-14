@@ -11,9 +11,14 @@ class PaymentStatusConfiguration : IEntityTypeConfiguration<PaymentStatus>
         builder.ToTable("paymentstatus");
         
         builder.HasKey(b => b.Id);
-
+        
         builder.Property(b => b.Id).UseHiLo("paymentstatusseq", SalesDbContext.DEFAULT_SCHEMA);
 
+
+        builder.Property(b => b.Name)
+            .HasMaxLength(30)
+            .IsRequired();
+        
         builder.HasData(PaymentStatus.Dictionary.Select(b => new PaymentStatus(b.Key, b.Value)));
     }
 }

@@ -1,11 +1,23 @@
+using System.Reflection;
+using MediatR;
+using Taaldc.Sales.Api.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
+
+// Add services to the container.
+builder.Services
+    .AddApplicationInsights(builder.Configuration)
+    .AddCustomDbContext(builder.Configuration);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 

@@ -15,54 +15,60 @@ class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
         builder.Property(o => o.Id)
             .UseHiLo("acquisitionseq", SalesDbContext.DEFAULT_SCHEMA);
 
+        //1.A
         builder
             .Property<int>("_buyerId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("BuyerId")
             .IsRequired();
         
-        //there is no direct reference to this object so we add relationship here
+        //1.B is no direct reference to this object so we add relationship here
         builder
             .HasOne<Buyer>()
             .WithMany()
             .HasForeignKey("_buyerId");
         
+        //2.A
         builder
             .Property<int>("_unitId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("UnitId")
             .IsRequired();
 
-        //there is no direct reference to this object so we add relationship here
+        //2.B there is no direct reference to this object so we add relationship here
         builder
             .HasOne<UnitReplica>()
             .WithMany()
             .HasForeignKey("_unitId");
         
-        //this field works a shadow property of the readonly Entity (Purpose)
+        //3.A - this field works a shadow property of the readonly Entity (Purpose)
         builder
             .Property<int>("_statusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("StatusId")
             .IsRequired();
         
-        //this field works a shadow property of the readonly Entity (Purpose)
+        //3.B - mapped to a navigation property -- that is immutable
+        builder.HasOne(b => b.Status)
+            .WithMany()
+            .HasForeignKey("_statusId");
+        
+        //4.A - -this field works a shadow property of the readonly Entity (Purpose)
         builder
-            .Property<int>("_transactionType")
+            .Property<int>("_transactionTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("TransactionType")
+            .HasColumnName("TransactionTypeId")
+            .IsRequired();
+        
+        //4.B - mapped to a navigation proerty - TransactionType
+        builder.HasOne(b => b.TransactionType)
+            .WithMany()
             .IsRequired();
 
         builder
             .Metadata
             .FindNavigation(nameof(Acquisition.Payments))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
-
-        // builder
-        //     .Metadata
-        //     .FindNavigation(nameof(Acquisition.Penalties))
-        //     .SetPropertyAccessMode(PropertyAccessMode.Field);
-
 
 
     }

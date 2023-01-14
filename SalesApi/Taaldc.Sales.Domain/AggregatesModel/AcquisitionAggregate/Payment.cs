@@ -4,7 +4,7 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class Payment : Entity
 {
-    public Payment(int paymentTypeId, int transactionTypeId,  DateTime actualPaymentDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
+    public Payment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate, string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
         _paymentTypeId = paymentTypeId;
         _transactionTypeId = transactionTypeId;
@@ -16,11 +16,9 @@ public class Payment : Entity
         Remarks = remarks;
         CorrelationId = correlationId;
     }
-    
 
-    public DateTime? ActualPaymentDate { get; private set; }
-    public DateTime? ScheduledPaymentDate { get; private set; }
-    
+    public DateTime ActualPaymentDate { get; private set; }
+
     public string ConfirmationNumber { get; private set; }
 
     private int _paymentTypeId;
@@ -57,4 +55,6 @@ public class Payment : Entity
         VerifiedBy = verififed;
         _statusId = PaymentStatus.GetStatusId(PaymentStatus.Void);
     }
+    
+    
 }

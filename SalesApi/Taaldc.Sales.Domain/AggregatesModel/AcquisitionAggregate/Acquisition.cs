@@ -42,13 +42,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
     private int _buyerId;
     public int GetBuyerId => _buyerId;
 
-    public void AddPayment(int paymentTypeId, int purposeId,  DateTime transactionDate, string confirmationNumber,  string paymentMethod, decimal amountPaid, string remarks, string correlationId)
-    {
-        Payment payment = new(paymentTypeId, purposeId, transactionDate, confirmationNumber, paymentMethod,
-            amountPaid, remarks, correlationId);
 
-        _payments.Add(payment);
-    }
 
     public void VoidPayment(int paymentId, string user)
     {
