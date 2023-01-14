@@ -13,5 +13,9 @@ class UnitReplicaConfiguration : IEntityTypeConfiguration<UnitReplica>
         builder.HasKey(b => b.Id);
 
         builder.Property(b => b.Id).UseHiLo("unitreplicaseq", SalesDbContext.DEFAULT_SCHEMA);
+
+        builder.Property(b => b.SellingPrice).HasColumnType("decimal(18,4)").IsRequired();
+
+        builder.Property(b => b.OriginalPrice).HasColumnType("decimal(18,4)").IsRequired();
     }
 }
