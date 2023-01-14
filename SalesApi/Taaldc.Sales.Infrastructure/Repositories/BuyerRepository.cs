@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
@@ -20,12 +21,12 @@ public class BuyerRepository : IBuyerRepository
     
     public Buyer GetByEmail(string email)
     {
-        return _context.Buyers.SingleOrDefault(i => i.EmailAddress == email);
+        return _context.Buyers.AsNoTracking().SingleOrDefault(i => i.EmailAddress == email);
     }
 
     public Buyer GetById(int id)
     {
-       return  _context.Buyers.Find(id);
+       return  _context.Buyers.AsNoTracking().SingleOrDefault(i => i.Id == id);
     }
 
     public Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo,

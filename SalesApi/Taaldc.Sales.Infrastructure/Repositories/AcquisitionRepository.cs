@@ -18,14 +18,14 @@ public class AcquisitionRepository : IAcquisitionRepository
     public IUnitOfWork UnitOfWork => _context;
 
 
-    public async Task Acquire(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks)
+    public async Task<Acquisition> SellUnit(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks)
     {
         Buyer buyer = await _context.Buyers.FindAsync(buyerId);
 
         if (buyer == default)
-            throw new SalesDomainException(nameof(Acquire), new KeyNotFoundException($"{buyerId} not found."));
-        
-        _context.Acquisitions.Add(new(unitId, buyerId, code, broker, remarks));
+            throw new SalesDomainException(nameof(SellUnit), new KeyNotFoundException($"{buyerId} not found."));
+
+        return _context.Acquisitions.Add(new(unitId, buyerId, code, broker, remarks)).Entity;
     }
 
     public async Task VerifyPayment( int paymentId, string verifiedBy)

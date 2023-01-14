@@ -33,4 +33,8 @@
       <ProjectReference Include="..\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Application\Commands\AddBuyer" />
+    </ItemGroup>
+
 </Project>

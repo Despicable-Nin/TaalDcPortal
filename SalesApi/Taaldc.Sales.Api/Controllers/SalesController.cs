@@ -21,7 +21,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> Post([FromBody] AddSaleDTO dto)
+        public async Task<IActionResult> Post([FromBody] SellUnitDTO dto)
         {
             return Ok();
         }

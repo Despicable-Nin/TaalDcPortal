@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Taaldc.Sales.Api.DTO;
 
-public class AddSaleDTO
+public class SellUnitDTO
 {
     [JsonPropertyName("code")]
     [JsonProperty(Required = Required.AllowNull)]
