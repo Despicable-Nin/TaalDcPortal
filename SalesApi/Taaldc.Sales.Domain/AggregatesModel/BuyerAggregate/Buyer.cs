@@ -27,4 +27,23 @@ public class Buyer : Entity, IAggregateRoot
     public string Province { get; private set; }
     public string TownCity { get; private set; }
     public string ZipCode { get; private set; }
+    
+    
+    public void UpdateName(string salutation, string firstName, string lastName)
+    {
+        Salutation = salutation;
+        FirstName = firstName;
+        LastName = lastName;
+    }
+    
+    public void UpdateDetails(string emailAddress, string contactNo,
+        string country, string province, string townCity, string zipCode)
+    {
+        EmailAddress = emailAddress;
+        ContactNo = contactNo;
+        Country = country;
+        Province = province;
+        TownCity = townCity;
+        ZipCode = zipCode;
+    }
 }

@@ -26,8 +26,6 @@ public class AcquisitionRepository : IAcquisitionRepository
             throw new SalesDomainException(nameof(Acquire), new KeyNotFoundException($"{buyerId} not found."));
         
         _context.Acquisitions.Add(new(unitId, buyerId, code, broker, remarks));
-
-        await _context.SaveChangesAsync(default);
     }
 
     public async Task VerifyPayment( int paymentId, string verifiedBy)
@@ -43,7 +41,25 @@ public class AcquisitionRepository : IAcquisitionRepository
         }
 
         _context.Payments.Update(payment);
+    }
 
-        await _context.SaveChangesAsync(default);
+    public async Task<IEnumerable<PaymentStatus>> GetPaymentStatus()
+    {
+        return await _context.PaymentStatus.AsNoTracking().ToArrayAsync();
+    }
+
+    public async Task<IEnumerable<PaymentType>> GetPaymentTypes()
+    {
+        return await _context.PaymentTypes.AsNoTracking().ToArrayAsync();
+    }
+
+    public async Task<IEnumerable<TransactionType>> GetPaymentTransactionTypes()
+    {
+        return await _context.TransactionTypes.AsNoTracking().ToArrayAsync();
+    }
+
+    public async Task<IEnumerable<AcquisitionStatus>> GetSaleStatus()
+    {
+        return await _context.AcquisitionStatus.AsNoTracking().ToArrayAsync();
     }
 }
