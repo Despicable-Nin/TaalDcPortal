@@ -83,4 +83,12 @@ public class SellUnitDTO
     [JsonPropertyName("remarks")]
     [JsonProperty(Required = Required.AllowNull)]
     public string Remarks { get; set; }
+
+    [JsonPropertyName("reservation_confirmation_number")]
+    [JsonProperty(Required = Required.Always)]
+    public string ReservationConfirmNo { get; set; }
+    
+    [JsonPropertyName("downpayment_confirmation_number")]
+    [JsonProperty(Required = Required.AllowNull)]
+    public string DownpaymentConfirmNo { get; set; }
 }
