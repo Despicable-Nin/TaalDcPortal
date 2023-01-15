@@ -45,7 +45,8 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             buyer.Id,
             request.Code,
             request.Broker,
-            request.Remarks);
+            request.Remarks,
+            request.SellingPrice);
 
         var reservation = sale.Payments
             .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForReservation));

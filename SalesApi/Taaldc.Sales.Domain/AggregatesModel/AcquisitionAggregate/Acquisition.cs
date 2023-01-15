@@ -13,7 +13,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
 
 
  
-    public Acquisition(int unitId,  int buyerId, string code, string broker, string remarks) : this()
+    public Acquisition(int unitId,  int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
     {
         _unitId = unitId;
         _buyerId = buyerId;
@@ -21,6 +21,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
         Broker = broker;
         Remarks = remarks;
         _statusId = AcquisitionStatus.GetIdByName(AcquisitionStatus.New);
+        FinalPrice = finalPrice;
     }
     
     private int _unitId;
@@ -29,6 +30,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
     public string Code { get; private set; }
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
+    public decimal FinalPrice { get; private set; }
     public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;

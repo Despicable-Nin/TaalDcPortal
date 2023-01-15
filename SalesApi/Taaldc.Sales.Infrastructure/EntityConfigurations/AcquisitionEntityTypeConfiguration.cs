@@ -52,6 +52,8 @@ class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
         builder.HasOne(b => b.Status)
             .WithMany()
             .HasForeignKey("_statusId");
+
+        builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
         
 
         builder
