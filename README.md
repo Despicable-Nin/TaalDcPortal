@@ -95,12 +95,8 @@ See link: https://www.twilio.com/blog/using-sql-server-on-macos-with-docker
 
 
 ```
-docker run 
--d 
---name sql_server 
--e 'ACCEPT_EULA=Y'
--e 'SA_PASSWORD=someThingComplicated1234'
--p 1433:1433 mcr.microsoft.com/mssql/server:2019-latest
+docker run -d --name sql_server -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=someThingComplicated1234' -p 1433:1433 mcr.microsoft.com/mssql/server:2019-latest
+
 ```
 <br/>
 
