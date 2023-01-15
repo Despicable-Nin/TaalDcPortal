@@ -1,4 +1,4 @@
-namespace Taaldc.Catalog.API.Extensions;
+namespace Taaldc.Library.Common.Extensions;
 
 public static class GenericTypeExtensions
 {

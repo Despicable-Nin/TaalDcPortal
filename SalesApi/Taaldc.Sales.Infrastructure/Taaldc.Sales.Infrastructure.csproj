@@ -14,11 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
       <ProjectReference Include="..\Taaldc.Sales.Domain\Taaldc.Sales.Domain.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Repositories" />
     </ItemGroup>
 
 </Project>

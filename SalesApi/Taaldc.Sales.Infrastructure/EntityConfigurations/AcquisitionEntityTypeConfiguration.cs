@@ -52,18 +52,9 @@ class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
         builder.HasOne(b => b.Status)
             .WithMany()
             .HasForeignKey("_statusId");
+
+        builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
         
-        //4.A - -this field works a shadow property of the readonly Entity (Purpose)
-        builder
-            .Property<int>("_transactionTypeId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("TransactionTypeId")
-            .IsRequired();
-        
-        //4.B - mapped to a navigation proerty - TransactionType
-        builder.HasOne(b => b.TransactionType)
-            .WithMany()
-            .IsRequired();
 
         builder
             .Metadata

@@ -1,23 +1,22 @@
 using MediatR;
-using Taaldc.Catalog.API.Extensions;
-using Taaldc.Catalog.Infrastructure;
 using Taaldc.Library.Common.Extensions;
+using Taaldc.Sales.Infrastructure;
 
-namespace Taaldc.Catalog.API.Application.Behaviors;
+namespace Taaldc.Sales.API.Application.Behaviors;
 
 public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly CatalogDbContext _dbContext;
+    private readonly SalesDbContext _dbContext;
 
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
     //private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
 
-    public TransactionBehaviour(CatalogDbContext dbContext,
+    public TransactionBehaviour(SalesDbContext dbContext,
         //IOrderingIntegrationEventService orderingIntegrationEventService,
         ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
     {
-        _dbContext = dbContext ?? throw new ArgumentException(nameof(CatalogDbContext));
+        _dbContext = dbContext ?? throw new ArgumentException(nameof(SalesDbContext));
         //_orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentException(nameof(orderingIntegrationEventService));
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }

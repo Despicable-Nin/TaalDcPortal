@@ -1,10 +1,10 @@
+
 using FluentValidation;
 using MediatR;
-using Taaldc.Catalog.API.Extensions;
-using Taaldc.Catalog.Domain.Exceptions;
 using Taaldc.Library.Common.Extensions;
+using Taaldc.Sales.Domain.Exceptions;
 
-namespace Taaldc.Catalog.API.Application.Behaviors;
+namespace Taaldc.Sales.API.Application.Behaviors;
 
 public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
@@ -37,7 +37,7 @@ public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest
             _logger.LogWarning("Validation errors - {CommandType} - Command: {@Command} - Errors: {@ValidationErrors}",
                 typeName, request, failures);
 
-            throw new CatalogDomainException(
+            throw new SalesDomainException(
                 $"Command Validation Errors for type {typeof(TRequest).Name}",
                 new ValidationException("Validation exception", failures));
         }

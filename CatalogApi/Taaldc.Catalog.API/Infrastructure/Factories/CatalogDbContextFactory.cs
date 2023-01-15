@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Taaldc.Catalog.Infrastructure;
+using TaalDc.Library.Common.Mediator;
 
 namespace Taaldc.Catalog.API.Infrastructure.Factories;
 
