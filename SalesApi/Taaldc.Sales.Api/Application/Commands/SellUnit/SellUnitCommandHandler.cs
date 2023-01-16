@@ -1,5 +1,6 @@
 using FluentValidation;
 using MediatR;
+using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
 
@@ -7,30 +8,24 @@ namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
 {
-    private readonly IOrderRepository _salesRepository;
-    private readonly IBuyerRepository _buyerRepository;
-    private readonly ILogger<SellUnitCommandHandler> _logger;
-
-    public SellUnitCommandHandler(IOrderRepository salesRepository, IBuyerRepository buyerRepository, ILogger<SellUnitCommandHandler> logger)
+    public SellUnitCommandHandler(IOrderRepository salesRepository, IBuyerRepository buyerRepository, ILogger<SellUnitCommandHandler> logger, IAmCurrentUser currentUser)
     {
         _salesRepository = salesRepository;
         _buyerRepository = buyerRepository;
         _logger = logger;
+        _currentUser = currentUser;
     }
 
+    private readonly IOrderRepository _salesRepository;
+    private readonly IBuyerRepository _buyerRepository;
+    private readonly ILogger<SellUnitCommandHandler> _logger;
+    private readonly IAmCurrentUser _currentUser;
+    
     public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         Buyer buyer = _buyerRepository.GetByEmail(request.EmailAddress);
-        int? buyerId = default;
         
-        if (buyer == default)
-        {
-            buyerId = default;
-        }
-        else
-        {
-            buyerId = buyer.Id;
-        }
+        var buyerId = buyer?.Id;
 
         buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
             request.EmailAddress,
@@ -97,7 +92,6 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
         //publish these data
         //unitId, sellingPrice,
         //sale.AddDomainEvent();
-
 
         return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
         {

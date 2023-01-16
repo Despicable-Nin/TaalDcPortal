@@ -4,6 +4,8 @@ using SeedWork;
 using Taaldc.Sales.Api;
 using Taaldc.Sales.API.Application.Behaviors;
 using Taaldc.Sales.Api.Extensions;
+using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,10 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+builder.Services.AddScoped(typeof(IBuyerRepository), typeof(BuyerRepository));
+//builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
 
 var app = builder.Build();
 
