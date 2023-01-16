@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
@@ -12,10 +12,13 @@ class UnitTypeConfiguration : IEntityTypeConfiguration<UnitType>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.Id)
-            .HasDefaultValue(1)
-            .ValueGeneratedNever()
-            .IsRequired();
+        //builder.Property(c => c.Id)
+        //    .HasDefaultValue(1)
+        //    .ValueGeneratedNever()
+        //    .IsRequired();
+
+        builder.Property(o => o.Id)
+           .UseHiLo("unittypeseq", CatalogDbContext.DEFAULT_SCHEMA);
 
         builder.Property(b => b.Name)
             .HasMaxLength(30)

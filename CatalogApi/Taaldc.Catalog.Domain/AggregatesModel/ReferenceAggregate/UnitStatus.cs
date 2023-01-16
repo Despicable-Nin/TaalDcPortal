@@ -1,8 +1,8 @@
 using SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
-public sealed class UnitStatus : Enumeration
+public sealed class UnitStatus : Enumeration, IAggregateRoot
 {
     public enum UnitIs : int
     {

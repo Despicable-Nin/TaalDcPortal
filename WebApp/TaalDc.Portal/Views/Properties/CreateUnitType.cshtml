@@ -1,0 +1,118 @@
+﻿@using TaalDc.Portal.ViewModels.Catalog
+@model UnitTypeCreateDTO
+
+@{
+    ViewBag.Title = "Create Unit Type";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+     <h4 class="primary-color mb-3">
+        <strong>
+            New Unit Type
+        </strong>
+    </h4>
+
+    <div>
+        <form id="unitTypeForm" method="post" class="row mb-5 needs-validation" asp-action="CreateUnitType" asp-controller="Properties">
+            <div class="mb-3 col-lg-8">
+                <label asp-for="Name" class="form-label"><strong>Unit Type</strong></label>
+                <input asp-for="Name" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            <div class="mb-3 col-lg-8">
+                <label class="form-label" asp-for="ShortCode"><strong>Short Code</strong></label>
+                
+                <input asp-for="ShortCode" type="text" class="form-control" required />
+                    
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <input id="unittype-form-submit" class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        const form = document.getElementById('unitTypeForm');
+        form.addEventListener('submit', onUnitTypeFormSubmit);
+
+        function onUnitTypeFormSubmit(event) {
+            event.preventDefault();
+
+            var btn = document.getElementById("unittype-form-submit");
+
+            btn.disabled = true;
+
+            const data = new FormData(event.target);
+
+            const value = Object.fromEntries(data.entries());
+
+            console.log('form values', value);
+
+            var isFormValid = event.target.checkValidity();
+
+            console.log('form validity', isFormValid);
+
+            event.target.classList.add("was-validated");
+
+
+            $("#form-premessage").show();
+
+            if (isFormValid) {
+                var formAction = event.target.action
+
+                $.ajax({
+                    type: 'POST',
+                    url: formAction,
+                    data: value,
+                    success: function (data, status, xhr) {
+                        console.log('property post', data);
+                        Toastify({
+                            text: "Submitted successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#6AB0F8",
+                            },
+                            onClick: function () { } // Callback after click
+                        }).showToast();
+                    }, error: function () {
+                        Toastify({
+                            text: "Something went wrong. Please try again later.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "center", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#D01818",
+                            },
+                            onClick: function () { } // Callback after click
+                        }).showToast();
+
+                        btn.disabled = false;
+                    }
+                });
+            }else{
+                btn.disabled = false;
+            }
+            return false;
+        }
+    </script>
+}

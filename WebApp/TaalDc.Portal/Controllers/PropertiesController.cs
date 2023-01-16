@@ -112,6 +112,24 @@ namespace TaalDc.Portal.Controllers
             return Ok(result);
         }
 
+        public async Task<IActionResult> EditTower(int id)
+        {
+            try
+            {
+                var result = await _catalogService.GetTowerById(id);
+
+                if (result == null) RedirectToAction("Index");
+
+                var towerCreateDTO = new TowerCreateDTO(result.Id, result.PropertyId, result.TowerName, result.Address);
+
+                return View(towerCreateDTO);
+
+            }
+            catch (Exception err)
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
 
         public async Task<IActionResult> CreateFloor()
@@ -196,6 +214,25 @@ namespace TaalDc.Portal.Controllers
             var unitTypes = await _catalogService.GetUnitTypes();
 
             return View(unitTypes);
+        }
+
+
+        public IActionResult CreateUnitType()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUnitType(UnitTypeCreateDTO model)
+        {
+            var result = await _catalogService.CreateUnitType(model);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
         }
     }
 }

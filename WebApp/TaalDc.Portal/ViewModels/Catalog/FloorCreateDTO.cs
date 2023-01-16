@@ -5,6 +5,15 @@ namespace TaalDc.Portal.ViewModels.Catalog
 {
     public class FloorCreateDTO
     {
+        public FloorCreateDTO(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
+        {
+            TowerId = towerId;
+            FloorId = floorId;
+            Name = name;
+            Description = description;
+            FloorPlanFilePath = floorPlanFilePath;
+        }
+
         [JsonPropertyName("tower_id")]
         public int TowerId { get; set; }
 

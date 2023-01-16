@@ -10,6 +10,7 @@ using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,7 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBeha
 
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
+builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
 
 builder.Services.AddScoped<IPropertyQueries>(i =>
 {

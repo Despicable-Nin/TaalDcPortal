@@ -12,16 +12,13 @@ namespace Taaldc.Catalog.API.Controllers;
 public class UnitsController : ApiBaseController<UnitsController>
 {
     private readonly IUnitQueries _unitQueries;
-    private readonly IUnitTypeQueries _unitTypeQueries;
 
     public UnitsController(
-        IUnitQueries unitQueries, 
-        IUnitTypeQueries unitTypeQueries,
+        IUnitQueries unitQueries,
         ILogger<UnitsController> logger, 
         IMediator mediator) : base(logger, mediator)
     {
         _unitQueries = unitQueries;
-        _unitTypeQueries = unitTypeQueries;
     }
     
     [HttpPost]
@@ -61,19 +58,5 @@ public class UnitsController : ApiBaseController<UnitsController>
         int max = 999999999, int pageSize = 20, int pageNumber = 1)
     {
         return Ok(await _unitQueries.GetAvailableUnitsAsync(unitTypeId, viewId, floorId, location, min, max, pageSize, pageNumber));
-    }
-
-    [HttpGet("types")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> GetUnitTypes()
-    {
-        try {
-            var unitTypes = await _unitTypeQueries.GetUnitTypes();
-            return Ok(unitTypes);
-        }catch(Exception err)
-        {
-            return BadRequest(err.Message);
-        }
     }
 }

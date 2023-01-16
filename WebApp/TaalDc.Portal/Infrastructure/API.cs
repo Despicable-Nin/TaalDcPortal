@@ -16,13 +16,12 @@ public static class API
         public static string AddProperty(string baseUri) => $"{baseUri}/api/adm/properties";
         public static string AddTower(string baseUri) => $"{baseUri}/api/adm/towers";
         public static string AddUnit(string baseUri) => $"{baseUri}/api/adm/units";
-
-
+        public static string AddUnitType(string baseUri) => $"{baseUri}/api/adm/unitTypes";
 
         public static string GetProperties(string baseUri) => $"{baseUri}/api/adm/properties";
         public static string GetTowers(string baseUri) => $"{baseUri}/api/adm/towers";
         public static string GetFloors(string baseUri) => $"{baseUri}/api/adm/floors";
         public static string GetUnits(string baseUri) => $"{baseUri}/api/adm/units";
-        public static string GetUnitTypes(string baseUri) => $"{baseUri}/api/adm/units/types";
+        public static string GetUnitTypes(string baseUri) => $"{baseUri}/api/adm/unitTypes";
     }
 }

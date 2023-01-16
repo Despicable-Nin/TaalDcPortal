@@ -67,7 +67,7 @@
                                 <td>@prop.Address</td>
                                 <td>@prop.Units</td>
                                 <td>
-                                    <a class="action-edit" href="#">Edit</a>
+                                    <a class="action-edit" asp-controller="Properties" asp-action="EditTower" asp-route-id="@prop.Id">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>
                                 </td>
                             </tr>
