@@ -26,7 +26,8 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
 
     public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator, IAmCurrentUser currentUser = null) : base(options)
-    {                                                                                                                                                                                            sdc
+    {                                                                                                                                                                                            
+        
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _currentUser = currentUser;
         System.Diagnostics.Debug.WriteLine("SalesDbContext::ctor ->" + this.GetHashCode());
