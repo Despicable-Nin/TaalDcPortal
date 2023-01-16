@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SeedWork;
+using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.DTO;
@@ -55,6 +56,17 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(await _mediator.Send(command));
         }
         
-       
+        [HttpPost("{id}/payment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> AddPayment(int id, [FromBody] AddPaymentDTO dto)
+        {
+            if (id != dto.TransactionId) return BadRequest("Invalid request path.");
+            
+            AddPaymentCommand command = _mapper.Map<AddPaymentCommand>(dto);
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
     }
 }
