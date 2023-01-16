@@ -52,8 +52,15 @@ namespace Taaldc.Sales.Api.Controllers
         {
             //this is for verification purposes --- only admin can do this
             //for now manually check role of user.. 
-            AcceptPaymentCommand command = new AcceptPaymentCommand(id);
-            return Ok(await _mediator.Send(command));
+
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("admin"))
+            {
+
+                AcceptPaymentCommand command = new AcceptPaymentCommand(id);
+                return Ok(await _mediator.Send(command));
+            }
+
+            return BadRequest("Unauthorized.");
         }
         
         [HttpPost("{id}/payment")]
