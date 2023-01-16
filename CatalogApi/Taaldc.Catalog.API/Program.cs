@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using MediatR;
+using SeedWork;
+using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
@@ -32,6 +34,9 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+
+builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));

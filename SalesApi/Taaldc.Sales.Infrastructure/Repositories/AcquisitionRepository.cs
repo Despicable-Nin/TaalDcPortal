@@ -23,7 +23,7 @@ public class AcquisitionRepository : IAcquisitionRepository
         Buyer buyer = await _context.Buyers.FindAsync(buyerId);
 
         if (buyer == default)
-            throw new SalesDomainException(nameof(SellUnit), new KeyNotFoundException($"{buyerId} not found."));
+            throw new SalesDomainException(nameof(SellUnit), new Exception($"Buyer not found."));
 
         return _context.Acquisitions.Add(new(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
     }
@@ -33,7 +33,7 @@ public class AcquisitionRepository : IAcquisitionRepository
         var payment = await _context.Payments.Include(i => i.Status).FirstOrDefaultAsync( i => i.Id == paymentId);
 
         if (payment == null)
-            throw new SalesDomainException(nameof(VerifyPayment), new KeyNotFoundException("Payment not found."));
+            throw new SalesDomainException(nameof(VerifyPayment), new Exception("Payment not found."));
 
         if (payment.Status.Id != PaymentStatus.GetStatusId(PaymentStatus.Pending))
         {
