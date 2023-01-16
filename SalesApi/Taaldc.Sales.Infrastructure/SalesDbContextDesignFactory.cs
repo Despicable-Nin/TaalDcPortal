@@ -12,7 +12,7 @@ public class SalesDbContextDesignFactory : IDesignTimeDbContextFactory<SalesDbCo
         var optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>()
             .UseSqlServer("Server=localhost;Database=taaldb_sales;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Sales.Infrastructure"));
 
-        return new SalesDbContext(optionsBuilder.Options, new NoMediator());
+        return new SalesDbContext(optionsBuilder.Options, new NoMediator(), new CurrentUser());
     }
 
 }
