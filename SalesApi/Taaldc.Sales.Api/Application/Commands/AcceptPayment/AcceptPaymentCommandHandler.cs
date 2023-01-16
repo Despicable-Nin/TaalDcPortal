@@ -7,11 +7,11 @@ namespace Taaldc.Sales.API.Application.Commands.ProcessPayment;
 
 public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand, CommandResult>
 {
-    private readonly IAcquisitionRepository _repository;
+    private readonly IOrderRepository _repository;
     private readonly IAmCurrentUser _currentUser;
 
 
-    public AcceptPaymentCommandHandler(IAcquisitionRepository repository, IAmCurrentUser currentUser)
+    public AcceptPaymentCommandHandler(IOrderRepository repository, IAmCurrentUser currentUser)
     {
         _repository = repository;
         _currentUser = currentUser;

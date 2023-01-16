@@ -16,7 +16,7 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique();
 
-        builder.Property<int>("AcquisitionId")
+        builder.Property<int>("OrderId")
             .IsRequired();
             
 
