@@ -37,12 +37,6 @@ public class CatalogDbContext : DbContext, IUnitOfWork
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Entity> entry in
-        //          ChangeTracker.Entries<Entity>())
-        // {
-        //     Debug.Print($"Checking states: {entry.Entity.GetType()}{entry.State}");
-        // }
-        //
         return base.SaveChangesAsync(cancellationToken);
     }
     
