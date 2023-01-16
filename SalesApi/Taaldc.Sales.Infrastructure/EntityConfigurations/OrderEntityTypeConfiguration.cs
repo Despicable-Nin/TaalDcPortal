@@ -4,16 +4,16 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure.EntityConfigurations;
 
-class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
+class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 {
-    public void Configure(EntityTypeBuilder<Acquisition> builder)
+    public void Configure(EntityTypeBuilder<Order> builder)
     {
-        builder.ToTable("acquisition", SalesDbContext.DEFAULT_SCHEMA);
+        builder.ToTable("order", SalesDbContext.DEFAULT_SCHEMA);
         builder.HasKey(b => b.Id);
         
         //IMPORTANT: this is need for auto-increment of ID
         builder.Property(o => o.Id)
-            .UseHiLo("acquisitionseq", SalesDbContext.DEFAULT_SCHEMA);
+            .UseHiLo("orderseq", SalesDbContext.DEFAULT_SCHEMA);
 
         //1.A
         builder
@@ -58,7 +58,7 @@ class AcquisitionEntityTypeConfiguration : IEntityTypeConfiguration<Acquisition>
 
         builder
             .Metadata
-            .FindNavigation(nameof(Acquisition.Payments))
+            .FindNavigation(nameof(Order.Payments))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
 

@@ -3,9 +3,9 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-public class Acquisition : DomainEntity, IAggregateRoot
+public class Order : DomainEntity, IAggregateRoot
 {
-    protected Acquisition()
+    protected Order()
     {
         _payments = new List<Payment>();
         //_penalties = new List<Penalty>();
@@ -13,14 +13,14 @@ public class Acquisition : DomainEntity, IAggregateRoot
 
 
  
-    public Acquisition(int unitId,  int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
+    public Order(int unitId,  int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
     {
         _unitId = unitId;
         _buyerId = buyerId;
         Code = code;
         Broker = broker;
         Remarks = remarks;
-        _statusId = AcquisitionStatus.GetIdByName(AcquisitionStatus.New);
+        _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         FinalPrice = finalPrice;
     }
     
@@ -34,7 +34,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
     public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;
-    public AcquisitionStatus Status { get; private set; }
+    public OrderStatus Status { get; private set; }
     
 
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
@@ -47,7 +47,7 @@ public class Acquisition : DomainEntity, IAggregateRoot
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
     
-    public void AddPayment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate,
+    public Payment AddPayment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate,
         string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId = default)
     {
         if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
@@ -58,7 +58,8 @@ public class Acquisition : DomainEntity, IAggregateRoot
             amountPaid, remarks, correlationId);
 
         _payments.Add(payment);
-
+        return payment;
+            
     }
 
     public Payment FindPayment(string confirmationNumber) =>

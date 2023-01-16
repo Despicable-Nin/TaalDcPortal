@@ -2,7 +2,7 @@ using SeedWork;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-public sealed class AcquisitionStatus : Enumeration
+public sealed class OrderStatus : Enumeration
 {
     public const string FullyPaid = nameof(FullyPaid);
     public const string PartiallyPaid = nameof(PartiallyPaid);
@@ -21,7 +21,7 @@ public sealed class AcquisitionStatus : Enumeration
 
     public static int GetIdByName(string name) => Dictionary.FirstOrDefault(i => i.Value == name).Key;
     
-    public AcquisitionStatus(int id, string name) : base(id, name)
+    public OrderStatus(int id, string name) : base(id, name)
     {
     }
     

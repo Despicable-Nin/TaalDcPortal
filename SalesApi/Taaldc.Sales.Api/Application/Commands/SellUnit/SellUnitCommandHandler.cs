@@ -7,11 +7,11 @@ namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
 {
-    private readonly IAcquisitionRepository _salesRepository;
+    private readonly IOrderRepository _salesRepository;
     private readonly IBuyerRepository _buyerRepository;
     private readonly ILogger<SellUnitCommandHandler> _logger;
 
-    public SellUnitCommandHandler(IAcquisitionRepository salesRepository, IBuyerRepository buyerRepository, ILogger<SellUnitCommandHandler> logger)
+    public SellUnitCommandHandler(IOrderRepository salesRepository, IBuyerRepository buyerRepository, ILogger<SellUnitCommandHandler> logger)
     {
         _salesRepository = salesRepository;
         _buyerRepository = buyerRepository;
@@ -40,7 +40,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
 
         if (request.ReservationConfirmNo == string.Empty) throw new ArgumentNullException(nameof(SellUnitCommand));
 
-        var sale = await _salesRepository.SellUnit(request.UnitId,
+        var sale = _salesRepository.AddOrder(request.UnitId,
             TransactionType.GetTypeId(TransactionType.ForReservation),
             buyer.Id,
             request.Code,
@@ -73,7 +73,6 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
         
         if (request.DownPayment != default)
         {
-              
             var downpayment = sale.Payments
                 .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForAcquisition));
 

@@ -12,10 +12,10 @@ namespace Taaldc.Sales.Api.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-        private readonly IAcquisitionRepository _repository;
+        private readonly IOrderRepository _repository;
         private readonly ILogger<StatusController> _logger;
 
-        public StatusController(IAcquisitionRepository repository, ILogger<StatusController> logger)
+        public StatusController(IOrderRepository repository, ILogger<StatusController> logger)
         {
             _repository = repository;
             _logger = logger;

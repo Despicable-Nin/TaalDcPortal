@@ -1,5 +1,7 @@
 using System.Reflection;
 using MediatR;
+using SeedWork;
+using Taaldc.Sales.Api;
 using Taaldc.Sales.API.Application.Behaviors;
 using Taaldc.Sales.Api.Extensions;
 
@@ -20,6 +22,9 @@ builder.Services.AddSwaggerGen();
 
 // register auto-mapper
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
