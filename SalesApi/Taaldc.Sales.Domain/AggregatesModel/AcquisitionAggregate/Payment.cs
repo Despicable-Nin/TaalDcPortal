@@ -23,6 +23,7 @@ public class Payment : Entity
 
     private int _paymentTypeId;
     public PaymentType PaymentType { get; private set; }
+    public int GetPaymentTypeId() => _paymentTypeId;
 
     private int _transactionTypeId;
     public TransactionType TransactionType { get; private set; }
