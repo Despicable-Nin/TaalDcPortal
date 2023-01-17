@@ -1,4 +1,21 @@
-﻿<!DOCTYPE html>
+﻿@using SeedWork
+@using TaalDc.Portal.Extensions
+@inject IAmCurrentUser CurrentUser;
+@{
+    string controller = "";
+    string action = "";
+    try
+    {
+        controller = @ViewContext.RouteData.Values["controller"].ToString();
+        action = @ViewContext.RouteData.Values["action"].ToString();
+    }
+    catch
+    {
+        
+    }
+   
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -16,12 +33,12 @@
             <div class="dropdown pb-2" style="float: right;padding-right:1rem;">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="~/user-profile.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                    <span class="d-none d-sm-inline ms-3 mx-1">Super Admin</span>
+                    <span class="d-none d-sm-inline ms-3 mx-1">@CurrentUser.Email</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    @* <li><a class="dropdown-item" href="#">New project...</a></li> *@
+                    @* <li><a class="dropdown-item" href="#">Settings</a></li> *@
+                    <li><a class="dropdown-item" href="/Identity/Account/Manage/Email">Profile</a></li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -43,36 +60,45 @@
                         <ul class="nav nav-pills flex-column mt-3 mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                             <li class="nav-item">
                                 <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
-                                   Dashboard
+                                    Dashboard
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Properties" asp-action="Index" class="nav-link align-middle px-0">
-                                    Properties
-                                </a>
-                            </li>
-                            <li class="nav-item">
+                            @if (CurrentUser.Roles.Contains("ADMIN"))
+                            {
+                                @Html.Partial("_Sidebar");
+                            }
+                             <li class="nav-item">
                                 <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
                                    Sales
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Inquiries" asp-action="Index" class="nav-link align-middle px-0">
-                                    Inquiries
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Users" asp-action="Index" class="nav-link align-middle px-0">
-                                   Settings
-                                </a>
-                            </li>
+
                         </ul>
                        
                     </div>
                 </div>
                 <div class="col p-0">
                     <main role="main">
+                      
                         <div class="content-wrapper">
+                            @try
+                            {
+                                @if (!string.IsNullOrEmpty(controller) && controller.ToLower() == "home")
+                                {
+                                    
+                                }
+                                else
+                                {
+                                    <div class="card-title pl-3 pb-5 pt-0">
+                                        <a asp-controller="@controller" asp-action="Index">@controller</a> / <a asp-action="@action">@action</a>
+                                    </div>
+                                }
+                               
+                            }
+                            catch
+                            {
+
+                            }
                             @RenderBody()
                         </div>
                     </main>
@@ -82,7 +108,8 @@
 }else
 {
     <main role="main">
-            @RenderBody()
+        <breadcrumb></breadcrumb>
+        @RenderBody()
     </main>
 }
 

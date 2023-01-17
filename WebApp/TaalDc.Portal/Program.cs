@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ builder.Services.AddControllersWithViews();
 
 //dependency injection for services
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IAmCurrentUser, CurrentUser>();
 
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
 builder.Services.AddScoped(typeof(ICatalogService), typeof(CatalogService));

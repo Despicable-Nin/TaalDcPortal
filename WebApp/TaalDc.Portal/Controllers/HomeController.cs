@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+
 using TaalDc.Portal.Models;
 
 namespace WebApplication2.Controllers;
+
 
 public class HomeController : Controller
 {
