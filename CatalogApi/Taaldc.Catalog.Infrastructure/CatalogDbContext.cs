@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 using Unit = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit;
 
 namespace Taaldc.Catalog.Infrastructure;
@@ -33,6 +34,9 @@ public class CatalogDbContext : DbContext, IUnitOfWork
 
         modelBuilder.HasSequence<int>("unitseq", DEFAULT_SCHEMA)
                   .StartsAt(2000).IncrementsBy(1);
+
+        modelBuilder.HasSequence<int>("unittypeseq", DEFAULT_SCHEMA)
+                 .StartsAt(9).IncrementsBy(1);
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

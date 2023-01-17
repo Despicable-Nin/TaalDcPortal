@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Catalog.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Catalog.Infrastructure;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    partial class CatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230116012917_RemovedNavPropertyToUnit")]
+    partial class RemovedNavPropertyToUnit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,9 +39,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
 
             modelBuilder.HasSequence<int>("unitseq", "catalog")
                 .StartsAt(2000L);
-
-            modelBuilder.HasSequence<int>("unittypeseq", "catalog")
-                .StartsAt(9L);
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
@@ -330,10 +330,8 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitType", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unittypeseq", "catalog");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Name")
                         .IsRequired()

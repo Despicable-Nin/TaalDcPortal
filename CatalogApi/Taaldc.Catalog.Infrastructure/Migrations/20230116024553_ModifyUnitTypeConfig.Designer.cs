@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Catalog.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Catalog.Infrastructure;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    partial class CatalogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230116024553_ModifyUnitTypeConfig")]
+    partial class ModifyUnitTypeConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +40,8 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.HasSequence<int>("unitseq", "catalog")
                 .StartsAt(2000L);
 
-            modelBuilder.HasSequence<int>("unittypeseq", "catalog")
-                .StartsAt(9L);
+            modelBuilder.HasSequence("unittypeseq", "catalog")
+                .IncrementsBy(10);
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {

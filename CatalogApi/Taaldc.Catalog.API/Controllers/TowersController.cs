@@ -52,4 +52,14 @@ public class TowersController : ApiBaseController<TowersController>
 	{
 		return Ok(await _unitQueries.GetUnitTypeAvailabilityByTowerId(id));
 	}
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetTowerById(int id)
+    {
+        var tower = await _towerQueries.GetTowerById(id);
+        if (tower == null) return NotFound();
+        return Ok(tower);
+    }
 }

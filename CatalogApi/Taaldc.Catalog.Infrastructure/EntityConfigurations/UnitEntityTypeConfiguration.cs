@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
@@ -31,33 +32,31 @@ class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
             .HasColumnName("ScenicViewId")
             .IsRequired();
 
-        //mapped to a navigation property -- that is immutable as well
-        builder.HasOne(b => b.ScenicView)
+
+        builder.HasOne<ScenicView>()
             .WithMany()
             .HasForeignKey("_scenicViewId");
         
+
         //to provide an immutable FK id 
         builder.Property<int>("_unitStatusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("UnitStatus")
             .IsRequired();
 
-        //mapped to a navigation property -- that is immutable as well
-        builder.HasOne(b => b.UnitStatus)
-            .WithMany()
-            .HasForeignKey("_unitStatusId");
-        
+        builder.HasOne<UnitStatus>()
+           .WithMany()
+           .HasForeignKey("_unitStatusId");
+
         //to provide an immutable FK id 
         builder.Property<int>("_unitTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("UnitType")
             .IsRequired();
         
-        //mapped to a navigation property -- that is immutable as well
-        builder.HasOne(b => b.UnitType)
-            .WithMany()
-            .HasForeignKey("_unitTypeId");
-
+        builder.HasOne<UnitType>()
+           .WithMany()
+           .HasForeignKey("_unitTypeId");
 
     }
 }

@@ -1,8 +1,8 @@
 using SeedWork;
 
-namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
+namespace Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
-public sealed class ScenicView : Enumeration
+public sealed class ScenicView : Enumeration, IAggregateRoot
 {
     public static IEnumerable<ScenicView> ViewOptions = new[]
     {
