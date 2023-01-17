@@ -20,7 +20,7 @@ public class OrderRepository : IOrderRepository
 
 
     public async Task<Order> FindOrderByIdAsync(int transactionId) =>
-        await _context.Acquisitions.AsNoTracking().FirstOrDefaultAsync(i => i.Id == transactionId);
+        await _context.Orders.AsNoTracking().FirstOrDefaultAsync(i => i.Id == transactionId);
 
     public Order AddOrder(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks, decimal finalPrice)
     {
@@ -29,16 +29,16 @@ public class OrderRepository : IOrderRepository
         if (buyer == default)
             throw new SalesDomainException(nameof(AddOrder), new Exception($"Buyer not found."));
 
-        return _context.Acquisitions.Add(new(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
+        return _context.Orders.Add(new(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
     }
 
-    public Order UpdateOrder(Order order) =>  _context.Acquisitions.Update(order).Entity;
+    public Order UpdateOrder(Order order) =>  _context.Orders.Update(order).Entity;
     
 
     public async Task<Payment> AddPayment(int acquisitionId, int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate,
         string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
-        var tran = await _context.Acquisitions.FirstOrDefaultAsync(i => i.Id == acquisitionId);
+        var tran = await _context.Orders.FirstOrDefaultAsync(i => i.Id == acquisitionId);
 
         if (tran == default)
             throw new SalesDomainException(nameof(AddPayment), new Exception("Acquisition not found."));
@@ -46,7 +46,7 @@ public class OrderRepository : IOrderRepository
         var payment = tran.AddPayment(paymentTypeId, transactionTypeId, actualPaymentDate, confirmationNumber, paymentMethod,
             amountPaid, remarks, correlationId);
         
-        _context.Acquisitions.Update(tran);
+        _context.Orders.Update(tran);
 
         return payment;
     }

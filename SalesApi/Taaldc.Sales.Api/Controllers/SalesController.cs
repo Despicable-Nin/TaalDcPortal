@@ -6,27 +6,31 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
+using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
 
 namespace Taaldc.Sales.Api.Controllers
 {
-    [Route("api/sel/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class SalesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IOrderQueries _orderQueries;
         private readonly ILogger<SalesController> _logger;
         private readonly IMapper _mapper;
         private readonly IAmCurrentUser _currentUser;
 
 
-        public SalesController(IMediator mediator, ILogger<SalesController> logger, IMapper mapper, IAmCurrentUser currentUser)
+        public SalesController(IMediator mediator, IOrderQueries orderQueries, ILogger<SalesController> logger, IMapper mapper, IAmCurrentUser currentUser)
         {
             _mediator = mediator;
+            _orderQueries = orderQueries;
             _logger = logger;
             _mapper = mapper;
             _currentUser = currentUser;
@@ -45,7 +49,7 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(result);
         }
         
-        [HttpGet("payment/{id}/approve")]
+        [HttpGet("payments/{id}/approve")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> AcceptPayment(int id)
@@ -63,7 +67,7 @@ namespace Taaldc.Sales.Api.Controllers
             return BadRequest("Unauthorized.");
         }
         
-        [HttpPost("{id}/payment")]
+        [HttpPost("{id}/payments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> AddPayment(int id, [FromBody] AddPaymentDTO dto)
@@ -75,5 +79,14 @@ namespace Taaldc.Sales.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("{id}/payments")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetPayments(int id)
+        {
+            return Ok(await _orderQueries.get);
+        }
+        
     }
 }
