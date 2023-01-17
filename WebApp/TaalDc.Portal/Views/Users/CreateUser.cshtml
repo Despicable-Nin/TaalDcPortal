@@ -1,0 +1,63 @@
+@model TaalDc.Portal.ViewModels.Users.CreateUserViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+    IEnumerable<string> Roles = (IEnumerable<string>)ViewData["Roles"];
+}
+
+
+
+<div class="container-fluid">
+    <h4 class="primary-color mb-3">
+        <strong>
+            New User Account
+        </strong>
+    </h4>
+    <div>
+        <form id="userForm" method="post" class="row mb-5 needs-validation" asp-action="Post" asp-controller="Users">
+            <div class="mb-3 col-lg-8">
+                <label asp-for="Username" class="form-label"><strong>Username</strong></label>
+                <input asp-for="Username" class="form-control" required/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            <div class="mb-3 col-lg-8">
+                <label asp-for="Emailaddress" class="form-label"><strong>Email Address</strong></label>
+                <input asp-for="Emailaddress" class="form-control" required/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            <div class="mb-3 col-lg-8">
+                <label asp-for="DefaultPassword" class="form-label"><strong>Default Password</strong></label>
+                <input asp-for="DefaultPassword" class="form-control" readonly="readonly" value="T@@ldc2023!" required/>
+                <div class="invalid-feedback">
+                    This is a required field. 
+                </div>
+            </div>
+            
+           <div class="mb-3 col-lg-8">
+               <label asp-for="Role" class="form-label"><strong>Role</strong></label>
+               <select asp-for="Role" class="form-control form-select" required>
+                   @foreach (var role in Roles)
+                   {
+                       <option value="@role">
+                           @role
+                       </option>
+                   }
+               </select>
+               <div class="invalid-feedback">
+                   This is a required field.
+               </div>
+           </div>
+
+            <div class="col-lg-12">
+                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+

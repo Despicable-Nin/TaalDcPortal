@@ -17,6 +17,14 @@ public class UserIndexViewModel
     }
 }
 
+public class CreateUserViewModel
+{
+    public string Username { get; set; }
+    public string Emailaddress { get; set; }
+    public string Role { get; set; }
+    public string DefaultPassword { get; set; }
+}
+
 public record UserViewModel
 {
     public UserViewModel(string username, string[] roles)
@@ -28,8 +36,9 @@ public record UserViewModel
     public string Username { get; }
     public string[] Roles { get; }
 
-    public string GetRolesAsString()
+    public string? GetRolesAsString()
     {
+        if (!Roles.Any()) return null;
         return string.Join(",", Roles ?? Array.Empty<string>());
     }
 }
