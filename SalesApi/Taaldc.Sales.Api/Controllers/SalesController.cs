@@ -85,7 +85,7 @@ namespace Taaldc.Sales.Api.Controllers
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> GetPayments(int id)
         {
-            return Ok(await _orderQueries.get);
+            return Ok(await _orderQueries.GetPayments(id));
         }
         
     }

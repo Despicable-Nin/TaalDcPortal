@@ -89,12 +89,14 @@ public class OrderQueries : IOrderQueries
 
         if (tran == default) throw new SalesDomainException(nameof(GetPayments), new Exception("Order not found"));
 
-        return tran.Payments.Select(i =>
+        var result = tran.Payments.Select(i =>
             new PaymentDTO(i.Id, i.ActualPaymentDate, i.ConfirmationNumber,
                 i.GetPaymentTypeId(), i.PaymentType?.Name, i.GetTransactionTypeId(), i.VerifiedBy,
                 i.GetPaymentStatusId(),
                 i.Status?.Name, i.PaymentMethod, i.AmountPaid, i.Remarks, tran.Id, i.CorrelationId.ToString(),
                 i.TransactionType?.Name));
+        
+        return result;
 
     }
 }
