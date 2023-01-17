@@ -1,5 +1,4 @@
 ﻿@using SeedWork
-@using TaalDc.Portal.Extensions
 @inject IAmCurrentUser CurrentUser;
 @{
     string controller = "";
@@ -58,21 +57,8 @@
                             <span class="fs-5 d-none d-sm-inline"><strong>TAALDC Portal</strong></span>
                         </a>
                         <ul class="nav nav-pills flex-column mt-3 mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
-                                    Dashboard
-                                </a>
-                            </li>
-                            @if (CurrentUser.Roles.Contains("ADMIN"))
-                            {
-                                @Html.Partial("_Sidebar");
-                            }
-                             <li class="nav-item">
-                                <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
-                                   Sales
-                                </a>
-                            </li>
-
+                            
+                            @Html.Partial("_Sidebar")
                         </ul>
                        
                     </div>

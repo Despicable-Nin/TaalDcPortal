@@ -1,16 +1,39 @@
+@using SeedWork
+@inject IAmCurrentUser CurrentUser;
+
+
+
 <li class="nav-item">
-    <a asp-area="" asp-controller="Properties" asp-action="Index" class="nav-link align-middle px-0">
-        Properties
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
+        Dashboard
     </a>
 </li>
-                       
-<li class="nav-item">
-    <a asp-area="" asp-controller="Inquiries" asp-action="Index" class="nav-link align-middle px-0">
-        Inquiries
-    </a>
-</li>
-<li class="nav-item">
-    <a asp-area="" asp-controller="Users" asp-action="Index" class="nav-link align-middle px-0">
-        Settings
-    </a>
-</li>
+@if (CurrentUser.Roles.Contains("ADMIN") || CurrentUser.Roles.Contains("BROKER") || CurrentUser.Roles.Contains("SALES"))
+{
+    <li class="nav-item">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
+            Sales
+        </a>
+    </li>
+}
+@if (CurrentUser.Roles.Contains("ADMIN"))
+  {
+      <li class="nav-item">
+          <a asp-area="" asp-controller="Properties" asp-action="Index" class="nav-link align-middle px-0">
+              Properties
+          </a>
+      </li>
+      <li class="nav-item">
+          <a asp-area="" asp-controller="Inquiries" asp-action="Index" class="nav-link align-middle px-0">
+              Inquiries
+          </a>
+      </li>
+      <li class="nav-item">
+          <a asp-area="" asp-controller="Users" asp-action="Index" class="nav-link align-middle px-0">
+              Settings
+          </a>
+      </li> 
+  }
+                            
+
+
