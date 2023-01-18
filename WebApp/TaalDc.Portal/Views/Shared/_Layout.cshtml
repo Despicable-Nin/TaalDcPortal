@@ -5,8 +5,8 @@
     string action = "";
     try
     {
-        controller = @ViewContext.RouteData.Values["controller"].ToString();
-        action = @ViewContext.RouteData.Values["action"].ToString();
+        controller = @ViewContext.RouteData.Values["controller"]?.ToString();
+        action = @ViewContext.RouteData.Values["action"]?.ToString();
     }
     catch
     {
@@ -75,8 +75,10 @@
                                 }
                                 else
                                 {
-                                    <div class="card-title pl-5 pb-5 pt-0">
-                                        <a asp-controller="@controller" asp-action="Index">@controller</a> / <a asp-action="@action">@action</a>
+                                    <div class="container-fluid">
+                                        <div class="card-title pl-5 pb-3 pt-0">
+                                            <a asp-controller="@controller" asp-action="Index">@controller</a> / <a asp-action="@action">@action</a>
+                                        </div>
                                     </div>
                                 }
                                

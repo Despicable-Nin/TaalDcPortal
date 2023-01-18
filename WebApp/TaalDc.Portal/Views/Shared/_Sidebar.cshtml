@@ -11,7 +11,7 @@
 @if (CurrentUser.Roles.Contains("ADMIN") || CurrentUser.Roles.Contains("BROKER") || CurrentUser.Roles.Contains("SALES"))
 {
     <li class="nav-item">
-        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link align-middle px-0">
+        <a asp-area="" asp-controller="Sales" asp-action="Index" class="nav-link align-middle px-0">
             Sales
         </a>
     </li>

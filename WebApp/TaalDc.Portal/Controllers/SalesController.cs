@@ -16,6 +16,61 @@ public class SalesController : Controller
         
         return View();
     }
+
+
+    public IActionResult Available()
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
+        //
+
+
+        return View();
+    }
+
+
+    public IActionResult Reserved()
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
+        //
+
+
+        return View();
+    }
+
+    public IActionResult Blocked()
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
+        //
+
+
+        return View();
+    }
+
+    public IActionResult Cancelled()
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
+        //
+
+
+        return View();
+    }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
     
     
     //we need to be able to call sales/sel/sales POST (SellUnit)
