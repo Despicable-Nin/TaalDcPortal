@@ -23,7 +23,7 @@ public class UsersController : BaseController<UsersController>
 
     public async Task<IActionResult> Index()
     {
-        var vm = await _accountService.GetListOfUsersWithRoles();
+        var vm = await _accountService.GetListOfUsers();
         return View(vm);
     }
     
@@ -37,7 +37,7 @@ public class UsersController : BaseController<UsersController>
     }
 
 
-    [HttpPost]
+    [HttpPost("post")]
     public async Task<IActionResult> Post(CreateUserViewModel model)
     {
         var result = await _accountService.CreateUser(model);
@@ -48,6 +48,38 @@ public class UsersController : BaseController<UsersController>
         ViewData["Roles"] = await _accountService.GetRolesAsync();
         ViewData["Errors"] = result;
         return Redirect("");
+    }
+    
+    public async Task<IActionResult> UpdateUser(string id)
+    {
+
+        var user = await _accountService.GetUserById(id);
+        //get dropdown of roles
+        ViewData["Roles"] = await _accountService.GetRolesAsync();
+
+        UpdateUserViewModel model = new()
+        {
+            Id = id,
+            Emailaddress = user.Email.Normalize(),
+            Username =  user.Username
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Put(string id, UpdateUserViewModel model)
+    {
+
+        var result = await _accountService.UpdateUser(model.Id, model, false);
+
+        if (string.IsNullOrEmpty(result)) return RedirectToAction(nameof(Index));
+        
+        ViewData["Roles"] = await _accountService.GetRolesAsync();
+
+        return RedirectToAction(nameof(UpdateUser), model);
+
+
     }
     
 }

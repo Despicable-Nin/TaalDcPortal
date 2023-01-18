@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ public class AccountService : IAccountService
         _logger = logger;
     }
 
-    public async Task<UserIndexViewModel> GetListOfUsersWithRoles()
+    public async Task<UserIndexViewModel> GetListOfUsers()
     {
         var users = await _userManager.Users.AsNoTracking().ToListAsync();
         var roles = await _roleManager.Roles.AsNoTracking().ToArrayAsync();
@@ -37,7 +38,7 @@ public class AccountService : IAccountService
             foreach (var r in roles)
                 if (_userManager.IsInRoleAsync(i, r.Name).Result)
                     currentRoles.Add(r.Name);
-            vm.AddUser(new UserViewModel(i.Email, currentRoles.ToArray()));
+            vm.AddUser(new UserViewModel(i.NormalizedUserName, i.NormalizedEmail, i.Id, currentRoles.ToArray()));
         });
 
         return vm;
@@ -96,6 +97,42 @@ public class AccountService : IAccountService
         return string.Empty;
 
     }
-    
-   
+
+    public async Task<string> UpdateUser(string id, UpdateUserViewModel vm, bool resetPassword = false)
+    {
+        var user = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == id);
+        
+        //get role
+        var current = await _userManager.GetRolesAsync(user);
+
+        var result = await _userManager.RemoveFromRolesAsync(user, current);
+
+        if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+        
+        result = await _userManager.AddToRoleAsync(user, vm.Role);
+        
+        if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+
+        if (resetPassword)
+        {
+            result = await _userManager.ChangePasswordAsync(user, vm.CurrentPassword, vm.NewPassword);
+            if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+        }
+
+        user.UserName = vm.Username;
+
+        result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+
+
+        return string.Empty;
+
+    }
+
+    public async Task<UserViewModel> GetUserById(string id)
+    {
+        var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+        var roles = await _userManager.GetRolesAsync(user);
+        return new UserViewModel(user.UserName, user.Email, user.Id, roles.ToArray());
+    }
 }

@@ -39,9 +39,8 @@
                     <tr>
                         <td>@prop.Username</td>
                         <td>@(prop.GetRolesAsString() ?? "No role") </td>
-                        <td class="float-right">
-                             <a class="action-edit" asp-controller="Users" asp-action="" asp-route-id="">Manage Role(s)</a> |
-                             <a class="action-delete" href="#">Delete</a>
+                        <td class="">
+                             <a class="action-edit" asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a> |
                         </td>
                     </tr>
                 }
