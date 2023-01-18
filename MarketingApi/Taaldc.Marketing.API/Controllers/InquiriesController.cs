@@ -45,6 +45,8 @@ public class InquiriesController : Controller
       var records =  result.Select(i => new InquiryDto
       {
          Id = i.Id,
+         DateOfInquiry = i.CreatedOn,
+         DateVerified = i.CreatedOn == i.ModifiedOn ? null : i.ModifiedOn,
          Country = i.Customer.Country,
          Message = i.Message,
          Property = i.Property,

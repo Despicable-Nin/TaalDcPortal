@@ -66,7 +66,7 @@ public class AccountService : IAccountService
         {
             user = new IdentityUser
             {
-                UserName = vm.Username,
+                UserName = vm.Username.ToLower(),
                 Email = vm.Emailaddress,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
@@ -119,10 +119,10 @@ public class AccountService : IAccountService
             if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
         }
 
-        user.UserName = vm.Username;
+        //user.UserName = vm.Username;
 
-        result = await _userManager.UpdateAsync(user);
-        if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+        //result = await _userManager.UpdateAsync(user);
+        //if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
 
 
         return string.Empty;

@@ -28,7 +28,7 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>User Email / Username</th>
+                    <th>User Email</th>
                     <th>Roles</th>
                     <th></th>
                 </tr>
@@ -37,10 +37,10 @@
                 @foreach(var prop in Model.ListOfUsers)
                 {
                     <tr>
-                        <td>@prop.Username</td>
+                        <td>@prop.Email</td>
                         <td>@(prop.GetRolesAsString() ?? "No role") </td>
-                        <td class="">
-                             <a class="action-edit" asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a> |
+                        <td class="float-right">
+                             <a asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a>
                         </td>
                     </tr>
                 }

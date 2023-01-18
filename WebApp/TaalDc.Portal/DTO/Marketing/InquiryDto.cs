@@ -4,22 +4,6 @@ using Newtonsoft.Json;
 
 namespace TaalDc.Portal.DTO.Marketing;
 
-public record InquriesResult
-{
-    public InquriesResult()
-    {
-        Inquiries = new List<InquiryDto>();
-    }
-
-    [JsonPropertyName("inquiries")] public ICollection<InquiryDto> Inquiries { get; set; } 
-
-    [JsonPropertyName("page_size")] public int PageSize { get; set; }
-
-    [JsonPropertyName("page_number")] public int PageNumber { get; set; }
-
-    [JsonPropertyName("total")] public int Total { get; set; }
-}
-
 public record InquiryDto
 {
     [JsonPropertyName("inquiry_id")]
@@ -33,6 +17,12 @@ public record InquiryDto
     
     [JsonPropertyName("status")]
     public string Status { get; set; }
+    
+    [JsonPropertyName("inquiry_date")]
+    public DateTimeOffset DateOfInquiry { get; set; }
+    
+    [JsonPropertyName("verify_date")]
+    public DateTimeOffset? DateVerified { get; set; }
 
     
     [JsonPropertyName("inquiry_type")]
