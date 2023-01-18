@@ -2,7 +2,7 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public interface IOrderQueries
 {
-    Task<IEnumerable<PreSellingDTO>> GetUnitsAvailability(
+    Task<IEnumerable<Unit_Order_DTO>> GetUnitAndOrdersByAvailability(
         int unitStatusId,
         int pageNumber,
         int pageSize,

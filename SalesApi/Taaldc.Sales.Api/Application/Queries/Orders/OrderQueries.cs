@@ -63,7 +63,7 @@ public class OrderQueries : IOrderQueries
         _context = context;
     }
 
-    public async Task<IEnumerable<PreSellingDTO>> GetUnitsAvailability(
+    public async Task<IEnumerable<Unit_Order_DTO>> GetUnitAndOrdersByAvailability(
         int unitStatusId, 
         int pageNumber, 
         int pageSize,   
@@ -84,7 +84,7 @@ public class OrderQueries : IOrderQueries
       
         await connection.OpenAsync(CancellationToken.None);
 
-        var result = await connection.QueryAsync<PreSellingDTO>(query);
+        var result = await connection.QueryAsync<Unit_Order_DTO>(query);
 
         return result;
 

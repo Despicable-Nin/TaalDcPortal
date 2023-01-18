@@ -103,7 +103,7 @@ namespace Taaldc.Sales.Api.Controllers
             if (unitStatus <= 0) return BadRequest("Invalid unit status");
             if (unitStatus > 4) return BadRequest("Invalid unit status");
             
-            return Ok(await _orderQueries.GetUnitsAvailability(unitStatus, pageNumber, pageSize, floorId, unitTypeId, viewId));
+            return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId, unitTypeId, viewId));
         }
         
     }

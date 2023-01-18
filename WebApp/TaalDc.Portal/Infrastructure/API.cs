@@ -24,4 +24,10 @@ public static class API
         public static string GetUnits(string baseUri) => $"{baseUri}/api/adm/units";
         public static string GetUnitTypes(string baseUri) => $"{baseUri}/api/adm/unitTypes";
     }
+
+    public static class Sales
+    {
+        public static string GetUnitAndOrdersAvailability(string baseUri) => $"{baseUri}/api/v1/sales";
+
+    }
 }
