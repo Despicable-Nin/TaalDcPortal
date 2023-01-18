@@ -3,13 +3,17 @@ using MediatR;
 using SeedWork;
 using Taaldc.Sales.Api;
 using Taaldc.Sales.API.Application.Behaviors;
+using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.Extensions;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Infrastructure;
 using Taaldc.Sales.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+var configuration = builder.Configuration;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllers();
 
@@ -37,6 +41,10 @@ builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 builder.Services.AddScoped(typeof(IBuyerRepository), typeof(BuyerRepository));
 //builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
 
+builder.Services.AddScoped<IOrderQueries>(i =>
+{
+    return new OrderQueries(connectionString,new SalesDbContextDesignFactory().CreateDbContext(null));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

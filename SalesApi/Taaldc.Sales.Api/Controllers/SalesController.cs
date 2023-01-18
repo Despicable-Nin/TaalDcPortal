@@ -87,6 +87,14 @@ namespace Taaldc.Sales.Api.Controllers
         {
             return Ok(await _orderQueries.GetPayments(id));
         }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetPresellingUnits()
+        {
+            return Ok(await _orderQueries.GetPresellingReport());
+        }
         
     }
 }

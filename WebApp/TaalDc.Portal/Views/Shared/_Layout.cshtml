@@ -85,7 +85,13 @@
                             }
                             catch
                             {
-
+                                var area = ViewContext.RouteData.Values["area"];
+                                
+                                <div class="container-fluid">
+                                    <div class="card-title pl-5 pb-3 pt-0">
+                                        <a asp-area="@area" asp-page="Manage" asp-page-handler="Email">@area</a>
+                                    </div>
+                                </div>
                             }
                             @RenderBody()
                         </div>
