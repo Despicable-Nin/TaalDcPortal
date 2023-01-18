@@ -75,6 +75,11 @@ p {
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+.spacer{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 /*X-Small devices (portrait phones, less than 576px)*/
 @media (max-width: 575.98px) {
     h1 {

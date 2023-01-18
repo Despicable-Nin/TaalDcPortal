@@ -1,0 +1,218 @@
+﻿@using TaalDc.Portal.ViewModels.Sales
+@model SalesCreateDTO
+
+@{
+    ViewBag.Title = "Sales - Create";
+    Layout = "_Layout";
+}
+
+
+<div class="container-fluid">
+    <div class="col-lg-8">
+        <h4 class="primary-color mb-3">
+            <strong>
+                New Sales
+            </strong>
+        </h4>
+
+        <hr />
+        <form method="post" class="row mb-5 needs-validation" asp-action="Create" asp-controller="Sales">
+
+             <div class="col-lg-12">
+                <label class="form-label"><strong>Customer Name</strong></label>
+            </div>
+
+            <div class="mb-3 col-lg-2">
+                <input asp-for="Salutation" class="form-control" required placeholder="Mr."/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-5">
+                <input asp-for="FirstName" class="form-control" required placeholder="First Name" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="mb-3 col-lg-5">
+                <input asp-for="LastName" class="form-control" required placeholder="Last Name" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="EmailAddress" class="form-label"><strong>Email Address</strong></label>
+                <input asp-for="EmailAddress" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="ContactNo" class="form-label"><strong>Contact No.</strong></label>
+                <input asp-for="ContactNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+             <div class="col-lg-12">
+                <label class="form-label"><strong>Customer Address</strong></label>
+            </div>
+
+            <div class="mb-3 col-lg-9">
+                <input asp-for="TownCity" class="form-control" required placeholder="Address..." />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-3">
+                <input asp-for="TownCity" class="form-control" required placeholder="City" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="Province" class="form-control" required placeholder="State/Province" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="Country" class="form-control" required placeholder="Country" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="ZipCode" class="form-control" required placeholder="Zip Code" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="spacer col-lg-12">
+
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="UnitId" class="form-label"><strong>Unit</strong></label>
+                <input asp-for="UnitId" class="form-control" required readonly/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="SellingPrice" class="form-label"><strong>Selling Price</strong></label>
+                <input asp-for="SellingPrice" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Code" class="form-label"><strong>Contract Reference No.</strong></label>
+                <input asp-for="Code" class="form-control" required/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
+                <input asp-for="Broker" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="mb-3 col-lg-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="withReservation" checked>
+                    <label class="form-check-label" for="withReservation">With Reservation?</label>
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="Reservation" class="form-label"><strong>Reservation Amount</strong></label>
+                <input asp-for="Reservation" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+             <div class="mb-3 col-lg-6">
+                <label asp-for="ReservationConfirmNo" class="form-label"><strong>Reservation Confirmation No.</strong></label>
+                <input asp-for="ReservationConfirmNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                 <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="withDownPayment" checked>
+                    <label class="form-check-label" for="withDownPayment">With Downpayment?</label>
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="DownPayment" class="form-label"><strong>Downpayment Amount</strong></label>
+                <input asp-for="DownPayment" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="DownPaymentConfirmNo" class="form-label"><strong>Downpayment Confirmation No.</strong></label>
+                <input asp-for="DownPaymentConfirmNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            
+            <div class="mb-3 col-lg-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" asp-for="IsRefundable">
+                    <label class="form-check-label" asp-for="IsRefundable">
+                        Refundable?
+                    </label>
+                </div>
+            </div>
+
+             <div class="mb-3 col-lg-12">
+                <label asp-for="PaymentDate" class="form-label"><strong>Transaction Date</strong></label>
+                <input asp-for="PaymentDate" class="form-control" required type="date"/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Remarks" class="form-label"><strong>Note/Remarks</strong></label>
+                <textarea asp-for="Remarks" class="form-control" required rows="5"></textarea>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            
+             <div class="col-lg-12">
+                 <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
