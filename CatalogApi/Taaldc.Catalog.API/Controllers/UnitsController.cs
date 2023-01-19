@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Taaldc.Catalog.API.Application.Commands.ChangeStatusOfUnit;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 using Taaldc.Catalog.API.Application.Common.Models;
 using Taaldc.Catalog.API.Application.Queries;
@@ -27,6 +28,14 @@ public class UnitsController : ApiBaseController<UnitsController>
     public async Task<IActionResult> UpsertUnit( UpsertUnitDTO model)
     {
         return Ok(await _mediator.Send(new UpsertUnitCommand(model.UnitId, model.UnitTypeId, model.ScenicViewId,model.UnitNo, model.FloorId, model.FloorArea, model.BalconyArea, model.Price, model.Remarks)));
+    }
+    
+    [HttpPost("change-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> ChangeStatusOfUnit( ChangeStatusOfUnitDTO model)
+    {
+        return Ok(await _mediator.Send(new ChangeStatusOfUnitCommand(model.UnitId, model.UnitStatus, model.Remarks)));
     }
 
     [HttpGet]

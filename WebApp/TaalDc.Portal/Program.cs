@@ -51,6 +51,12 @@ builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 builder.Services.AddHttpClient<IMarketingService, MarketingService>()
     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
+builder.Services.AddHttpClient<ICatalogService, CatalogService>()
+	.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+builder.Services.AddHttpClient<ISalesService, SalesService>()
+    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOptions();

@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Diagnostics;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
 using Taaldc.Catalog.API.Application.Common.Models;
@@ -99,6 +100,8 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
             }
             catch (Exception err)
             {
+                Debug.Print(
+                    string.Join(", ", new [] { err.Message, err.StackTrace, err.InnerException?.Message }));
                 return null;
             }
         }

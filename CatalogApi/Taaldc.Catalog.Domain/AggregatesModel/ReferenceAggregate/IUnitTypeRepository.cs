@@ -13,4 +13,9 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate
         UnitType Update(UnitType unitType);
         Task<UnitType> GetAsync(int id);
     }
+
+    public interface IUnitStatusRepository : IRepository<UnitStatus>
+    {
+        
+    }
 }
