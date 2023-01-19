@@ -47,7 +47,7 @@ public class UsersController : BaseController<UsersController>
         //get dropdown of roles
         ViewData["Roles"] = await _accountService.GetRolesAsync();
         ViewData["Errors"] = result;
-        return Redirect("");
+        return RedirectToAction(nameof(CreateUser));
     }
     
     public async Task<IActionResult> UpdateUser(string id)

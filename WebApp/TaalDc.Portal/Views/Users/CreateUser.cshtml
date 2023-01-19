@@ -17,13 +17,13 @@
     </h4>
     <div>
         <form id="userForm" method="post" class="row mb-5 needs-validation" asp-action="Post" asp-controller="Users">
-            <div class="mb-3 col-lg-8">
-                <label asp-for="Username" class="form-label"><strong>Username</strong></label>
-                <input asp-for="Username" class="form-control" required/>
-                <div class="invalid-feedback">
-                    This is a required field.
-                </div>
-            </div>
+            @* <div class="mb-3 col-lg-8"> *@
+            @*     <label asp-for="Username" class="form-label"><strong>Username</strong></label> *@
+            @*     <input asp-for="Username" class="form-control" required/> *@
+            @*     <div class="invalid-feedback"> *@
+            @*         This is a required field. *@
+            @*     </div> *@
+            @* </div> *@
             <div class="mb-3 col-lg-8">
                 <label asp-for="Emailaddress" class="form-label"><strong>Email Address</strong></label>
                 <input asp-for="Emailaddress" class="form-control" required/>

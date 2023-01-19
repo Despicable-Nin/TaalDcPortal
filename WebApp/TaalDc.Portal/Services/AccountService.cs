@@ -66,7 +66,7 @@ public class AccountService : IAccountService
         {
             user = new IdentityUser
             {
-                UserName = vm.Username.ToLower(),
+                UserName = vm.Emailaddress,
                 Email = vm.Emailaddress,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
