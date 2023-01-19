@@ -21,4 +21,5 @@ public class CurrentUser : IAmCurrentUser
     public string Email { get; }
     public string IdentityId { get; }
 
+	public string Name { get; }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -8,7 +9,8 @@ using TaalDc.Portal.ViewModels.Catalog;
 
 namespace TaalDc.Portal.Controllers
 {
-    public class PropertiesController : BaseController<PropertiesController>
+	[Authorize]
+	public class PropertiesController : BaseController<PropertiesController>
     {
         private readonly ICatalogService _catalogService;
 
