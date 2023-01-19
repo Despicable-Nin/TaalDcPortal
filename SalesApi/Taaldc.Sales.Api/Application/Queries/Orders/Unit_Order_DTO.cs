@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
-public record PreSellingDTO
+public record Unit_Order_DTO
 {
     [JsonPropertyName("salutation")] public string Salutation { get; set; }
 
