@@ -211,7 +211,25 @@ namespace TaalDc.Portal.Controllers
             var units = await _catalogService.GetUnits(filter,floorId,unitTypeId,viewId,statusId, sortBy, sortOrder, pageNumber, pageSize);
             return View(units);
         }
-        public async Task<IActionResult> UnitTypes()
+
+
+		public async Task<IActionResult> GetUnits(
+			string filter,
+			int? floorId,
+			int? unitTypeId,
+			int? viewId,
+			int? statusId,
+			string sortBy,
+			SortOrderEnum sortOrder,
+			int pageNumber = 1,
+			int pageSize = 10)
+		{
+			var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder, pageNumber, pageSize);
+            return new JsonResult(units);
+		}
+
+
+		public async Task<IActionResult> UnitTypes()
         {
             var unitTypes = await _catalogService.GetUnitTypes();
 
