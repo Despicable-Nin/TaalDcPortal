@@ -39,7 +39,7 @@
                     <tr>
                         <td>@prop.Email</td>
                         <td>@(prop.GetRolesAsString() ?? "No role") </td>
-                        <td class="float-right">
+                        <td>
                              <a asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a>
                         </td>
                     </tr>
