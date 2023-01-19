@@ -12,7 +12,7 @@ public static class IServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddEntityFrameworkSqlServer()
+        services
             .AddDbContext<SalesDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);

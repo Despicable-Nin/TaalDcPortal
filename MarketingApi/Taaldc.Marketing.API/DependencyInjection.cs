@@ -18,7 +18,7 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddEntityFrameworkSqlServer()
+        services
             .AddDbContext<MarketingDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
