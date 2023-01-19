@@ -18,12 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 //Add Serilog
-builder.Host.UseSerilog((ctx, lc) => lc
-    .Enrich.FromLogContext()
 #if DEBUG
-    .MinimumLevel.Verbose()
-    .WriteTo.Console()
-    .WriteTo.Seq("http://localhost:5341"));
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .Enrich.FromLogContext()
+        .MinimumLevel.Verbose()
+        .WriteTo.Console()
+        .WriteTo.Seq("http://localhost:5341"));
 #endif
 
 // Add services to the container.

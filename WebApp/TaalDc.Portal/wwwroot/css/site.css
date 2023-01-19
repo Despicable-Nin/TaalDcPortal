@@ -30,6 +30,7 @@
 body {
     font-family: 'Inter Regular', Arial, sans-serif;
     font-size: 1rem;
+    overflow: hidden;
 }
 
 h1 {
@@ -192,6 +193,8 @@ main {
 }
 
 .content-wrapper {
+    overflow-y: scroll;
+    height: 100vh;
     padding-top: 100px;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
@@ -289,4 +292,10 @@ label {
 .invalid-feedback {
     font-size: 1rem;
     font-weight: 700;
+}
+
+
+
+.reservationfields, .dpfields{
+    display: none;
 }

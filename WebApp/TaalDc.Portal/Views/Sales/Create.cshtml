@@ -4,11 +4,264 @@
 @{
     ViewBag.Title = "Sales - Create";
     Layout = "_Layout";
+
+
+	string[] countryList = {
+			"Afghanistan",
+			"Albania",
+			"Algeria",
+			"American Samoa",
+			"Andorra",
+			"Angola",
+			"Anguilla",
+			"Antarctica",
+			"Antigua and Barbuda",
+			"Argentina",
+			"Armenia",
+			"Aruba",
+			"Australia",
+			"Austria",
+			"Azerbaijan",
+			"Bahamas",
+			"Bahrain",
+			"Bangladesh",
+			"Barbados",
+			"Belarus",
+			"Belgium",
+			"Belize",
+			"Benin",
+			"Bermuda",
+			"Bhutan",
+			"Bolivia (Plurinational State of)",
+			"Bonaire, Sint Eustatius and Saba",
+			"Bosnia and Herzegovina",
+			"Botswana",
+			"Bouvet Island",
+			"Brazil",
+			"British Indian Ocean Territory",
+			"Brunei Darussalam",
+			"Bulgaria",
+			"Burkina Faso",
+			"Burundi",
+			"Cabo Verde",
+			"Cambodia",
+			"Cameroon",
+			"Canada",
+			"Cayman Islands",
+			"Central African Republic",
+			"Chad",
+			"Chile",
+			"China",
+			"Christmas Island",
+			"Cocos (Keeling) Islands",
+			"Colombia",
+			"Comoros",
+			"Congo (the Democratic Republic of the)",
+			"Congo",
+			"Cook Islands",
+			"Costa Rica",
+			"Croatia",
+			"Cuba",
+			"Curaçao",
+			"Cyprus",
+			"Czechia",
+			"Côte d'Ivoire",
+			"Denmark",
+			"Djibouti",
+			"Dominica",
+			"Dominican Republic",
+			"Ecuador",
+			"Egypt",
+			"El Salvador",
+			"Equatorial Guinea",
+			"Eritrea",
+			"Estonia",
+			"Eswatini",
+			"Ethiopia",
+			"Falkland Islands  [Malvinas]",
+			"Faroe Islands",
+			"Fiji",
+			"Finland",
+			"France",
+			"French Guiana",
+			"French Polynesia",
+			"French Southern Territories",
+			"Gabon",
+			"Gambia",
+			"Georgia",
+			"Germany",
+			"Ghana",
+			"Gibraltar",
+			"Greece",
+			"Greenland",
+			"Grenada",
+			"Guadeloupe",
+			"Guam",
+			"Guatemala",
+			"Guernsey",
+			"Guinea",
+			"Guinea-Bissau",
+			"Guyana",
+			"Haiti",
+			"Heard Island and McDonald Islands",
+			"Holy See",
+			"Honduras",
+			"Hong Kong",
+			"Hungary",
+			"Iceland",
+			"India",
+			"Indonesia",
+			"Iran (Islamic Republic of)",
+			"Iraq",
+			"Ireland",
+			"Isle of Man",
+			"Israel",
+			"Italy",
+			"Jamaica",
+			"Japan",
+			"Jersey",
+			"Jordan",
+			"Kazakhstan",
+			"Kenya",
+			"Kiribati",
+			"Korea, North",
+			"Korea, South",
+			"Kuwait",
+			"Kyrgyzstan",
+			"Lao People's Democratic Republic",
+			"Latvia",
+			"Lebanon",
+			"Lesotho",
+			"Liberia",
+			"Libya",
+			"Liechtenstein",
+			"Lithuania",
+			"Luxembourg",
+			"Macao",
+			"Madagascar",
+			"Malawi",
+			"Malaysia",
+			"Maldives",
+			"Mali",
+			"Malta",
+			"Marshall Islands",
+			"Martinique",
+			"Mauritania",
+			"Mauritius",
+			"Mayotte",
+			"Mexico",
+			"Micronesia (Federated States of)",
+			"Moldova (the Republic of)",
+			"Monaco",
+			"Mongolia",
+			"Montenegro",
+			"Montserrat",
+			"Morocco",
+			"Mozambique",
+			"Myanmar",
+			"Namibia",
+			"Nauru",
+			"Nepal",
+			"Netherlands",
+			"New Caledonia",
+			"New Zealand",
+			"Nicaragua",
+			"Niger",
+			"Nigeria",
+			"Niue",
+			"Norfolk Island",
+			"Northern Mariana Islands",
+			"Norway",
+			"Oman",
+			"Pakistan",
+			"Palau",
+			"Palestine, State of",
+			"Panama",
+			"Papua New Guinea",
+			"Paraguay",
+			"Peru",
+			"Philippines",
+			"Pitcairn",
+			"Poland",
+			"Portugal",
+			"Puerto Rico",
+			"Qatar",
+			"Republic of North Macedonia",
+			"Romania",
+			"Russian Federation",
+			"Rwanda",
+			"Réunion",
+			"Saint Barthélemy",
+			"Saint Helena, Ascension and Tristan da Cunha",
+			"Saint Kitts and Nevis",
+			"Saint Lucia",
+			"Saint Martin (French part)",
+			"Saint Pierre and Miquelon",
+			"Saint Vincent and the Grenadines",
+			"Samoa",
+			"San Marino",
+			"Sao Tome and Principe",
+			"Saudi Arabia",
+			"Senegal",
+			"Serbia",
+			"Seychelles",
+			"Sierra Leone",
+			"Singapore",
+			"Sint Maarten (Dutch part)",
+			"Slovakia",
+			"Slovenia",
+			"Solomon Islands",
+			"Somalia",
+			"South Africa",
+			"South Georgia and the South Sandwich Islands",
+			"South Sudan",
+			"Spain",
+			"Sri Lanka",
+			"Sudan",
+			"Suriname",
+			"Svalbard and Jan Mayen",
+			"Sweden",
+			"Switzerland",
+			"Syrian Arab Republic",
+			"Taiwan",
+			"Tajikistan",
+			"Tanzania, United Republic of",
+			"Thailand",
+			"Timor-Leste",
+			"Togo",
+			"Tokelau",
+			"Tonga",
+			"Trinidad and Tobago",
+			"Tunisia",
+			"Turkey",
+			"Turkmenistan",
+			"Turks and Caicos Islands",
+			"Tuvalu",
+			"Uganda",
+			"Ukraine",
+			"United Arab Emirates",
+			"United Kingdom of Great Britain and Northern Ireland",
+			"United States Minor Outlying Islands",
+			"United States of America",
+			"Uruguay",
+			"Uzbekistan",
+			"Vanuatu",
+			"Venezuela (Bolivarian Republic of)",
+			"Viet Nam",
+			"Virgin Islands (British)",
+			"Virgin Islands (U.S.)",
+			"Wallis and Futuna",
+			"Western Sahara",
+			"Yemen",
+			"Zambia",
+			"Zimbabwe",
+			"Åland Islands"
+		};
 }
 
 
 <div class="container-fluid">
-    <div class="col-lg-8">
+    <div class="col-xl-8 col-lg-12">
         <h4 class="primary-color mb-3">
             <strong>
                 New Sales
@@ -23,7 +276,20 @@
             </div>
 
             <div class="mb-3 col-lg-2">
-                <input asp-for="Salutation" class="form-control" required placeholder="Mr."/>
+                <select asp-for="Salutation" class="form-control form-select" required>
+                    <option value="Mr.">
+                        Mr.
+                    </option>
+                    <option value="Ms.">
+                        Ms.
+                    </option>
+                    <option value="Mrs.">
+                        Mrs.
+                    </option>
+                    <option value="Other">
+                        Other
+                    </option>
+                </select>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -86,8 +352,18 @@
             </div>
 
             <div class="mb-3 col-lg-4">
-                <input asp-for="Country" class="form-control" required placeholder="Country" />
-                <div class="invalid-feedback">
+				<select asp-for="Country" class="form-control form-select" required>
+					@foreach(var i in countryList)
+					{
+						var selected = false;
+						if (i == "Philippines") selected = true;
+
+						<option value="@i" selected="@selected">
+							@i
+						</option>
+					}
+				</select>
+				<div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
@@ -107,7 +383,7 @@
 
             <div class="mb-3 col-lg-6">
                 <label asp-for="UnitId" class="form-label"><strong>Unit</strong></label>
-                <input asp-for="UnitId" class="form-control" required readonly/>
+                <input asp-for="UnitId" class="form-control" required readonly onclick="openAvailableUnitsModal()"/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -140,12 +416,12 @@
 
             <div class="mb-3 col-lg-12">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="withReservation" checked>
+                    <input class="form-check-input" type="checkbox" id="withReservation">
                     <label class="form-check-label" for="withReservation">With Reservation?</label>
                 </div>
             </div>
 
-            <div class="mb-3 col-lg-6">
+            <div class="mb-3 col-lg-6 reservationfields">
                 <label asp-for="Reservation" class="form-label"><strong>Reservation Amount</strong></label>
                 <input asp-for="Reservation" class="form-control" required />
                 <div class="invalid-feedback">
@@ -153,7 +429,7 @@
                 </div>
             </div>
 
-             <div class="mb-3 col-lg-6">
+            <div class="mb-3 col-lg-6 reservationfields">
                 <label asp-for="ReservationConfirmNo" class="form-label"><strong>Reservation Confirmation No.</strong></label>
                 <input asp-for="ReservationConfirmNo" class="form-control" required />
                 <div class="invalid-feedback">
@@ -163,12 +439,12 @@
 
             <div class="mb-3 col-lg-12">
                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="withDownPayment" checked>
+                    <input class="form-check-input" type="checkbox" id="withDownPayment">
                     <label class="form-check-label" for="withDownPayment">With Downpayment?</label>
                 </div>
             </div>
 
-            <div class="mb-3 col-lg-6">
+            <div class="mb-3 col-lg-6 dpfields">
                 <label asp-for="DownPayment" class="form-label"><strong>Downpayment Amount</strong></label>
                 <input asp-for="DownPayment" class="form-control" required />
                 <div class="invalid-feedback">
@@ -176,7 +452,7 @@
                 </div>
             </div>
 
-            <div class="mb-3 col-lg-6">
+            <div class="mb-3 col-lg-6 dpfields">
                 <label asp-for="DownPaymentConfirmNo" class="form-label"><strong>Downpayment Confirmation No.</strong></label>
                 <input asp-for="DownPaymentConfirmNo" class="form-control" required />
                 <div class="invalid-feedback">
@@ -216,3 +492,94 @@
         </form>
     </div>
 </div>
+
+
+<div class="modal fade" id="available-units-modal" tabindex="-1" aria-labelledby="available-units-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Available Units</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Common Tower | 1BR TAAL VIEW | Unit 4-403</td>
+                            <td>
+                                <button type="button" class="btn btn-primary">Select</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Common Tower | 1BR TAAL VIEW | Unit 4-403</td>
+                            <td>
+                                <button type="button" class="btn btn-primary">Select</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Common Tower | 1BR TAAL VIEW | Unit 4-403</td>
+                            <td>
+                                <button type="button" class="btn btn-primary">Select</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function openAvailableUnitsModal() {
+            const unitsModal = new bootstrap.Modal(document.getElementById('available-units-modal'), {});
+
+            unitsModal.show();
+        }
+
+        var withReservation = document.getElementById("withReservation");
+
+        withReservation.addEventListener('change', function () {
+			var reservationFields = document.getElementsByClassName('reservationfields');
+            if (this.checked) {
+                for(var i=0; i<reservationFields.length; i++){
+					reservationFields[i].style.display = "block";
+				}
+
+                console.log("Checkbox is checked..");
+            } else {
+				for (var i = 0; i < reservationFields.length; i++) {
+					reservationFields[i].style.display = "none";
+				}
+            }
+        });
+
+
+
+		var withDP = document.getElementById("withDownPayment");
+
+		withDP.addEventListener('change', function () {
+			var dpFields = document.getElementsByClassName('dpfields');
+			if (this.checked) {
+				for (var i = 0; i < dpFields.length; i++) {
+					dpFields[i].style.display = "block";
+				}
+
+				console.log("Checkbox is checked..");
+			} else {
+				for (var i = 0; i < dpFields.length; i++) {
+					dpFields[i].style.display = "none";
+				}
+			}
+		});
+
+    </script>
+}

@@ -55,7 +55,9 @@ public class UnitsController : ApiBaseController<UnitsController>
         int? floorId, 
         string location,
         int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1)
+        int max = 999999999, 
+        int pageSize = 20, 
+        int pageNumber = 1)
     {
         return Ok(await _unitQueries.GetAvailableUnitsAsync(unitTypeId, viewId, floorId, location, min, max, pageSize, pageNumber));
     }
