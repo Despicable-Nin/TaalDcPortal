@@ -29,11 +29,45 @@ public interface IUnitQueries
              int pageNumber = 1,
              int pageSize = 10
         );
+
+    Task<UnitDTO> GetUnitById(int unitId);
 }
 
 public class UnitQueries : IUnitQueries
 {
     private readonly string _connectionString;
+
+    private const string UNIT_QUERY = $"SELECT u.Id " +
+                                      $",p.[Id] AS PropertyId " +
+                                      $",p.[Name] AS PropertyName " +
+                                      $",t.[Id] AS TowerId" +
+                                      $",t.[Name] AS TowerName " +
+                                      $",u.UnitType AS UnitTypeId" +
+                                      $",ut.ShortCode AS UnitType" +
+                                      $",u.ScenicViewId AS ScenicViewId" +
+                                      $",sv.Name AS ScenicView" +
+                                      $",u.FloorId AS FloorId" +
+                                      $",f.[Name] AS FloorName" +
+                                      $",u.FloorArea+u.BalconyArea AS TotalArea" +
+                                      $",u.FloorArea" +
+                                      $",u.BalconyArea" +
+                                      $",u.Identifier," +
+                                      $"u.Price," +
+                                      $"u.UnitStatus AS UnitStatusId" +
+                                      $",us.[Name] AS UnitStatus " +
+                                      $"FROM catalog.unit u " +
+                                      $"JOIN catalog.floors f " +
+                                      $"ON u.FloorId = f.Id " +
+                                      $"JOIN catalog.tower t " +
+                                      $"ON f.TowerId = t.Id " +
+                                      $"JOIN catalog.property p " +
+                                      $"ON t.PropertyId = p.Id " +
+                                      $"JOIN catalog.unittype ut " +
+                                      $"ON u.UnitType = ut.Id " +
+                                      $"JOIN catalog.scenicview sv ON " +
+                                      $"u.ScenicViewId = sv.Id " +
+                                      $"JOIN catalog.unitstatus us " +
+                                      $"ON u.UnitStatus = us.Id ";
 
     public UnitQueries(string connectionString)
     {
@@ -53,37 +87,7 @@ public class UnitQueries : IUnitQueries
         int pageNumber = 1, 
         int pageSize = 10)
      {
-        var query = $"SELECT u.Id " +
-            $",p.[Id] AS PropertyId " +
-            $",p.[Name] AS PropertyName " +
-            $",t.[Id] AS TowerId" +
-            $",t.[Name] AS TowerName " +
-            $",u.UnitType AS UnitTypeId" +
-            $",ut.ShortCode AS UnitType" +
-            $",u.ScenicViewId AS ScenicViewId" +
-            $",sv.Name AS ScenicView" +
-            $",u.FloorId AS FloorId" +
-            $",f.[Name] AS FloorName" +
-            $",u.FloorArea+u.BalconyArea AS TotalArea" +
-            $",u.FloorArea" +
-            $",u.BalconyArea" +
-            $",u.Identifier," +
-            $"u.Price," +
-            $"u.UnitStatus AS UnitStatusId" +
-            $",us.[Name] AS UnitStatus " +
-            $"FROM catalog.unit u " +
-            $"JOIN catalog.floors f " +
-            $"ON u.FloorId = f.Id " +
-            $"JOIN catalog.tower t " +
-            $"ON f.TowerId = t.Id " +
-            $"JOIN catalog.property p " +
-            $"ON t.PropertyId = p.Id " +
-            $"JOIN catalog.unittype ut " +
-            $"ON u.UnitType = ut.Id " +
-            $"JOIN catalog.scenicview sv ON " +
-            $"u.ScenicViewId = sv.Id " +
-            $"JOIN catalog.unitstatus us " +
-            $"ON u.UnitStatus = us.Id " +
+        var query = UNIT_QUERY +
             $"WHERE u.IsActive = '1' AND f.IsActive = '1' AND t.IsActive = '1' AND p.IsActive = '1' " +
             $"AND u.Identifier LIKE '%' + ISNULL('{filter}',u.Identifier) + '%' " +
             $"AND f.Id = ISNULL({(floorId > 0? $"'{floorId}'": "NULL")},f.Id) " +
@@ -129,6 +133,18 @@ public class UnitQueries : IUnitQueries
         var temp = await connection.QueryAsync<int>(countQuery);
 
         return new PaginationQueryResult<UnitDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+    }
+
+    
+    public async Task<UnitDTO> GetUnitById(int unitId)
+    {
+        var query = UNIT_QUERY + $" WHERE u.Id = {unitId}";
+        
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync(CancellationToken.None);
+        var result = await connection.QueryAsync<UnitDTO>(query);
+
+        return result.SingleOrDefault();
     }
 
     public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(

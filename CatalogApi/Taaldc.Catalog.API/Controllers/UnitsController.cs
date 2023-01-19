@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.ChangeStatusOfUnit;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
@@ -20,6 +21,15 @@ public class UnitsController : ApiBaseController<UnitsController>
         IMediator mediator) : base(logger, mediator)
     {
         _unitQueries = unitQueries;
+    }
+
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnityId(int id)
+    {
+        return Ok(await _unitQueries.GetUnitById(id));
     }
     
     [HttpPost]
