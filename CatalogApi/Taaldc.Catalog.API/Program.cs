@@ -85,7 +85,9 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(options => {
+    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
+});
 
 
 app.UseHttpsRedirection();
