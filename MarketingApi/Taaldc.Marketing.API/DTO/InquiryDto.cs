@@ -10,14 +10,13 @@ public record InquiryDto
 
     [JsonPropertyName("attended_by")] public string AttendBy { get; set; }
 
-    [JsonPropertyName("status_id")] private int StatusId { get; set; }
+    [JsonPropertyName("status_id")] public int StatusId { get; set; }
 
     [JsonPropertyName("status")] public string Status { get; set; }
 
-    [JsonPropertyName("inquiry_date")]
-public DateTimeOffset DateOfInquiry { get; set; }
-[JsonPropertyName("verify_date")]
-    public DateTimeOffset? DateVerified { get; set; }
+    [JsonPropertyName("inquiry_date")] public DateTimeOffset DateOfInquiry { get; set; }
+
+    [JsonPropertyName("verify_date")] public DateTimeOffset? DateVerified { get; set; }
 
     [JsonPropertyName("inquiry_type")]
     [JsonProperty(Required = Required.Always)]
