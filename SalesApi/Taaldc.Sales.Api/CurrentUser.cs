@@ -3,6 +3,7 @@ using SeedWork;
 
 namespace Taaldc.Sales.Api;
 
+
 public class CurrentUser : IAmCurrentUser
 {
     private readonly bool _isAuthenticated;
@@ -11,14 +12,14 @@ public class CurrentUser : IAmCurrentUser
     public CurrentUser(IHttpContextAccessor httpContextAccessor)
     {
         Email = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
-        IdentityId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Sid);
+        Name = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
+        IdentityId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         Roles = httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)?.Select(i => i.Value).ToArray();
         _isAuthenticated = !string.IsNullOrEmpty(Email);
     }
-
-
+    
+    public string Name { get; }
     public string[] Roles { get; }
     public string Email { get; }
     public string IdentityId { get; }
-
 }
