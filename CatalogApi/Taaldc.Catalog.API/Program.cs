@@ -10,7 +10,6 @@ using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
-using Taaldc.Catalog.API.Extensions.DI;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 using Taaldc.Catalog.Infrastructure.Repositories;
@@ -22,10 +21,13 @@ var configuration = builder.Configuration;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddControllers();
 
+//setting up dbcontext and related stuff
+builder.Services.AddCustomDbContext(configuration);
 
-builder.Services
-    .AddApplicationInsights(builder.Configuration)
-    .AddCustomDbContext(builder.Configuration);
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpoints();
+
+builder.Services.AddCustomAuth(configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

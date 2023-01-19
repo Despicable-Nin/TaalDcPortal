@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SeedWork;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
+using Taaldc.Common.Persistence;
 using Unit = Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Unit;
 
 namespace Taaldc.Catalog.Infrastructure;
@@ -12,6 +13,7 @@ public class CatalogDbContext : DbContext, IUnitOfWork
 {
     public const string DEFAULT_SCHEMA = "catalog";
     private readonly IMediator _mediator;
+    private readonly IAmCurrentUser _currentUser;
  
     public DbSet<Project> Projects { get; set; }
     public DbSet<Property> Properties { get; set; }
@@ -22,7 +24,7 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     public DbSet<UnitType> UnitTypes { get; set; }
     public DbSet<ScenicView> ScenicViews { get; set; }
 
-    public CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMediator mediator) : base(options)
+    public CatalogDbContext(DbContextOptions<CatalogDbContext> options, IAmCurrentUser currentUser, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         System.Diagnostics.Debug.WriteLine("CatalogDbContext::ctor ->" + this.GetHashCode());
@@ -41,6 +43,7 @@ public class CatalogDbContext : DbContext, IUnitOfWork
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        this.DbAudit(_currentUser);
         return base.SaveChangesAsync(cancellationToken);
     }
     

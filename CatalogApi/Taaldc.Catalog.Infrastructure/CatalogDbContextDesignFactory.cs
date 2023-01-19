@@ -1,17 +1,19 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using SeedWork;
 
 namespace Taaldc.Catalog.Infrastructure;
 
 public class CatalogDbContextDesignFactory : IDesignTimeDbContextFactory<CatalogDbContext>
 {
+
     public CatalogDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>()
             .UseSqlServer("Server=localhost;Database=taaldb_admin;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
 
-        return new CatalogDbContext(optionsBuilder.Options, new NoMediator());
+        return new CatalogDbContext(optionsBuilder.Options, null, new NoMediator());
     }
 
     class NoMediator : IMediator

@@ -20,6 +20,6 @@ public class CatalogDbContextFactory : IDesignTimeDbContextFactory<CatalogDbCont
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>();
         optionsBuilder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
 
-        return new CatalogDbContext(optionsBuilder.Options, new NoMediator());
+        return new CatalogDbContext(optionsBuilder.Options, default, new NoMediator());
     }
 }

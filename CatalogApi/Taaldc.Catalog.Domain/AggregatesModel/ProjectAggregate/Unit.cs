@@ -27,7 +27,7 @@ public sealed class Unit : Entity
     //public ScenicView ScenicView { get; private set; }
     
     private int _unitStatusId;
-    //public UnitStatus UnitStatus { get; private set; }
+    public int GetUnitStatusId() => _unitStatusId;
     
     private int _unitTypeId;
     //public UnitType UnitType { get; private set; }
@@ -52,7 +52,7 @@ public sealed class Unit : Entity
 
     public void AddRemarks(string remarks)
     {
-        this.Remarks = remarks;
+        this.Remarks += remarks + Environment.NewLine;
     }
 
     public void MarkAsSold() => _unitStatusId = (int)UnitStatus.UnitIs.SOLD;
