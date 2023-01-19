@@ -30,7 +30,7 @@ public class UnitsController : ApiBaseController<UnitsController>
         return Ok(await _mediator.Send(new UpsertUnitCommand(model.UnitId, model.UnitTypeId, model.ScenicViewId,model.UnitNo, model.FloorId, model.FloorArea, model.BalconyArea, model.Price, model.Remarks)));
     }
     
-    [HttpPost]
+    [HttpPost("change-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> ChangeStatusOfUnit( ChangeStatusOfUnitDTO model)
