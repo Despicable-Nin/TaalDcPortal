@@ -29,8 +29,6 @@ builder.Services.AddEndpoints();
 
 builder.Services.AddCustomAuth(configuration);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -86,7 +84,7 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI(options => {
-    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
+    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI");
 });
 
 
