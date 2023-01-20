@@ -18,6 +18,7 @@ public class OrderQueries : IOrderQueries
         $" O.Id ,O.[Code] ,O.[Broker] ,O.[Remarks] ,O.[FinalPrice] ,O.[IsRefundable] ,O.[StatusId] ,O.[BuyerId] ,B.[Salutation] ,B.[FirstName] ,B.[LastName] ,B.[EmailAddress] ,B.[ContactNo] ,B.[Country] ,B.[Province] ,B.[TownCity] ,B.[ZipCode] ,O.[Id] [OrderId] ,B.[CreatedBy] ,O.[BuyerId] ,U.[PropertyId] ,U.[TowerId] ,U.[FloorId] ,U.[UnitId] ,U.[ScenicViewId] ,U.[UnitTypeId] ,U.[Property] ,U.[Tower] ,U.[Floor] ,U.[Unit] ,U.[ScenicView] ,U.[UnitType] ,U.[UnitArea] ,U.[BalconyArea] ,U.[UnitStatus],U.[UnitStatusId],U.[OriginalPrice] ,U.[SellingPrice] " + 
         $" FROM [taaldb_sales].[sales].[unitreplica] U  LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id ";
 
+    
     public OrderQueries(string connectionString, SalesDbContext context)
     {
         _connectionString = connectionString ??
