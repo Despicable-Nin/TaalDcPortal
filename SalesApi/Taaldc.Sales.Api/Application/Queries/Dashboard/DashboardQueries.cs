@@ -4,7 +4,7 @@ using Taaldc.Sales.Infrastructure;
 
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
-public class DashboardQueries : IDashboardQueries
+public partial class DashboardQueries : IDashboardQueries
 {
     internal enum UnitStatus : int
     {

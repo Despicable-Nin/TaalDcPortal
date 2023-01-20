@@ -14,4 +14,7 @@ public interface IDashboardQueries
     Task<int> GetReservedParkingCount();
     Task<int> GetSoldParkingCount();
     Task<int> GetBlockedParkingCount();
+
+    Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType();
+    Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerCondoUnitType();
 }

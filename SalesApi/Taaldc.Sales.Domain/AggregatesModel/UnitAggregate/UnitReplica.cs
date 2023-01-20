@@ -48,5 +48,7 @@ public class UnitReplica : DomainEntity, IAggregateRoot
 
     public decimal OriginalPrice { get; private set; }
     public decimal SellingPrice { get; private set; }
-    
+
+    public double GetFloorArea() => BalconyArea + UnitArea;
+
 }
