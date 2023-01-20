@@ -47,15 +47,29 @@ public class Order : DomainEntity, IAggregateRoot
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
     
-    public Payment AddPayment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate,
-        string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId = default)
+    public Payment AddPayment(
+        int paymentTypeId, 
+        int transactionTypeId,
+        DateTime actualPaymentDate,
+        string confirmationNumber, 
+        string paymentMethod,
+        decimal amountPaid, 
+        string remarks, 
+        string correlationId = default)
     {
         if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
             throw new SalesDomainException(nameof(AddPayment),
                 new InvalidOperationException("Duplicate payment confirmation number."));
 
-        Payment payment = new(paymentTypeId, transactionTypeId, actualPaymentDate, confirmationNumber, paymentMethod,
-            amountPaid, remarks, correlationId);
+        Payment payment = new(
+            paymentTypeId, 
+            transactionTypeId, 
+            actualPaymentDate,
+            confirmationNumber,
+            paymentMethod,
+            amountPaid, 
+            remarks, 
+            correlationId);
 
         _payments.Add(payment);
         return payment;

@@ -12,8 +12,8 @@ using TaalDc.Portal.Data;
 namespace TaalDc.Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230120032458_Test")]
-    partial class Test
+    [Migration("20230120094559_addeduserprofile")]
+    partial class addeduserprofile
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,58 +145,6 @@ namespace TaalDc.Portal.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<string>", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityUser<string>");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -290,17 +238,26 @@ namespace TaalDc.Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("UserId"), "userseq", "dbo");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("_identityId")
+                    b.Property<string>("Identity")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("IdentityId");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameSuffix")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("_identityId");
+                    b.HasIndex("Identity")
+                        .IsUnique();
 
                     b.ToTable("UserProfiles");
                 });
@@ -352,15 +309,6 @@ namespace TaalDc.Portal.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TaalDc.Portal.Data.UserProfile", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<string>", null)
-                        .WithMany()
-                        .HasForeignKey("_identityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

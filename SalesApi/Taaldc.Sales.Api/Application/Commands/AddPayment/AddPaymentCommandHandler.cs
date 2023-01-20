@@ -12,17 +12,23 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Comma
     
     public async Task<CommandResult> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
     {
-        var tran = await _repository.FindOrderByIdAsync(request.TransactionId);
+        var order = await _repository.FindOrderByIdAsync(request.TransactionId);
 
-        if (tran == default)
+        if (order == default)
             throw new SalesDomainException(nameof(AddPaymentCommandHandler),
-                new Exception(("Sales transaction not found.")));
+                new Exception(("Order not found.")));
 
-        Payment payment = tran.AddPayment(request.PaymentTypeId, request.TransactionTypeId, request.PaymentDate,
-            request.ConfirmationNumber, request.PaymentMethod, request.AmountPaid, request.Remarks,
+        Payment payment = order.AddPayment(
+            request.PaymentTypeId,
+            request.TransactionTypeId, 
+            request.PaymentDate,
+            request.ConfirmationNumber, 
+            request.PaymentMethod,
+            request.AmountPaid,
+            request.Remarks,
             request.CorrelationId);
         
-        _repository.UpdateOrder(tran);
+        _repository.UpdateOrder(order);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
