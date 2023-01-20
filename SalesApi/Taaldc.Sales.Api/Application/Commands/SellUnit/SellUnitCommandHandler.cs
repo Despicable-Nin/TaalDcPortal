@@ -43,12 +43,12 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             request.Remarks,
             request.SellingPrice);
 
-        var reservation = sale.Payments
-            .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForReservation));
-
-        if (reservation != default)
-            throw new SalesDomainException(nameof(SellUnitCommandHandler),
-                new ValidationException("Reservation already exists."));
+        // var reservation = sale.Payments
+        //     .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForReservation));
+        //
+        // if (reservation != default)
+        //     throw new SalesDomainException(nameof(SellUnitCommandHandler),
+        //         new ValidationException("Reservation already exists."));
 
         if (request.Reservation != default)
         {
@@ -68,12 +68,12 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
         
         if (request.DownPayment != default)
         {
-            var downpayment = sale.Payments
-                .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForAcquisition));
-
-            if (downpayment != default)
-                throw new SalesDomainException(nameof(SellUnitCommandHandler),
-                    new ValidationException("Downpayment already exists."));
+            // var downpayment = sale.Payments
+            //     .FirstOrDefault(i => i.GetTransactionTypeId() == TransactionType.GetTypeId(TransactionType.ForAcquisition));
+            //
+            // if (downpayment != default)
+            //     throw new SalesDomainException(nameof(SellUnitCommandHandler),
+            //         new ValidationException("Downpayment already exists."));
             
             //add payment fore acquisition
             sale.AddPayment(
@@ -86,12 +86,8 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.Remarks,
                 default);
         }
-        
+
         await _salesRepository.UnitOfWork.SaveChangesAsync(default);
-        
-        //publish these data
-        //unitId, sellingPrice,
-        //sale.AddDomainEvent();
 
         return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
         {
