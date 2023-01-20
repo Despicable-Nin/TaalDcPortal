@@ -55,7 +55,11 @@ public class AccountService : IAccountService
         return vm.ToArray();
     }
     
-    public async Task<IEnumerable<string>> GetRolesAsync() =>await _roleManager.Roles.Select(i => i.NormalizedName).ToArrayAsync();
+    public async Task<IEnumerable<string>> GetRolesAsync() => await _roleManager.Roles.AsNoTracking()
+        .Where(i => i.NormalizedName != "GUEST")
+        .Select(i => i.NormalizedName)
+        .OrderBy(i => i)
+        .ToArrayAsync();
    
     public async Task<string> CreateUser(CreateUserViewModel vm)
     {
