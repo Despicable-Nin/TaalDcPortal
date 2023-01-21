@@ -29,14 +29,27 @@ public partial class DashboardQueries
 
     public async Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView()
     {
-        var unitDb = _context.Units.AsNoTracking()
-            .Where(unit =>  new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
-
-        var ret = from unit in unitDb
-            select new ResidentialUnitCountPerViewDTO(unit.ScenicView,
-                unitDb.Count(i => i.UnitTypeId == unit.UnitTypeId));
+        var query = "SELECT DISTINCT U.[ScenicView] [View] " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.ScenicViewId = ScenicViewId GROUP BY ScenicViewId) [Available] " +
+                    "FROM [taaldb_sales].[sales].[unitreplica] U " +
+                    "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
+                    "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
+                    "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1";
         
-        return new AvailabilityOfResidentialUnitsPerViewDTO(unitDb.Count(), await ret.ToArrayAsync());
+        await using var connection = new SqlConnection(_connectionString);
+      
+        await connection.OpenAsync(CancellationToken.None);
+        
+        var result = await connection.QueryAsync<ResidentialUnitCountPerViewDTO>(query);
+
+        var countQuery = "SELECT COUNT(*) [COUNT] " +
+                         "FROM [taaldb_sales].[sales].[unitreplica] U " +
+                         "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1 ";
+        
+        var countResult = (await connection.QueryAsync<int>(countQuery)).SingleOrDefault();
+
+        return new AvailabilityOfResidentialUnitsPerViewDTO(countResult, result);
+
 
     }
 
@@ -51,7 +64,7 @@ public partial class DashboardQueries
                     "FROM [taaldb_sales].[sales].[unitreplica] U " +
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
-                    "WHERE U.UnitTypeId IN (6,7) ";
+                    "WHERE U.UnitTypeId IN (6,7)  AND U.UnitStatusId = 1";
         
         await using var connection = new SqlConnection(_connectionString);
       
@@ -74,7 +87,7 @@ public partial class DashboardQueries
                     "FROM [taaldb_sales].[sales].[unitreplica] U " +
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
-                    "WHERE U.UnitTypeId IN (2,3,4,5,8) ";
+                    "WHERE U.UnitTypeId IN (2,3,4,5,8)  AND U.UnitStatusId = 1";
         
         await using var connection = new SqlConnection(_connectionString);
       
