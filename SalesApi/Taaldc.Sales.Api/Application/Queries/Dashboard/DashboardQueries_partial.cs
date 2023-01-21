@@ -10,21 +10,22 @@ namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public partial class DashboardQueries
 {
-    public async Task<IEnumerable<AvailabilityOfParkingUnitPerFloorDTO>> GetParkingUnitTypeAvailabilityPerFloor()
+    public async Task<IEnumerable<ParkingUnitAvailabilityPerFloorDTO>> GetParkingUnitTypeAvailabilityPerFloor()
     {
-        var unitDb = _context.Units.AsNoTracking()
-            .Where(unit =>  new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+        var query = "SELECT DISTINCT U.UnitType, U.Floor " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.FloorId = FloorId) [Available] " +
+                    "FROM [taaldb_sales].[sales].[unitreplica] U " +
+                    "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
+                    "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
+                    "WHERE U.UnitTypeId IN (6,7) AND U.UnitStatusId = 1 ";
+        
+        await using var connection = new SqlConnection(_connectionString);
+      
+        await connection.OpenAsync(CancellationToken.None);
+        
+        var result = await connection.QueryAsync<ParkingUnitAvailabilityPerFloorDTO>(query);
 
-        var ret = from unit in unitDb
-            select new AvailabilityOfParkingUnitPerFloorDTO(
-                unit.UnitType,
-                unitDb.Count(c => c.UnitTypeId == unit.UnitTypeId),
-                unitDb.Select(c => new ParkingUnitAvailabilityPerFloorDTO(c.Floor,
-                    unitDb.Count(x => x.UnitTypeId == unit.UnitTypeId && x.FloorId == unit.FloorId)))
-            );
-
-        return await ret.ToArrayAsync();
-
+        return result;
     }
 
     public async Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView()
