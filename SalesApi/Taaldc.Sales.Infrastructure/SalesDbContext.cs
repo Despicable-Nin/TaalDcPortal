@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using SeedWork;
+using Taaldc.Common.Persistence;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure;
@@ -35,46 +36,14 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        Audit();
+        this.DbAudit(_currentUser);
         return base.SaveChangesAsync(cancellationToken);
     }
 
-    private void Audit()
-    {
-        this.ChangeTracker.DetectChanges();
-
-        foreach (EntityEntry entry in ChangeTracker.Entries())
-        {
-            if (entry.Entity is Enumeration
-                || entry.Entity is ValueObject
-                || entry.State == EntityState.Detached
-                || entry.State == EntityState.Unchanged)
-            {
-                continue;
-            }
-
-            if (entry.Entity is IAuditable auditable)
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        auditable.AuditOnCreate(_currentUser?.Email);
-                        break;
-
-                    case EntityState.Modified:
-                        auditable.AuditOnUpdate(_currentUser?.Email, true);
-                        break;
-
-                    case EntityState.Deleted:
-                        break;
-                }
-            }
-        }
-    }
 
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        return null;
+        return SaveChangesAsync(cancellationToken);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

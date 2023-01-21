@@ -38,8 +38,8 @@ public class Payment : Entity
     public string PaymentMethod { get; private set; }
     public decimal AmountPaid { get; private set; }
     public string Remarks { get; private set; }
-    
-    public string CorrelationId { get; private set; }
+
+    public string CorrelationId { get; private set; } = string.Empty;
 
     public void VerifyPayment(string verifiedBy)
     {
