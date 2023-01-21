@@ -2,13 +2,14 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public record BuyerDTO
 {
-    public BuyerDTO(string salutation, string firstName, string lastName, string emailAddress, string contactNo, string country, string province, string townCity, string zipCode)
+    public BuyerDTO(string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address, string country, string province, string townCity, string zipCode)
     {
         Salutation = salutation;
         FirstName = firstName;
         LastName = lastName;
         EmailAddress = emailAddress;
         ContactNo = contactNo;
+        Address = address;
         Country = country;
         Province = province;
         TownCity = townCity;
@@ -20,7 +21,8 @@ public record BuyerDTO
     public string LastName { get; private set; }
     public string EmailAddress { get; private set; }
     public string ContactNo { get; private set; }
-    public string Country { get; private set; }
+	public string Address { get; private set; }
+	public string Country { get; private set; }
     public string Province { get; private set; }
     public string TownCity { get; private set; }
     public string ZipCode { get; private set; }

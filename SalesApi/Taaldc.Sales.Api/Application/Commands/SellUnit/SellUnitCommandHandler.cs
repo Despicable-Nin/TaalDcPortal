@@ -29,7 +29,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
 
         buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
             request.EmailAddress,
-            request.ContactNo, request.Country, request.Province, request.TownCity, request.ZipCode, buyerId);
+            request.ContactNo, request.Address, request.Country, request.Province, request.TownCity, request.ZipCode, buyerId);
 
         await _buyerRepository.UnitOfWork.SaveChangesAsync();
 
@@ -89,12 +89,18 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.ReservationConfirmNo == request.DownPaymentConfirmNo ? request.ReservationConfirmNo : default);
         }
 
-        await _salesRepository.UnitOfWork.SaveChangesAsync(default);
+        try { 
+             await _salesRepository.UnitOfWork.SaveChangesAsync(default);
+			return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
+		    {
+			    { "UnitId", sale.GetUnitId },
 
-        return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
-        {
-            { "UnitId", sale.GetUnitId },
+		    });
+		}
+		catch(Exception ex) {
+            return SellUnitCommandResult.Create(false, ex.Message, new Dictionary<string, object>());
+        }
 
-        });
+		
     }
 }

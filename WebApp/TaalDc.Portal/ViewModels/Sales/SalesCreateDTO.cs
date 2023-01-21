@@ -1,45 +1,98 @@
-﻿namespace TaalDc.Portal.ViewModels.Sales
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace TaalDc.Portal.ViewModels.Sales
 {
     public class SalesCreateDTO
     {
-        public string Code { get; set; }
+		[JsonPropertyName("code")]
+		[JsonProperty(Required = Required.AllowNull)]
+		public string Code { get; set; }
 
-        public string Broker { get; set; }
+		[JsonPropertyName("broker")]
+		[JsonProperty(Required = Required.Always)]
+		public string Broker { get; set; }
 
-        public bool IsRefundable { get; set; }
+		[JsonPropertyName("is_refundable")]
+		[JsonProperty(Required = Required.Always)]
+		public bool IsRefundable { get; set; }
 
-        public int UnitId { get; set; }
+		[JsonPropertyName("unit_id")]
+		[JsonProperty(Required = Required.Always)]
+		public int UnitId { get; set; }
 
-        public decimal SellingPrice { get; set; }
+		[JsonPropertyName("selling_price")]
+		[JsonProperty(Required = Required.Always)]
+		public decimal SellingPrice { get; set; }
 
-        public string Salutation { get; set; }
+		[JsonPropertyName("salutation")]
+		[JsonProperty(Required = Required.Always)]
+		public string Salutation { get; set; }
 
-        public string FirstName { get; set; }
+		[JsonPropertyName("first_name")]
+		[JsonProperty(Required = Required.Always)]
+		public string FirstName { get; set; }
 
-        public string LastName { get; set; }
+		[JsonPropertyName("last_name")]
+		[JsonProperty(Required = Required.Always)]
+		public string LastName { get; set; }
 
-        public string EmailAddress { get; set; }
+		[JsonPropertyName("email_address")]
+		[JsonProperty(Required = Required.Always)]
+		[EmailAddress]
+		public string EmailAddress { get; set; }
 
-        public string ContactNo { get; set; }
+		[JsonPropertyName("contact_number")]
+		[JsonProperty(Required = Required.Always)]
+		public string ContactNo { get; set; }
 
-        public string Country { get; set; }
+		[JsonPropertyName("address")]
+		[JsonProperty(Required = Required.Default)]
+		public string Address { get; set; }
 
-        public string Province { get; set; }
+		[JsonPropertyName("country")]
+		[JsonProperty(Required = Required.Default)]
+		public string Country { get; set; }
 
-        public string TownCity { get; set; }
+		[JsonPropertyName("province")]
+		[JsonProperty(Required = Required.Default)]
+		public string Province { get; set; }
 
-        public string ZipCode { get; set; }
+		[JsonPropertyName("city")]
+		[JsonProperty(Required = Required.Default)]
+		public string TownCity { get; set; }
 
-        public decimal Reservation { get; set; }
-        public string ReservationConfirmNo { get; set; }
+		[JsonPropertyName("zipcode")]
+		[JsonProperty(Required = Required.Always)]
+		public string ZipCode { get; set; }
 
-        public decimal DownPayment { get; set; }
-        public string DownPaymentConfirmNo { get; set; }
+		[JsonPropertyName("reservation_fee")]
+		[JsonProperty(Required = Required.Always)]
+		public decimal Reservation { get; set; }
 
-        public DateTime PaymentDate { get; set; }
+		[JsonPropertyName("downpayment")]
+		[JsonProperty(Required = Required.AllowNull)]
+		public decimal DownPayment { get; set; }
 
-        public string PaymentMethod { get; set; }
+		[JsonPropertyName("payment_date")]
+		[JsonProperty(Required = Required.Always)]
+		public DateTime PaymentDate { get; set; }
 
-        public string Remarks { get; set; }
-    }
+		[JsonPropertyName("payment_method")]
+		[JsonProperty(Required = Required.Always)]
+		public string PaymentMethod { get; set; }
+
+		[JsonPropertyName("remarks")]
+		[JsonProperty(Required = Required.AllowNull)]
+		public string Remarks { get; set; }
+
+		[JsonPropertyName("reservation_confirmation_number")]
+		[JsonProperty(Required = Required.Always)]
+		public string ReservationConfirmNo { get; set; }
+
+		[JsonPropertyName("downpayment_confirmation_number")]
+		[JsonProperty(Required = Required.AllowNull)]
+		public string DownpaymentConfirmNo { get; set; }
+	}
 }

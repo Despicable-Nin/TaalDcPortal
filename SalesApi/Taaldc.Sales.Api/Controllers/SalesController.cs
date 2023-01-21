@@ -15,6 +15,8 @@ using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Taaldc.Sales.Api.Controllers
 {
@@ -90,6 +92,7 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(await _orderQueries.GetPayments(id));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]

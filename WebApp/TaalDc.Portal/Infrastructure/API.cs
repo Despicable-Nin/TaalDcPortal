@@ -28,7 +28,9 @@ public static class API
     public static class Sales
     {
         public static string GetUnitAndOrdersAvailability(string baseUri) => $"{baseUri}/api/v1/sales";
-        public static string GetAvailableUnitCount(string baseUrl) =>
+		public static string SellUnit(string baseUrl) => $"{baseUrl}/api/v1/sales";
+
+		public static string GetAvailableUnitCount(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/residential/available";
         public static string GetReservedUnitCount(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/residential/reserved";
@@ -51,7 +53,5 @@ public static class API
         public static string GetAvailabilityPerParkingUnitType(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/parking/available-per-unit-type";
 
-        
-
-    }
+	}
 }

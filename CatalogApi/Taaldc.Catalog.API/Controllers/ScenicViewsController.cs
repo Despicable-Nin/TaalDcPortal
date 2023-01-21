@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
@@ -14,6 +15,7 @@ namespace Taaldc.Catalog.API.Controllers
 			_scenicViewQueries = scenicViewQueries;
 		}
 
+		[AllowAnonymous]
 		[HttpGet("available")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesErrorResponseType(typeof(BadRequestResult))]

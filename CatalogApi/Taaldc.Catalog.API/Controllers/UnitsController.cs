@@ -65,7 +65,8 @@ public class UnitsController : ApiBaseController<UnitsController>
         return Ok(await _unitQueries.GetActiveUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder, pageNumber, pageSize));
     }
 
-    [HttpGet("available")]
+	[AllowAnonymous]
+	[HttpGet("available")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetAvailableUnits(

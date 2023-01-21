@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Sales.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230121041536_added-address-to-buyer")]
+    partial class addedaddresstobuyer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,6 +255,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CorrelationId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
@@ -283,6 +287,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VerifiedBy")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("_paymentTypeId")
@@ -509,10 +514,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<int>("UnitTypeId")
                         .HasColumnType("int");
-
-                    b.Property<string>("UnitTypeShortCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

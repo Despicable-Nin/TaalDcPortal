@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
@@ -39,6 +40,7 @@ public class FloorsController : ApiBaseController<FloorsController>
         return Ok(await _floorQueries.GetActiveFloors(filter, sortBy, sortOrder, pageNumber, pageSize));
     }
 
+    [AllowAnonymous]
     [HttpGet("available")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesErrorResponseType(typeof(BadRequestResult))]

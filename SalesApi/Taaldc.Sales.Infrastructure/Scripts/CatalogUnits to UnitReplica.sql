@@ -1,7 +1,7 @@
 USE taaldb_admin
 GO
 
---TRUNCATE TABLE taaldb_sales.sales.unitreplica
+DELETE FROM taaldb_sales.sales.unitreplica
 
 INSERT INTO taaldb_sales.sales.unitreplica
 (Id, 

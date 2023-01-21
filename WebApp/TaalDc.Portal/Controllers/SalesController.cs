@@ -1,11 +1,22 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaalDc.Portal.Services;
+using TaalDc.Portal.ViewModels.Sales;
 
 namespace TaalDc.Portal.Controllers;
 
-public class SalesController : Controller
+[Authorize]
+public class SalesController : BaseController<SalesController>
 {
-    // GET
-    public IActionResult Index()
+	private readonly ISalesService _salesService;
+
+	public SalesController(ISalesService salesService, ILogger<SalesController> loggerInstance) : base(loggerInstance)
+	{
+		_salesService = salesService;
+	}
+
+	// GET
+	public IActionResult Index()
     {
         //display units by joining tables unitreplica and acquisition
         //this should tell us which units are available,
@@ -71,6 +82,23 @@ public class SalesController : Controller
     {
         return View();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(SalesCreateDTO model)
+    {
+        if (model.DownPayment == 0) model.DownpaymentConfirmNo = "-";
+
+        if(string.IsNullOrEmpty(model.Remarks)) model.Remarks = "";
+        
+        var result = await _salesService.SellUnit(model);
+
+		if (!result.IsSuccess) return BadRequest(new
+		{
+			Message = result.ErrorMessage
+		});
+
+		return Ok(result);
+	}
     
     
     //we need to be able to call sales/sel/sales POST (SellUnit)
