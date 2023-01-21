@@ -58,6 +58,7 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(b => b.ActualPaymentDate).IsRequired();
 
         builder.Property(b => b.CorrelationId).IsRequired(false);
+        builder.Property(b => b.VerifiedBy).IsRequired(false);
 
     }
 }
