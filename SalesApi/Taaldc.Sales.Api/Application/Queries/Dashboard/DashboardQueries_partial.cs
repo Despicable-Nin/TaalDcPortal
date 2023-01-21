@@ -1,5 +1,9 @@
 
+using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Serilog;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
@@ -36,45 +40,54 @@ public partial class DashboardQueries
 
     }
 
-    public async Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType()
+    public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType()
     {
 
-        var unitDb = _context.Units.AsNoTracking()
-            .Where(unit =>  new[] { 6,7 }.Contains(unit.UnitTypeId) && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+        var query = "SELECT DISTINCT U.[UnitType] " + 
+                    ",U.[UnitArea] + U.[BalconyArea] [FloorArea] " +
+                    ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] " +
+                    ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.UnitTypeId = UnitTypeId GROUP BY UnitTypeId) [Available] " +
+                    "FROM [taaldb_sales].[sales].[unitreplica] U " +
+                    "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
+                    "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
+                    "WHERE U.UnitTypeId IN (6,7) ";
+        
+        await using var connection = new SqlConnection(_connectionString);
+      
+        await connection.OpenAsync(CancellationToken.None);
 
-        return await GetAvailabilityPerUnitType(unitDb);
+        var result = await connection.QueryAsync<ParkingUnitAvailabilityPerUnitTypeDTO>(query);
+        
+        return result;
     }
 
-    public async Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType()
+    public async Task<IEnumerable<ResidentialUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType()
     {
        
-        var unitDb = _context.Units.AsNoTracking().Where(unit =>
-            new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+        var query = "SELECT DISTINCT U.[UnitType] " +
+                    ",(SELECT TOP 1 UnitArea + BalconyArea FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [MinArea] " +
+                    ",(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [MaxArea] " +
+                    ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] " +
+                    ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.UnitTypeId = UnitTypeId GROUP BY UnitTypeId) [Available] " +
+                    "FROM [taaldb_sales].[sales].[unitreplica] U " +
+                    "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
+                    "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
+                    "WHERE U.UnitTypeId IN (2,3,4,5,8) ";
+        
+        await using var connection = new SqlConnection(_connectionString);
+      
+        await connection.OpenAsync(CancellationToken.None);
 
-        return await GetAvailabilityPerUnitType(unitDb);
-    }
-    
-    private async Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerUnitType(
-        IQueryable<UnitReplica> unitDb)
-    {
-        var ret = from unit in unitDb
-            select new
-            {
-                unit.UnitType,
-                floorArea = unit.GetFloorArea(),
-                min = unitDb.Min(i => i.OriginalPrice),
-                max = unitDb.Max(i => i.OriginalPrice),
-                available = _context.Units.AsNoTracking().Count(u => u.UnitTypeId == unit.UnitTypeId)
-            };
-
-        var result = await ret.Select(i =>
-                new AvailabilityPerUnitTypeDTO(i.UnitType, i.floorArea, ToPriceRange(i.min, i.max), i.available))
-            .ToArrayAsync();
-
+        var result = await connection.QueryAsync<ResidentialUnitAvailabilityPerUnitTypeDTO>(query);
+        
         return result;
     }
     
-    private string ToPriceRange(decimal min, decimal max)
+
+    
+    private static string ToPriceRange(decimal min, decimal max)
     {
         var a = min.ToString("#,##0.00");
         var b = max.ToString("#,##0.00");

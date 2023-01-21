@@ -18,6 +18,6 @@ public interface IDashboardQueries
 
     Task<IEnumerable<AvailabilityOfParkingUnitPerFloorDTO>> GetParkingUnitTypeAvailabilityPerFloor();
     Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView();
-    Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType();
-    Task<IEnumerable<AvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType();
+    Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType();
+    Task<IEnumerable<ResidentialUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType();
 }
