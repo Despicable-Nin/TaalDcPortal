@@ -4,6 +4,7 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public interface IUnitReplicaRepository : IRepository<UnitReplica>
 {
-    Task<UnitReplica> AddASync(UnitReplica unitReplica);
-    
+    UnitReplica AddASync(UnitReplica unitReplica);
+    UnitReplica Update(UnitReplica unitReplica);
+    UnitReplica? GetById(int id);
 }

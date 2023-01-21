@@ -47,8 +47,12 @@ public class SellUnitDTO
     [JsonPropertyName("contact_number")]
     [JsonProperty(Required = Required.Always)]
     public string ContactNo { get;  set; }
-    
-    [JsonPropertyName("country")]
+
+	[JsonPropertyName("address")]
+	[JsonProperty(Required = Required.Default)]
+	public string Address { get; set; }
+
+	[JsonPropertyName("country")]
     [JsonProperty(Required = Required.Default)]
     public string Country { get;  set; }
     
@@ -81,7 +85,6 @@ public class SellUnitDTO
     public string PaymentMethod { get; set; }
     
     [JsonPropertyName("remarks")]
-    [JsonProperty(Required = Required.AllowNull)]
     public string Remarks { get; set; }
 
     [JsonPropertyName("reservation_confirmation_number")]

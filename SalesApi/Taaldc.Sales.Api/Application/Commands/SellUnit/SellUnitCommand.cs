@@ -5,7 +5,7 @@ namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommand : IRequest<SellUnitCommandResult>
 {
-    public SellUnitCommand(string code, string broker, bool isRefundable, int unitId, decimal sellingPrice, string salutation, string firstName, string lastName, string emailAddress, string contactNo, string country, string province, string townCity, string zipCode, decimal reservation, string reservationConfirmNo, decimal downPayment, string downPaymentConfirmNo, DateTime paymentDate, string paymentMethod, string remarks)
+    public SellUnitCommand(string code, string broker, bool isRefundable, int unitId, decimal sellingPrice, string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address, string country, string province, string townCity, string zipCode, decimal reservation, string reservationConfirmNo, decimal downPayment, string downPaymentConfirmNo, DateTime paymentDate, string paymentMethod, string remarks)
     {
         Code = code;
         Broker = broker;
@@ -17,6 +17,7 @@ public class SellUnitCommand : IRequest<SellUnitCommandResult>
         LastName = lastName;
         EmailAddress = emailAddress;
         ContactNo = contactNo;
+        Address = address; 
         Country = country;
         Province = province;
         TownCity = townCity;
@@ -50,6 +51,7 @@ public class SellUnitCommand : IRequest<SellUnitCommandResult>
 
     public string ContactNo { get;private  set; }
    
+    public string Address { get; private set; }
     public string Country { get;private  set; }
    
     public string Province { get;private  set; }

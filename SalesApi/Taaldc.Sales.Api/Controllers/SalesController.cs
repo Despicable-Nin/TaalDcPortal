@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.ProcessPayment;
@@ -90,6 +84,7 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(await _orderQueries.GetPayments(id));
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]

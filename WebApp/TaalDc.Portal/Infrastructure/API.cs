@@ -17,6 +17,9 @@ public static class API
         public static string AddTower(string baseUri) => $"{baseUri}/api/adm/towers";
         public static string AddUnit(string baseUri) => $"{baseUri}/api/adm/units";
         public static string AddUnitType(string baseUri) => $"{baseUri}/api/adm/unitTypes";
+        public static string UpdateUnitStatus(string baseUri) => $"{baseUri}/api/adm/units/change-status";
+
+
 
         public static string GetProperties(string baseUri) => $"{baseUri}/api/adm/properties";
         public static string GetTowers(string baseUri) => $"{baseUri}/api/adm/towers";
@@ -28,7 +31,9 @@ public static class API
     public static class Sales
     {
         public static string GetUnitAndOrdersAvailability(string baseUri) => $"{baseUri}/api/v1/sales";
-        public static string GetAvailableUnitCount(string baseUrl) =>
+		public static string SellUnit(string baseUrl) => $"{baseUrl}/api/v1/sales";
+
+		public static string GetAvailableUnitCount(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/residential/available";
         public static string GetReservedUnitCount(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/residential/reserved";
@@ -51,7 +56,5 @@ public static class API
         public static string GetAvailabilityPerParkingUnitType(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/parking/available-per-unit-type";
 
-        
-
-    }
+	}
 }

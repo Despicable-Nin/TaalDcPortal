@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using SeedWork;
+using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
 
@@ -8,20 +9,27 @@ namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
 {
-    public SellUnitCommandHandler(IOrderRepository salesRepository, IBuyerRepository buyerRepository, ILogger<SellUnitCommandHandler> logger, IAmCurrentUser currentUser)
+    public SellUnitCommandHandler(
+        IOrderRepository salesRepository, 
+        IBuyerRepository buyerRepository, 
+        ILogger<SellUnitCommandHandler> logger, 
+        IAmCurrentUser currentUser,
+        IMediator mediator)
     {
         _salesRepository = salesRepository;
         _buyerRepository = buyerRepository;
         _logger = logger;
         _currentUser = currentUser;
+        _mediator = mediator;
     }
 
     private readonly IOrderRepository _salesRepository;
     private readonly IBuyerRepository _buyerRepository;
     private readonly ILogger<SellUnitCommandHandler> _logger;
     private readonly IAmCurrentUser _currentUser;
-    
-    public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+	private readonly IMediator _mediator;
+
+	public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         Buyer buyer = _buyerRepository.GetByEmail(request.EmailAddress);
         
@@ -29,7 +37,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
 
         buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
             request.EmailAddress,
-            request.ContactNo, request.Country, request.Province, request.TownCity, request.ZipCode, buyerId);
+            request.ContactNo, request.Address, request.Country, request.Province, request.TownCity, request.ZipCode, buyerId);
 
         await _buyerRepository.UnitOfWork.SaveChangesAsync();
 
@@ -89,12 +97,21 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.ReservationConfirmNo == request.DownPaymentConfirmNo ? request.ReservationConfirmNo : default);
         }
 
-        await _salesRepository.UnitOfWork.SaveChangesAsync(default);
+        try { 
+            await _salesRepository.UnitOfWork.SaveChangesAsync(default);
 
-        return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
-        {
-            { "UnitId", sale.GetUnitId },
+            await _mediator.Publish(new UpdateUnitReplicaStatusNotif(request.UnitId, 3, "RESERVED"));
 
-        });
+            return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
+		    {
+			    { "UnitId", sale.GetUnitId },
+
+		    });
+		}
+		catch(Exception ex) {
+            return SellUnitCommandResult.Create(false, ex.Message, new Dictionary<string, object>());
+        }
+
+		
     }
 }

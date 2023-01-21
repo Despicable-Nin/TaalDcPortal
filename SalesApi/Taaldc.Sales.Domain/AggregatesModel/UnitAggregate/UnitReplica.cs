@@ -53,4 +53,11 @@ public class UnitReplica : DomainEntity, IAggregateRoot
 
     public double GetFloorArea() => BalconyArea + UnitArea;
 
+
+    public void UpdateStatus(int unitStatusId, string unitStatus)
+    {
+        UnitStatusId = unitStatusId;
+        UnitStatus = unitStatus;
+    }
+
 }

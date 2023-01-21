@@ -242,5 +242,20 @@ namespace TaalDc.Portal.Services
             throw new Exception("Unit type cannot be created.");
         }
 
-    }
+		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model)
+		{
+			var uri = API.Catalog.UpdateUnitStatus(_removeServiceBaseUrl);
+
+			var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+			var content = await response.Content.ReadAsStringAsync();
+
+			if (response.IsSuccessStatusCode)
+			{
+				return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+			}
+
+			throw new Exception("Unit status cannot be updated. Error: " + content);
+		}
+	}
 }

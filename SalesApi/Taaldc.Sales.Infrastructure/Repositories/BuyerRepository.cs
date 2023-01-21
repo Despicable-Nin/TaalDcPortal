@@ -29,7 +29,7 @@ public class BuyerRepository : IBuyerRepository
        return  _context.Buyers.AsNoTracking().SingleOrDefault(i => i.Id == id);
     }
 
-    public Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
+    public Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address,
         string country, string province, string townCity, string zipCode, int? buyerId)
     {
         Buyer buyer = default;
@@ -38,13 +38,12 @@ public class BuyerRepository : IBuyerRepository
             //update
             buyer = _context.Buyers.Find(buyerId.Value);
             buyer.UpdateName(salutation, firstName,lastName);
-            buyer.UpdateDetails(emailAddress, contactNo, country, province, townCity,
-                zipCode);
+            buyer.UpdateDetails(emailAddress, contactNo, address, country, province, townCity, zipCode);
 
             return _context.Buyers.Update(buyer).Entity;
         }
 
-        buyer = new(salutation, firstName, lastName, emailAddress, contactNo, country, province, townCity, zipCode);
+        buyer = new(salutation, firstName, lastName, emailAddress, contactNo, address, country, province, townCity, zipCode);
         return _context.Buyers.Add(buyer).Entity;
     }
 }

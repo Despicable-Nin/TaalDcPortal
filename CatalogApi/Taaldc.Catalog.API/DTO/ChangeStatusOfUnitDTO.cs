@@ -7,13 +7,13 @@ public class ChangeStatusOfUnitDTO
 {
     [JsonPropertyName("unit_id")] 
     [JsonProperty(Required = Required.Always)]
-    public int UnitId { get; private set; }
+    public int UnitId { get; set; }
     
     [JsonPropertyName("unit_status_id")] 
     [JsonProperty(Required = Required.Always)]
-    public int UnitStatus { get; private set; }
+    public int UnitStatus { get; set; }
     
     [JsonPropertyName("remarks")] 
     [JsonProperty(Required = Required.Always)]
-    public string Remarks { get; private set; }
+    public string Remarks { get; set; }
 }
