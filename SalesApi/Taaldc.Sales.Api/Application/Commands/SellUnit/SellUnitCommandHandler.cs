@@ -63,6 +63,8 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.Reservation,
                 request.Remarks,
                 default);
+            
+           
         }
         
         

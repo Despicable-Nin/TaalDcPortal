@@ -35,7 +35,8 @@ public class Order : DomainEntity, IAggregateRoot
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
-    
+    public int GetStatusId() => _statusId;
+    public void SetStatus(int status) => _statusId = status;
 
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 

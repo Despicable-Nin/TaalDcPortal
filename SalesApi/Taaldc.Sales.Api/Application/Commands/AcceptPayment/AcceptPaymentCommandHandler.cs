@@ -22,7 +22,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
     {
         if (!_currentUser.Roles.Contains("admin")) return CommandResult.Failed(request.PaymentId, "Unauthorized.");
         
-        await _repository.VerifyPayment(request.PaymentId, _currentUser.Email);
+        await _repository.AcceptPayment(request.OrderId, request.PaymentId, _currentUser.Email);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
         
