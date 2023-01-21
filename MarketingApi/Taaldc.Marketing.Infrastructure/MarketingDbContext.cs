@@ -26,7 +26,8 @@ public class MarketingDbContext : DbContext, IUnitOfWork
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        
+        this.DbAudit(_currentUser);
+
         
         return base.SaveChangesAsync(cancellationToken);
     }
