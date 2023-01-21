@@ -30,44 +30,48 @@ public partial class DashboardQueries : IDashboardQueries
 
         _context = context;
     }
-    
-    public async Task<int> GetAvailableUnitCount() =>
-        _context.Units
+
+    public async Task<int> GetAvailableUnitCount()
+    {
+      
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsACondoUnit() && i.UnitStatusId == (int)UnitStatus.AVAILABLE);
+            .CountAsync(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.AVAILABLE);
+       
+    }
 
     public async Task<int> GetReservedUnitCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsACondoUnit() && i.UnitStatusId == (int)UnitStatus.RESERVED);
+            .Count(i =>  new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId)  && i.UnitStatusId == (int)UnitStatus.RESERVED);
 
     public async Task<int> GetSoldUnitCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsACondoUnit() && i.UnitStatusId == (int)UnitStatus.SOLD);
+            .Count(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId)  && i.UnitStatusId == (int)UnitStatus.SOLD);
 
     public async Task<int> GetBlockedUnitCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsACondoUnit() && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .Count(i =>  new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId)  && i.UnitStatusId == (int)UnitStatus.BLOCKED);
 
     public async Task<int> GetAvailableParkingCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsAParkingUnit() && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .Count(i => new[] { 6,7 }.Contains(i.UnitTypeId)  && i.UnitStatusId == (int)UnitStatus.BLOCKED);
 
     public async Task<int> GetReservedParkingCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsAParkingUnit() && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .Count(i =>new[] { 6,7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
 
     public async Task<int> GetSoldParkingCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsAParkingUnit() && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .Count(i => new[] { 6,7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
 
     public async Task<int> GetBlockedParkingCount() =>
         _context.Units
             .AsNoTracking()
-            .Count(i => i.UnitTypeId.IsAParkingUnit() && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .Count(i =>new[] { 6,7 }.Contains(i.UnitTypeId)&& i.UnitStatusId == (int)UnitStatus.BLOCKED);
 }

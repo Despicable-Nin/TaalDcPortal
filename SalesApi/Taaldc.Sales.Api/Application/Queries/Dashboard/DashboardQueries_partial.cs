@@ -9,7 +9,7 @@ public partial class DashboardQueries
     public async Task<IEnumerable<AvailabilityOfParkingUnitPerFloorDTO>> GetParkingUnitTypeAvailabilityPerFloor()
     {
         var unitDb = _context.Units.AsNoTracking()
-            .Where(unit => unit.UnitTypeId.IsACondoUnit() && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+            .Where(unit =>  new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
 
         var ret = from unit in unitDb
             select new AvailabilityOfParkingUnitPerFloorDTO(
@@ -26,7 +26,7 @@ public partial class DashboardQueries
     public async Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView()
     {
         var unitDb = _context.Units.AsNoTracking()
-            .Where(unit => unit.UnitTypeId.IsACondoUnit() && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+            .Where(unit =>  new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
 
         var ret = from unit in unitDb
             select new ResidentialUnitCountPerViewDTO(unit.ScenicView,
@@ -40,7 +40,7 @@ public partial class DashboardQueries
     {
 
         var unitDb = _context.Units.AsNoTracking()
-            .Where(unit =>  unit.UnitTypeId.IsAParkingUnit() && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+            .Where(unit =>  new[] { 6,7 }.Contains(unit.UnitTypeId) && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
 
         return await GetAvailabilityPerUnitType(unitDb);
     }
@@ -49,7 +49,7 @@ public partial class DashboardQueries
     {
        
         var unitDb = _context.Units.AsNoTracking().Where(unit =>
-            unit.UnitTypeId.IsACondoUnit() && unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
+            new[] { 2, 3, 4, 5, 8 }.Contains(unit.UnitTypeId)&& unit.UnitStatusId == (int)UnitStatus.AVAILABLE);
 
         return await GetAvailabilityPerUnitType(unitDb);
     }
