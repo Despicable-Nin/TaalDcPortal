@@ -1,6 +1,8 @@
 USE taaldb_admin
 GO
 
+--TRUNCATE TABLE taaldb_sales.sales.unitreplica
+
 INSERT INTO taaldb_sales.sales.unitreplica
 (Id, 
 CreatedBy, 
@@ -20,6 +22,7 @@ Floor,
 Unit,
 ScenicView,
 UnitType,
+UnitTypeShortCode,
 UnitArea,
 BalconyArea,
 UnitStatus,
@@ -40,6 +43,7 @@ f.Name AS Floor,
 u.Identifier AS Unit,
 sv.Name AS ScenicView,
 ut.Name AS UnitType,
+ut.ShortCode AS UnitTypeShortCode,
 u.FloorArea AS UnitArea,
 u.BalconyArea AS BalconyArea,
 us.Name AS UnitStatus,
