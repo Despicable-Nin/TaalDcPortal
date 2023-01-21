@@ -1,7 +1,7 @@
 
 namespace SeedWork;
 
-public abstract class Entity //: IAuditable
+public abstract class Entity: IAuditable
 {
 
     private int? _requestedHashCode;
