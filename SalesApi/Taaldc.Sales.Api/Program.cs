@@ -59,7 +59,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options => {
-        options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
+        options.SwaggerEndpoint("/swagger/V1/swagger.json", "Sales WebAPI");
     });
 }
 
