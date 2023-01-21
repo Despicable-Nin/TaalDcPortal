@@ -51,61 +51,7 @@ public class OrderRepository : IOrderRepository
 
         return payment;
     }
-
-    public async Task AcceptPayment(int orderId, int paymentId, string verifiedBy)
-    {
-        
-        //get order to update
-        var order = await _context.Orders.Include(i => i.Payments).FirstOrDefaultAsync(i => i.Id == orderId);
-        
-        //get payment
-        var payment = order.Payments.FirstOrDefault(i =>
-            i.Id == paymentId && i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Pending));
-        
-        //if payment null 
-        if (payment == null) throw new SalesDomainException("Payment has already been processed.");
-        
-        payment.VerifyPayment(verifiedBy);
-
-        var hasRF = false;
-        var hasDP = false;
-
-        foreach (var p in order.Payments)
-        {
-            if (p.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation) && 
-                p.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            {
-                hasRF = true;
-            }
-            
-            if (p.GetPaymentTypeId() == PaymentType.GetId(PaymentType.PartialDownPayment) && 
-                p.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            {
-                hasDP = true;
-            }
-        }
-
-        if (hasRF && hasDP)
-        {
-            order.SetStatus(OrderStatus.GetIdByName(OrderStatus.PartiallyPaid));
-        }
-        else if (hasRF && hasDP == false)
-        {
-            order.SetStatus(OrderStatus.GetIdByName(OrderStatus.Reserved));
-        }
-        else if (hasRF == false && hasDP)
-        {
-            order.SetStatus(OrderStatus.GetIdByName(OrderStatus.PartiallyPaid));
-        }else if (hasRF == false && hasDP == false)
-        {
-            order.SetStatus(OrderStatus.GetIdByName(OrderStatus.New));
-        }
-
-        _context.Orders.Update(order);
-
-
-    }
-
+    
     public async Task<IEnumerable<PaymentStatus>> GetPaymentStatus()
     {
         return await _context.PaymentStatus.AsNoTracking().ToArrayAsync();
