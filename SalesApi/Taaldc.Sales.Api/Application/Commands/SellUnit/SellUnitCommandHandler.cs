@@ -84,7 +84,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.PaymentMethod,
                 request.Reservation,
                 request.Remarks,
-                default);
+                request.ReservationConfirmNo == request.DownPaymentConfirmNo ? request.ReservationConfirmNo : default);
         }
 
         await _salesRepository.UnitOfWork.SaveChangesAsync(default);
