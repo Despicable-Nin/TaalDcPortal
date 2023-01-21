@@ -21,9 +21,13 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
     public async Task<CommandResult> Handle(AcceptPaymentCommand request, CancellationToken cancellationToken)
     {
         if (!_currentUser.Roles.Contains("admin")) return CommandResult.Failed(request.PaymentId, "Unauthorized.");
-        
-        await _repository.AcceptPayment(request.OrderId, request.PaymentId, _currentUser.Email);
 
+        var order = await _repository.FindOrderByIdAsync(request.OrderId);
+
+        order.AcceptPayment(request.PaymentId, _currentUser?.Email);
+
+        _repository.UpdateOrder(order);
+       
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
         
         return CommandResult.Success(request.PaymentId);

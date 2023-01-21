@@ -80,6 +80,40 @@ public class Order : DomainEntity, IAggregateRoot
     public Payment FindPayment(string confirmationNumber) =>
         _payments.SingleOrDefault(i => i.ConfirmationNumber == confirmationNumber);
 
+    public void AcceptPayment(int paymentId, string verifiedBy)
+    {
+        if (_payments.Any(i =>
+                i.Id == paymentId && i.GetPaymentStatusId() != PaymentStatus.GetStatusId(PaymentStatus.Pending)))
+        {
+            throw new SalesDomainException(nameof(AcceptPayment), new Exception("Payment has already been processed."));
+        }
+
+        _payments.SingleOrDefault(i => i.Id == paymentId).VerifyPayment(verifiedBy);
+       
+
+        if (HasReservation() && HasDownpayment())
+        {
+            _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
+        }else if (HasReservation() && !HasDownpayment())
+        {
+            _statusId = OrderStatus.GetIdByName(OrderStatus.Reserved);
+        }else if (!HasReservation() && HasDownpayment())
+        {
+            _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
+        }
+        else
+        {
+            _statusId = OrderStatus.GetIdByName(OrderStatus.New);
+        }
+        
+    }
+
+    public bool HasReservation() => _payments.Any()
+        ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation)) : false;
+    
+    public bool HasDownpayment() => _payments.Any()
+        ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.PartialDownPayment)) : false;
+
 
     //private List<Penalty> _penalties;
     //public IEnumerable<Penalty> Penalties => _penalties.AsReadOnly();

@@ -21,7 +21,7 @@ public class OrderRepository : IOrderRepository
 
 
     public async Task<Order> FindOrderByIdAsync(int transactionId) =>
-        await _context.Orders.AsNoTracking().FirstOrDefaultAsync(i => i.Id == transactionId);
+        await _context.Orders.Include(i => i.Payments).AsNoTracking().FirstOrDefaultAsync(i => i.Id == transactionId);
 
     public Order AddOrder(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks, decimal finalPrice)
     {
