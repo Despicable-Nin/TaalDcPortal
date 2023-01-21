@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaalDc.Portal.Services;
+using TaalDc.Portal.ViewModels.Catalog;
 using TaalDc.Portal.ViewModels.Sales;
 
 namespace TaalDc.Portal.Controllers;
@@ -9,10 +10,12 @@ namespace TaalDc.Portal.Controllers;
 public class SalesController : BaseController<SalesController>
 {
 	private readonly ISalesService _salesService;
+	private readonly ICatalogService _catalogService;
 
-	public SalesController(ISalesService salesService, ILogger<SalesController> loggerInstance) : base(loggerInstance)
+	public SalesController(ISalesService salesService, ICatalogService catalogService, ILogger<SalesController> loggerInstance) : base(loggerInstance)
 	{
 		_salesService = salesService;
+		_catalogService = catalogService;
 	}
 
 	// GET
@@ -92,10 +95,13 @@ public class SalesController : BaseController<SalesController>
         
         var result = await _salesService.SellUnit(model);
 
-		if (!result.IsSuccess) return BadRequest(new
-		{
-			Message = result.ErrorMessage
-		});
+		if (!result.IsSuccess) return BadRequest(new { Message = result.ErrorMessage });
+
+		//Update Unit Status in Catalog
+		var unitStatus = new UnitStatusUpdateDTO(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
+        var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+
+        if(!unitStatusResult.IsSuccess) return BadRequest(new { Message = unitStatusResult.ErrorMessage });
 
 		return Ok(result);
 	}

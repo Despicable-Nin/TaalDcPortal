@@ -4,6 +4,7 @@ using System.Text.Json;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
+using TaalDc.Portal.ViewModels.Catalog;
 using TaalDc.Portal.ViewModels.Sales;
 
 namespace TaalDc.Portal.Services;
@@ -13,12 +14,12 @@ public class SalesService : ISalesService
 	private readonly IOptions<AppSettings> _settings;
 	private readonly HttpClient _httpClient;
 	private readonly ILogger<SalesService> _logger;
-
 	private readonly string _removeServiceBaseUrl;
 
 	public SalesService(IOptions<AppSettings> settings,
 			HttpClient httpClient,
-			ILogger<SalesService> logger)
+			ILogger<SalesService> logger,
+			ICatalogService catalogService)
 	{
 		_settings = settings;
 		_httpClient = httpClient;
@@ -42,8 +43,6 @@ public class SalesService : ISalesService
 
 		if (response.IsSuccessStatusCode)
 		{
-			//Update Unit Status in Catalog
-
 			return JsonSerializer.Deserialize<SellUnitCommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 		}
 

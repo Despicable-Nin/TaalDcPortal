@@ -17,6 +17,9 @@ public static class API
         public static string AddTower(string baseUri) => $"{baseUri}/api/adm/towers";
         public static string AddUnit(string baseUri) => $"{baseUri}/api/adm/units";
         public static string AddUnitType(string baseUri) => $"{baseUri}/api/adm/unitTypes";
+        public static string UpdateUnitStatus(string baseUri) => $"{baseUri}/api/adm/units/change-status";
+
+
 
         public static string GetProperties(string baseUri) => $"{baseUri}/api/adm/properties";
         public static string GetTowers(string baseUri) => $"{baseUri}/api/adm/towers";

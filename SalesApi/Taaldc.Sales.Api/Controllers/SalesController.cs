@@ -1,22 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Taaldc.Sales.Api.Controllers
 {
