@@ -45,7 +45,7 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBeha
 
 builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 builder.Services.AddScoped(typeof(IBuyerRepository), typeof(BuyerRepository));
-//builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
+builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
 
 builder.Services.AddScoped<IOrderQueries>(i =>
     new OrderQueries(connectionString, new SalesDbContextDesignFactory().CreateDbContext(null)));
