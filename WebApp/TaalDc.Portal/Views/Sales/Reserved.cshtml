@@ -73,7 +73,7 @@
                         {
                             <tr>
                                 <td>
-                                    <a href="/Sales/Details/@sale.OrderId">@sale.OrderId</a>
+                                    <a asp-action="Details" asp-controller="Sales" asp-route-id="@sale.OrderId">@sale.OrderId</a>
                                 </td>
                                 <td>@sale.FirstName @sale.LastName</td>
                                 <td>@sale.Tower</td>

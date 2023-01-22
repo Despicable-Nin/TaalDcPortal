@@ -62,38 +62,36 @@ public class OrderQueries : IOrderQueries
 
     public async Task<IEnumerable<PaymentDTO>> GetPayments(int id)
     {
-        var tran = await _context.Orders
-            .Include(i => i.Payments)
-            .ThenInclude(i => i.PaymentType)
-            .Include(i => i.Payments)
-            .ThenInclude(i => i.Status)
-            .Include(i => i.Payments)
-            .ThenInclude(i => i.TransactionType)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(i => i.Id == id);
-        
-        if (tran is null) throw new SalesDomainException(nameof(GetPayments), new Exception("Order not found"));
+        var query = $"SELECT P.Id, " +
+            $"P.ActualPaymentDate, " +
+            $"P.ConfirmationNumber, " +
+            $"P.PaymentTypeId, " +
+            $"PT.[Name] AS PaymentType, " +
+            $"P.TransactionTypeId, " +
+            $"T.[Name] AS TransactionType, " +
+            $"P.VerifiedBy, " +
+            $"P.StatusId AS PaymentStatusId, " +
+            $"PS.[Name] AS PaymentStatus, " +
+            $"P.PaymentMethod, " +
+            $"P.AmountPaid, " +
+            $"ISNULL(P.Remarks, ''), " +
+            $"P.CorrelationId, " +
+            $"P.OrderId FROM dbo.payment P " +
+            $"JOIN dbo.paymenttype PT ON " +
+            $"P.PaymentTypeId = PT.Id JOIN " +
+            $"dbo.transactiontype T ON " +
+            $"P.TransactionTypeId = T.Id JOIN " +
+            $"dbo.paymentstatus PS ON " +
+            $"P.StatusId = PS.Id " +
+            $"WHERE OrderId = '{id}'";
 
-        var result = tran.Payments.Select(i =>
-            new PaymentDTO(
-                i.Id, 
-                i.ActualPaymentDate, 
-                i.ConfirmationNumber,
-                i.GetPaymentTypeId(),
-                i.PaymentType?.Name,
-                i.GetTransactionTypeId(), 
-                i.VerifiedBy,
-                i.GetPaymentStatusId(),
-                i.Status?.Name,
-                i.PaymentMethod,
-                i.AmountPaid,
-                i.Remarks,
-                tran.Id,
-                i.CorrelationId,
-                i.TransactionType?.Name));
-        
+        await using var connection = new SqlConnection(_connectionString);
+
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<PaymentDTO>(query);
+
         return result;
-
     }
 
     public async Task<Unit_Order_DTO> GetOrder(int id)

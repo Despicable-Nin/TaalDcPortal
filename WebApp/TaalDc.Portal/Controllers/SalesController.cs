@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Drawing.Printing;
+using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
 using TaalDc.Portal.ViewModels.Sales;
@@ -131,15 +132,26 @@ public class SalesController : BaseController<SalesController>
             return BadRequest(model);
         }
 	}
-    
 
+
+    [Route("Sales/{id}/Details")]
     public async Task<IActionResult> Details(int id)
     {
         var result = await _salesService.GetSalesById(id);
 
         return View(result);
     }
-    
+
+    [Route("Sales/{id}/Payments")]
+    public async Task<IActionResult> Payments(int id)
+    {
+        var payments = await _salesService.GetSalesPayments(id);
+        var salesViewModel = new SalesViewModel(payments, id);
+
+        return View(salesViewModel);
+    }
+
+
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?
     //we can throw it in Hangfire here..

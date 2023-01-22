@@ -44,6 +44,18 @@ public class SalesService : ISalesService
         return result;
     }
 
+    public async Task<IEnumerable<PaymentDTO>> GetSalesPayments(int id)
+    {
+        var uri = API.Sales.GetSales(_removeServiceBaseUrl);
+        uri = $"{uri}/{id}/payments";
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<PaymentDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
     public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId)
 	{
 		var uri = API.Sales.GetSales(_removeServiceBaseUrl);

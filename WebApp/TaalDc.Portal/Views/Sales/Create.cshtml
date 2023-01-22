@@ -482,7 +482,14 @@
 
 			<div class="mb-3 col-lg-12">
 				<label asp-for="PaymentMethod" class="form-label"><strong>Payment Method</strong></label>
-				<input asp-for="PaymentMethod" class="form-control" required />
+				<select asp-for="PaymentMethod" class="form-control form-select" required>
+					<option value="Cash">
+						Cash
+					</option>
+					<option value="Check">
+						Check
+					</option>
+				</select>
 				<div class="invalid-feedback">
 					This is a required field.
 				</div>
