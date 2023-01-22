@@ -6,4 +6,7 @@ public interface IAmCurrentUser
     string Email { get; }
     string IdentityId { get; }
     string[] Roles { get; }
+
+    bool IsAdmin();
+    bool IsBroker();
 }

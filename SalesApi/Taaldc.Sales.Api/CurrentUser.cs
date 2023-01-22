@@ -22,4 +22,8 @@ public class CurrentUser : IAmCurrentUser
     public string[] Roles { get; }
     public string Email { get; }
     public string IdentityId { get; }
+    
+    
+    public bool IsAdmin() => Roles.Contains("ADMIN");
+    public bool IsBroker() => Roles.Contains("BROKER");
 }
