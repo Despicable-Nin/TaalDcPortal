@@ -13,6 +13,8 @@ public interface IOrderQueries
         int? viewId);
 
     Task<IEnumerable<PaymentDTO>> GetPayments(int id);
+
+    Task<Unit_Order_DTO> GetOrder(int id);
 }
 
 // public enum UnitIs : int

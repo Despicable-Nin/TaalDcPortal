@@ -47,10 +47,12 @@ builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 builder.Services.AddScoped(typeof(IBuyerRepository), typeof(BuyerRepository));
 builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
 
+
 builder.Services.AddScoped<IOrderQueries>(i =>
-    new OrderQueries(connectionString, new SalesDbContextDesignFactory().CreateDbContext(null)));
+    new OrderQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
+
 builder.Services.AddScoped<IDashboardQueries>(i =>
-    new DashboardQueries(connectionString, new SalesDbContextDesignFactory().CreateDbContext(null)));
+    new DashboardQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
 
 var app = builder.Build();
 

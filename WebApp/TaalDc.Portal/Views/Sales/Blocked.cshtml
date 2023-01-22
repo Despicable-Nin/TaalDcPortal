@@ -37,9 +37,6 @@
         <li class="nav-item">
             <a class="nav-link active" asp-controller="Sales" asp-action="Blocked">Blocked</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Sales" asp-action="Cancelled">Cancelled</a>
-        </li>
     </ul>
 
 
@@ -62,7 +59,7 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Customer Name</th>
+                            <th style="width: 215px">Customer Name</th>
                             <th>Tower</th>
                             <th>Unit Type</th>
                             <th>Unit No.</th>
@@ -75,7 +72,7 @@
                         @foreach (var sale in Model.Data)
                         {
                             <tr>
-                                <td>@sale.UnitId</td>
+                                <td>@sale.OrderId</td>
                                 <td>@sale.FirstName @sale.LastName</td>
                                 <td>@sale.Tower</td>
                                 <td>@sale.UnitType @sale.ScenicView</td>

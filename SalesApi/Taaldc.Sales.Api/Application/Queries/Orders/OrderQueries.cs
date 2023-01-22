@@ -87,10 +87,23 @@ public class OrderQueries : IOrderQueries
                 i.AmountPaid,
                 i.Remarks,
                 tran.Id,
-                i.CorrelationId.ToString(),
+                i.CorrelationId,
                 i.TransactionType?.Name));
         
         return result;
 
+    }
+
+    public async Task<Unit_Order_DTO> GetOrder(int id)
+    {
+        var query = $"{UnitQuery} WHERE O.Id = '{id}'";
+
+        await using var connection = new SqlConnection(_connectionString);
+
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<Unit_Order_DTO>(query);
+
+        return result.FirstOrDefault();
     }
 }

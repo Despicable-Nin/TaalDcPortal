@@ -76,6 +76,7 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}/payments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -84,7 +85,6 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(await _orderQueries.GetPayments(id));
         }
 
-        [AllowAnonymous]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -102,6 +102,19 @@ namespace Taaldc.Sales.Api.Controllers
             
             return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId, unitTypeId, viewId));
         }
-        
+
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetPresellingUnits(
+            int id
+           )
+        {
+            if (id <= 0) return BadRequest("Invalid order id");
+
+            return Ok(await _orderQueries.GetOrder(id));
+        }
+
     }
 }
