@@ -1,6 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using SeedWork;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.Text.Json;
 using TaalDc.Portal.DTO.Sales;
@@ -30,9 +32,21 @@ public class SalesService : ISalesService
 		_removeServiceBaseUrl = $"{settings.Value.SalesUrl}";
 	}
 
-	public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId)
+    public async Task<Unit_Order_DTO> GetSalesById(int id)
 	{
-		var uri = API.Sales.GetUnitAndOrdersAvailability(_removeServiceBaseUrl);
+		var uri = API.Sales.GetSales(_removeServiceBaseUrl);
+		uri = $"{uri}/{id}";
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<Unit_Order_DTO>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId)
+	{
+		var uri = API.Sales.GetSales(_removeServiceBaseUrl);
 		uri = $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}";
 
 		var responseString = await _httpClient.GetStringAsync(uri);

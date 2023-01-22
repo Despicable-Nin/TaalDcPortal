@@ -30,7 +30,7 @@ public static class API
 
     public static class Sales
     {
-        public static string GetUnitAndOrdersAvailability(string baseUri) => $"{baseUri}/api/v1/sales";
+        public static string GetSales(string baseUri) => $"{baseUri}/api/v1/sales";
 		public static string SellUnit(string baseUrl) => $"{baseUrl}/api/v1/sales";
 
 		public static string GetAvailableUnitCount(string baseUrl) =>

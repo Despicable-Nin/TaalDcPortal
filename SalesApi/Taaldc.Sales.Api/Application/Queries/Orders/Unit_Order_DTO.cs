@@ -14,6 +14,8 @@ public record Unit_Order_DTO
 
     [JsonPropertyName("contact_number")] public string ContactNo { get; set; }
 
+    [JsonPropertyName("address")] public string Address { get; set; }
+
     [JsonPropertyName("country")] public string Country { get; set; }
 
     [JsonPropertyName("province")] public string Province { get; set; }
@@ -24,6 +26,8 @@ public record Unit_Order_DTO
 
     [JsonPropertyName("order_id")] public string OrderId { get; set; }
 
+    [JsonPropertyName("transaction_date")] public DateTime TransactionDate { get; set; }
+    
     [JsonPropertyName("code")] public string Code { get; set; }
 
     [JsonPropertyName("broker")] public string Broker { get; set; }

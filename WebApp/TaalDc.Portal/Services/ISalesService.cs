@@ -15,4 +15,6 @@ public interface ISalesService
 		int? viewId);
 
     Task<SellUnitCommandResult> SellUnit(SalesCreateDTO model);
+
+	Task<Unit_Order_DTO> GetSalesById(int id);
 }

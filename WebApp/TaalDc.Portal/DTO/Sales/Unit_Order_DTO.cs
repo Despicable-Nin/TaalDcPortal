@@ -14,7 +14,7 @@ public record Unit_Order_DTO
     [JsonPropertyName("email_address")] public string EmailAddress { get; set; }
 
     [JsonPropertyName("contact_number")] public string ContactNo { get; set; }
-
+    [JsonPropertyName("address")] public string Address { get; set; }
     [JsonPropertyName("country")] public string Country { get; set; }
 
     [JsonPropertyName("province")] public string Province { get; set; }
@@ -24,6 +24,8 @@ public record Unit_Order_DTO
     [JsonPropertyName("zip_code")] public string ZipCode { get; set; }
 
     [JsonPropertyName("order_id")] public string OrderId { get; set; }
+
+    [JsonPropertyName("transaction_date")] public DateTime TransactionDate { get; set; }
 
     [JsonPropertyName("code")] public string Code { get; set; }
 

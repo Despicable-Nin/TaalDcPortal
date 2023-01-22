@@ -14,10 +14,12 @@ public class OrderQueries : IOrderQueries
     private readonly string _connectionString;
     private readonly SalesDbContext _context;
 
+    private const string PaymentCTE = $"WITH PaymentCTE AS ( SELECT P.*, ROW_NUMBER() OVER (PARTITION BY P.OrderId ORDER BY P.id) as RowNum FROM [taaldb_sales].[dbo].[payment] P) ";
+
     private const string UnitQuery =
-        $" SELECT " + 
-        $" O.Id ,O.[Code] ,O.[Broker] ,O.[Remarks] ,O.[FinalPrice] ,O.[IsRefundable] ,O.[StatusId], OS.[Name] AS Status, O.[BuyerId] ,B.[Salutation] ,B.[FirstName] ,B.[LastName] ,B.[EmailAddress] ,B.[ContactNo] ,B.[Country] ,B.[Province] ,B.[TownCity] ,B.[ZipCode] ,O.[Id] [OrderId] ,B.[CreatedBy] ,O.[BuyerId] ,U.[PropertyId] ,U.[TowerId] ,U.[FloorId] ,U.[UnitId] ,U.[ScenicViewId] ,U.[UnitTypeId] ,U.[Property] ,U.[Tower] ,U.[Floor] ,U.[Unit] ,U.[ScenicView] ,U.[UnitType] ,U.[UnitArea] ,U.[BalconyArea] ,U.[UnitStatus],U.[UnitStatusId],U.[OriginalPrice] ,U.[SellingPrice] " + 
-        $" FROM [taaldb_sales].[sales].[unitreplica] U LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId LEFT JOIN [taaldb_sales].[sales].[orderstatus] OS ON O.[StatusId] = OS.Id  LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id ";
+        $"{PaymentCTE} SELECT " + 
+        $" O.Id ,O.[Code] ,O.[Broker] ,O.[Remarks] ,O.[FinalPrice] ,O.[IsRefundable] ,O.[StatusId], OS.[Name] AS Status, O.[BuyerId] ,B.[Salutation] ,B.[FirstName] ,B.[LastName] ,B.[EmailAddress] ,B.[ContactNo] ,B.[Address], B.[Country] ,B.[Province] ,B.[TownCity] ,B.[ZipCode] ,O.[Id] [OrderId] ,B.[CreatedBy] ,O.[BuyerId] ,U.[PropertyId] ,U.[TowerId] ,U.[FloorId] ,U.[UnitId] ,U.[ScenicViewId] ,U.[UnitTypeId] ,U.[Property] ,U.[Tower] ,U.[Floor] ,U.[Unit] ,U.[ScenicView] ,U.[UnitType] ,U.[UnitArea] ,U.[BalconyArea] ,U.[UnitStatus],U.[UnitStatusId],U.[OriginalPrice] ,U.[SellingPrice],P.[ActualPaymentDate] AS TransactionDate " + 
+        $" FROM [taaldb_sales].[sales].[unitreplica] U LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId LEFT JOIN [taaldb_sales].[sales].[orderstatus] OS ON O.[StatusId] = OS.Id  LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
 
     
     public OrderQueries(string connectionString, SalesDbContext context)
@@ -48,7 +50,7 @@ public class OrderQueries : IOrderQueries
 
 
         //get total count
-        var unitCountQuery = $"SELECT  TOP 1 count(U.Id) FROM \r\n [taaldb_sales].[sales].[unitreplica] U ";
+        var unitCountQuery = $"SELECT  TOP 1 count(U.Id) FROM   [taaldb_sales].[sales].[unitreplica] U ";
 
         var countQuery = $"{unitCountQuery} WHERE U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
 

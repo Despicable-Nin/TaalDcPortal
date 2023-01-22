@@ -132,6 +132,13 @@ public class SalesController : BaseController<SalesController>
         }
 	}
     
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var result = await _salesService.GetSalesById(id);
+
+        return View(result);
+    }
     
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?
