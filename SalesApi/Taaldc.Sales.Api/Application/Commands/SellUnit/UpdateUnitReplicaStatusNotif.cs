@@ -39,7 +39,7 @@ namespace Taaldc.Sales.Api.Application.Commands.SellUnit
 
 				_repository.Update(unit);
 
-				await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+				await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 			}
 		}
 	}

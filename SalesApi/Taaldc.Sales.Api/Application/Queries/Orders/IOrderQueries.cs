@@ -1,16 +1,17 @@
+using Taaldc.Sales.Api.Application.Common.Models;
+
 namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public interface IOrderQueries
 {
-    Task<IEnumerable<Unit_Order_DTO>> GetUnitAndOrdersByAvailability(
+    Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersByAvailability(
         int unitStatusId,
         int pageNumber,
         int pageSize,
         int? floorId,
         int? unitTypeId,
         int? viewId);
-    
-    
+
     Task<IEnumerable<PaymentDTO>> GetPayments(int id);
 }
 

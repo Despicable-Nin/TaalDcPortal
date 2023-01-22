@@ -38,6 +38,10 @@ public class ChangeStatusOfUnitCommandHandler : IRequestHandler<ChangeStatusOfUn
         unit.SetUnitStatus(request.UnitStatus);
         unit.AddRemarks(request.Remarks);
 
+        _repository.UpdateUnit(unit);
+
+        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+
         return CommandResult.Success(unit.Id);
     }
 }

@@ -416,14 +416,14 @@
             </div>
 
 
-            <div class="mb-3 col-lg-12">
+            @*<div class="mb-3 col-lg-12">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="withReservation">
                     <label class="form-check-label" for="withReservation">With Reservation?</label>
                 </div>
-            </div>
+            </div>*@
 
-            <div class="mb-3 col-lg-6 reservationfields">
+            <div class="mb-3 col-lg-6">
                 <label asp-for="Reservation" class="form-label"><strong>Reservation Amount</strong></label>
                 <input asp-for="Reservation" class="form-control" required />
                 <div class="invalid-feedback">
@@ -431,7 +431,7 @@
                 </div>
             </div>
 
-            <div class="mb-3 col-lg-6 reservationfields">
+            <div class="mb-3 col-lg-6">
                 <label asp-for="ReservationConfirmNo" class="form-label"><strong>Reservation Confirmation No.</strong></label>
                 <input asp-for="ReservationConfirmNo" class="form-control" required />
                 <div class="invalid-feedback">
@@ -710,20 +710,20 @@
 
 			var withReservation = document.getElementById("withReservation");
 
-			withReservation.addEventListener('change', function () {
-				var reservationFields = document.getElementsByClassName('reservationfields');
-				if (this.checked) {
-					for(var i=0; i<reservationFields.length; i++){
-						reservationFields[i].style.display = "block";
-					}
+			//withReservation.addEventListener('change', function () {
+			//	var reservationFields = document.getElementsByClassName('reservationfields');
+			//	if (this.checked) {
+			//		for(var i=0; i<reservationFields.length; i++){
+			//			reservationFields[i].style.display = "block";
+			//		}
 
-					console.log("Checkbox is checked..");
-				} else {
-					for (var i = 0; i < reservationFields.length; i++) {
-						reservationFields[i].style.display = "none";
-					}
-				}
-			});
+			//		console.log("Checkbox is checked..");
+			//	} else {
+			//		for (var i = 0; i < reservationFields.length; i++) {
+			//			reservationFields[i].style.display = "none";
+			//		}
+			//	}
+			//});
 
 
 

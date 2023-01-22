@@ -160,4 +160,9 @@ public class ProjectRepository : IProjectRepository
 
         _context.Properties.Remove(property);
     }
+
+	public Unit UpdateUnit(Unit unit)
+	{
+        return _context.Units.Update(unit).Entity;
+	}
 }

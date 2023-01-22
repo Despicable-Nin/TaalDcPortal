@@ -61,7 +61,7 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .FindNavigation(nameof(Order.Payments))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
-
-    }
+		builder.Property(b => b.Remarks).IsRequired(false);
+	}
 }
 

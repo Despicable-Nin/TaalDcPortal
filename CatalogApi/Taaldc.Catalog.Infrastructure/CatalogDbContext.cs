@@ -27,7 +27,8 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options, IAmCurrentUser currentUser, IMediator mediator) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        System.Diagnostics.Debug.WriteLine("CatalogDbContext::ctor ->" + this.GetHashCode());
+		_currentUser = currentUser;
+		System.Diagnostics.Debug.WriteLine("CatalogDbContext::ctor ->" + this.GetHashCode());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

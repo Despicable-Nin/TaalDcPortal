@@ -83,27 +83,30 @@ public class SalesController : BaseController<SalesController>
 
     public IActionResult Create()
     {
-        return View();
+        var salesCreateDTO = new SalesCreateDTO();
+        return View(salesCreateDTO);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(SalesCreateDTO model)
-    {
-        if (model.DownPayment == 0) model.DownpaymentConfirmNo = "-";
+	{
+		if (ModelState.IsValid) { 
+            var result = await _salesService.SellUnit(model);
 
-        if(string.IsNullOrEmpty(model.Remarks)) model.Remarks = "";
-        
-        var result = await _salesService.SellUnit(model);
+		    if (!result.IsSuccess) return BadRequest(new { Message = result.ErrorMessage });
 
-		if (!result.IsSuccess) return BadRequest(new { Message = result.ErrorMessage });
+		    //Update Unit Status in Catalog
+		    var unitStatus = new UnitStatusUpdateDTO(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
+            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 
-		//Update Unit Status in Catalog
-		var unitStatus = new UnitStatusUpdateDTO(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
-        var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+            if(!unitStatusResult.IsSuccess) return BadRequest(new { Message = unitStatusResult.ErrorMessage });
 
-        if(!unitStatusResult.IsSuccess) return BadRequest(new { Message = unitStatusResult.ErrorMessage });
-
-		return Ok(result);
+		    return Ok(result);
+        }
+        else
+        {
+            return BadRequest(model);
+        }
 	}
     
     

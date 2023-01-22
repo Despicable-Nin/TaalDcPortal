@@ -6,6 +6,15 @@ namespace TaalDc.Portal.ViewModels.Sales
 {
     public class SalesCreateDTO
     {
+		public SalesCreateDTO()
+		{
+			Remarks = "";
+			DownPayment = 0.00M;
+			Reservation = 0.00M;
+			DownpaymentConfirmNo = "";
+			PaymentDate = DateTime.Now;
+		}
+
 		[JsonPropertyName("code")]
 		[JsonProperty(Required = Required.AllowNull)]
 		public string Code { get; set; }
@@ -72,7 +81,6 @@ namespace TaalDc.Portal.ViewModels.Sales
 		public decimal Reservation { get; set; }
 
 		[JsonPropertyName("downpayment")]
-		[JsonProperty(Required = Required.AllowNull)]
 		public decimal DownPayment { get; set; }
 
 		[JsonPropertyName("payment_date")]
@@ -85,7 +93,7 @@ namespace TaalDc.Portal.ViewModels.Sales
 
 		[JsonPropertyName("remarks")]
 		[JsonProperty(Required = Required.AllowNull)]
-		public string Remarks { get; set; }
+		public string Remarks { get; set; } 
 
 		[JsonPropertyName("reservation_confirmation_number")]
 		[JsonProperty(Required = Required.Always)]
