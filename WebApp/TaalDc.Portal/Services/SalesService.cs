@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Options;
 using SeedWork;
+using System.Globalization;
 using System.Text.Json;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Infrastructure;
@@ -28,10 +30,17 @@ public class SalesService : ISalesService
 		_removeServiceBaseUrl = $"{settings.Value.SalesUrl}";
 	}
 
-	public Task<IEnumerable<Unit_Order_DTO>> GetUnitAndOrdersAvailability()
-    {
-        throw new NotImplementedException();
-    }
+	public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId)
+	{
+		var uri = API.Sales.GetUnitAndOrdersAvailability(_removeServiceBaseUrl);
+		uri = $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}";
+
+		var responseString = await _httpClient.GetStringAsync(uri);
+
+		var result = JsonSerializer.Deserialize<PaginationQueryResult<Unit_Order_DTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+		return result;
+	}
 
 	public async Task<SellUnitCommandResult> SellUnit(SalesCreateDTO model)
 	{

@@ -1,19 +1,38 @@
-﻿@{
+﻿@using TaalDc.Portal.DTO.Sales;
+@using TaalDc.Portal.Models;
+@model PaginationQueryResult<Unit_Order_DTO>
+
+
+@{
     ViewBag.Title = "Sales";
     Layout = "_Layout";
 
     var filter = Context.Request.Query["filter"].FirstOrDefault();
+
+    var currentPageNo = Model.PageNumber;
+    var numberOfPagesToDisplay = 5;
+
+    var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
+
+    var pageGroups = new List<int>();
+
+    for (int i = 1; i <= totalPageGroups; i++)
+    {
+        pageGroups.Add(i * numberOfPagesToDisplay);
+    }
+
+    var nextPage = 0;
+    var prevPage = 0;
 }
 
 
 <div class="container-fluid">
-     <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Sales" asp-action="Index">Sold</a>
         </li>
-         
         <li class="nav-item">
-            <a class="nav-link" asp-controller="Sales" asp-action="Reserved">Reserved</a>
+            <a class="nav-link " asp-controller="Sales" asp-action="Reserved">Reserved</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" asp-controller="Sales" asp-action="Blocked">Blocked</a>
@@ -40,67 +59,88 @@
         <div class="data-section">
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped">
-                     <thead>
+                    <thead>
                         <tr>
                             <th>ID</th>
                             <th>Customer Name</th>
                             <th>Tower</th>
                             <th>Unit Type</th>
                             <th>Unit No.</th>
+                            <th>Sales Status</th>
+                            <th>Unit Status</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Juan dela Cruz</td>
-                            <td>Common Tower</td>
-                            <td>1BR TAAL VIEW</td>
-                            <td>4-413</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
+                        @foreach (var sale in Model.Data)
+                        {
+                            <tr>
+                                <td>@sale.UnitId</td>
+                                <td>@sale.FirstName @sale.LastName</td>
+                                <td>@sale.Tower</td>
+                                <td>@sale.UnitType @sale.ScenicView</td>
+                                <td>@sale.Unit</td>
+                                <td>@sale.Status</td>
+                                <td>@sale.UnitStatus</td>
+                                <td>
+                                    <a class="action-edit" href="#">Edit</a>
+                                    <a class="action-delete" href="#">Delete</a>
+                                </td>
+                            </tr>
+                        }
 
-                        <tr>
-                            <td>1</td>
-                            <td>Juan dela Cruz</td>
-                            <td>Common Tower</td>
-                            <td>1BR TAAL VIEW</td>
-                            <td>4-413</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
 
-                         <tr>
-                            <td>1</td>
-                            <td>Juan dela Cruz</td>
-                            <td>Common Tower</td>
-                            <td>1BR TAAL VIEW</td>
-                            <td>4-413</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
-
-                         <tr>
-                            <td>1</td>
-                            <td>Juan dela Cruz</td>
-                            <td>Common Tower</td>
-                            <td>1BR TAAL VIEW</td>
-                            <td>4-413</td>
-                            <td>
-                                <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
-                            </td>
-                        </tr>
+                        @if (Model.Data.Count() == 0)
+                        {
+                            <tr>
+                                <td class="text-center" colspan="8">No data to display.</td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
+
+            <div>
+                <ul class="pagination">
+
+                    @{
+                        var pageGroupIndex = pageGroups.Where(i => currentPageNo <= i).FirstOrDefault();
+                        var lastPageIndex = pageGroups.OrderByDescending(i => i).FirstOrDefault();
+                        var pageGroup = pageGroups.Count() > 0 && pageGroupIndex > 0 ? pageGroupIndex : Model.TotalPages;
+                        var pageGroupMinPage = Model.TotalPages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+                        //5 -> 0
+                        //10 -> 5
+
+                        nextPage = currentPageNo < Model.TotalPages ? currentPageNo + 1 : 0;
+                        prevPage = currentPageNo > 1 ? currentPageNo - 1 : 0;
+                    }
+
+                    <li class="page-item @(prevPage == 0? "disabled": "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
+                    </li>
+
+                    @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
+                    {
+                        <li class="page-item">
+                            <a href="?pageNumber=@(Model.PageNumber)" class="noselect page-link alink active">@Model.PageNumber</a>
+                        </li>
+                    }
+
+                    @for (int i = pageGroupMinPage; i < pageGroup; i++)
+                    {
+                        var active = (i + 1) == Model.PageNumber;
+                        var pageNo = i + 1;
+                        <li class="page-item"><a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active? "active": "")">@(pageNo)</a></li>
+                    }
+
+                    <li class="page-item @(nextPage == 0? "disabled": "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
+                    </li>
+
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>

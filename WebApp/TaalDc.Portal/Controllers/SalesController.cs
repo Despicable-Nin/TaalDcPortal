@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Drawing.Printing;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
 using TaalDc.Portal.ViewModels.Sales;
@@ -19,20 +21,64 @@ public class SalesController : BaseController<SalesController>
 	}
 
 	// GET
-	public IActionResult Index()
+	public async Task<IActionResult> Index(int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int pageNumber = 1,
+        int pageSize = 10)
     {
         //display units by joining tables unitreplica and acquisition
         //this should tell us which units are available,
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
+
+        var sales = await _salesService.GetUnitAndOrdersAvailability(2, pageNumber, pageSize, floorId, unitTypeId, viewId);
+        return View(sales);
+    }
+
+
+    public async Task<IActionResult> Available(int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
+        //
+
+        var sales = await _salesService.GetUnitAndOrdersAvailability(1, pageNumber, pageSize, floorId, unitTypeId, viewId);
+        return View(sales);
+    }
+
+
+    public async Task<IActionResult> Reserved(
+		int? floorId,
+		int? unitTypeId,
+		int? viewId,
+		int pageNumber = 1,
+		int pageSize = 10
+		)
+    {
+        //display units by joining tables unitreplica and acquisition
+        //this should tell us which units are available,
+        //w/c has been Reserved w/o payment, Reserved w/ payment,
+        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         
-        
-        return View();
+        var sales = await _salesService.GetUnitAndOrdersAvailability(3, pageNumber, pageSize, floorId, unitTypeId, viewId);
+
+
+        return View(sales);
     }
 
-
-    public IActionResult Available()
+    public async Task<IActionResult> Blocked(int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int pageNumber = 1,
+        int pageSize = 10)
     {
         //display units by joining tables unitreplica and acquisition
         //this should tell us which units are available,
@@ -40,33 +86,10 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-
-        return View();
-    }
+        var sales = await _salesService.GetUnitAndOrdersAvailability(4, pageNumber, pageSize, floorId, unitTypeId, viewId);
 
 
-    public IActionResult Reserved()
-    {
-        //display units by joining tables unitreplica and acquisition
-        //this should tell us which units are available,
-        //w/c has been Reserved w/o payment, Reserved w/ payment,
-        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
-        //
-
-
-        return View();
-    }
-
-    public IActionResult Blocked()
-    {
-        //display units by joining tables unitreplica and acquisition
-        //this should tell us which units are available,
-        //w/c has been Reserved w/o payment, Reserved w/ payment,
-        //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
-        //
-
-
-        return View();
+        return View(sales);
     }
 
     public IActionResult Cancelled()
