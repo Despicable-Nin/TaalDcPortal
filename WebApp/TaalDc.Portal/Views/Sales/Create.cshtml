@@ -410,13 +410,14 @@
             </div>
 
             <div class="mb-3 col-lg-12">
-	            <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
 	            @if (CurrentUser.IsBroker())
 	            {
+		            <label asp-for="Broker" class="form-label"><strong>Broker <small>(Defaults to current user)</small></strong></label>
 		            <input asp-for="Broker" class="form-control" value="@CurrentUser.Email" readonly="readonly" required />
 	            }
 	            else
 	            {
+		            <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
 		            <input asp-for="Broker" class="form-control" required />
 	            }
                
