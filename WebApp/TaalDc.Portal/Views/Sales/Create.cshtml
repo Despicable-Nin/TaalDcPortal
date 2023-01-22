@@ -1,10 +1,12 @@
 ﻿@using TaalDc.Portal.ViewModels.Sales
+@using SeedWork
 @model SalesCreateDTO
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "Sales - Create";
     Layout = "_Layout";
-
+	
 
 	string[] countryList = {
 			"Afghanistan",
@@ -408,8 +410,16 @@
             </div>
 
             <div class="mb-3 col-lg-12">
-                <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
-                <input asp-for="Broker" class="form-control" required />
+	            <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
+	            @if (CurrentUser.IsBroker())
+	            {
+		            <input asp-for="Broker" class="form-control" value="@CurrentUser.Email" readonly="readonly" required />
+	            }
+	            else
+	            {
+		            <input asp-for="Broker" class="form-control" required />
+	            }
+               
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Drawing.Printing;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using SeedWork;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -14,15 +16,19 @@ public class SalesController : BaseController<SalesController>
 {
 	private readonly ISalesService _salesService;
 	private readonly ICatalogService _catalogService;
+    private readonly IAccountService _accountService;
+    private readonly IAmCurrentUser _currentUser;
 
-	public SalesController(ISalesService salesService, ICatalogService catalogService, ILogger<SalesController> loggerInstance) : base(loggerInstance)
-	{
-		_salesService = salesService;
-		_catalogService = catalogService;
-	}
 
-	// GET
-	public async Task<IActionResult> Index(int? floorId,
+    public SalesController(ILogger<SalesController> loggerInstance, ISalesService salesService, ICatalogService catalogService, IAccountService accountService, IAmCurrentUser currentUser) : base(loggerInstance)
+    {
+        _salesService = salesService;
+        _catalogService = catalogService;
+        _accountService = accountService;
+        _currentUser = currentUser;
+    }
+
+    public async Task<IActionResult> Index(int? floorId,
         int? unitTypeId,
         int? viewId,
         int pageNumber = 1,
@@ -115,6 +121,16 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Create(SalesCreateDTO model)
 	{
 		if (ModelState.IsValid) { 
+            
+            //regardless of role --> check for broker validation
+            if (_currentUser.IsBroker() && model.Broker.ToUpper() != _currentUser.Email) return BadRequest("Broker not verified.");
+            
+            if (_currentUser.IsAdmin())
+            {
+                //check for the broker credentials if legit
+                if ( !await IsABroker(model.Broker.ToUpper())) return BadRequest("Broker not verified.");
+            }
+            
             var result = await _salesService.SellUnit(model);
 
 		    if (!result.IsSuccess) return BadRequest(new { Message = result.ErrorMessage });
@@ -157,4 +173,10 @@ public class SalesController : BaseController<SalesController>
     //we can throw it in Hangfire here..
     // a job that queries for the unit in catalog and updates the status . . .
     //for now.. mae a call to HTTPclient here... to catalog api to udpate unit..
+
+    private async Task<bool> IsABroker(string broker)
+    {
+        var brokers = await _accountService.GetBrokers();
+        return brokers.Any() ? brokers.Select(i => i.Email).Contains(broker) : false;
+    }
 }
