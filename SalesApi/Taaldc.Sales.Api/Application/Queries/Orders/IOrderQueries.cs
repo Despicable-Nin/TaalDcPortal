@@ -10,7 +10,8 @@ public interface IOrderQueries
         int pageSize,
         int? floorId,
         int? unitTypeId,
-        int? viewId);
+        int? viewId,
+        string broker = "");
 
     Task<IEnumerable<PaymentDTO>> GetPayments(int id);
 

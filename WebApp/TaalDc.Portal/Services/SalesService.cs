@@ -56,10 +56,12 @@ public class SalesService : ISalesService
         return result;
     }
 
-    public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId)
+    public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersAvailability(int unitStatusId, int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string broker = "")
 	{
 		var uri = API.Sales.GetSales(_removeServiceBaseUrl);
-		uri = $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}";
+
+		var brokerString = string.IsNullOrEmpty(broker) ? string.Empty : $"&broker={broker}";
+		uri = $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}{brokerString}";
 
 		var responseString = await _httpClient.GetStringAsync(uri);
 

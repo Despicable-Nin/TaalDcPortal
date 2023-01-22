@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Drawing.Printing;
+using System.Drawing.Text;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using SeedWork;
 using TaalDc.Portal.DTO.Sales;
@@ -18,6 +19,11 @@ public class SalesController : BaseController<SalesController>
 	private readonly ICatalogService _catalogService;
     private readonly IAccountService _accountService;
     private readonly IAmCurrentUser _currentUser;
+
+    private const int AVAILABLE = 1;
+    private const int SOLD = 2;
+    private const int RESERVED = 3;
+    private const int BLOCKED = 4;
 
 
     public SalesController(ILogger<SalesController> loggerInstance, ISalesService salesService, ICatalogService catalogService, IAccountService accountService, IAmCurrentUser currentUser) : base(loggerInstance)
@@ -40,7 +46,7 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-        var sales = await _salesService.GetUnitAndOrdersAvailability(2, pageNumber, pageSize, floorId, unitTypeId, viewId);
+        var sales = await _salesService.GetUnitAndOrdersAvailability(SOLD, pageNumber, pageSize, floorId, unitTypeId, viewId);
         return View(sales);
     }
 
@@ -57,7 +63,8 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-        var sales = await _salesService.GetUnitAndOrdersAvailability(1, pageNumber, pageSize, floorId, unitTypeId, viewId);
+       
+        var sales = await _salesService.GetUnitAndOrdersAvailability(AVAILABLE, pageNumber, pageSize, floorId, unitTypeId, viewId);
         return View(sales);
     }
 
@@ -74,8 +81,8 @@ public class SalesController : BaseController<SalesController>
         //this should tell us which units are available,
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
-        
-        var sales = await _salesService.GetUnitAndOrdersAvailability(3, pageNumber, pageSize, floorId, unitTypeId, viewId);
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
+        var sales = await _salesService.GetUnitAndOrdersAvailability(RESERVED, pageNumber, pageSize, floorId, unitTypeId, viewId, broker);
 
 
         return View(sales);
@@ -93,7 +100,7 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-        var sales = await _salesService.GetUnitAndOrdersAvailability(4, pageNumber, pageSize, floorId, unitTypeId, viewId);
+        var sales = await _salesService.GetUnitAndOrdersAvailability(BLOCKED, pageNumber, pageSize, floorId, unitTypeId, viewId);
 
 
         return View(sales);
@@ -119,17 +126,10 @@ public class SalesController : BaseController<SalesController>
 
     [HttpPost]
     public async Task<IActionResult> Create(SalesCreateDTO model)
-	{
-		if (ModelState.IsValid) { 
-            
-            //regardless of role --> check for broker validation
-            if (_currentUser.IsBroker() && model.Broker.ToUpper() != _currentUser.Email) return BadRequest("Broker not verified.");
-            
-            if (_currentUser.IsAdmin())
-            {
-                //check for the broker credentials if legit
-                if ( !await IsABroker(model.Broker.ToUpper())) return BadRequest("Broker not verified.");
-            }
+    {
+        await ValidateBroker(model);
+
+        if (ModelState.IsValid) { 
             
             var result = await _salesService.SellUnit(model);
 
@@ -147,7 +147,9 @@ public class SalesController : BaseController<SalesController>
         {
             return BadRequest(model);
         }
-	}
+    }
+
+ 
 
 
     [Route("Sales/{id}/Details")]
@@ -178,5 +180,31 @@ public class SalesController : BaseController<SalesController>
     {
         var brokers = await _accountService.GetBrokers();
         return brokers.Any() ? brokers.Select(i => i.Email).Contains(broker) : false;
+    }
+
+    private async Task<string[]> AdditionalValidationModelResult(string broker)
+    {
+
+        var validationErrors = new List<string>();
+        //regardless of role --> check for broker validation
+        if (_currentUser.IsBroker() && broker.ToUpper() != _currentUser.Email) validationErrors.Add("Current user should be assigned as the BROKER");
+            
+        if (_currentUser.IsAdmin())
+        {
+            //check for the broker credentials if legit
+            if (!await IsABroker(broker.ToUpper())) validationErrors.Add("BROKER not found.");
+        }
+
+        return validationErrors.ToArray();
+    }
+    
+    private async Task ValidateBroker(SalesCreateDTO model)
+    {
+        var additionalValidation = await AdditionalValidationModelResult(model.Broker);
+
+        if (additionalValidation.Any())
+        {
+            ModelState.AddModelError("Broker", string.Join(". ", additionalValidation));
+        }
     }
 }

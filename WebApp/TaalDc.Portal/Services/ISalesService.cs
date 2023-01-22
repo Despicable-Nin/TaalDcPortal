@@ -12,7 +12,8 @@ public interface ISalesService
 		int pageSize,
 		int? floorId,
 		int? unitTypeId,
-		int? viewId);
+		int? viewId,
+		string broker = "");
 
     Task<SellUnitCommandResult> SellUnit(SalesCreateDTO model);
 
