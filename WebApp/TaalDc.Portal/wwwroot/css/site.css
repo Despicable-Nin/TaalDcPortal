@@ -30,6 +30,7 @@
 body {
     font-family: 'Inter Regular', Arial, sans-serif;
     font-size: 1rem;
+    overflow: hidden;
 }
 
 h1 {
@@ -73,6 +74,11 @@ p {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+.spacer{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 /*X-Small devices (portrait phones, less than 576px)*/
@@ -187,6 +193,8 @@ main {
 }
 
 .content-wrapper {
+    overflow-y: scroll;
+    height: 100vh;
     padding-top: 100px;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
@@ -284,4 +292,10 @@ label {
 .invalid-feedback {
     font-size: 1rem;
     font-weight: 700;
+}
+
+
+
+.reservationfields, .dpfields{
+    display: none;
 }

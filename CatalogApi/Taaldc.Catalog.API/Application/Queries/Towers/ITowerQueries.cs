@@ -1,5 +1,7 @@
-﻿using Dapper;
+﻿using System.Diagnostics;
+using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Globalization;
 using Taaldc.Catalog.API.Application.Common.Models;
 
 namespace Taaldc.Catalog.API.Application.Queries.Towers
@@ -69,9 +71,39 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
             return new PaginationQueryResult<TowerDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
         }
 
-        public Task<TowerDTO> GetTowerById(int id)
+        public async Task<TowerDTO> GetTowerById(int id)
         {
-            throw new NotImplementedException();
+            var query = $"SELECT t.Id" +
+                $",p.[Id] AS PropertyId" +
+                $",p.[Name] AS PropertyName" +
+                $",t.[Name] AS TowerName" +
+                $",t.[Address]" +
+                $",COUNT(u.[Id]) AS Units " +
+                $"FROM catalog.tower t " +
+                $"JOIN catalog.property p " +
+                $"ON t.PropertyId = p.Id " +
+                $"LEFT JOIN catalog.floors f " +
+                $"ON f.TowerId = t.Id " +
+                $"LEFT JOIN catalog.unit u " +
+                $"ON u.FloorId = f.Id AND u.IsActive = '1' " +
+                $"AND u.ScenicViewId > 1 " +
+                $"WHERE t.Id = '{id}'" +
+                $"GROUP BY t.Id, p.Id, p.[Name], t.[Name], t.[Address]";
+
+            await using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync(CancellationToken.None);
+
+            try
+            {
+                var result = await connection.QueryFirstAsync<TowerDTO>(query);
+                return result;
+            }
+            catch (Exception err)
+            {
+                Debug.Print(
+                    string.Join(", ", new [] { err.Message, err.StackTrace, err.InnerException?.Message }));
+                return null;
+            }
         }
     }
 }

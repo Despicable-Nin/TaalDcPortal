@@ -72,18 +72,18 @@ public class LoginModel : PageModel
         {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(Input.Email.ToLower(), Input.Password, Input.RememberMe, true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("User logged in.");
-                return LocalRedirect(returnUrl);
+                _logger.LogInformation("User logged in");
+                return RedirectToAction("Index", "Home");
             }
 
             if (result.RequiresTwoFactor)
                 return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
             if (result.IsLockedOut)
             {
-                _logger.LogWarning("User account locked out.");
+                _logger.LogWarning("User account locked out");
                 return RedirectToPage("./Lockout");
             }
 
@@ -106,7 +106,6 @@ public class LoginModel : PageModel
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>

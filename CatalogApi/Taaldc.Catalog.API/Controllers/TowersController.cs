@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertFloor;
 using Taaldc.Catalog.API.Application.Commands.UpsertTower;
@@ -45,11 +46,22 @@ public class TowersController : ApiBaseController<TowersController>
         return Ok(await _towerQueries.GetActiveTowers(filter, sortBy, sortOrder, pageNumber, pageSize));
     }
 
-    [HttpGet("{id}/available-units-by-type")]
+	[AllowAnonymous]
+	[HttpGet("{id}/available-units-by-type")]
 	[ProducesResponseType(StatusCodes.Status200OK)]
 	[ProducesErrorResponseType(typeof(BadRequestResult))]
 	public async Task<IActionResult> GetAvailabilityByUnitType(int id)
 	{
 		return Ok(await _unitQueries.GetUnitTypeAvailabilityByTowerId(id));
 	}
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetTowerById(int id)
+    {
+        var tower = await _towerQueries.GetTowerById(id);
+        if (tower == null) return NotFound();
+        return Ok(tower);
+    }
 }

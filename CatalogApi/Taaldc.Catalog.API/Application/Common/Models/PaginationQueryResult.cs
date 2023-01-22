@@ -6,8 +6,6 @@ namespace Taaldc.Catalog.API.Application.Common.Models
     {
         public PaginationQueryResult(int pageSize, int pageNumber, int totalCount, IEnumerable<T> data)
         {
-            if (totalCount == null) totalCount = 0;
-
             PageSize = pageSize;
             PageNumber = pageNumber;
             TotalCount = totalCount;

@@ -1,5 +1,7 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Taaldc.Catalog.API.Application.Commands.ChangeStatusOfUnit;
 using Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 using Taaldc.Catalog.API.Application.Common.Models;
 using Taaldc.Catalog.API.Application.Queries;
@@ -12,16 +14,22 @@ namespace Taaldc.Catalog.API.Controllers;
 public class UnitsController : ApiBaseController<UnitsController>
 {
     private readonly IUnitQueries _unitQueries;
-    private readonly IUnitTypeQueries _unitTypeQueries;
 
     public UnitsController(
-        IUnitQueries unitQueries, 
-        IUnitTypeQueries unitTypeQueries,
+        IUnitQueries unitQueries,
         ILogger<UnitsController> logger, 
         IMediator mediator) : base(logger, mediator)
     {
         _unitQueries = unitQueries;
-        _unitTypeQueries = unitTypeQueries;
+    }
+
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnityId(int id)
+    {
+        return Ok(await _unitQueries.GetUnitById(id));
     }
     
     [HttpPost]
@@ -30,6 +38,14 @@ public class UnitsController : ApiBaseController<UnitsController>
     public async Task<IActionResult> UpsertUnit( UpsertUnitDTO model)
     {
         return Ok(await _mediator.Send(new UpsertUnitCommand(model.UnitId, model.UnitTypeId, model.ScenicViewId,model.UnitNo, model.FloorId, model.FloorArea, model.BalconyArea, model.Price, model.Remarks)));
+    }
+    
+    [HttpPost("change-status")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> ChangeStatusOfUnit( ChangeStatusOfUnitDTO model)
+    {
+        return Ok(await _mediator.Send(new ChangeStatusOfUnitCommand(model.UnitId, model.UnitStatus, model.Remarks)));
     }
 
     [HttpGet]
@@ -49,7 +65,8 @@ public class UnitsController : ApiBaseController<UnitsController>
         return Ok(await _unitQueries.GetActiveUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder, pageNumber, pageSize));
     }
 
-    [HttpGet("available")]
+	[AllowAnonymous]
+	[HttpGet("available")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetAvailableUnits(
@@ -58,16 +75,10 @@ public class UnitsController : ApiBaseController<UnitsController>
         int? floorId, 
         string location,
         int min = 0,
-        int max = 999999999, int pageSize = 20, int pageNumber = 1)
+        int max = 999999999, 
+        int pageSize = 20, 
+        int pageNumber = 1)
     {
         return Ok(await _unitQueries.GetAvailableUnitsAsync(unitTypeId, viewId, floorId, location, min, max, pageSize, pageNumber));
-    }
-
-    [HttpGet("types")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> GetUnitTypes()
-    {
-        return Ok(await _unitTypeQueries.GetUnitTypes());
     }
 }

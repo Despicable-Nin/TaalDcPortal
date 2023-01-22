@@ -11,6 +11,12 @@ class TransactionTypeConfiguration : IEntityTypeConfiguration<TransactionType>
         builder.ToTable("transactiontype");
         
         builder.HasKey(b => b.Id);
+        
+
+        
+        builder.Property(b => b.Name)
+            .HasMaxLength(30)
+            .IsRequired();
 
         builder.Property(b => b.Id).UseHiLo("transactiontypeseq", SalesDbContext.DEFAULT_SCHEMA);
 

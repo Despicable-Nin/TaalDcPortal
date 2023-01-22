@@ -21,6 +21,8 @@ namespace TaalDc.Portal.Services
             int pageNumber = 1,
             int pageSize = 10);
 
+        Task<TowerDTO> GetTowerById(int id);
+
         Task<PaginationQueryResult<FloorDTO>> GetFloors(string filter,
             string sortBy,
             SortOrderEnum sortOrder,
@@ -46,6 +48,7 @@ namespace TaalDc.Portal.Services
         Task<CommandResult> CreateTower(TowerCreateDTO model);
         Task<CommandResult> CreateFloor(FloorCreateDTO model);
         Task<CommandResult> CreateUnit(UnitCreateDTO model);
-        
-    }
+        Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model);
+		Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model);
+	}
 }

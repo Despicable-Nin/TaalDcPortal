@@ -4,7 +4,8 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class UnitReplica : DomainEntity, IAggregateRoot
 {
-    public UnitReplica(int propertyId, int towerId, int floorId, int unitId, int scenicViewId, int unitTypeId, string property, string tower, string floor, string unit, string scenicView, string unitType, double unitArea, double balconyArea, string unitStatus, int unitStatusId, decimal originalPrice)
+    public UnitReplica(int propertyId, int towerId, int floorId, int unitId, int scenicViewId, int unitTypeId, string property, string tower, string floor, 
+        string unit, string scenicView, string unitType, double unitArea, double balconyArea, string unitStatus, int unitStatusId, decimal originalPrice, string unitTypeShortCode)
     {
         PropertyId = propertyId;
         TowerId = towerId;
@@ -24,7 +25,7 @@ public class UnitReplica : DomainEntity, IAggregateRoot
         UnitStatusId = unitStatusId;
         OriginalPrice = originalPrice;
         SellingPrice = originalPrice;
-        
+        UnitTypeShortCode = unitTypeShortCode;
     }
     
 
@@ -41,6 +42,7 @@ public class UnitReplica : DomainEntity, IAggregateRoot
     public string Unit { get; private set; }
     public string ScenicView { get; private set; }
     public string UnitType { get; private set; }
+    public string UnitTypeShortCode { get; private set; }
     public double UnitArea { get; private set; }
     public double BalconyArea { get; private set; }
     public string UnitStatus { get; private set; }
@@ -48,5 +50,14 @@ public class UnitReplica : DomainEntity, IAggregateRoot
 
     public decimal OriginalPrice { get; private set; }
     public decimal SellingPrice { get; private set; }
-    
+
+    public double GetFloorArea() => BalconyArea + UnitArea;
+
+
+    public void UpdateStatus(int unitStatusId, string unitStatus)
+    {
+        UnitStatusId = unitStatusId;
+        UnitStatus = unitStatus;
+    }
+
 }

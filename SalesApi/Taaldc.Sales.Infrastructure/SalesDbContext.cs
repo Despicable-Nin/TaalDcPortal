@@ -1,8 +1,12 @@
-﻿using System.Data.Common;
+﻿using System.Data;
+using System.Data.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 using SeedWork;
+using Taaldc.Common.Persistence;
+using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure;
 
@@ -10,61 +14,109 @@ public class SalesDbContext : DbContext, IUnitOfWork
 {
     public const string DEFAULT_SCHEMA = "sales";
     private readonly IMediator _mediator;
-
+    private readonly IAmCurrentUser _currentUser;
     
-    public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator) : base(options)
-    {
+    public DbSet<Buyer> Buyers { get; set; }
+    public DbSet<UnitReplica> Units { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderStatus> AcquisitionStatus { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<PaymentType> PaymentTypes { get; set; }
+    public DbSet<PaymentStatus> PaymentStatus { get; set; }
+    public DbSet<TransactionType> TransactionTypes { get; set; }
+
+
+    public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator, IAmCurrentUser currentUser = null) : base(options)
+    {                                                                                                                                                                                            
+        
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        System.Diagnostics.Debug.WriteLine("CatalogDbContext::ctor ->" + this.GetHashCode());
+        _currentUser = currentUser;
+        System.Diagnostics.Debug.WriteLine("SalesDbContext::ctor ->" + this.GetHashCode());
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    {
+        this.DbAudit(_currentUser);
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+
+    public async Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+    {
+        // Dispatch Domain Events collection. 
+        // Choices:
+        // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
+        // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
+        // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
+        // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
+        await _mediator.DispatchDomainEventsAsync(this);
+
+        // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
+        // performed through the DbContext will be committed
+        var result = await base.SaveChangesAsync(cancellationToken);
+
+        return result;
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SalesDbContext).Assembly);
+        
     }
     
-    public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+    private IDbContextTransaction _currentTransaction;
+
+    public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+
+    public bool HasActiveTransaction => _currentTransaction != null;
+
+    public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        return null;
-    }
-}
+        if (_currentTransaction != null) return null;
 
+        _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-public class SalesDbContextDesignFactory : IDesignTimeDbContextFactory<SalesDbContext>
-{
-    public SalesDbContext CreateDbContext(string[] args)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>()
-            .UseSqlServer("Server=localhost;Database=taaldb_sales;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
-
-        return new SalesDbContext(optionsBuilder.Options, new NoMediator());
+        return _currentTransaction;
     }
 
-    class NoMediator : IMediator
+    public async Task CommitTransactionAsync(IDbContextTransaction transaction)
     {
-        public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
-        {
-            return default(IAsyncEnumerable<TResponse>);
-        }
+        if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
-        public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
+        try
         {
-            return default(IAsyncEnumerable<object?>);
+            await SaveChangesAsync();
+            transaction.Commit();
         }
-
-        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
+        catch
         {
-            return Task.CompletedTask;
+            RollbackTransaction();
+            throw;
         }
-
-        public Task Publish(object notification, CancellationToken cancellationToken = default)
+        finally
         {
-            return Task.CompletedTask;
+            if (_currentTransaction != null)
+            {
+                _currentTransaction.Dispose();
+                _currentTransaction = null;
+            }
         }
+    }
 
-        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
+    public void RollbackTransaction()
+    {
+        try
         {
-            return Task.FromResult<TResponse>(default(TResponse));
+            _currentTransaction?.Rollback();
         }
-
-        public Task<object> Send(object request, CancellationToken cancellationToken = default)
+        finally
         {
-            return Task.FromResult(default(object));
+            if (_currentTransaction != null)
+            {
+                _currentTransaction.Dispose();
+                _currentTransaction = null;
+            }
         }
     }
 }

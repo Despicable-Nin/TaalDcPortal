@@ -1,0 +1,823 @@
+﻿@using TaalDc.Portal.ViewModels.Sales
+@model SalesCreateDTO
+
+@{
+    ViewBag.Title = "Sales - Create";
+    Layout = "_Layout";
+
+
+	string[] countryList = {
+			"Afghanistan",
+			"Albania",
+			"Algeria",
+			"American Samoa",
+			"Andorra",
+			"Angola",
+			"Anguilla",
+			"Antarctica",
+			"Antigua and Barbuda",
+			"Argentina",
+			"Armenia",
+			"Aruba",
+			"Australia",
+			"Austria",
+			"Azerbaijan",
+			"Bahamas",
+			"Bahrain",
+			"Bangladesh",
+			"Barbados",
+			"Belarus",
+			"Belgium",
+			"Belize",
+			"Benin",
+			"Bermuda",
+			"Bhutan",
+			"Bolivia (Plurinational State of)",
+			"Bonaire, Sint Eustatius and Saba",
+			"Bosnia and Herzegovina",
+			"Botswana",
+			"Bouvet Island",
+			"Brazil",
+			"British Indian Ocean Territory",
+			"Brunei Darussalam",
+			"Bulgaria",
+			"Burkina Faso",
+			"Burundi",
+			"Cabo Verde",
+			"Cambodia",
+			"Cameroon",
+			"Canada",
+			"Cayman Islands",
+			"Central African Republic",
+			"Chad",
+			"Chile",
+			"China",
+			"Christmas Island",
+			"Cocos (Keeling) Islands",
+			"Colombia",
+			"Comoros",
+			"Congo (the Democratic Republic of the)",
+			"Congo",
+			"Cook Islands",
+			"Costa Rica",
+			"Croatia",
+			"Cuba",
+			"Curaçao",
+			"Cyprus",
+			"Czechia",
+			"Côte d'Ivoire",
+			"Denmark",
+			"Djibouti",
+			"Dominica",
+			"Dominican Republic",
+			"Ecuador",
+			"Egypt",
+			"El Salvador",
+			"Equatorial Guinea",
+			"Eritrea",
+			"Estonia",
+			"Eswatini",
+			"Ethiopia",
+			"Falkland Islands  [Malvinas]",
+			"Faroe Islands",
+			"Fiji",
+			"Finland",
+			"France",
+			"French Guiana",
+			"French Polynesia",
+			"French Southern Territories",
+			"Gabon",
+			"Gambia",
+			"Georgia",
+			"Germany",
+			"Ghana",
+			"Gibraltar",
+			"Greece",
+			"Greenland",
+			"Grenada",
+			"Guadeloupe",
+			"Guam",
+			"Guatemala",
+			"Guernsey",
+			"Guinea",
+			"Guinea-Bissau",
+			"Guyana",
+			"Haiti",
+			"Heard Island and McDonald Islands",
+			"Holy See",
+			"Honduras",
+			"Hong Kong",
+			"Hungary",
+			"Iceland",
+			"India",
+			"Indonesia",
+			"Iran (Islamic Republic of)",
+			"Iraq",
+			"Ireland",
+			"Isle of Man",
+			"Israel",
+			"Italy",
+			"Jamaica",
+			"Japan",
+			"Jersey",
+			"Jordan",
+			"Kazakhstan",
+			"Kenya",
+			"Kiribati",
+			"Korea, North",
+			"Korea, South",
+			"Kuwait",
+			"Kyrgyzstan",
+			"Lao People's Democratic Republic",
+			"Latvia",
+			"Lebanon",
+			"Lesotho",
+			"Liberia",
+			"Libya",
+			"Liechtenstein",
+			"Lithuania",
+			"Luxembourg",
+			"Macao",
+			"Madagascar",
+			"Malawi",
+			"Malaysia",
+			"Maldives",
+			"Mali",
+			"Malta",
+			"Marshall Islands",
+			"Martinique",
+			"Mauritania",
+			"Mauritius",
+			"Mayotte",
+			"Mexico",
+			"Micronesia (Federated States of)",
+			"Moldova (the Republic of)",
+			"Monaco",
+			"Mongolia",
+			"Montenegro",
+			"Montserrat",
+			"Morocco",
+			"Mozambique",
+			"Myanmar",
+			"Namibia",
+			"Nauru",
+			"Nepal",
+			"Netherlands",
+			"New Caledonia",
+			"New Zealand",
+			"Nicaragua",
+			"Niger",
+			"Nigeria",
+			"Niue",
+			"Norfolk Island",
+			"Northern Mariana Islands",
+			"Norway",
+			"Oman",
+			"Pakistan",
+			"Palau",
+			"Palestine, State of",
+			"Panama",
+			"Papua New Guinea",
+			"Paraguay",
+			"Peru",
+			"Philippines",
+			"Pitcairn",
+			"Poland",
+			"Portugal",
+			"Puerto Rico",
+			"Qatar",
+			"Republic of North Macedonia",
+			"Romania",
+			"Russian Federation",
+			"Rwanda",
+			"Réunion",
+			"Saint Barthélemy",
+			"Saint Helena, Ascension and Tristan da Cunha",
+			"Saint Kitts and Nevis",
+			"Saint Lucia",
+			"Saint Martin (French part)",
+			"Saint Pierre and Miquelon",
+			"Saint Vincent and the Grenadines",
+			"Samoa",
+			"San Marino",
+			"Sao Tome and Principe",
+			"Saudi Arabia",
+			"Senegal",
+			"Serbia",
+			"Seychelles",
+			"Sierra Leone",
+			"Singapore",
+			"Sint Maarten (Dutch part)",
+			"Slovakia",
+			"Slovenia",
+			"Solomon Islands",
+			"Somalia",
+			"South Africa",
+			"South Georgia and the South Sandwich Islands",
+			"South Sudan",
+			"Spain",
+			"Sri Lanka",
+			"Sudan",
+			"Suriname",
+			"Svalbard and Jan Mayen",
+			"Sweden",
+			"Switzerland",
+			"Syrian Arab Republic",
+			"Taiwan",
+			"Tajikistan",
+			"Tanzania, United Republic of",
+			"Thailand",
+			"Timor-Leste",
+			"Togo",
+			"Tokelau",
+			"Tonga",
+			"Trinidad and Tobago",
+			"Tunisia",
+			"Turkey",
+			"Turkmenistan",
+			"Turks and Caicos Islands",
+			"Tuvalu",
+			"Uganda",
+			"Ukraine",
+			"United Arab Emirates",
+			"United Kingdom of Great Britain and Northern Ireland",
+			"United States Minor Outlying Islands",
+			"United States of America",
+			"Uruguay",
+			"Uzbekistan",
+			"Vanuatu",
+			"Venezuela (Bolivarian Republic of)",
+			"Viet Nam",
+			"Virgin Islands (British)",
+			"Virgin Islands (U.S.)",
+			"Wallis and Futuna",
+			"Western Sahara",
+			"Yemen",
+			"Zambia",
+			"Zimbabwe",
+			"Åland Islands"
+		};
+}
+
+
+<div class="container-fluid">
+    <div class="col-xl-8 col-lg-12 col-md-12">
+        <h4 class="primary-color mb-3">
+            <strong>
+                New Sales
+            </strong>
+        </h4>
+
+        <hr />
+		<form id="salesForm" method="post" class="row mb-5 needs-validation" asp-action="Create" asp-controller="Sales">
+
+             <div class="col-lg-12">
+                <label class="form-label"><strong>Customer Name</strong></label>
+            </div>
+
+            <div class="mb-3 col-lg-2">
+                <select asp-for="Salutation" class="form-control form-select" required>
+                    <option value="Mr.">
+                        Mr.
+                    </option>
+                    <option value="Ms.">
+                        Ms.
+                    </option>
+                    <option value="Mrs.">
+                        Mrs.
+                    </option>
+                    <option value="Other">
+                        Other
+                    </option>
+                </select>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-5">
+                <input asp-for="FirstName" class="form-control" required placeholder="First Name" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="mb-3 col-lg-5">
+                <input asp-for="LastName" class="form-control" required placeholder="Last Name" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="EmailAddress" class="form-label"><strong>Email Address</strong></label>
+                <input asp-for="EmailAddress" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="ContactNo" class="form-label"><strong>Contact No.</strong></label>
+                <input asp-for="ContactNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+             <div class="col-lg-12">
+                <label class="form-label"><strong>Customer Address</strong></label>
+            </div>
+
+            <div class="mb-3 col-lg-9">
+                <input asp-for="Address" class="form-control" required placeholder="Address..." />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-3">
+                <input asp-for="TownCity" class="form-control" required placeholder="City" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="Province" class="form-control" required placeholder="State/Province" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+				<select asp-for="Country" class="form-control form-select" required>
+					@foreach(var i in countryList)
+					{
+						var selected = false;
+						if (i == "Philippines") selected = true;
+
+						<option value="@i" selected="@selected">
+							@i
+						</option>
+					}
+				</select>
+				<div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="ZipCode" class="form-control" required placeholder="Zip Code" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            <div class="spacer col-lg-12">
+
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label for="unitName" class="form-label"><strong>Unit</strong></label>
+                <input name="unitName" class="form-control" required readonly onclick="openAvailableUnitsModal()"/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+			<input hidden asp-for="UnitId" />
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="SellingPrice" class="form-label"><strong>Selling Price</strong></label>
+                <input asp-for="SellingPrice" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Code" class="form-label"><strong>Contract Reference No.</strong></label>
+                <input asp-for="Code" class="form-control" required/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Broker" class="form-label"><strong>Broker</strong></label>
+                <input asp-for="Broker" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+
+            @*<div class="mb-3 col-lg-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="withReservation">
+                    <label class="form-check-label" for="withReservation">With Reservation?</label>
+                </div>
+            </div>*@
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="Reservation" class="form-label"><strong>Reservation Amount</strong></label>
+                <input asp-for="Reservation" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="ReservationConfirmNo" class="form-label"><strong>Reservation Confirmation No.</strong></label>
+                <input asp-for="ReservationConfirmNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                 <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="withDownPayment">
+                    <label class="form-check-label" for="withDownPayment">With Downpayment?</label>
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6 dpfields">
+                <label asp-for="DownPayment" class="form-label"><strong>Downpayment Amount</strong></label>
+                <input asp-for="DownPayment" class="form-control" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6 dpfields">
+                <label asp-for="DownpaymentConfirmNo" class="form-label"><strong>Downpayment Confirmation No.</strong></label>
+				<input asp-for="DownpaymentConfirmNo" class="form-control" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            
+            <div class="mb-3 col-lg-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" asp-for="IsRefundable">
+                    <label class="form-check-label" asp-for="IsRefundable">
+                        Refundable?
+                    </label>
+                </div>
+            </div>
+
+             <div class="mb-3 col-lg-12">
+                <label asp-for="PaymentDate" class="form-label"><strong>Transaction Date</strong></label>
+                <input asp-for="PaymentDate" class="form-control" required type="date"/>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+			<div class="mb-3 col-lg-12">
+				<label asp-for="PaymentMethod" class="form-label"><strong>Payment Method</strong></label>
+				<select asp-for="PaymentMethod" class="form-control form-select" required>
+					<option value="Cash">
+						Cash
+					</option>
+					<option value="Check">
+						Check
+					</option>
+				</select>
+				<div class="invalid-feedback">
+					This is a required field.
+				</div>
+			</div>
+
+            <div class="mb-3 col-lg-12">
+                <label asp-for="Remarks" class="form-label"><strong>Note/Remarks</strong></label>
+                <textarea asp-for="Remarks" class="form-control" rows="5"></textarea>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+            
+             <div class="col-lg-12">
+                 <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="available-units-modal" tabindex="-1" aria-labelledby="available-units-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Available Units</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+				<form id="units-form" class="mb-3">
+					<input name="unitFilter" placeholder="Search..." class="form-control" />
+				</form>
+				<table class="table">
+                    <thead>
+                        <tr>
+                            <th>Unit</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="unit-body">
+                        
+                    </tbody>
+                </table>
+				<div id="unit-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+    <script>
+			applyMask();
+
+			function applyMask(){
+				$("#SellingPrice").mask("#,##0.00", {reverse: true});
+				$("#Reservation").mask("#,##0.00", { reverse: true });
+				$("#DownPayment").mask("#,##0.00", { reverse: true });
+			}
+
+			const unitsForm = document.getElementById('units-form');
+			unitsForm.addEventListener('submit', onUnitFormSubmit);
+
+			function onUnitFormSubmit(event){
+				event.preventDefault();
+
+				getAvailableUnits(1,10);
+			}
+
+			function getAvailableUnits(pageNumber = 1, pageSize = 10)
+			{
+				console.log(document.getElementsByName("unitFilter"));
+				var filter = document.getElementsByName("unitFilter")[0].value;
+
+				fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}`)
+					.then((response) => response.json())
+					.then((data) => {
+						//Process data into table
+						var unitTableBody = document.getElementById("unit-body");
+						var unitModalBody = document.getElementById("unit-modal-body");
+						var unitPagination = document.getElementById("unit-pagination");
+						unitPagination.innerHTML = "";
+						var rows = "";
+
+						data.data.map((u,i) => {
+							var unit = {
+								unit: u.identifier,
+								id: u.unit_id,
+								tower: u.tower_name,
+								floor: u.floor_name,
+								view: u.scenic_view,
+								unitType : u.unit_type
+							};
+
+							var unitName = `${u.tower_name} | ${u.unit_type} ${u.scenic_view} | Unit ${u.identifier}`;
+
+							let newRow = `<tr>
+								<td>${unitName}</td>
+								<td>
+									<button data-unit="${unitName}" data-unitId="${u.unit_id}" data-sellingPrice="${u.price}" onclick="onUnitSelect()" type="button" class="btn btn-primary">Select</button>
+								</td>
+							</tr>`
+
+							rows = rows + newRow;
+						});
+
+						unitTableBody.innerHTML = rows;
+
+
+						//add a pagination
+						var numberOfPagesToDisplay = 5;
+						var totalPageGroups = data.total_pages / numberOfPagesToDisplay;
+						var pageGroups = [];
+
+						for(var i=1; i<=totalPageGroups; i++)
+						{
+							pageGroups.push(i * numberOfPagesToDisplay);
+						}
+
+
+						var pageGroupIndex = pageGroups.find(i => data.page_number <= i);
+						var lastPageIndex = pageGroups[pageGroups.length -1];
+
+						console.log('last index', lastPageIndex);
+
+						var pageGroup = pageGroups.length > 0 && pageGroupIndex > 0 ? pageGroupIndex : data.total_pages;
+						var pageGroupMinPage = data.total_pages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+						////5 -> 0
+						////10 -> 5
+
+						var nextPage = data.page_number < data.total_pages ? data.page_number + 1 : 0;
+						var prevPage = data.page_number > 1 ? data.page_number - 1 : 0;
+
+
+						var ul = document.createElement("ul");
+					
+
+						ul.classList.add("pagination");
+
+						if (data.page_number > 1) {
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.innerHTML = `<a onclick="getAvailableUnits(${prevPage}, 10)" class="page-link alink noselect">Prev</a>`;
+							ul.appendChild(li);
+						}
+
+
+						if(prevPage == 0){
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.classList.add("disabled");
+							li.innerHTML = `<a class="page-link alink noselect">Prev</a>`;
+							ul.appendChild(li);
+						}
+
+						 if(pageGroup == 0 || pageGroup == pageGroupMinPage){
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.innerHTML = `<a onclick="getAvailableUnits(${data.page_number}, 10)" class="page-link alink noselect">${data.page_number}</a>`;
+							ul.appendChild(li);
+						}
+
+						for (var i = pageGroupMinPage; i < pageGroup; i++) {
+							var isActive = data.page_number == i+1;
+
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.innerHTML = `<a onclick="getAvailableUnits(${i + 1}, 10)" class="noselect page-link alink ${isActive ? "active" : ""}">${i + 1}</a>`;
+							ul.appendChild(li);
+						}
+
+						if (data.page_number < data.total_pages) {
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.innerHTML = `<a onclick="getAvailableUnits(${nextPage}, 10)" class="page-link alink noselect">Next</a>`;
+							ul.appendChild(li);
+						}
+
+						if (nextPage == 0) {
+							var li = document.createElement("li");
+							li.classList.add("page-item");
+							li.classList.add("disabled");
+							li.innerHTML = `<a class="page-link alink noselect">Next</a>`;
+							ul.appendChild(li);
+						}
+
+						unitPagination.appendChild(ul)
+
+						return data;
+					});
+			}
+
+
+			function onUnitSelect(){
+				document.getElementsByName("unitName")[0].value = event.target.getAttribute('data-unit');
+				document.getElementsByName("UnitId")[0].value = event.target.getAttribute('data-unitId');
+				document.getElementsByName("SellingPrice")[0].value = event.target.getAttribute('data-sellingPrice');
+			
+				const unitsModal = document.getElementById("available-units-modal");
+				const modalBackdrop = document.getElementsByClassName("modal-backdrop");
+
+				applyMask();
+
+				unitsModal.classList.remove("show");
+				unitsModal.style.display = "none";
+				document.body.classList.remove("modal-open");
+				document.body.removeAttribute("style");
+
+				while (modalBackdrop.length > 0) {
+					modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+				}
+			}
+
+			function openAvailableUnitsModal() {
+				const unitsModal = new bootstrap.Modal(document.getElementById('available-units-modal'), {});
+
+				//fetch available units
+				getAvailableUnits();
+
+				unitsModal.show();
+			}
+
+			var withReservation = document.getElementById("withReservation");
+
+			//withReservation.addEventListener('change', function () {
+			//	var reservationFields = document.getElementsByClassName('reservationfields');
+			//	if (this.checked) {
+			//		for(var i=0; i<reservationFields.length; i++){
+			//			reservationFields[i].style.display = "block";
+			//		}
+
+			//		console.log("Checkbox is checked..");
+			//	} else {
+			//		for (var i = 0; i < reservationFields.length; i++) {
+			//			reservationFields[i].style.display = "none";
+			//		}
+			//	}
+			//});
+
+
+
+			var withDP = document.getElementById("withDownPayment");
+
+			withDP.addEventListener('change', function () {
+				var dpFields = document.getElementsByClassName('dpfields');
+				if (this.checked) {
+					for (var i = 0; i < dpFields.length; i++) {
+						dpFields[i].style.display = "block";
+					}
+
+					console.log("Checkbox is checked..");
+				} else {
+					for (var i = 0; i < dpFields.length; i++) {
+						dpFields[i].style.display = "none";
+					}
+				}
+			});
+
+
+
+
+			const salesForm = document.getElementById('salesForm');
+			salesForm.addEventListener('submit', onSalesFormSubmit);
+
+
+
+			function onSalesFormSubmit(event){
+				event.preventDefault();
+
+				const data = new FormData(event.target);
+
+				const value = Object.fromEntries(data.entries());
+
+				console.log('form values', value);
+
+				var isFormValid = event.target.checkValidity();
+
+				event.target.classList.add("was-validated");
+
+				if (isFormValid) {
+					var formAction = event.target.action
+
+					$.ajax({
+						type: 'POST',
+						url: formAction,
+						data: value,
+						success: function (data, status, xhr) {
+							console.log('sales post', data);
+							Toastify({
+								text: "Submitted successfully!",
+								duration: 3000,
+								close: true,
+								gravity: "top", // `top` or `bottom`
+								position: "right", // `left`, `center` or `right`
+								stopOnFocus: true, // Prevents dismissing of toast on hover
+								style: {
+									background: "#6AB0F8",
+								},
+								onClick: function () { } // Callback after click
+							}).showToast();
+
+							window.location.replace("/Sales/Reserved");
+
+						}, error: function () {
+							Toastify({
+								text: "Something went wrong. Please try again later.",
+								duration: 3000,
+								close: true,
+								gravity: "top", // `top` or `bottom`
+								position: "center", // `left`, `center` or `right`
+								stopOnFocus: true, // Prevents dismissing of toast on hover
+								style: {
+									background: "#D01818",
+								},
+								onClick: function () { } // Callback after click
+							}).showToast();
+
+							btn.disabled = false;
+						}
+					});
+				}else{
+					btn.disabled = false;
+				}
+			return false;
+			}
+
+    </script>
+}

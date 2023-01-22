@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -8,7 +9,8 @@ using TaalDc.Portal.ViewModels.Catalog;
 
 namespace TaalDc.Portal.Controllers
 {
-    public class PropertiesController : BaseController<PropertiesController>
+	[Authorize]
+	public class PropertiesController : BaseController<PropertiesController>
     {
         private readonly ICatalogService _catalogService;
 
@@ -112,6 +114,24 @@ namespace TaalDc.Portal.Controllers
             return Ok(result);
         }
 
+        public async Task<IActionResult> EditTower(int id)
+        {
+            try
+            {
+                var result = await _catalogService.GetTowerById(id);
+
+                if (result == null) RedirectToAction("Index");
+
+                var towerCreateDTO = new TowerCreateDTO(result.Id, result.PropertyId, result.TowerName, result.Address);
+
+                return View(towerCreateDTO);
+
+            }
+            catch (Exception err)
+            {
+                return RedirectToAction("Index");
+            }
+        }
 
 
         public async Task<IActionResult> CreateFloor()
@@ -191,11 +211,48 @@ namespace TaalDc.Portal.Controllers
             var units = await _catalogService.GetUnits(filter,floorId,unitTypeId,viewId,statusId, sortBy, sortOrder, pageNumber, pageSize);
             return View(units);
         }
-        public async Task<IActionResult> UnitTypes()
+
+
+		public async Task<IActionResult> GetUnits(
+			string filter,
+			int? floorId,
+			int? unitTypeId,
+			int? viewId,
+			int? statusId,
+			string sortBy,
+			SortOrderEnum sortOrder,
+			int pageNumber = 1,
+			int pageSize = 10)
+		{
+			var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder, pageNumber, pageSize);
+            return new JsonResult(units);
+		}
+
+
+		public async Task<IActionResult> UnitTypes()
         {
             var unitTypes = await _catalogService.GetUnitTypes();
 
             return View(unitTypes);
+        }
+
+
+        public IActionResult CreateUnitType()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUnitType(UnitTypeCreateDTO model)
+        {
+            var result = await _catalogService.CreateUnitType(model);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
         }
     }
 }

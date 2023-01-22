@@ -1,4 +1,5 @@
 using SeedWork;
+using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
@@ -23,13 +24,13 @@ public sealed class Unit : Entity
     public double BalconyArea { get; private set; }
     
     private int _scenicViewId;
-    public ScenicView ScenicView { get; private set; }
+    //public ScenicView ScenicView { get; private set; }
     
     private int _unitStatusId;
-    public UnitStatus UnitStatus { get; private set; }
+    public int GetUnitStatusId() => _unitStatusId;
     
     private int _unitTypeId;
-    public UnitType UnitType { get; private set; }
+    //public UnitType UnitType { get; private set; }
     public string Remarks { get; private set; }
     public void SetPrice(decimal newPrice) => Price = newPrice;
 
@@ -51,7 +52,7 @@ public sealed class Unit : Entity
 
     public void AddRemarks(string remarks)
     {
-        this.Remarks = remarks;
+        this.Remarks += remarks + Environment.NewLine;
     }
 
     public void MarkAsSold() => _unitStatusId = (int)UnitStatus.UnitIs.SOLD;

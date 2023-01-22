@@ -81,6 +81,20 @@ namespace TaalDc.Portal.Services
             return result;
         }
 
+
+        public async Task<TowerDTO> GetTowerById(int id)
+        {
+            var uri = API.Catalog.GetTowers(_removeServiceBaseUrl);
+
+            uri = uri + $"/{id}";
+
+            var responseString = await _httpClient.GetStringAsync(uri);
+
+            var result = JsonSerializer.Deserialize<TowerDTO>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
+
         public async Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter, int? floorId, int? unitTypeId, int? viewId, int? statusId, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             var uri = API.Catalog.GetUnits(_removeServiceBaseUrl);
@@ -212,6 +226,36 @@ namespace TaalDc.Portal.Services
             throw new Exception("Unit cannot be created.");
         }
 
-        
-    }
+        public async Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model)
+        {
+            var uri = API.Catalog.AddUnitType(_removeServiceBaseUrl);
+
+            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            }
+
+            throw new Exception("Unit type cannot be created.");
+        }
+
+		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model)
+		{
+			var uri = API.Catalog.UpdateUnitStatus(_removeServiceBaseUrl);
+
+			var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+			var content = await response.Content.ReadAsStringAsync();
+
+			if (response.IsSuccessStatusCode)
+			{
+				return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+			}
+
+			throw new Exception("Unit status cannot be updated. Error: " + content);
+		}
+	}
 }

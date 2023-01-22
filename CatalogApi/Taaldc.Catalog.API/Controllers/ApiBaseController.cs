@@ -1,9 +1,12 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Taaldc.Catalog.API.Controllers;
 
-[ApiController]
+
+[ApiController, Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/adm/[controller]")]
 public class ApiBaseController<T> : ControllerBase where T : ControllerBase
 {

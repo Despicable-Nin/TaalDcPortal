@@ -16,16 +16,20 @@ public class HttpClientAuthorizationDelegatingHandler
     private readonly IConfiguration _configuration;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<HttpClientAuthorizationDelegatingHandler> _logger;
     
     private readonly bool _isAuthenticated;
     private readonly string _email;
 
     public HttpClientAuthorizationDelegatingHandler(
+        ILogger<HttpClientAuthorizationDelegatingHandler> logger,
         IHttpContextAccessor httpContextAccessor, 
         IConfiguration configuration,
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
+
+        _logger = logger;
         _httpContextAccessor = httpContextAccessor;
         _configuration = configuration;
         _userManager = userManager;
@@ -52,6 +56,7 @@ public class HttpClientAuthorizationDelegatingHandler
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
+        _logger.LogDebug("Logging HTTPClient request...", request);
         return await base.SendAsync(request, cancellationToken);
     }
 
@@ -66,8 +71,10 @@ public class HttpClientAuthorizationDelegatingHandler
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Email),
+                    new Claim(ClaimTypes.Email, user.NormalizedEmail),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.NormalizedUserName)
                 };
 
                 foreach (var r in roles)
@@ -77,32 +84,31 @@ public class HttpClientAuthorizationDelegatingHandler
                 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
-                var tokenDescriptor = new SecurityTokenDescriptor()
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddHours(8),
-                    Issuer = _configuration["JWT:ValidIssuer"],
-                    Audience = _configuration["JWT:ValidAudience"],
-                    SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var jwtToken = tokenHandler.WriteToken(token);
-                var stringToken = tokenHandler.WriteToken(token);
-
-                return stringToken;
-
-                // var token = new JwtSecurityToken(
-                //     issuer: _configuration["JWT:ValidIssuer"],
-                //     audience: _configuration["JWT:ValidAudience"],
-                //     expires: DateTime.Now.AddHours(3),
-                //     claims: claims,
-                //     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                // );
+                // var tokenDescriptor = new SecurityTokenDescriptor()
+                // {
+                //     Subject = new ClaimsIdentity(claims),
+                //     Expires = DateTime.Now.AddHours(8),
+                //     Issuer = _configuration["JWT:ValidIssuer"],
+                //     Audience = _configuration["JWT:ValidAudience"],
+                //     SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                // };
                 //
-                // //TODO: we can try storing this to Session or Cookie after..
-                // return new JwtSecurityTokenHandler().WriteToken(token);
+                // var tokenHandler = new JwtSecurityTokenHandler();
+                // var token = tokenHandler.CreateToken(tokenDescriptor);
+                // var stringToken = tokenHandler.WriteToken(token);
+
+                //return stringToken;
+
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:ValidIssuer"],
+                    audience: _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddHours(3),
+                    claims: claims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+                
+                //TODO: we can try storing this to Session or Cookie after..
+                return new JwtSecurityTokenHandler().WriteToken(token);
             }
             catch (Exception ex)
             {

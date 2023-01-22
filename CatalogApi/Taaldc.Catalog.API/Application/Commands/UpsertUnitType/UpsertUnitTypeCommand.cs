@@ -4,22 +4,22 @@ using MediatR;
 
 namespace Taaldc.Catalog.API.Application.Commands.UpsertUnitType;
 
-public class UpsertUnitTypeCommand : IRequest<string>
+public class UpsertUnitTypeCommand : IRequest<CommandResult>
 {
-    public UpsertUnitTypeCommand(int? unitId, string name, string shortCode)
+    public UpsertUnitTypeCommand(int? unitTypeId, string name, string shortCode)
     {
-        UnitId = unitId;
+        UnitTypeId = unitTypeId;
         Name = name;
         ShortCode = shortCode;
     }
 
-    [DataMember] public int? UnitId { get; private set; }
+    [DataMember] public int? UnitTypeId { get; private set; }
     [DataMember] public string Name { get; private set; }
     [DataMember] public string ShortCode { get; private set; }
 
     public bool IsNew()
     {
-        return !UnitId.HasValue;
+        return !UnitTypeId.HasValue;
     }
 }
 

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 //Add Serilog
-builder.Host.UseSerilog((ctx, lc) => lc
-    .Enrich.FromLogContext()
 #if DEBUG
-    .MinimumLevel.Verbose()
-    .WriteTo.Console()
-    .WriteTo.Seq("http://localhost:5341"));
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .Enrich.FromLogContext()
+        .MinimumLevel.Verbose()
+        .WriteTo.Console()
+        .WriteTo.Seq("http://localhost:5341"));
 #endif
 
 // Add services to the container.
@@ -39,6 +40,7 @@ builder.Services.AddControllersWithViews();
 
 //dependency injection for services
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<IAmCurrentUser, CurrentUser>();
 
 builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
 builder.Services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
@@ -47,6 +49,12 @@ builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
 builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 
 builder.Services.AddHttpClient<IMarketingService, MarketingService>()
+    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+builder.Services.AddHttpClient<ICatalogService, CatalogService>()
+	.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+builder.Services.AddHttpClient<ISalesService, SalesService>()
     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
 
@@ -79,6 +87,16 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Response.StatusCode == 404)
+    {
+        context.Request.Path = "/Home/PageNotFound";
+        await next();
+    }
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

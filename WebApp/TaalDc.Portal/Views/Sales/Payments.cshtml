@@ -1,0 +1,65 @@
+﻿@using TaalDc.Portal.ViewModels.Sales;
+@model SalesViewModel
+
+@{
+    ViewBag.Title = "Sales Payments";
+    Layout = "_Layout";
+
+}
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Sales" asp-action="Details" asp-route-id="@Model.OrderId">Details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Sales" asp-action="Payments" asp-route-id="@Model.OrderId">Payments</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <h4 class="primary-color mb-5 mt-3">
+            <strong>Payment Details</strong>
+        </h4>
+
+        <div class="table-responsive w-100 mb-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Payment Type</th>
+                        <th>Amount</th>
+                        <th>Transaction Date</th>
+                        <th>Verified By</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var payment in Model.Payments)
+                    {
+                        <tr>
+                            <td>@payment.Id</td>
+                            <td>@payment.PaymentType</td>
+                            <td>@payment.AmountPaid.ToString("#,##0.00")</td>
+                            <td>@payment.ActualPaymentDate.ToString("MMMM dd, yyyy")</td>
+                            <td>@payment.VerifiedBy</td>
+                            <td>@payment.PaymentStatus</td>
+                            <td>
+                                <a class="action-edit" href="#">Verify</a>
+                            </td>
+                        </tr>
+                    }
+
+
+                    @if (Model.Payments.Count() == 0)
+                    {
+                        <tr>
+                            <td class="text-center" colspan="7">No data to display.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -37,6 +37,9 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.HasSequence<int>("unitseq", "catalog")
                 .StartsAt(2000L);
 
+            modelBuilder.HasSequence<int>("unittypeseq", "catalog")
+                .StartsAt(9L);
+
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>
                 {
                     b.Property<int>("Id")
@@ -170,22 +173,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.ToTable("property", "catalog");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.ScenicView", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("scenicview", "catalog");
-                });
-
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Tower", b =>
                 {
                     b.Property<int>("Id")
@@ -308,7 +295,23 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.ToTable("unit", "catalog");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitStatus", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.ScenicView", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("scenicview", "catalog");
+                });
+
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitStatus", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int")
@@ -324,11 +327,13 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     b.ToTable("unitstatus", "catalog");
                 });
 
-            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", b =>
+            modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitType", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unittypeseq", "catalog");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -380,29 +385,23 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.ScenicView", "ScenicView")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.ScenicView", null)
                         .WithMany()
                         .HasForeignKey("_scenicViewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitStatus", "UnitStatus")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitStatus", null)
                         .WithMany()
                         .HasForeignKey("_unitStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.UnitType", "UnitType")
+                    b.HasOne("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitType", null)
                         .WithMany()
                         .HasForeignKey("_unitTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ScenicView");
-
-                    b.Navigation("UnitStatus");
-
-                    b.Navigation("UnitType");
                 });
 
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate.Floor", b =>

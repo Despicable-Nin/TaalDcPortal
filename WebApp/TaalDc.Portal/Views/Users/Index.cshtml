@@ -5,12 +5,47 @@
     Layout = "_Layout";
 }
 
-
-@foreach (var i in Model.ListOfUsers)
-{
-    <p>@i.Username | @i.GetRolesAsString()</p>
-}
-
-<h2>Create a table that displays Users (Email) and their Role(s)/Clickable button that where you can deactivate and update role assignments --</h2>
-<p>No user can have zero roles -- the minimum is Guest role</p>
-<strong>Admin (seeded) shoudl not be able to be removed by anyone; nor it can be demoted even by itself</strong>
+<div class="container-fluid">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Users" asp-action="Index">User Management</a>
+        </li>
+    </ul>
+    
+    <!-- Tab Contents -->
+    <div class="tab-content">
+        <div class="action-section">
+            <div class="action-btn text-end">
+                <a asp-controller="Users" asp-action="CreateUser" class="btn btn-primary">New User</a>
+            </div>
+        </div>
+        <!-- Tables -->
+        <div class="data-section">
+            <div class="table-responsive w-100 mb-3">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>User Email</th>
+                            <th>Roles</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach(var prop in Model.ListOfUsers)
+                    {
+                        <tr>
+                            <td>@prop.Email</td>
+                            <td>@(prop.GetRolesAsString() ?? "No role") </td>
+                            <td>
+                                 <a asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <!-- End of tables -->
+    </div>
+</div>

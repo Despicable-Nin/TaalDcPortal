@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SeedWork;
+using Taaldc.Common.Persistence;
 using Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 
 namespace Taaldc.Marketing.Infrastructure;
@@ -25,14 +26,15 @@ public class MarketingDbContext : DbContext, IUnitOfWork
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        
+        this.DbAudit(_currentUser);
+
         
         return base.SaveChangesAsync(cancellationToken);
     }
 
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        Audit();
+        this.DbAudit(_currentUser);
 
         return base.SaveChangesAsync(cancellationToken);
     }
@@ -42,38 +44,6 @@ public class MarketingDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(MarketingDbContext).Assembly);
     }
-    
-    private void Audit()
-    {
-        this.ChangeTracker.DetectChanges();
-
-        foreach (EntityEntry entry in ChangeTracker.Entries())
-        {
-            if (entry.Entity is Enumeration
-                || entry.Entity is ValueObject
-                || entry.State == EntityState.Detached
-                || entry.State == EntityState.Unchanged)
-            {
-                continue;
-            }
-
-            if (entry.Entity is IAuditable auditable)
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        auditable.AuditOnCreate(_currentUser?.Email);
-                        break;
-
-                    case EntityState.Modified:
-                        auditable.AuditOnUpdate(_currentUser?.Email, true);
-                        break;
-
-                    case EntityState.Deleted:
-                        break;
-                }
-            }
-        }
-    }
+ 
 
 }

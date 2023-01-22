@@ -11,9 +11,13 @@ class PaymentTypeConfiguration : IEntityTypeConfiguration<PaymentType>
         builder.ToTable("paymenttype");
         
         builder.HasKey(b => b.Id);
+        
+        builder.Property(b => b.Id).UseHiLo("paymentypeseq", SalesDbContext.DEFAULT_SCHEMA);
 
-        builder.Property(b => b.Id).UseHiLo("paymenttypeseq", SalesDbContext.DEFAULT_SCHEMA);
-
+        
+        builder.Property(b => b.Name)
+            .HasMaxLength(30)
+            .IsRequired();
 
         builder.HasData(PaymentType.Dictionary.Select(b => new PaymentType(b.Key, b.Value)));
     }

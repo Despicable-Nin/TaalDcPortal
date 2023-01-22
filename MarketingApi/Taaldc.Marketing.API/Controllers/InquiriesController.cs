@@ -26,6 +26,42 @@ public class InquiriesController : Controller
       _currentUser = currentUser;
    }
 
+   [AllowAnonymous]
+   [HttpGet("{id}")]
+   [ProducesResponseType(StatusCodes.Status200OK)]
+   [ProducesErrorResponseType(typeof(BadRequestResult))]
+   public async Task<IActionResult> GetInquiryById(int id)
+   {
+      var inquiry = await _dbContext.Inquiries.Include(i => i.Customer).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+
+      if (inquiry == default) return NoContent();
+
+      InquiryDto result = new()
+      {
+         Id = inquiry.Id,
+         DateOfInquiry = inquiry.CreatedOn,
+         DateVerified = inquiry.CreatedOn == inquiry.ModifiedOn ? null : inquiry.ModifiedOn,
+         Country = inquiry.Customer.Country,
+         Message = inquiry.Message,
+         Property = inquiry.Property,
+         Province = inquiry.Customer?.Province,
+         Remarks = inquiry.Remarks,
+         Salutation = inquiry.Customer?.Salutation,
+         Status = inquiry.Status?.Name,
+         ContactNo = inquiry.Customer?.ContactNo,
+         EmailAddress = inquiry.Customer?.EmailAddress,
+         FirstName = inquiry.Customer?.FirstName,
+         LastName = inquiry.Customer?.LastName,
+         InquiryType = inquiry.TypeOfInquiry,
+         PropertyId = inquiry.PropertyId,
+         TownCity = inquiry.Customer?.TownCity,
+         AttendBy = inquiry.AttendedBy,
+         InquiryTypeId = 0 //used to be a table but made into a string
+      };
+
+      return Ok(result);
+   }
+
    [HttpGet]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -45,6 +81,8 @@ public class InquiriesController : Controller
       var records =  result.Select(i => new InquiryDto
       {
          Id = i.Id,
+         DateOfInquiry = i.CreatedOn,
+         DateVerified = i.CreatedOn == i.ModifiedOn ? null : i.ModifiedOn,
          Country = i.Customer.Country,
          Message = i.Message,
          Property = i.Property,

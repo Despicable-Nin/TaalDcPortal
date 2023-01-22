@@ -16,6 +16,9 @@ public class TransactionType : Enumeration
   
     };
 
+    public static int GetTypeId(string name) =>
+        Dictionary.SingleOrDefault(i => i.Value.ToLower() == name.ToLower()).Key;
+
     public TransactionType(int id, string name) : base(id, name)
     {
     }
