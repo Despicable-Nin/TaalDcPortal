@@ -29,6 +29,7 @@
                             <th>User</th>
                             <th>Email</th>
                             <th>Roles</th>
+                            <th>Is Active</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -39,8 +40,9 @@
                             <td>@prop.GetFullName()</td>
                             <td>@prop.Email</td>
                             <td>@(prop.GetRolesAsString() ?? "No role") </td>
+                            <td>@prop.IsActive</td>
                             <td>
-                                 <a asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a>
+                                <a asp-controller="Users" asp-action="UpdateUser" asp-route-id="@prop.Id">Edit</a>
                             </td>
                         </tr>
                     }

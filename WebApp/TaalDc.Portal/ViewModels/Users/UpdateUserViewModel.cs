@@ -18,6 +18,7 @@ public class UpdateUserViewModel
     [DisplayName("Email Address")]
     public string Emailaddress { get; set; }
     public string Role { get; set; }
+    public bool IsActive { get; set; }
     
  
     public string CurrentPassword { get; set; }

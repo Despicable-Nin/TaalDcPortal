@@ -17,7 +17,7 @@
     </h4>
     <div>
         <form id="userForm" method="post" class="row mb-5 needs-validation" asp-action="Put" asp-route-id="@Model.Id" asp-controller="Users">
-             <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Id"/>
             <div class="mb-3 col-lg-4">
                 <label asp-for="FirstName" class="form-label"><strong>First Name</strong></label>
                 <input asp-for="FirstName" class="form-control" required/>
@@ -61,10 +61,20 @@
                     This is a required field.
                 </div>
             </div>
-             <div class="col-lg-12">
+            <div class="mb-3 col-lg-12">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="true" asp-for="IsActive">
+                    <label class="form-check-label" asp-for="IsActive">
+                        IsActive?
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-12">
                 <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
+        
+    
     </div>
 </div>
 
