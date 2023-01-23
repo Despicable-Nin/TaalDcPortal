@@ -61,7 +61,11 @@ public class UsersController : BaseController<UsersController>
         {
             Id = id,
             Emailaddress = user.Email.Normalize(),
-            Username =  user.Username
+            FirstName =  user.FirstName,
+            LastName = user.LastName,
+            MiddleName = user.MiddleName,
+            NameSuffix = user.NameSuffix,
+            Role = user.Roles.FirstOrDefault() ?? string.Empty
         };
 
         return View(model);

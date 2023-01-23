@@ -26,7 +26,8 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>User Email</th>
+                            <th>User</th>
+                            <th>Email</th>
                             <th>Roles</th>
                             <th></th>
                         </tr>
@@ -35,6 +36,7 @@
                     @foreach(var prop in Model.ListOfUsers)
                     {
                         <tr>
+                            <td>@prop.GetFullName()</td>
                             <td>@prop.Email</td>
                             <td>@(prop.GetRolesAsString() ?? "No role") </td>
                             <td>

@@ -1,3 +1,5 @@
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 namespace TaalDc.Portal.ViewModels.Users;
 
 public class UserIndexViewModel
@@ -19,17 +21,28 @@ public class UserIndexViewModel
 
 public record UserViewModel
 {
-    public UserViewModel(string username, string email, string id, string[] roles)
+    public UserViewModel(string id, string email, string firstName, string lastName, string nameSuffix, string middleName, string[] roles)
     {
-        Username = username;
-        Email = email;
         Id = id;
+        Email = email;
+        FirstName = firstName ?? string.Empty;
+        LastName = lastName ?? string.Empty;
+        NameSuffix = nameSuffix ?? string.Empty;
+        MiddleName = middleName ?? string.Empty;
         Roles = roles;
     }
 
     public string Id { get; }
     public string Email { get; }
-    public string Username { get; }
+
+    public string FirstName { get; }
+
+    public string LastName { get; } 
+    public string NameSuffix { get; } 
+    public string MiddleName { get; } 
+
+    public string GetFullName() => 
+        $"{FirstName} {(!string.IsNullOrEmpty(MiddleName) ? MiddleName[0].ToString() : string.Empty)} {LastName} {NameSuffix}";
     public string[] Roles { get; }
 
     public string? GetRolesAsString()
