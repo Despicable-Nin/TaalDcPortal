@@ -127,7 +127,11 @@ public class SalesController : BaseController<SalesController>
     [HttpPost]
     public async Task<IActionResult> Create(SalesCreateDTO model)
     {
+
+        await ValidateFees(model);
         await ValidateBroker(model);
+
+
 
         if (ModelState.IsValid) { 
             
@@ -205,6 +209,25 @@ public class SalesController : BaseController<SalesController>
         if (additionalValidation.Any())
         {
             ModelState.AddModelError("Broker", string.Join(". ", additionalValidation));
+        }
+    }
+    
+    private async Task ValidateFees (SalesCreateDTO model)
+    {
+        if (model.Reservation > 0)
+        {
+            if (string.IsNullOrEmpty(model.ReservationConfirmNo))
+            {
+                ModelState.AddModelError(nameof(SalesCreateDTO.ReservationConfirmNo),"Reservation Confirmation number is required.");
+            }
+        }
+        
+        if (model.DownPayment > 0)
+        {
+            if (string.IsNullOrEmpty(model.DownpaymentConfirmNo))
+            {
+                ModelState.AddModelError(nameof(SalesCreateDTO.DownpaymentConfirmNo),"Downpayment Confirmation number is required.");
+            }
         }
     }
 }
