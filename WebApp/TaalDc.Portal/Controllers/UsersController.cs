@@ -65,7 +65,8 @@ public class UsersController : BaseController<UsersController>
             LastName = user.LastName,
             MiddleName = user.MiddleName,
             NameSuffix = user.NameSuffix,
-            Role = user.Roles.FirstOrDefault() ?? string.Empty
+            Role = user.Roles.FirstOrDefault() ?? string.Empty,
+            IsActive = user.Roles.Any(),
         };
 
         return View(model);
@@ -85,5 +86,5 @@ public class UsersController : BaseController<UsersController>
 
 
     }
-    
+
 }

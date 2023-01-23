@@ -58,7 +58,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 request.SellingPrice);
 
             //if RF has been paid
-            if (request.Reservation <= 0)
+            if (request.Reservation > 0)
             {
 
                 if (request.ReservationConfirmNo == string.Empty)
@@ -78,7 +78,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             }
 
             //if DP has been paid
-            if (request.DownPayment <= 0)
+            if (request.DownPayment > 0)
             {
                 //if paid, require this
                 if (request.DownPaymentConfirmNo == string.Empty)

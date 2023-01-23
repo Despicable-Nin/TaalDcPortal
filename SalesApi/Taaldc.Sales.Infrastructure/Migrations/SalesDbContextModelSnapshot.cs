@@ -248,7 +248,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<string>("ConfirmationNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CorrelationId")
                         .HasColumnType("nvarchar(max)");
@@ -296,10 +296,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnName("TransactionTypeId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConfirmationNumber")
-                        .IsUnique()
-                        .HasDatabaseName("IX_ConfirmationNumber");
 
                     b.HasIndex("OrderId");
 
