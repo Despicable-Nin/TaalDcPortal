@@ -1,5 +1,7 @@
-﻿@using TaalDc.Portal.ViewModels.Sales;
+﻿@using SeedWork;
+@using TaalDc.Portal.ViewModels.Sales;
 @model SalesViewModel
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "Sales Payments";
@@ -30,6 +32,7 @@
                         <th>Payment Type</th>
                         <th>Amount</th>
                         <th>Transaction Date</th>
+                        <th>Confirmation No.</th>
                         <th>Verified By</th>
                         <th>Status</th>
                         <th></th>
@@ -43,10 +46,13 @@
                             <td>@payment.PaymentType</td>
                             <td>@payment.AmountPaid.ToString("#,##0.00")</td>
                             <td>@payment.ActualPaymentDate.ToString("MMMM dd, yyyy")</td>
+                            <td>@payment.ConfirmationNumber</td>
                             <td>@payment.VerifiedBy</td>
                             <td>@payment.PaymentStatus</td>
                             <td>
-                                <a class="action-edit" href="#">Verify</a>
+                                @if(payment.PaymentStatus == "Pending" && CurrentUser.IsAdmin()){
+                                    <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id)" class="action-edit" href="#">Verify</a>
+                                }
                             </td>
                         </tr>
                     }
@@ -63,3 +69,39 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="paymentVerifyModal" tabindex="-1" aria-labelledby="paymentVerifyModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Verification</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to accept this payment?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button onclick="acceptPayment()" type="button" class="btn btn-primary">Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/sales/payment.js"></script>
+    <script>
+        function openAcceptPaymentModal(orderId, paymentId){
+            var paymentModal = document.getElementById('paymentVerifyModal');
+
+            paymentModal.dataset.orderId = orderId;
+            paymentModal.dataset.paymentId = paymentId;
+
+            var modal = new bootstrap.Modal(paymentModal, {});
+
+            modal.show();
+        }
+    </script>
+}

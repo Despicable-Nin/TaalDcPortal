@@ -10,6 +10,7 @@ using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
 using TaalDc.Portal.ViewModels.Catalog;
 using TaalDc.Portal.ViewModels.Sales;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TaalDc.Portal.Services;
 
@@ -31,6 +32,22 @@ public class SalesService : ISalesService
 
 		_removeServiceBaseUrl = $"{settings.Value.SalesUrl}";
 	}
+
+    public async Task<CommandResult> AcceptPayment(int orderId, int paymentId)
+    {
+		var uri = API.Sales.AcceptPayment(_removeServiceBaseUrl, orderId, paymentId);
+
+        var response = await _httpClient.PostAsync(uri,null);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        throw new Exception("Payment cannot be updated.");
+    }
 
     public async Task<Unit_Order_DTO> GetSalesById(int id)
 	{

@@ -45,7 +45,7 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(result);
         }
         
-        [HttpGet("{id}/payments/{paymentId}/approve")]
+        [HttpPost("{id}/payments/{paymentId}/approve")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> AcceptPayment(int id,int paymentId)
@@ -53,7 +53,7 @@ namespace Taaldc.Sales.Api.Controllers
             //this is for verification purposes --- only admin can do this
             //for now manually check role of user.. 
 
-            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("admin"))
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
             {
 
                 AcceptPaymentCommand command = new AcceptPaymentCommand(id, paymentId);

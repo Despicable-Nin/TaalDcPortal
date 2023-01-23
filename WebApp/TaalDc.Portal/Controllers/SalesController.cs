@@ -137,23 +137,57 @@ public class SalesController : BaseController<SalesController>
             
             var result = await _salesService.SellUnit(model);
 
-		    if (!result.IsSuccess) return BadRequest(new { Message = result.ErrorMessage });
+		    if (!result.IsSuccess) return BadRequest(new { 
+                IsFormError = false,
+                Message = result.ErrorMessage 
+            });
 
 		    //Update Unit Status in Catalog
 		    var unitStatus = new UnitStatusUpdateDTO(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
             var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 
-            if(!unitStatusResult.IsSuccess) return BadRequest(new { Message = unitStatusResult.ErrorMessage });
+            if(!unitStatusResult.IsSuccess) return BadRequest(new {  IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
 		    return Ok(result);
         }
         else
         {
-            return BadRequest(model);
+            return BadRequest(new
+            {
+                IsFormError = true,
+                ModelState = Json(ModelState)
+            });
         }
     }
 
- 
+
+    [HttpPost]
+    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId)
+    {
+        if (orderId > 0 && paymentId > 0)
+        {
+
+            var result = await _salesService.AcceptPayment(orderId, paymentId);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                IsFormError = false,
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
+        }
+        else
+        {
+            return BadRequest(new
+            {
+                IsFormError = false,
+                ErrorMessage = "Invalid order and payment id"
+            });
+        }
+    }
+
+
 
 
     [Route("Sales/{id}/Details")]
@@ -191,7 +225,7 @@ public class SalesController : BaseController<SalesController>
 
         var validationErrors = new List<string>();
         //regardless of role --> check for broker validation
-        if (_currentUser.IsBroker() && broker.ToUpper() != _currentUser.Email) validationErrors.Add("Current user should be assigned as the BROKER");
+        if (_currentUser.IsBroker() && broker.ToUpper() != _currentUser.Email.ToUpper()) validationErrors.Add("Current user should be assigned as the BROKER");
             
         if (_currentUser.IsAdmin())
         {

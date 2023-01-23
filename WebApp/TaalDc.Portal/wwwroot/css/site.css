@@ -160,6 +160,12 @@ ul.noliststyle {
         box-shadow: none;
     }
 
+.btn-secondary {
+    border-radius: 0px;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
 .form-wrapper {
     display: flex;
     align-items: center;
@@ -184,6 +190,20 @@ ul.noliststyle {
 
     .taaldc-sidenav .nav-item{
         margin-bottom: 0.75rem !important;
+    }
+
+    @media(max-width: 1240px){
+        .taaldc-sidenav{
+            display: none;
+        }
+
+        .login-banner{
+            display: none;
+        }
+
+        .form-wrapper{
+            min-height: 100vh;
+        }
     }
 
 
@@ -298,4 +318,9 @@ label {
 
 .reservationfields, .dpfields{
     display: none;
+}
+
+
+.sales-table{
+    min-width: 1080px;
 }

@@ -27,7 +27,7 @@
 </head>
 <body>
  
-@if(ViewData["Title"].ToString() != "Log in"){
+@if(ViewData["Title"].ToString() != "Log in" && User.Identity.IsAuthenticated){
         <nav class="bg-light p-3 main-nav">
             <div class="dropdown pb-2" style="float: right;padding-right:1rem;">
                 <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -111,7 +111,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.2/dist/jquery.min.js"></script>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>

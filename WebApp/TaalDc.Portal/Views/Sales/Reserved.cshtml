@@ -55,7 +55,7 @@
 
         <div class="data-section">
             <div class="table-responsive w-100 mb-3">
-                <table class="table table-striped">
+                <table class="table table-striped sales-table">
                      <thead>
                         <tr>
                             <th>ID</th>
@@ -79,8 +79,8 @@
                                 <td>@sale.Tower</td>
                                 <td>@sale.UnitType @sale.ScenicView</td>
                                 <td>@sale.Unit</td>
-                                <td>@sale.Status</td>
-                                <td>@sale.UnitStatus</td>
+                                <td>@sale.Status.ToUpper()</td>
+                                <td>@sale.UnitStatus.ToUpper()</td>
                                 <td>
                                     <a class="action-edit" href="#">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>

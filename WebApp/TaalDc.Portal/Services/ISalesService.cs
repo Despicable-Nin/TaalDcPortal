@@ -20,4 +20,6 @@ public interface ISalesService
 	Task<Unit_Order_DTO> GetSalesById(int id);
 
 	Task<IEnumerable<PaymentDTO>> GetSalesPayments(int id);
+
+	Task<CommandResult> AcceptPayment(int orderId, int paymentId);
 }
