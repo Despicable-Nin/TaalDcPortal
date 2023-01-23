@@ -93,6 +93,9 @@
                             },
                             onClick: function () { } // Callback after click
                         }).showToast();
+                        
+                        //TODO: Toast immediately closes 
+                        window.location.replace("/Properties/Index");
                     }, error: function () {
                         Toastify({
                             text: "Something went wrong. Please try again later.",

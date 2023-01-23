@@ -45,7 +45,8 @@ namespace TaalDc.Portal.Controllers
                 Message = result.ErrorMessage
             });
 
-            return Ok(result);
+
+            return Ok();
         }
 
         public async Task<IActionResult> EditProperty(int id)
