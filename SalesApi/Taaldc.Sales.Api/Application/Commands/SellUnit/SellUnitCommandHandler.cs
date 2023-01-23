@@ -84,6 +84,10 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 if (request.DownPaymentConfirmNo == string.Empty)
                     throw new ArgumentNullException(nameof(SellUnitCommand));
 
+                string correlationId = (request.DownPaymentConfirmNo == request.ReservationConfirmNo)
+                    ? request.DownPaymentConfirmNo
+                    : string.Empty;
+
 
                 //add payment fore acquisition
                 sale.AddPayment(
@@ -96,7 +100,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                     request.Remarks,
                     request.ReservationConfirmNo == request.DownPaymentConfirmNo
                         ? request.ReservationConfirmNo
-                        : default);
+                        : correlationId);
             }
 
 
