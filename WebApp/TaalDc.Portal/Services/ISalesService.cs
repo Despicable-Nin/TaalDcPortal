@@ -22,4 +22,6 @@ public interface ISalesService
 	Task<IEnumerable<PaymentDTO>> GetSalesPayments(int id);
 
 	Task<CommandResult> AcceptPayment(int orderId, int paymentId);
+
+    Task<CommandResult> AddPayment(PaymentCreateDTO model);
 }

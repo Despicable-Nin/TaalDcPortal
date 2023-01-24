@@ -58,9 +58,9 @@ public class Order : DomainEntity, IAggregateRoot
         string remarks, 
         string correlationId = default)
     {
-        if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
-            throw new SalesDomainException(nameof(AddPayment),
-                new InvalidOperationException("Duplicate payment confirmation number."));
+        //if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
+        //    throw new SalesDomainException(nameof(AddPayment),
+        //        new InvalidOperationException("Duplicate payment confirmation number."));
 
         Payment payment = new(
             paymentTypeId, 

@@ -25,6 +25,16 @@ public class SalesController : BaseController<SalesController>
     private const int RESERVED = 3;
     private const int BLOCKED = 4;
 
+    public static IDictionary<int, string> Dictionary = new Dictionary<int, string>()
+    {
+        { 1, "ForReservation" },
+        { 2, "ForAcquisition" },
+
+    };
+
+    public static int GetTypeId(string name) =>
+        Dictionary.SingleOrDefault(i => i.Value.ToLower() == name.ToLower()).Key;
+
 
     public SalesController(ILogger<SalesController> loggerInstance, ISalesService salesService, ICatalogService catalogService, IAccountService accountService, IAmCurrentUser currentUser) : base(loggerInstance)
     {
@@ -155,6 +165,7 @@ public class SalesController : BaseController<SalesController>
             return BadRequest(new
             {
                 IsFormError = true,
+                Message = "Please check your data entry.",
                 ModelState = Json(ModelState)
             });
         }
@@ -183,6 +194,36 @@ public class SalesController : BaseController<SalesController>
             {
                 IsFormError = false,
                 ErrorMessage = "Invalid order and payment id"
+            });
+        }
+    }
+
+
+    [HttpPost]
+    public async Task<IActionResult> CreatePayment(int id, PaymentCreateDTO model)
+    {
+        model.TransactionId = id;
+
+        if (model.TransactionId > 0)
+        {
+            model.TransactionTypeId = model.PaymentTypeId != 1 ? GetTypeId("ForAcquisition") : GetTypeId("ForReservation");
+
+            var result = await _salesService.AddPayment(model);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                IsFormError = false,
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
+        }
+        else
+        {
+            return BadRequest(new
+            {
+                IsFormError = false,
+                ErrorMessage = "Invalid payment id"
             });
         }
     }
@@ -230,7 +271,7 @@ public class SalesController : BaseController<SalesController>
         if (_currentUser.IsAdmin())
         {
             //check for the broker credentials if legit
-            if (!await IsABroker(broker.ToUpper())) validationErrors.Add("BROKER not found.");
+            if (!string.IsNullOrEmpty(broker) && !await IsABroker(broker.ToUpper())) validationErrors.Add("BROKER not found.");
         }
 
         return validationErrors.ToArray();

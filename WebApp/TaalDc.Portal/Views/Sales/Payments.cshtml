@@ -7,6 +7,15 @@
     ViewBag.Title = "Sales Payments";
     Layout = "_Layout";
 
+
+    Dictionary<int, string> PaymentTypes = new Dictionary<int, string>()
+    {
+        { 1, "Reservation" },
+        { 2, "Partial Downpayment" },
+        { 3, "Full Payment" },
+        { 4, "Penalty" }
+    };
+
 }
 
 <div class="container-fluid">
@@ -20,9 +29,17 @@
     </ul>
 
     <div class="tab-content">
-        <h4 class="primary-color mb-5 mt-3">
+        <h4 class="primary-color mb-3 mt-3">
             <strong>Payment Details</strong>
         </h4>
+
+        @if(CurrentUser.IsAdmin()){
+            <div class="action-section">
+                <div class="action-btn text-end">
+                    <button onclick="addNewPayment()" type="button" class="btn btn-primary">New Payment</button>
+                </div>
+            </div>
+        }
 
         <div class="table-responsive w-100 mb-3">
             <table class="table table-striped">
@@ -43,7 +60,7 @@
                     {
                         <tr>
                             <td>@payment.Id</td>
-                            <td>@payment.PaymentType</td>
+                            <td>@(PaymentTypes.FirstOrDefault(i => i.Key == payment.PaymentTypeId).Value)</td>
                             <td>@payment.AmountPaid.ToString("#,##0.00")</td>
                             <td>@payment.ActualPaymentDate.ToString("MMMM dd, yyyy")</td>
                             <td>@payment.ConfirmationNumber</td>
@@ -90,9 +107,100 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="newPaymentModal" tabindex="-1" aria-labelledby="newPaymentModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Payment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row" id="paymentform" method="post" asp-action="CreatePayment" asp-controller="Sales" asp-route-id="@Model.OrderId">
+                    <div class="mb-3 col-lg-12">
+                        <label for="PaymentMethod" class="form-label"><strong>Payment Method</strong></label>
+                        <select name="PaymentMethod" class="form-control form-select" required>
+                            <option value="Cash">
+                                Cash
+                            </option>
+                            <option value="Check">
+                                Check
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="PaymentDate" class="form-label"><strong>Payment Date</strong></label>
+                        <input name="PaymentDate" class="form-control" required type="date"/>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="AmountPaid" class="form-label"><strong>Amount</strong></label>
+                        <input id="AmountPaid" name="AmountPaid" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="ConfirmationNumber" class="form-label"><strong>Confirmation No.</strong></label>
+                        <input name="ConfirmationNumber" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="PaymentTypeId" class="form-label"><strong>Payment Type</strong></label>
+                        <select name="PaymentTypeId" class="form-control form-select" required>
+                            @foreach(var pType in PaymentTypes){
+                                <option value="@pType.Key">
+                                    @pType.Value
+                                </option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="Remarks" class="form-label"><strong>Note/Remarks</strong></label>
+                        <textarea name="Remarks" class="form-control" rows="5"></textarea>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
     <script src="~/js/sales/payment.js"></script>
     <script>
+        function addNewPayment(){
+            var newPaymentModal = document.getElementById('newPaymentModal');
+            applyMask();
+            var modal = new bootstrap.Modal(newPaymentModal, {});
+
+            modal.show();
+        }
+
+
         function openAcceptPaymentModal(orderId, paymentId){
             var paymentModal = document.getElementById('paymentVerifyModal');
 

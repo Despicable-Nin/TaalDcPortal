@@ -49,6 +49,22 @@ public class SalesService : ISalesService
         throw new Exception("Payment cannot be updated.");
     }
 
+    public async Task<CommandResult> AddPayment(PaymentCreateDTO model)
+    {
+        var uri = API.Sales.AddPayment(_removeServiceBaseUrl, model.TransactionId);
+
+        var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        throw new Exception("Sale cannot be created.");
+    }
+
     public async Task<Unit_Order_DTO> GetSalesById(int id)
 	{
 		var uri = API.Sales.GetSales(_removeServiceBaseUrl);

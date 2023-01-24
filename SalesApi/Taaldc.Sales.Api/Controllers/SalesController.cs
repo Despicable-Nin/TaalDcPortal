@@ -37,10 +37,13 @@ namespace Taaldc.Sales.Api.Controllers
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> Post([FromBody] SellUnitDTO dto)
         {
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
+            {
+                dto.Broker = dto.Broker ?? "In-house";
+            }
+
             SellUnitCommand command = _mapper.Map<SellUnitCommand>(dto);
             var result = await _mediator.Send(command);
-            
-
             
             return Ok(result);
         }

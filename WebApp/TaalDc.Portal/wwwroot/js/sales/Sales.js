@@ -141,7 +141,10 @@ function getAvailableUnits(pageNumber = 1, pageSize = 10) {
 function onUnitSelect() {
 	document.getElementsByName("unitName")[0].value = event.target.getAttribute('data-unit');
 	document.getElementsByName("UnitId")[0].value = event.target.getAttribute('data-unitId');
-	document.getElementsByName("SellingPrice")[0].value = event.target.getAttribute('data-sellingPrice');
+
+	var sellingPrice = parseFloat(event.target.getAttribute('data-sellingPrice')).toFixed(2);
+
+	document.getElementsByName("SellingPrice")[0].value = parseFloat(sellingPrice).toLocaleString();
 
 	const unitsModal = document.getElementById("available-units-modal");
 	const modalBackdrop = document.getElementsByClassName("modal-backdrop");
@@ -251,10 +254,11 @@ function onSalesFormSubmit(event) {
 
 			}, error: function (data) {
 				const response = data.responseJSON;
-				var errors = response.modelState.value; 
-				console.log("Error", response);
-
+				
 				if (response.isFormError) {
+					var errors = response.modelState.value;
+					console.log("Error", response);
+
 					// Iterate through the errors and render them next to the appropriate form fields
 					for (var key in errors) {
 						if (errors.hasOwnProperty(key)) {
@@ -271,7 +275,7 @@ function onSalesFormSubmit(event) {
 				}
 
 				Toastify({
-					text: "Something went wrong. Please try again later.",
+					text: response.message ? response.message : "Something went wrong. Please try again later.",
 					duration: 3000,
 					close: true,
 					gravity: "top", // `top` or `bottom`

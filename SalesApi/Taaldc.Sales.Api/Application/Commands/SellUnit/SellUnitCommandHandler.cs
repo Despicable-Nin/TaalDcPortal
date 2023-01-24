@@ -117,7 +117,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
         catch (Exception ex)
         {
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
-            return SellUnitCommandResult.Create(false, ex.Message, new Dictionary<string, object>());
+            return SellUnitCommandResult.Create(false, ex.InnerException.Message, new Dictionary<string, object>());
         }
 
 

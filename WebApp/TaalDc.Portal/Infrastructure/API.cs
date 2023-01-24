@@ -35,7 +35,7 @@ public static class API
         public static string GetSales(string baseUri) => $"{baseUri}/api/v1/sales";
 		public static string SellUnit(string baseUrl) => $"{baseUrl}/api/v1/sales";
         public static string AcceptPayment(string baseUrl, int orderId, int paymentId) => $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve";
-
+        public static string AddPayment(string baseUrl, int orderId) => $"{baseUrl}/api/v1/sales/{orderId}/payments";
         public static string GetAvailableUnitCount(string baseUrl) =>
             $"{baseUrl}/api/v1/dashboard/residential/available";
         public static string GetReservedUnitCount(string baseUrl) =>
