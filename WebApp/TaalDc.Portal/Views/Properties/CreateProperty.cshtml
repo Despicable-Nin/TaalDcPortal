@@ -25,7 +25,7 @@
                 <div class="mb-3 col-lg-8">
                     <label class="form-label"><strong>Land Area</strong></label>
                     <div class="input-group mb-3">
-                        <input asp-for="LandArea" type="text" class="form-control" required/>
+                        <input asp-for="LandArea" type="number" class="form-control" required/>
                         <span class="input-group-text">sqm</span>
                         <div class="invalid-feedback">
                             This is a required field.
@@ -95,7 +95,7 @@
                         }).showToast();
                         
                         //TODO: Toast immediately closes 
-                        window.location.replace("/Properties/Index");
+                        setTimeout(() => window.location.replace("/Properties/Index"),500);
                     }, error: function () {
                         Toastify({
                             text: "Something went wrong. Please try again later.",

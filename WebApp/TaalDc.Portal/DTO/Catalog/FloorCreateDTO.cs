@@ -14,6 +14,11 @@ namespace TaalDc.Portal.ViewModels.Catalog
             FloorPlanFilePath = floorPlanFilePath;
         }
 
+        public FloorCreateDTO()
+        {
+                
+        }
+
         [JsonPropertyName("tower_id")]
         public int TowerId { get; set; }
 

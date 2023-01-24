@@ -111,6 +111,8 @@
                             },
                             onClick: function () { } // Callback after click
                         }).showToast();
+                        
+                    setTimeout(() => window.location.replace("/Properties/Floors"),500);
                     }, error: function () {
                         Toastify({
                             text: "Something went wrong. Please try again later.",

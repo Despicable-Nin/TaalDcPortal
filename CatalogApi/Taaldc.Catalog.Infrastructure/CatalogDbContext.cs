@@ -34,6 +34,22 @@ public class CatalogDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CatalogDbContext).Assembly);
+        
+        modelBuilder.HasSequence<int>("projectseq", DEFAULT_SCHEMA)
+            .StartsAt(2000).IncrementsBy(1);
+
+        modelBuilder.HasSequence<int>("propertyseq", DEFAULT_SCHEMA)
+            .StartsAt(2000).IncrementsBy(1);
+        
+        modelBuilder.HasSequence<int>("floorseq", DEFAULT_SCHEMA)
+            .StartsAt(2000).IncrementsBy(1);
+        
+        modelBuilder.HasSequence<int>("towerseq", DEFAULT_SCHEMA)
+            .StartsAt(2000).IncrementsBy(1);
+        
+        modelBuilder.HasSequence<int>("unitseq", DEFAULT_SCHEMA)
+            .StartsAt(2000).IncrementsBy(1);
+
 
         modelBuilder.HasSequence<int>("unitseq", DEFAULT_SCHEMA)
                   .StartsAt(2000).IncrementsBy(1);

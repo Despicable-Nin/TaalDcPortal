@@ -92,6 +92,8 @@
                             },
                             onClick: function () { } // Callback after click
                         }).showToast();
+                        
+                            setTimeout(() => window.location.replace("/Properties/UnitTypes"),1000);
                     }, error: function () {
                         Toastify({
                             text: "Something went wrong. Please try again later.",

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Globalization;
+using AutoMapper;
+using TaalDc.Portal.DTO.Catalog;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -13,10 +15,12 @@ namespace TaalDc.Portal.Controllers
 	public class PropertiesController : BaseController<PropertiesController>
     {
         private readonly ICatalogService _catalogService;
+        private readonly IMapper _mapper;
 
-        public PropertiesController(ICatalogService catalogService, ILogger<PropertiesController> loggerInstance) : base(loggerInstance)
+        public PropertiesController(ICatalogService catalogService, IMapper mapper, ILogger<PropertiesController> loggerInstance) : base(loggerInstance)
         {
             _catalogService = catalogService;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index(string filter,
             string sortBy,
@@ -57,9 +61,9 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Index");
 
-                var propertyCreateDTO = new PropertyCreateDTO(result.ProjectId, result.Id, result.PropertyName, result.LandArea);
+                PropertyCreateDTO propertyCreateDto = _mapper.Map<PropertyCreateDTO>(result);
 
-                return View(propertyCreateDTO);
+                return View(propertyCreateDto);
 
             }catch(Exception err)
             {

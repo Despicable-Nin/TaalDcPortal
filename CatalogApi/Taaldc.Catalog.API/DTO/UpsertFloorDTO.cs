@@ -5,7 +5,21 @@ namespace Taaldc.Catalog.API.DTO;
 
 public class UpsertFloorDTO
 {
-    [JsonPropertyName("tower_id")]
+	public UpsertFloorDTO(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
+	{
+		TowerId = towerId;
+		FloorId = floorId;
+		Name = name;
+		Description = description;
+		FloorPlanFilePath = floorPlanFilePath;
+	}
+
+	public UpsertFloorDTO()
+	{
+		
+	}
+
+	[JsonPropertyName("tower_id")]
     [JsonProperty(Required = Required.Always)]
     public int TowerId { get; set; }
     
