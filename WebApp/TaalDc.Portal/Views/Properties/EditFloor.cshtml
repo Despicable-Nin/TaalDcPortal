@@ -16,6 +16,7 @@
 
     <div>
         <form id="floorForm" method="post" class="row mb-5 needs-validation" asp-action="CreateFloor" asp-controller="Properties">
+            <input type="hidden" asp-for="FloorId"></input>
             <div class="mb-3 col-lg-8">
                 <label asp-for="TowerId" class="form-label"><strong>Tower</strong></label>
                 <select asp-for="TowerId" class="form-control form-select" required>
@@ -27,33 +28,33 @@
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
                 <label asp-for="Name" class="form-label"><strong>Name</strong></label>
-                <input asp-for="Name" class="form-control" required />
+                <input asp-for="Name" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
                 <label asp-for="Description" class="form-label"><strong>Floor Description</strong></label>
-                <input asp-for="Description" class="form-control" required />
+                <input asp-for="Description" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
                 <label asp-for="FloorPlanFilePath" class="form-label"><strong>Floor Plan File Path</strong></label>
-                <input asp-for="FloorPlanFilePath" class="form-control" />
+                <input asp-for="FloorPlanFilePath" class="form-control"/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="col-lg-12">
-                <input id="floor-form-submit" class="btn btn-primary" type="submit" value="Save" />
+                <input id="floor-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>

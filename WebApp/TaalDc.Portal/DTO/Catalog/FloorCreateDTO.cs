@@ -29,7 +29,7 @@ namespace TaalDc.Portal.ViewModels.Catalog
         public string Name { get; set; }
         [JsonPropertyName("description")]
         public string Description { get; set; }
-        [JsonPropertyName("project_id")]
+        [JsonPropertyName("floor_plan_file_path")]
         public string FloorPlanFilePath { get; set; }
     }
 }
