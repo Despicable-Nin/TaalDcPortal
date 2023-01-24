@@ -102,7 +102,7 @@
 
             <div class="mb-3 col-lg-8">
                 <label asp-for="FloorArea" class="form-label"><strong>Floor Area</strong></label>
-                <input asp-for="FloorArea" class="form-control" required />
+                <input id="floorArea" type="decimal" asp-for="FloorArea" class="form-control" required placeholder="0.00" />
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -110,7 +110,7 @@
 
             <div class="mb-3 col-lg-8">
                 <label asp-for="BalconyArea" class="form-label"><strong>Balcony Area</strong></label>
-                <input asp-for="BalconyArea" class="form-control" required />
+                <input id="balconyArea" type="decimal" asp-for="BalconyArea" class="form-control" required placeholder="0.00" />
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -118,7 +118,7 @@
             
             <div class="mb-3 col-lg-8">
                 <label asp-for="SellingPrice" class="form-label"><strong>Selling Price</strong></label>
-                <input asp-for="SellingPrice" class="form-control" required />
+                <input id="sellingPrice" asp-for="SellingPrice" type="decimal" class="form-control" required placeholder="0.00"/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -138,8 +138,14 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
+    <script src="~/js/common/PJMask.js"></script>
     <script>
+        
+     
+        applyPJMask("#floorArea");
+        applyPJMask("#balconyArea");
+        applyPJMask("#sellingPrice");
+
         const form = document.getElementById('unitForm');
         form.addEventListener('submit', onPropertyFormSubmit);
 
