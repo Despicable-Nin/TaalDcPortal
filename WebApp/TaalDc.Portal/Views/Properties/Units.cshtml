@@ -104,7 +104,7 @@
                                 <td>@prop.Price.ToString("#,##0.00")</td>
                                 <td>@prop.UnitStatus</td>
                                 <td>
-                                    <a class="action-edit" href="#">Edit</a>
+                                       <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>
                                 </td>
                             </tr>

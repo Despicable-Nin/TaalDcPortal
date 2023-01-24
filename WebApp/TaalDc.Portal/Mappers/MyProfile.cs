@@ -15,6 +15,7 @@ public class MyProfile : Profile
         CreateMap<FloorDTO, FloorCreateDTO>()
             .ConstructUsing(o =>
                 new FloorCreateDTO(o.TowerId, o.Id, o.FloorName, o.FloorDescription, o.FloorPlanFilePath));
+        CreateMap<UnitDTO, UnitUpdateDTO>();
 
     }
 }

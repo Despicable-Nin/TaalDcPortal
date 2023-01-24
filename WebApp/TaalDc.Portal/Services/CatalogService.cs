@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http;
 using System.Text.Json;
+using Microsoft.CodeAnalysis.Operations;
 using TaalDc.Portal.DTO.Catalog;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Infrastructure;
@@ -14,7 +15,6 @@ namespace TaalDc.Portal.Services
         private readonly IOptions<AppSettings> _settings;
         private readonly HttpClient _httpClient;
         private readonly ILogger<MarketingService> _logger;
-
         private readonly string _remoteServiceUrl;
 
         public CatalogService(
@@ -25,137 +25,197 @@ namespace TaalDc.Portal.Services
             _settings = settings;
             _httpClient = httpClient;
             _logger = logger;
-
-            _remoteServiceUrl = $"{settings.Value.CatalogUrl}";
+            _remoteServiceUrl = settings.Value.CatalogUrl;
         }
 
         public async Task<PaginationQueryResult<FloorDTO>> GetFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetFloors(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.GetFloors(_remoteServiceUrl);
 
-            uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
+                uri =
+                    $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<PaginationQueryResult<FloorDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<FloorDTO>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<PaginationQueryResult<PropertyDTO>> GetProperties(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetProperties(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.GetProperties(_remoteServiceUrl);
 
-            uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
+                uri =
+                    $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<PaginationQueryResult<PropertyDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<PropertyDTO>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<PropertyDTO> GetPropertyById(int id)
         {
-            var uri = API.Catalog.GetProperties(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.GetProperties(_remoteServiceUrl);
 
-            uri = uri + $"/{id}";
+                uri = uri + $"/{id}";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<PropertyDTO>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<PropertyDTO>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<FloorDTO> GetFloorById(int id)
         {
-            var uri = API.Catalog.GetFloorById(_remoteServiceUrl, id);
+            try
+            {
+                var uri = API.Catalog.GetFloorById(_remoteServiceUrl, id);
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<FloorDTO>(responseString,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<FloorDTO>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<PaginationQueryResult<TowerDTO>> GetTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetTowers(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.GetTowers(_remoteServiceUrl);
 
-            uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
+                uri =
+                    $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<PaginationQueryResult<TowerDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<TowerDTO>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
 
         public async Task<TowerDTO> GetTowerById(int id)
         {
-            var uri = API.Catalog.GetTowers(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.GetTowers(_remoteServiceUrl);
 
-            uri = uri + $"/{id}";
+                uri = uri + $"/{id}";
 
-            var responseString = await _httpClient.GetStringAsync(uri);
+                var responseString = await _httpClient.GetStringAsync(uri);
 
-            var result = JsonSerializer.Deserialize<TowerDTO>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<TowerDTO>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter, int? floorId, int? unitTypeId, int? viewId, int? statusId, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetUnits(_remoteServiceUrl);
-
-            uri = $"{uri}?filter={filter}&" +
-                $"sortBy={sortBy}&" +
-                $"sortOrder={sortOrder}&" +
-                $"pageNumber={pageNumber}&" +
-                $"pageSize={pageSize}";
-
-
-            if (floorId.HasValue)
+            try
             {
-                uri = uri + $"&floorId={floorId}";
-            }
+                var uri = API.Catalog.GetUnits(_remoteServiceUrl);
 
-            if (unitTypeId.HasValue)
-            {
-                uri = uri + $"&unitTypeId={unitTypeId}";
-            }
+                uri = $"{uri}?filter={filter}&" +
+                      $"sortBy={sortBy}&" +
+                      $"sortOrder={sortOrder}&" +
+                      $"pageNumber={pageNumber}&" +
+                      $"pageSize={pageSize}";
 
-            if (viewId.HasValue)
-            {
-                uri = uri + $"&viewId={viewId}";
-            }
+                uri = floorId.HasValue ? $"{uri}&floorid={floorId}" : uri;
 
-            if (statusId.HasValue)
-            {
-                uri = uri + $"&statusId={statusId}";
-            }
+                uri = unitTypeId.HasValue ? $"{uri}&unitTypeId={unitTypeId}" : uri;
 
-            try { 
+                uri = viewId.HasValue ? $"{uri}&viewId={viewId}" : uri;
+
+                uri = statusId.HasValue ? $"{uri}&statusId={statusId}" : uri;
+                
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PaginationQueryResult<UnitDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<UnitDTO>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
-            }catch(Exception err)
+            }
+            catch (Exception err)
             {
-                throw new Exception(err.Message);
+                throw;
             }
         }
 
-        public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
+        public async Task<UnitDTO> GetUnitById(int id)
         {
-            var uri = API.Catalog.GetUnitTypes(_remoteServiceUrl);
-
             try
             {
+                var uri = API.Catalog.GetUnitById(_remoteServiceUrl, id);
+
+                var responseString = await _httpClient.GetStringAsync(uri);
+
+                var result = JsonSerializer.Deserialize<UnitDTO>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+    
+        }
+        
+        public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
+        {
+           
+            try
+            {
+                var uri = API.Catalog.GetUnitTypes(_remoteServiceUrl);
+
                 var responseString = await _httpClient.GetStringAsync(uri);
 
                 var result = JsonSerializer.Deserialize<IEnumerable<UnitTypeDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
@@ -164,110 +224,132 @@ namespace TaalDc.Portal.Services
             }
             catch (Exception err)
             {
-                throw new Exception(err.Message);
+                throw;
             }
         }
 
-
-
-
         public async Task<CommandResult> CreateProperty(PropertyCreateDTO model)
         {
-            if (model.ProjectId == 0) model.ProjectId = 1;
-
-            var uri = API.Catalog.AddProperty(_remoteServiceUrl);
-
-            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
+                //we are not expecting any new project..
+                if (model.ProjectId == 0) model.ProjectId = 1;
 
-            throw new Exception("Property cannot be created.");
+                var uri = API.Catalog.AddProperty(_remoteServiceUrl);
+
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+                
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<CommandResult> CreateTower(TowerCreateDTO model)
         {
-            var uri = API.Catalog.AddTower(_remoteServiceUrl);
-
-            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
+                var uri = API.Catalog.AddTower(_remoteServiceUrl);
 
-            throw new Exception("Tower cannot be created.");
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<CommandResult> CreateFloor(FloorCreateDTO model)
         {
-            var uri = API.Catalog.AddFloor(_remoteServiceUrl);
-
-            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
+                var uri = API.Catalog.AddFloor(_remoteServiceUrl);
 
-            throw new Exception("Floor cannot be created.");
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
 
         public async Task<CommandResult> CreateUnit(UnitCreateDTO model)
         {
-            var uri = API.Catalog.AddUnit(_remoteServiceUrl);
-
-            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
+                var uri = API.Catalog.AddUnit(_remoteServiceUrl);
 
-            throw new Exception("Unit cannot be created.");
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model)
         {
-            var uri = API.Catalog.AddUnitType(_remoteServiceUrl);
-
-            var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
+                var uri = API.Catalog.AddUnitType(_remoteServiceUrl);
 
-            throw new Exception("Unit type cannot be created.");
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+                
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
 		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model)
 		{
-			var uri = API.Catalog.UpdateUnitStatus(_remoteServiceUrl);
+            try
+            {
+                var uri = API.Catalog.UpdateUnitStatus(_remoteServiceUrl);
 
-			var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
-			var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync();
 
-			if (response.IsSuccessStatusCode)
-			{
-				return JsonSerializer.Deserialize<CommandResult>(content, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-			}
-
-			throw new Exception("Unit status cannot be updated. Error: " + content);
-		}
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                        new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+          
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 	}
 }

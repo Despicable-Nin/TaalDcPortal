@@ -41,6 +41,8 @@ namespace TaalDc.Portal.Services
              int pageNumber = 1,
              int pageSize = 10);
 
+        Task<UnitDTO> GetUnitById(int id);
+
 
         Task<IEnumerable<UnitTypeDTO>> GetUnitTypes();
 

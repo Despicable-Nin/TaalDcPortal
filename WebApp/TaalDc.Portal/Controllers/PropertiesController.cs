@@ -166,11 +166,9 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Floors");
 
-                var floorCreateDTO =
-                    _mapper.Map<FloorCreateDTO>(
+                var floorCreateDTO = _mapper.Map<FloorCreateDTO>(
                         result);
-                //new FloorCreateDTO(result.TowerId,result.Id,result.FloorName,result.FloorDescription,result.FloorPlanFilePath);
-
+          
                 return View(floorCreateDTO);
 
             }
@@ -217,6 +215,17 @@ namespace TaalDc.Portal.Controllers
             });
 
             return Ok(result);
+        }
+
+        public async Task<IActionResult> EditUnit(int id)
+        {
+            var result = await _catalogService.GetUnitById(id);
+
+            if (result == null) RedirectToAction("Units");
+
+            var unitUpdateDto = _mapper.Map<UnitUpdateDTO>(result);
+
+            return View(unitUpdateDto);
         }
 
         public async Task<IActionResult> Units(

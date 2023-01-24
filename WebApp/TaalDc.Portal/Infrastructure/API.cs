@@ -28,6 +28,7 @@ public static class API
         public static string GetUnitTypes(string baseUri) => $"{baseUri}/api/adm/unitTypes";
 
         public static string GetFloorById(string baserUri,int id) => $"{baserUri}/api/adm/floors/{id}";
+        public static string GetUnitById(string baseUri, int id) => $"{baseUri}/api/adm/units/{id}";
     }
 
     public static class Sales
