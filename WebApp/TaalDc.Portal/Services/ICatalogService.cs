@@ -29,6 +29,8 @@ namespace TaalDc.Portal.Services
             int pageNumber = 1,
             int pageSize = 10);
 
+        Task<FloorDTO> GetFloorById(int id);
+
         Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter,
              int? floorId,
              int? unitTypeId,

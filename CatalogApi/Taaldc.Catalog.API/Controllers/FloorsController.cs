@@ -18,6 +18,14 @@ public class FloorsController : ApiBaseController<FloorsController>
         _floorQueries = floorQueries;
     }
 
+	[HttpGet("{id}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesErrorResponseType(typeof(BadRequestResult))]
+	public async Task<IActionResult> GetFloorById(int id)
+	{
+		return Ok(await _floorQueries.GetFloorById(id));
+	}
+
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]

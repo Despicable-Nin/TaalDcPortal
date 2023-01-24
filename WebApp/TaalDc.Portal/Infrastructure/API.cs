@@ -26,6 +26,8 @@ public static class API
         public static string GetFloors(string baseUri) => $"{baseUri}/api/adm/floors";
         public static string GetUnits(string baseUri) => $"{baseUri}/api/adm/units";
         public static string GetUnitTypes(string baseUri) => $"{baseUri}/api/adm/unitTypes";
+
+        public static string GetFloorById(string baserUri,int id) => $"{baserUri}/api/adm/floors/{id}";
     }
 
     public static class Sales

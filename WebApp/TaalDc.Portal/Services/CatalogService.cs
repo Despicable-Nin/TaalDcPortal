@@ -15,7 +15,7 @@ namespace TaalDc.Portal.Services
         private readonly HttpClient _httpClient;
         private readonly ILogger<MarketingService> _logger;
 
-        private readonly string _removeServiceBaseUrl;
+        private readonly string _remoteServiceUrl;
 
         public CatalogService(
             IOptions<AppSettings> settings, 
@@ -26,12 +26,12 @@ namespace TaalDc.Portal.Services
             _httpClient = httpClient;
             _logger = logger;
 
-            _removeServiceBaseUrl = $"{settings.Value.CatalogUrl}";
+            _remoteServiceUrl = $"{settings.Value.CatalogUrl}";
         }
 
         public async Task<PaginationQueryResult<FloorDTO>> GetFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetFloors(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetFloors(_remoteServiceUrl);
 
             uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
@@ -44,7 +44,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<PaginationQueryResult<PropertyDTO>> GetProperties(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetProperties(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetProperties(_remoteServiceUrl);
 
             uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
@@ -57,7 +57,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<PropertyDTO> GetPropertyById(int id)
         {
-            var uri = API.Catalog.GetProperties(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetProperties(_remoteServiceUrl);
 
             uri = uri + $"/{id}";
 
@@ -68,9 +68,21 @@ namespace TaalDc.Portal.Services
             return result;
         }
 
+        public async Task<FloorDTO> GetFloorById(int id)
+        {
+            var uri = API.Catalog.GetFloorById(_remoteServiceUrl, id);
+
+            var responseString = await _httpClient.GetStringAsync(uri);
+
+            var result = JsonSerializer.Deserialize<FloorDTO>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
+
         public async Task<PaginationQueryResult<TowerDTO>> GetTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetTowers(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetTowers(_remoteServiceUrl);
 
             uri = $"{uri}?filter={filter}&sortBy={sortBy}&sortOrder={sortOrder}&pageNumber={pageNumber}&pageSize={pageSize}";
 
@@ -84,7 +96,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<TowerDTO> GetTowerById(int id)
         {
-            var uri = API.Catalog.GetTowers(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetTowers(_remoteServiceUrl);
 
             uri = uri + $"/{id}";
 
@@ -97,7 +109,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter, int? floorId, int? unitTypeId, int? viewId, int? statusId, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
-            var uri = API.Catalog.GetUnits(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetUnits(_remoteServiceUrl);
 
             uri = $"{uri}?filter={filter}&" +
                 $"sortBy={sortBy}&" +
@@ -140,7 +152,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
         {
-            var uri = API.Catalog.GetUnitTypes(_removeServiceBaseUrl);
+            var uri = API.Catalog.GetUnitTypes(_remoteServiceUrl);
 
             try
             {
@@ -163,7 +175,7 @@ namespace TaalDc.Portal.Services
         {
             if (model.ProjectId == 0) model.ProjectId = 1;
 
-            var uri = API.Catalog.AddProperty(_removeServiceBaseUrl);
+            var uri = API.Catalog.AddProperty(_remoteServiceUrl);
 
             var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -179,7 +191,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<CommandResult> CreateTower(TowerCreateDTO model)
         {
-            var uri = API.Catalog.AddTower(_removeServiceBaseUrl);
+            var uri = API.Catalog.AddTower(_remoteServiceUrl);
 
             var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -195,7 +207,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<CommandResult> CreateFloor(FloorCreateDTO model)
         {
-            var uri = API.Catalog.AddFloor(_removeServiceBaseUrl);
+            var uri = API.Catalog.AddFloor(_remoteServiceUrl);
 
             var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -212,7 +224,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<CommandResult> CreateUnit(UnitCreateDTO model)
         {
-            var uri = API.Catalog.AddUnit(_removeServiceBaseUrl);
+            var uri = API.Catalog.AddUnit(_remoteServiceUrl);
 
             var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -228,7 +240,7 @@ namespace TaalDc.Portal.Services
 
         public async Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model)
         {
-            var uri = API.Catalog.AddUnitType(_removeServiceBaseUrl);
+            var uri = API.Catalog.AddUnitType(_remoteServiceUrl);
 
             var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -244,7 +256,7 @@ namespace TaalDc.Portal.Services
 
 		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model)
 		{
-			var uri = API.Catalog.UpdateUnitStatus(_removeServiceBaseUrl);
+			var uri = API.Catalog.UpdateUnitStatus(_remoteServiceUrl);
 
 			var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 

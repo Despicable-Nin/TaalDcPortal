@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Globalization;
 using AutoMapper;
+using NuGet.DependencyResolver;
 using TaalDc.Portal.DTO.Catalog;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
@@ -127,7 +128,8 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Index");
 
-                var towerCreateDTO = new TowerCreateDTO(result.Id, result.PropertyId, result.TowerName, result.Address);
+                var towerCreateDTO = _mapper.Map<TowerCreateDTO>(result);
+                //new TowerCreateDTO(result.Id, result.PropertyId, result.TowerName, result.Address);
 
                 return View(towerCreateDTO);
 
@@ -137,18 +139,11 @@ namespace TaalDc.Portal.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-
+        
         public async Task<IActionResult> CreateFloor()
         {
-
-            //get dropdown of properties
-
-            //get dropdown of towers
-
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> CreateFloor(FloorCreateDTO model)
@@ -161,6 +156,28 @@ namespace TaalDc.Portal.Controllers
             });
 
             return Ok(result);
+        }
+
+        public async Task<IActionResult> EditFloor(int id)
+        {
+            try
+            {
+                var result = await _catalogService.GetFloorById(id);
+
+                if (result == null) RedirectToAction("Floors");
+
+                var floorCreateDTO =
+                    _mapper.Map<FloorCreateDTO>(
+                        result);
+                //new FloorCreateDTO(result.TowerId,result.Id,result.FloorName,result.FloorDescription,result.FloorPlanFilePath);
+
+                return View(floorCreateDTO);
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Floors");
+            }
         }
 
         public async Task<IActionResult> Floors(string filter,
