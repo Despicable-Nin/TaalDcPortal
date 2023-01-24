@@ -27,11 +27,11 @@ public static class DbContextExtensions
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        auditable.AuditOnCreate(_currentUser?.Email);
+                        auditable.AuditOnCreate(!string.IsNullOrEmpty(_currentUser?.Email)? _currentUser?.Email: String.Empty);
                         break;
 
                     case EntityState.Modified:
-                        auditable.AuditOnUpdate(_currentUser?.Email, true);
+                        auditable.AuditOnUpdate(!string.IsNullOrEmpty(_currentUser?.Email) ? _currentUser?.Email : String.Empty, true);
                         break;
 
                     case EntityState.Deleted:

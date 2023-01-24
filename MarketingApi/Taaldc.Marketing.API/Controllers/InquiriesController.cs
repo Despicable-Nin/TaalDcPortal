@@ -115,7 +115,7 @@ public class InquiriesController : Controller
             dto.Province, dto.TownCity));
       
        _dbContext.Inquiries.Add(entity);
-       await _dbContext.SaveChangesAsync();
+       await _dbContext.SaveEntitiesAsync();
       return Ok();
    }
    

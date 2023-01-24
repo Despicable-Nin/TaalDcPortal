@@ -34,8 +34,6 @@ public class MarketingDbContext : DbContext, IUnitOfWork
 
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        this.DbAudit(_currentUser);
-
         return base.SaveChangesAsync(cancellationToken);
     }
 
