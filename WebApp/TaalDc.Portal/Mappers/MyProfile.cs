@@ -8,7 +8,8 @@ public class MyProfile : Profile
 {
     public MyProfile()
     {
-        CreateMap<PropertyDTO, PropertyCreateDTO>();
+        CreateMap<PropertyDTO, PropertyCreateDTO>()
+            .ConstructUsing(o => new PropertyCreateDTO(o.ProjectId, o.Id, o.PropertyName, o.LandArea));
 
     }
 }
