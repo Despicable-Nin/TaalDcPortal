@@ -4,20 +4,27 @@ namespace Taaldc.Catalog.API.Application.Queries.Units;
 
 public record AvailableUnitQueryResult
 {
-    public AvailableUnitQueryResult(int pageSize, int pageNumber, int totalCount, IEnumerable<AvailableUnit> units)
-    {
-        PageSize = pageSize;
-        PageNumber = pageNumber;
-        TotalCount = totalCount;
-        Units = units;
-    }
+    [JsonPropertyName("unit_id")]
+    public int Id { get; }
+    [JsonPropertyName("unit_identifier")]
+    public string Identifier { get; }
+    [JsonPropertyName("price")]
+    public decimal Price { get; }
+    [JsonPropertyName("floor_area")]
+    public double FloorArea { get; }
+    [JsonPropertyName("floor")]
+    public string Floor { get; }
+    [JsonPropertyName("floor_description")]
+    public string FloorDesc { get; }
+    [JsonPropertyName("view")]
+    public string View { get; }
+    [JsonPropertyName("status")]
+    public string Status { get; }
+    [JsonPropertyName("type")]
+    public string Type { get; }
+    [JsonPropertyName("type_short_code")]
+    public string TypeCode { get; }
+	[JsonPropertyName("remarks")]
+	public string Remarks { get; }
 
-    [JsonPropertyName("page_size")]
-    public int PageSize { get; }
-    [JsonPropertyName("page_number")]
-    public int PageNumber { get; }
-    [JsonPropertyName("total")]
-    public int TotalCount { get; }
-    [JsonPropertyName("units")]
-    public IEnumerable<AvailableUnit> Units { get; }
 }

@@ -7,31 +7,31 @@ namespace TaalDc.Portal.Services
 {
     public interface ICatalogService
     {
-        Task<PaginationQueryResult<PropertyDTO>> GetProperties(string filter,
+        Task<PaginationQueryResult<Property_ClientDto>> GetProperties(string filter,
             string sortBy,
             SortOrderEnum sortOrder,
             int pageNumber = 1,
             int pageSize = 10);
 
-        Task<PropertyDTO> GetPropertyById(int id);
+        Task<Property_ClientDto> GetPropertyById(int id);
 
-        Task<PaginationQueryResult<TowerDTO>> GetTowers(string filter,
+        Task<PaginationQueryResult<Tower_ClientDto>> GetTowers(string filter,
             string sortBy,
             SortOrderEnum sortOrder,
             int pageNumber = 1,
             int pageSize = 10);
 
-        Task<TowerDTO> GetTowerById(int id);
+        Task<Tower_ClientDto> GetTowerById(int id);
 
-        Task<PaginationQueryResult<FloorDTO>> GetFloors(string filter,
+        Task<PaginationQueryResult<Floor_ClientDto>> GetFloors(string filter,
             string sortBy,
             SortOrderEnum sortOrder,
             int pageNumber = 1,
             int pageSize = 10);
 
-        Task<FloorDTO> GetFloorById(int id);
+        Task<Floor_ClientDto> GetFloorById(int id);
 
-        Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter,
+        Task<PaginationQueryResult<Unit_ClientDto>> GetUnits(string filter,
              int? floorId,
              int? unitTypeId,
              int? viewId,
@@ -41,19 +41,19 @@ namespace TaalDc.Portal.Services
              int pageNumber = 1,
              int pageSize = 10);
 
-        Task<UnitDTO> GetUnitById(int id);
+        Task<Unit_ClientDto> GetUnitById(int id);
 
 
-        Task<IEnumerable<UnitTypeDTO>> GetUnitTypes();
+        Task<IEnumerable<UnitType_ClientDto>> GetUnitTypes();
 
 
 
-        Task<CommandResult> CreateProperty(PropertyCreateDTO model);
-        Task<CommandResult> CreateTower(TowerCreateDTO model);
-        Task<CommandResult> CreateFloor(FloorCreateDTO model);
-        Task<CommandResult> CreateUnit(UnitCreateDTO model);
-        Task<CommandResult> UpdateUnit(UnitUpdateDTO model);
-        Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model);
-		Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model);
+        Task<CommandResult> CreateProperty(PropertyCreate_ClientDto model);
+        Task<CommandResult> CreateTower(TowerCreate_ClientDto model);
+        Task<CommandResult> CreateFloor(FloorCreate_ClientDto model);
+        Task<CommandResult> CreateUnit(UnitCreate_ClientDto model);
+        Task<CommandResult> UpdateUnit(UnitUpdate_ClientDto model);
+        Task<CommandResult> CreateUnitType(UnitTypeCreate_ClientDto model);
+		Task<CommandResult> UpdateUnitStatus(UnitStatusUpdate_ClientDto model);
 	}
 }

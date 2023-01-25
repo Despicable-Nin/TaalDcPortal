@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace TaalDc.Portal.ViewModels.Catalog
 {
-    public class PropertyCreateDTO
+    public class PropertyCreate_ClientDto
     {
-        public PropertyCreateDTO(int projectId, int? propertyId, string name, double landArea)
+        public PropertyCreate_ClientDto(int projectId, int? propertyId, string name, double landArea)
         {
             ProjectId = projectId;
             PropertyId = propertyId;
@@ -13,7 +13,7 @@ namespace TaalDc.Portal.ViewModels.Catalog
             LandArea = landArea;
         }
 
-        public PropertyCreateDTO()
+        public PropertyCreate_ClientDto()
         {
         }
 

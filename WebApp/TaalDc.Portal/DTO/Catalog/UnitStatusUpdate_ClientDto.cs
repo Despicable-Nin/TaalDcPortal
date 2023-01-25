@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace TaalDc.Portal.ViewModels.Catalog
 {
-	public class UnitStatusUpdateDTO
+	public class UnitStatusUpdate_ClientDto
 	{
-		public UnitStatusUpdateDTO(int unitId, int status, string remarks)
+		public UnitStatusUpdate_ClientDto(int unitId, int status, string remarks)
 		{
 			UnitId = unitId;
 			UnitStatus = status;

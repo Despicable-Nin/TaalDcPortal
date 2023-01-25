@@ -2,7 +2,7 @@
 
 namespace Taaldc.Catalog.API.Application.Queries.Units
 {
-	public class UnitTypeAvailability
+	public class UnitTypeAvailabilityQueryResult
 	{
 		[JsonPropertyName("tower_id")]
 		public int TowerId { get; set; }

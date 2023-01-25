@@ -28,7 +28,7 @@ namespace TaalDc.Portal.Services
             _remoteServiceUrl = settings.Value.CatalogUrl;
         }
 
-        public async Task<PaginationQueryResult<FloorDTO>> GetFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<Floor_ClientDto>> GetFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PaginationQueryResult<FloorDTO>>(responseString,
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<Floor_ClientDto>>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -50,7 +50,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<PaginationQueryResult<PropertyDTO>> GetProperties(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<Property_ClientDto>> GetProperties(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PaginationQueryResult<PropertyDTO>>(responseString,
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<Property_ClientDto>>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -72,7 +72,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<PropertyDTO> GetPropertyById(int id)
+        public async Task<Property_ClientDto> GetPropertyById(int id)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PropertyDTO>(responseString,
+                var result = JsonSerializer.Deserialize<Property_ClientDto>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -93,7 +93,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<FloorDTO> GetFloorById(int id)
+        public async Task<Floor_ClientDto> GetFloorById(int id)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<FloorDTO>(responseString,
+                var result = JsonSerializer.Deserialize<Floor_ClientDto>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -112,7 +112,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<PaginationQueryResult<TowerDTO>> GetTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<Tower_ClientDto>> GetTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
@@ -123,7 +123,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PaginationQueryResult<TowerDTO>>(responseString,
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<Tower_ClientDto>>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -135,7 +135,7 @@ namespace TaalDc.Portal.Services
         }
 
 
-        public async Task<TowerDTO> GetTowerById(int id)
+        public async Task<Tower_ClientDto> GetTowerById(int id)
         {
             try
             {
@@ -145,7 +145,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<TowerDTO>(responseString,
+                var result = JsonSerializer.Deserialize<Tower_ClientDto>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -156,7 +156,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<PaginationQueryResult<UnitDTO>> GetUnits(string filter, int? floorId, int? unitTypeId, int? viewId, int? statusId, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<Unit_ClientDto>> GetUnits(string filter, int? floorId, int? unitTypeId, int? viewId, int? statusId, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace TaalDc.Portal.Services
                 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<PaginationQueryResult<UnitDTO>>(responseString,
+                var result = JsonSerializer.Deserialize<PaginationQueryResult<Unit_ClientDto>>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -189,7 +189,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<UnitDTO> GetUnitById(int id)
+        public async Task<Unit_ClientDto> GetUnitById(int id)
         {
             try
             {
@@ -197,7 +197,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<UnitDTO>(responseString,
+                var result = JsonSerializer.Deserialize<Unit_ClientDto>(responseString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
@@ -209,7 +209,7 @@ namespace TaalDc.Portal.Services
     
         }
         
-        public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
+        public async Task<IEnumerable<UnitType_ClientDto>> GetUnitTypes()
         {
            
             try
@@ -218,7 +218,7 @@ namespace TaalDc.Portal.Services
 
                 var responseString = await _httpClient.GetStringAsync(uri);
 
-                var result = JsonSerializer.Deserialize<IEnumerable<UnitTypeDTO>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                var result = JsonSerializer.Deserialize<IEnumerable<UnitType_ClientDto>>(responseString, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 return result;
             }
@@ -228,7 +228,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<CommandResult> CreateProperty(PropertyCreateDTO model)
+        public async Task<CommandResult> CreateProperty(PropertyCreate_ClientDto model)
         {
             try
             {
@@ -251,7 +251,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<CommandResult> CreateTower(TowerCreateDTO model)
+        public async Task<CommandResult> CreateTower(TowerCreate_ClientDto model)
         {
             try
             {
@@ -271,7 +271,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<CommandResult> CreateFloor(FloorCreateDTO model)
+        public async Task<CommandResult> CreateFloor(FloorCreate_ClientDto model)
         {
             try
             {
@@ -291,7 +291,7 @@ namespace TaalDc.Portal.Services
         }
 
 
-        public async Task<CommandResult> CreateUnit(UnitCreateDTO model)
+        public async Task<CommandResult> CreateUnit(UnitCreate_ClientDto model)
         {
             try
             {
@@ -317,7 +317,7 @@ namespace TaalDc.Portal.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<CommandResult> UpdateUnit(UnitUpdateDTO model)
+        public async Task<CommandResult> UpdateUnit(UnitUpdate_ClientDto model)
         {
             try
             {
@@ -337,7 +337,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-        public async Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model)
+        public async Task<CommandResult> CreateUnitType(UnitTypeCreate_ClientDto model)
         {
             try
             {
@@ -357,7 +357,7 @@ namespace TaalDc.Portal.Services
             }
         }
 
-		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model)
+		public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdate_ClientDto model)
 		{
             try
             {

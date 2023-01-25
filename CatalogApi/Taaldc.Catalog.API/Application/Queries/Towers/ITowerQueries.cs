@@ -8,7 +8,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
 {
     public interface ITowerQueries
     {
-        Task<PaginationQueryResult<TowerDTO>> GetActiveTowers(
+        Task<PaginationQueryResult<TowerQueryResult>> GetActiveTowers(
              string filter,
              string sortBy,
              SortOrderEnum sortOrder,
@@ -16,7 +16,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
              int pageSize = 10
          );
 
-        Task<TowerDTO> GetTowerById(int id);
+        Task<TowerQueryResult> GetTowerById(int id);
     }
 
 
@@ -30,7 +30,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
                 : connectionString;
         }
 
-        public async Task<PaginationQueryResult<TowerDTO>> GetActiveTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<TowerQueryResult>> GetActiveTowers(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             var query = $"SELECT DISTINCT(t.Id)" +
                 $",p.[Id] AS PropertyId" +
@@ -56,7 +56,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var result = await connection.QueryAsync<TowerDTO>(query);
+            var result = await connection.QueryAsync<TowerQueryResult>(query);
 
             var countQuery = $"SELECT COUNT(*) " +
                 $"FROM catalog.tower t " +
@@ -68,10 +68,10 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
 
             var temp = await connection.QueryAsync<int>(countQuery);
 
-            return new PaginationQueryResult<TowerDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+            return new PaginationQueryResult<TowerQueryResult>(pageSize, pageNumber, temp.SingleOrDefault(), result);
         }
 
-        public async Task<TowerDTO> GetTowerById(int id)
+        public async Task<TowerQueryResult> GetTowerById(int id)
         {
             var query = $"SELECT t.Id" +
                 $",p.[Id] AS PropertyId" +
@@ -95,7 +95,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Towers
 
             try
             {
-                var result = await connection.QueryFirstAsync<TowerDTO>(query);
+                var result = await connection.QueryFirstAsync<TowerQueryResult>(query);
                 return result;
             }
             catch (Exception err)

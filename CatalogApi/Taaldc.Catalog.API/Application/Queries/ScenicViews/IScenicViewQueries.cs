@@ -6,7 +6,7 @@ namespace Taaldc.Catalog.API.Application.Queries.ScenicViews
 {
 	public interface IScenicViewQueries
 	{
-		Task<IEnumerable<AvailableView>> GetAvailableViewsByUnitType(int? unitTypeId);
+		Task<IEnumerable<AvailableViewQueryResult>> GetAvailableViewsByUnitType(int? unitTypeId);
 	}
 
 	public class ScenicViewQueries : IScenicViewQueries
@@ -19,7 +19,7 @@ namespace Taaldc.Catalog.API.Application.Queries.ScenicViews
 			: connectionString;
 		}
 
-		public async Task<IEnumerable<AvailableView>> GetAvailableViewsByUnitType(int? unitTypeId)
+		public async Task<IEnumerable<AvailableViewQueryResult>> GetAvailableViewsByUnitType(int? unitTypeId)
 		{
 			var availableViewsQuery = $"SELECT DISTINCT(sv.Id) AS ViewId," +
 			$"sv.Name as ScenicView " +
@@ -33,7 +33,7 @@ namespace Taaldc.Catalog.API.Application.Queries.ScenicViews
 			await using var connection = new SqlConnection(_connectionString);
 			await connection.OpenAsync(CancellationToken.None);
 
-			var result = await connection.QueryAsync<AvailableView>(availableViewsQuery);
+			var result = await connection.QueryAsync<AvailableViewQueryResult>(availableViewsQuery);
 
 			return result;
 		}

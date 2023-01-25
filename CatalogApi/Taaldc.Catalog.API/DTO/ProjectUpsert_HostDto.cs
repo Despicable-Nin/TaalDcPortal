@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Taaldc.Catalog.API.DTO;
 
-public class UpsertProjectDTO
+public class ProjectUpsert_HostDto
 {
     [JsonPropertyName("name")] public string Name { get;  set; }
     [JsonPropertyName("developer")] public string Developer { get;  set; }

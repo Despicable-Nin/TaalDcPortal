@@ -2,7 +2,7 @@
 
 namespace Taaldc.Catalog.API.Application.Queries.Floors
 {
-	public class AvailableFloor
+	public class AvailableFloorsQueryResult
 	{
 		[JsonPropertyName("floor_id")]
 		public int FloorId { get; set; }

@@ -19,7 +19,7 @@ namespace Taaldc.Catalog.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpsertUnitType(UpsertUnitTypeDTO model)
+        public async Task<IActionResult> UpsertUnitType(UnitTypeUpsert_HostDto model)
         {
             return Ok(
                 await _mediator.Send(

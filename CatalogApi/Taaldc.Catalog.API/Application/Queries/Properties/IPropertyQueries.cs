@@ -7,7 +7,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
 {
     public interface IPropertyQueries
     {
-        Task<PaginationQueryResult<PropertyDTO>> GetActiveProperties(
+        Task<PaginationQueryResult<PropertyQueryResult>> GetActiveProperties(
             string filter,
             string sortBy,
             SortOrderEnum sortOrder,
@@ -15,7 +15,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
             int pageSize = 10
         );
 
-        Task<PropertyDTO> GetPropertyById(int id);
+        Task<PropertyQueryResult> GetPropertyById(int id);
     }
 
 
@@ -30,7 +30,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
                 : connectionString;
         }
 
-        public async Task<PaginationQueryResult<PropertyDTO>> GetActiveProperties(
+        public async Task<PaginationQueryResult<PropertyQueryResult>> GetActiveProperties(
             string filter, 
             string sortBy,
             SortOrderEnum sortOrder = SortOrderEnum.ASC,
@@ -53,7 +53,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var result = await connection.QueryAsync<PropertyDTO>(query);
+            var result = await connection.QueryAsync<PropertyQueryResult>(query);
 
             var countQuery = $"SELECT COUNT(*) " +
                 $"FROM [taaldb_admin].[catalog].property p " +
@@ -63,10 +63,10 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
 
             var temp = await connection.QueryAsync<int>(countQuery);
 
-            return new PaginationQueryResult<PropertyDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+            return new PaginationQueryResult<PropertyQueryResult>(pageSize, pageNumber, temp.SingleOrDefault(), result);
         }
 
-        public async Task<PropertyDTO> GetPropertyById(int id)
+        public async Task<PropertyQueryResult> GetPropertyById(int id)
         {
             var query = $"SELECT p.Id," +
                 $"p.[Name] AS PropertyName," +
@@ -83,7 +83,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Properties
             await connection.OpenAsync(CancellationToken.None);
 
             try {
-                var result = await connection.QueryFirstAsync<PropertyDTO>(query);
+                var result = await connection.QueryFirstAsync<PropertyQueryResult>(query);
                 return result;
             }
             catch(Exception err)

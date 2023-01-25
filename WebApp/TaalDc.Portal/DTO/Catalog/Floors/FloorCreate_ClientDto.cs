@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace TaalDc.Portal.ViewModels.Catalog
 {
-    public class FloorCreateDTO
+    public class FloorCreate_ClientDto
     {
-        public FloorCreateDTO(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
+        public FloorCreate_ClientDto(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
         {
             TowerId = towerId;
             FloorId = floorId;
@@ -14,7 +14,7 @@ namespace TaalDc.Portal.ViewModels.Catalog
             FloorPlanFilePath = floorPlanFilePath;
         }
 
-        public FloorCreateDTO()
+        public FloorCreate_ClientDto()
         {
                 
         }

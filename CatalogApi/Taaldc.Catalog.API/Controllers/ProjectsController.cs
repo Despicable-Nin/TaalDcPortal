@@ -15,7 +15,7 @@ public class ProjectsController : ApiBaseController<ProjectsController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertProject(UpsertProjectDTO model)
+    public async Task<IActionResult> UpsertProject(ProjectUpsert_HostDto model)
     {
         return Ok(await _mediator.Send(new UpsertProjectCommand(model.ProjectId, model.Name, model.Developer)));
     }

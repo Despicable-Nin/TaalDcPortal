@@ -21,7 +21,7 @@ public class PropertiesController : ApiBaseController<PropertiesController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertProperty(UpsertPropertyDTO model)
+    public async Task<IActionResult> UpsertProperty(PropertyUpsert_HostDto model)
     {
         return Ok(
             await _mediator.Send(

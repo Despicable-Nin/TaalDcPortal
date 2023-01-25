@@ -9,7 +9,7 @@ public class MyProfile : Profile
 {
     public MyProfile()
     {
-        CreateMap<UpsertUnitDTO,UpsertUnitCommand>()
+        CreateMap<UnitUpsert_HostDto,UpsertUnitCommand>()
             .ConstructUsing(o => new UpsertUnitCommand (o.UnitId, o.UnitStatusId, o.UnitTypeId, o.ScenicViewId, o.UnitNo,
                 o.FloorId, o.FloorArea, o.BalconyArea, o.Price, o.Remarks, o.IsActive));
 

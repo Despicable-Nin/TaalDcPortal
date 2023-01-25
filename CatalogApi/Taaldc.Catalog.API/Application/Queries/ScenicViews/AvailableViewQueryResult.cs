@@ -2,7 +2,7 @@
 
 namespace Taaldc.Catalog.API.Application.Queries.ScenicViews
 {
-	public class AvailableView
+	public class AvailableViewQueryResult
 	{
 		[JsonPropertyName("view_id")]
 		public int ViewId { get; set; }

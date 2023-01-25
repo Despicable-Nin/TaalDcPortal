@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Taaldc.Catalog.API.DTO;
 
-public class UpsertUnitDTO
+public class UnitUpsert_HostDto
 {
     [JsonPropertyName("unit_id")] 
     [JsonProperty(Required = Required.Default)]
@@ -37,10 +37,13 @@ public class UpsertUnitDTO
     [JsonProperty(Required = Required.Always)]
     public int FloorId { get; set; }
 
-    [JsonPropertyName("remarks")]
-    public string Remarks { get; set; }
     [JsonPropertyName("unit_status_id")]
     public int? UnitStatusId { get; set; }
     [JsonPropertyName("is_active")]
     public bool IsActive { get; set; }
+    
+    
+    [JsonPropertyName("remarks")]
+    public string Remarks { get; set; }
 }
+

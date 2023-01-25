@@ -2,7 +2,7 @@
 
 namespace TaalDc.Portal.ViewModels.Catalog
 {
-    public class UnitCreateDTO
+    public class UnitCreate_ClientDto
     {
         [JsonPropertyName("unit_id")]
         public int? UnitId { get; set; }

@@ -19,7 +19,7 @@ public static class API
         public static string AddUnitType(string baseUri) => $"{baseUri}/api/adm/unitTypes";
         public static string UpdateUnitStatus(string baseUri) => $"{baseUri}/api/adm/units/change-status";
         
-        public static string EditUnit(string baseUri,int id) => $"{baseUri}/api/adm/units/{id}";
+        public static string EditUnit(string baseUri,int id) => $"{baseUri}/api/adm/units";
 
 
 

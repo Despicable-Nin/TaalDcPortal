@@ -2,7 +2,7 @@
 
 namespace TaalDc.Portal.DTO.Catalog
 {
-    public class PropertyDTO
+    public class Property_ClientDto
     {
         [JsonPropertyName("property_id")]
         public int Id { get; set; }

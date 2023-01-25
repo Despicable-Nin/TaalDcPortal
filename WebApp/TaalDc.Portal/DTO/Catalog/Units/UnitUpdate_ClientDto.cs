@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-public class UnitUpdateDTO
+public class UnitUpdate_ClientDto
 {
     [JsonPropertyName("unit_id")]
     public int UnitId { get; set; }
@@ -40,4 +40,6 @@ public class UnitUpdateDTO
     [JsonPropertyName("is_active")]
     [JsonProperty(Required = Required.Always)]
     public bool IsActive { get; set; }
+    [JsonPropertyName("remarks")]
+    public string Remarks { get; set; }
 }

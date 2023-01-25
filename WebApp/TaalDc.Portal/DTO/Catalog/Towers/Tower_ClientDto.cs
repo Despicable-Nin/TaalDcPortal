@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Taaldc.Catalog.API.Application.Queries.Towers
+namespace TaalDc.Portal.DTO.Catalog
 {
-    public class TowerDTO
+    public class Tower_ClientDto
     {
         [JsonPropertyName("tower_id")]
         public int Id { get; set; }

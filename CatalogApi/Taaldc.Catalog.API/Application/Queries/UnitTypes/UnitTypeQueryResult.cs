@@ -2,7 +2,7 @@
 
 namespace Taaldc.Catalog.API.Application.Queries.UnitTypes
 {
-    public class UnitTypeDTO
+    public class UnitTypeQueryResult
     {
         [JsonPropertyName("unit_type_id")]
         public int Id { get; set; }

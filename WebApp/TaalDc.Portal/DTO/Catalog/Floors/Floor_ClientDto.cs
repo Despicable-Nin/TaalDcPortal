@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Taaldc.Catalog.API.Application.Queries.Floors
+namespace TaalDc.Portal.DTO.Catalog
 {
-    public class FloorDTO
+    public class Floor_ClientDto
     {
         [JsonPropertyName("floor_id")]
         public int Id { get; set; }
-        
+
         [JsonPropertyName("tower_id")]
         public int TowerId { get; set; }
 
@@ -15,7 +15,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 
         [JsonPropertyName("property_name")]
         public string PropertyName { get; set; }
-        
+
         [JsonPropertyName("tower_name")]
         public string TowerName { get; set; }
 

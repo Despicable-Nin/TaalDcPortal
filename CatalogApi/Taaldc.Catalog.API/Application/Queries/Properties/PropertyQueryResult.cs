@@ -5,7 +5,7 @@ using Taaldc.Catalog.API.Application.Common.Models;
 
 namespace Taaldc.Catalog.API.Application.Queries.Properties
 {
-    public class PropertyDTO
+    public class PropertyQueryResult
     {
         [JsonPropertyName("property_id")]
         public int Id { get; set; }

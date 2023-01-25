@@ -9,7 +9,7 @@ namespace Taaldc.Catalog.API.Application.Queries.References
 {
     public interface IUnitTypeQueries 
     {
-        Task<IEnumerable<UnitTypeDTO>> GetUnitTypes();
+        Task<IEnumerable<UnitTypeQueryResult>> GetUnitTypes();
     }
 
     public class UnitTypeQueries : IUnitTypeQueries
@@ -22,7 +22,7 @@ namespace Taaldc.Catalog.API.Application.Queries.References
             : connectionString;
         }
 
-        public async Task<IEnumerable<UnitTypeDTO>> GetUnitTypes()
+        public async Task<IEnumerable<UnitTypeQueryResult>> GetUnitTypes()
         {
             var availableViewsQuery = $"SELECT Id" +
                 $",Name" +
@@ -32,7 +32,7 @@ namespace Taaldc.Catalog.API.Application.Queries.References
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var result = await connection.QueryAsync<UnitTypeDTO>(availableViewsQuery);
+            var result = await connection.QueryAsync<UnitTypeQueryResult>(availableViewsQuery);
 
             return result;
         }

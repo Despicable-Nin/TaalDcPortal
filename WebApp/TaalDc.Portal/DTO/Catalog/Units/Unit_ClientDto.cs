@@ -1,18 +1,19 @@
 ﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace Taaldc.Catalog.API.Application.Queries.Units
+namespace TaalDc.Portal.DTO.Catalog
 {
-    public class UnitDTO
+    public class Unit_ClientDto
     {
         [JsonPropertyName("unit_id")]
         public int Id { get; set; }
-        
+
         [JsonPropertyName("property_id")]
         public int PropertyId { get; set; }
-        
+
         [JsonPropertyName("property_name")]
         public string PropertyName { get; set; }
-        
+
         [JsonPropertyName("tower_id")]
         public int TowerId { get; set; }
 
@@ -57,5 +58,8 @@ namespace Taaldc.Catalog.API.Application.Queries.Units
 
         [JsonPropertyName("unit_status")]
         public string UnitStatus { get; set; }
+        
+        [JsonPropertyName("is_active")]
+        public bool IsActive { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using System.Drawing.Printing;
 using System.Globalization;
 using AutoMapper;
+using Newtonsoft.Json;
 using NuGet.DependencyResolver;
 using TaalDc.Portal.DTO.Catalog;
 using TaalDc.Portal.Enums;
@@ -41,7 +42,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProperty(PropertyCreateDTO model)
+        public async Task<IActionResult> CreateProperty(PropertyCreate_ClientDto model)
         {
             var result = await _catalogService.CreateProperty(model);
 
@@ -62,9 +63,9 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Index");
 
-                PropertyCreateDTO propertyCreateDto = _mapper.Map<PropertyCreateDTO>(result);
+                PropertyCreate_ClientDto propertyCreateClientDto = _mapper.Map<PropertyCreate_ClientDto>(result);
 
-                return View(propertyCreateDto);
+                return View(propertyCreateClientDto);
 
             }catch(Exception err)
             {
@@ -73,7 +74,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditProperty(PropertyCreateDTO model)
+        public async Task<IActionResult> EditProperty(PropertyCreate_ClientDto model)
         {
             var result = await _catalogService.CreateProperty(model);
 
@@ -95,20 +96,12 @@ namespace TaalDc.Portal.Controllers
 
             return View(towers);
         }
+
+
+        public async Task<IActionResult> CreateTower() => View();
         
-
-
-        public async Task<IActionResult> CreateTower()
-        {
-
-            //get dropdown of properties
-           
-            return View();
-        }
-
-
         [HttpPost]
-        public async Task<IActionResult> CreateTower(TowerCreateDTO model)
+        public async Task<IActionResult> CreateTower(TowerCreate_ClientDto model)
         {
             var result = await _catalogService.CreateTower(model);
 
@@ -128,9 +121,7 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Index");
 
-                var towerCreateDTO = _mapper.Map<TowerCreateDTO>(result);
-                //new TowerCreateDTO(result.Id, result.PropertyId, result.TowerName, result.Address);
-
+                var towerCreateDTO = _mapper.Map<TowerCreate_ClientDto>(result);
                 return View(towerCreateDTO);
 
             }
@@ -146,7 +137,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateFloor(FloorCreateDTO model)
+        public async Task<IActionResult> CreateFloor(FloorCreate_ClientDto model)
         {
             var result = await _catalogService.CreateFloor(model);
 
@@ -166,7 +157,7 @@ namespace TaalDc.Portal.Controllers
 
                 if (result == null) RedirectToAction("Floors");
 
-                var floorCreateDTO = _mapper.Map<FloorCreateDTO>(
+                var floorCreateDTO = _mapper.Map<FloorCreate_ClientDto>(
                         result);
           
                 return View(floorCreateDTO);
@@ -193,9 +184,6 @@ namespace TaalDc.Portal.Controllers
 
         public async Task<IActionResult> CreateUnit()
         {
-            //get dropdown of unit types
-
-            //get dropdown of floors
             var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
 
             ViewData["Floors"] = floors.Data;
@@ -205,7 +193,7 @@ namespace TaalDc.Portal.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateUnit(UnitCreateDTO model)
+        public async Task<IActionResult> CreateUnit(UnitCreate_ClientDto model)
         {
             var result = await _catalogService.CreateUnit(model);
 
@@ -223,7 +211,7 @@ namespace TaalDc.Portal.Controllers
 
             if (result == null) RedirectToAction("Units");
 
-            var unitUpdateDto = _mapper.Map<UnitUpdateDTO>(result);
+            var unitUpdateDto = _mapper.Map<UnitUpdate_ClientDto>(result);
             
             var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
 
@@ -233,18 +221,24 @@ namespace TaalDc.Portal.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> EditUnit(int id, UnitUpdateDTO model)
+        public async Task<IActionResult> EditUnit(int id, UnitUpdate_ClientDto model)
         {
+            LoggerInstance.LogDebug(JsonConvert.SerializeObject(model));
+            
             if (id != model.UnitId) return BadRequest("Invalid id.");
             
+            LoggerInstance.LogDebug($"Invoke {nameof(CatalogService.UpdateUnit)}");
+            
             var result = await _catalogService.UpdateUnit(model);
+            
+            LoggerInstance.LogCritical($"Result is: {result.IsSuccess}. {result.ErrorMessage}");
 
-            if (!result.IsSuccess) return BadRequest(new
+            if (result.IsSuccess)
             {
-                Message = result.ErrorMessage
-            });
+                return RedirectToAction("Units");
+            }
 
-            return Ok(result);
+            return View(model);
         }
 
         public async Task<IActionResult> Units(
@@ -293,7 +287,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateUnitType(UnitTypeCreateDTO model)
+        public async Task<IActionResult> CreateUnitType(UnitTypeCreate_ClientDto model)
         {
             var result = await _catalogService.CreateUnitType(model);
 

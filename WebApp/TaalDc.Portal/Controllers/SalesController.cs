@@ -153,7 +153,7 @@ public class SalesController : BaseController<SalesController>
             });
 
 		    //Update Unit Status in Catalog
-		    var unitStatus = new UnitStatusUpdateDTO(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
+		    var unitStatus = new UnitStatusUpdate_ClientDto(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
             var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 
             if(!unitStatusResult.IsSuccess) return BadRequest(new {  IsFormError = false, Message = unitStatusResult.ErrorMessage });

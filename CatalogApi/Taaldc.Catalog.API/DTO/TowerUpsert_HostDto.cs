@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Taaldc.Catalog.API.DTO;
 
-public class UpsertTowerDTO
+public class TowerUpsert_HostDto
 {
     [JsonPropertyName("property_id")]
     [JsonProperty(Required = Required.Always)]

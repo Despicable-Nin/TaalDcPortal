@@ -3,9 +3,9 @@ using Newtonsoft.Json;
 
 namespace Taaldc.Catalog.API.DTO;
 
-public class UpsertFloorDTO
+public class FloorUpsert_HostDto
 {
-	public UpsertFloorDTO(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
+	public FloorUpsert_HostDto(int towerId, int? floorId, string name, string description, string floorPlanFilePath)
 	{
 		TowerId = towerId;
 		FloorId = floorId;
@@ -14,7 +14,7 @@ public class UpsertFloorDTO
 		FloorPlanFilePath = floorPlanFilePath;
 	}
 
-	public UpsertFloorDTO()
+	public FloorUpsert_HostDto()
 	{
 		
 	}

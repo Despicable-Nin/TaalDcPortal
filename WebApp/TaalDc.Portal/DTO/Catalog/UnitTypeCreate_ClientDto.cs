@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace Taaldc.Catalog.API.DTO
+namespace TaalDc.Portal.ViewModels.Catalog
 {
-    public class UpsertUnitTypeDTO
+    public class UnitTypeCreate_ClientDto
     {
         [JsonPropertyName("unit_type_id")]
         [JsonProperty(Required = Required.Default)]

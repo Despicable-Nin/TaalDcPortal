@@ -41,9 +41,10 @@ public class UnitsController : ApiBaseController<UnitsController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertUnit( UpsertUnitDTO model)
+    public async Task<IActionResult> UpsertUnit( UnitUpsert_HostDto dto)
     {
-        var command = _mapper.Map<UpsertUnitDTO>(model);
+        var command = new UpsertUnitCommand(dto.UnitId, dto.UnitStatusId, dto.UnitTypeId, dto.ScenicViewId, dto.UnitNo,
+            dto.FloorId, dto.FloorArea, dto.BalconyArea, dto.Price, dto.Remarks, dto.IsActive);
 
         return Ok(await _mediator.Send(command));
     }
