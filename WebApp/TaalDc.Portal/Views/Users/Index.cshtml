@@ -12,7 +12,7 @@
             <a class="nav-link active" aria-current="page" asp-controller="Users" asp-action="Index">User Management</a>
         </li>
     </ul>
-    
+
     <!-- Tab Contents -->
     <div class="tab-content">
         <div class="action-section">
@@ -25,16 +25,16 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Roles</th>
-                            <th>Is Active</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                        <th>Is Active</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                    @foreach(var prop in Model.ListOfUsers)
+                    @foreach (var prop in Model.ListOfUsers)
                     {
                         <tr>
                             <td>@prop.GetFullName()</td>
@@ -50,6 +50,6 @@
                 </table>
             </div>
         </div>
-    <!-- End of tables -->
+        <!-- End of tables -->
     </div>
 </div>

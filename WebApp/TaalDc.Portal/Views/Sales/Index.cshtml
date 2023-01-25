@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Sales;
-@using TaalDc.Portal.Models;
-@model PaginationQueryResult<Unit_Order_DTO>
+﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Sales.OrderUnitBuyer_ClientDto>
 
 
 @{
@@ -16,7 +14,7 @@
 
     var pageGroups = new List<int>();
 
-    for (int i = 1; i <= totalPageGroups; i++)
+    for (var i = 1; i <= totalPageGroups; i++)
     {
         pageGroups.Add(i * numberOfPagesToDisplay);
     }
@@ -48,7 +46,7 @@
 
             <div class="action-search">
                 <form>
-                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
                 </form>
             </div>
         </div>
@@ -57,42 +55,44 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped sales-table">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Customer Name</th>
-                            <th>Tower</th>
-                            <th>Unit Type</th>
-                            <th>Unit No.</th>
-                            <th>Sales Status</th>
-                            <th>Unit Status</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Tower</th>
+                        <th>Unit Type</th>
+                        <th>Unit No.</th>
+                        <th>Sales Status</th>
+                        <th>Unit Status</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sale in Model.Data)
-                        {
-                            <tr>
-                                <td><a asp-action="Details" asp-controller="Sales" asp-route-id="@sale.OrderId">@sale.OrderId</a></td>
-                                <td>@sale.FirstName @sale.LastName</td>
-                                <td>@sale.Tower</td>
-                                <td>@sale.UnitType @sale.ScenicView</td>
-                                <td>@sale.Unit</td>
-                                <td>@sale.Status.ToUpper()</td>
-                                <td>@sale.UnitStatus.ToUpper()</td>
-                                <td>
-                                    <a class="action-edit" href="#">Edit</a>
-                                    <a class="action-delete" href="#">Delete</a>
-                                </td>
-                            </tr>
-                        }
+                    @foreach (var sale in Model.Data)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-controller="Sales" asp-route-id="@sale.OrderId">@sale.OrderId</a>
+                            </td>
+                            <td>@sale.FirstName @sale.LastName</td>
+                            <td>@sale.Tower</td>
+                            <td>@sale.UnitType @sale.ScenicView</td>
+                            <td>@sale.Unit</td>
+                            <td>@sale.Status.ToUpper()</td>
+                            <td>@sale.UnitStatus.ToUpper()</td>
+                            <td>
+                                <a class="action-edit" href="#">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    }
 
 
-                        @if (Model.Data.Count() == 0)
-                        {
-                            <tr>
-                                <td class="text-center" colspan="8">No data to display.</td>
-                            </tr>
-                        }
+                    @if (Model.Data.Count() == 0)
+                    {
+                        <tr>
+                            <td class="text-center" colspan="8">No data to display.</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -113,7 +113,7 @@
                         prevPage = currentPageNo > 1 ? currentPageNo - 1 : 0;
                     }
 
-                    <li class="page-item @(prevPage == 0? "disabled": "")">
+                    <li class="page-item @(prevPage == 0 ? "disabled" : "")">
                         <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
                     </li>
 
@@ -124,14 +124,16 @@
                         </li>
                     }
 
-                    @for (int i = pageGroupMinPage; i < pageGroup; i++)
+                    @for (var i = pageGroupMinPage; i < pageGroup; i++)
                     {
-                        var active = (i + 1) == Model.PageNumber;
+                        var active = i + 1 == Model.PageNumber;
                         var pageNo = i + 1;
-                        <li class="page-item"><a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active? "active": "")">@(pageNo)</a></li>
+                        <li class="page-item">
+                            <a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                        </li>
                     }
 
-                    <li class="page-item @(nextPage == 0? "disabled": "")">
+                    <li class="page-item @(nextPage == 0 ? "disabled" : "")">
                         <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
                     </li>
 

@@ -8,27 +8,29 @@
 <div class="container-fluid" style="position: relative;width: 100%;">
     <div class="row">
         <div class="col-xl-7 login-banner" style="background: linear-gradient(rgba(81, 108, 91, 0.8), rgba(81, 108, 91, 0.8)), url('/login-background.jpg');min-height: 100vh;background-repeat: no-repeat; background-size:cover;">
-           
+
         </div>
         <div class="col-xl-5 col-lg-12 col-md-12 form-wrapper">
             <section class="form-section">
                 <form id="account" method="post">
-                    <p class="primary-color text-center"><strong>TAGAYTAY ALL ALPHA LANDHOLDINGS AND DEVELOPMENT CORPORATION</strong></p>
+                    <p class="primary-color text-center">
+                        <strong>TAGAYTAY ALL ALPHA LANDHOLDINGS AND DEVELOPMENT CORPORATION</strong>
+                    </p>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"/>
                         <label asp-for="Input.Email" class="form-label"></label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                     <div class="form-floating mb-3">
-                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true"/>
                         <label asp-for="Input.Password" class="form-label"></label>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <div class="checkbox">
                             <label asp-for="Input.RememberMe" class="form-label">
-                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                <input class="form-check-input" asp-for="Input.RememberMe"/>
                                 @Html.DisplayNameFor(m => m.Input.RememberMe)
                             </label>
                         </div>
@@ -40,7 +42,7 @@
                         <p class="text-end">
                             <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
                         </p>
-                     @*   <p>
+                        @*   <p>
                             <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
                         </p>
                         <p>

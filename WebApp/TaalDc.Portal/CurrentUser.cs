@@ -16,12 +16,19 @@ public class CurrentUser : IAmCurrentUser
 
         if (Roles == null) Roles = Array.Empty<string>();
     }
-    
+
     public string Name { get; }
     public string[] Roles { get; }
     public string Email { get; }
     public string IdentityId { get; }
 
-    public bool IsAdmin() => Roles.Contains("ADMIN");
-    public bool IsBroker() => Roles.Contains("BROKER");
+    public bool IsAdmin()
+    {
+        return Roles.Contains("ADMIN");
+    }
+
+    public bool IsBroker()
+    {
+        return Roles.Contains("BROKER");
+    }
 }

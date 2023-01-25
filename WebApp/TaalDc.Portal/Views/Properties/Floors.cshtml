@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Catalog;
-@using TaalDc.Portal.Models;
-@model PaginationQueryResult<Floor_ClientDto>
+﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Floor_ClientDto>
 
 @{
     ViewBag.Title = "Floors";
@@ -39,7 +37,7 @@
 
             <div class="action-search">
                 <form>
-                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
                 </form>
             </div>
         </div>
@@ -48,38 +46,38 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Property</th>
-                            <th>Floor No.</th>
-                            <th>No. of Units</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Property</th>
+                        <th>Floor No.</th>
+                        <th>No. of Units</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var prop in Model.Data)
+                    @foreach (var prop in Model.Data)
+                    {
+                        var propertyWords = prop.PropertyName.Split(' ');
+
+                        var propertyInitials = "";
+
+                        foreach (var word in propertyWords)
                         {
-                            var propertyWords = prop.PropertyName.Split(' ');
-
-                            var propertyInitials = "";
-
-                            foreach(var word in propertyWords)
-                            {
-                                propertyInitials = propertyInitials + word[0];
-                            }
-
-
-                            <tr>
-                                <td>@prop.Id</td>
-                                <td>@(propertyInitials + " - " + prop.TowerName)</td>
-                                <td>@prop.FloorName</td>
-                                <td>@prop.Units</td>
-                                <td>
-                                     <a class="action-edit" asp-controller="Properties" asp-action="EditFloor" asp-route-id="@prop.Id">Edit</a>
-                                    <a class="action-delete" href="#">Delete</a>
-                                </td>
-                            </tr>
+                            propertyInitials = propertyInitials + word[0];
                         }
+
+
+                        <tr>
+                            <td>@prop.Id</td>
+                            <td>@(propertyInitials + " - " + prop.TowerName)</td>
+                            <td>@prop.FloorName</td>
+                            <td>@prop.Units</td>
+                            <td>
+                                <a class="action-edit" asp-controller="Properties" asp-action="EditFloor" asp-route-id="@prop.Id">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -89,11 +87,13 @@
                         <a class="page-link alink noselect">Prev</a>
                     </li>
 
-                    @for (int i = 0; i < Model.TotalPages; i++)
+                    @for (var i = 0; i < Model.TotalPages; i++)
                     {
-                        var active = (i + 1) == Model.PageNumber;
+                        var active = i + 1 == Model.PageNumber;
 
-                        <li class="page-item"><a href="?pageNumber=@(i+1)" class="noselect page-link alink @(active? "active": "")">@(i + 1)</a></li>
+                        <li class="page-item">
+                            <a href="?pageNumber=@(i + 1)" class="noselect page-link alink @(active ? "active" : "")">@(i + 1)</a>
+                        </li>
                     }
 
                     <li class="page-item ">

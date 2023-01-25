@@ -6,7 +6,7 @@
 }
 
 <div class="container-fluid">
-      <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Inquiries</a>
         </li>
@@ -15,32 +15,32 @@
     <div class="tab-content">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Inquiry Date</th>
-                     <th>Property</th>
-                    <th>Customer</th>
-                    <th>Contact No.</th>
-                     <th>Type</th>
-                    <th>Status</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Inquiry Date</th>
+                <th>Property</th>
+                <th>Customer</th>
+                <th>Contact No.</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var i in Model.Inquiries.OrderBy(i => i.DateOfInquiry))
-                {
-                    <tr>
-                        <td>@i.DateOfInquiry.ToString("MM/dd/yyyy")</td>
-                        <td>@i.Property</td>
-                       
-                        <td>@($"{i.FirstName} {@i.LastName} - ({i.EmailAddress})")</td>
-                        <td>@i.ContactNo</td>
-                      <td>@i.InquiryType</td>
-                        <td>@i.Status</td>
-                        <td>
-                            <a asp-action="" >Convert</a>
-                        </td>
-                    </tr>
-                }
+            @foreach (var i in Model.Inquiries.OrderBy(i => i.DateOfInquiry))
+            {
+                <tr>
+                    <td>@i.DateOfInquiry.ToString("MM/dd/yyyy")</td>
+                    <td>@i.Property</td>
+
+                    <td>@($"{i.FirstName} {i.LastName} - ({i.EmailAddress})")</td>
+                    <td>@i.ContactNo</td>
+                    <td>@i.InquiryType</td>
+                    <td>@i.Status</td>
+                    <td>
+                        <a asp-action="">Convert</a>
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>

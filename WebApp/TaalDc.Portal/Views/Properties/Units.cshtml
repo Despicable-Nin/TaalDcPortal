@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Catalog;
-@using TaalDc.Portal.Models;
-@model PaginationQueryResult<Unit_ClientDto>
+﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Unit_ClientDto>
 
 @{
     ViewBag.Title = "Units";
@@ -12,19 +10,19 @@
 
 
     var currentPageNo = Model.PageNumber;
-	var numberOfPagesToDisplay = 5;
+    var numberOfPagesToDisplay = 5;
 
-	var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
+    var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
 
-	var pageGroups = new List<int>();
+    var pageGroups = new List<int>();
 
-	for(int i=1; i<=totalPageGroups; i++)
-	{
-		pageGroups.Add(i * numberOfPagesToDisplay);
-	}
+    for (var i = 1; i <= totalPageGroups; i++)
+    {
+        pageGroups.Add(i * numberOfPagesToDisplay);
+    }
 
-	var nextPage = 0;
-	var prevPage = 0;
+    var nextPage = 0;
+    var prevPage = 0;
 
 }
 
@@ -56,7 +54,7 @@
 
             <div class="action-search">
                 <form>
-                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
                 </form>
             </div>
         </div>
@@ -65,50 +63,50 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped" style="min-width: 1500px;">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Property</th>
-                            <th>Unit Type</th>
-                            <th>Floor No.</th>
-                            <th>Total Area</th>
-                            <th>Floor Area</th>
-                            <th>Balcony Area</th>
-                            <th>Unit No.</th>
-                            <th>Selling Price</th>
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Property</th>
+                        <th>Unit Type</th>
+                        <th>Floor No.</th>
+                        <th>Total Area</th>
+                        <th>Floor Area</th>
+                        <th>Balcony Area</th>
+                        <th>Unit No.</th>
+                        <th>Selling Price</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var prop in Model.Data)
+                    @foreach (var prop in Model.Data)
+                    {
+                        var propertyWords = prop.PropertyName.Split(' ');
+
+                        var propertyInitials = "";
+
+                        foreach (var word in propertyWords)
                         {
-                            var propertyWords = prop.PropertyName.Split(' ');
-
-                            var propertyInitials = "";
-
-                            foreach (var word in propertyWords)
-                            {
-                                propertyInitials = propertyInitials + word[0];
-                            }
-
-
-                            <tr>
-                                <td>@prop.Id</td>
-                                <td>@(propertyInitials + " - " + prop.TowerName)</td>
-                                <td>@prop.UnitType @prop.ScenicView</td>
-                                <td>@prop.FloorName</td>
-                                <td>@prop.TotalArea</td>
-                                <td>@prop.FloorArea</td>
-                                <td>@prop.BalconyArea</td>
-                                <td>@prop.Identifier</td>
-                                <td>@prop.Price.ToString("#,##0.00")</td>
-                                <td>@prop.UnitStatus</td>
-                                <td>
-                                       <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id">Edit</a>
-                                    <a class="action-delete" href="#">Delete</a>
-                                </td>
-                            </tr>
+                            propertyInitials = propertyInitials + word[0];
                         }
+
+
+                        <tr>
+                            <td>@prop.Id</td>
+                            <td>@(propertyInitials + " - " + prop.TowerName)</td>
+                            <td>@prop.UnitType @prop.ScenicView</td>
+                            <td>@prop.FloorName</td>
+                            <td>@prop.TotalArea</td>
+                            <td>@prop.FloorArea</td>
+                            <td>@prop.BalconyArea</td>
+                            <td>@prop.Identifier</td>
+                            <td>@prop.Price.ToString("#,##0.00")</td>
+                            <td>@prop.UnitStatus</td>
+                            <td>
+                                <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -128,24 +126,27 @@
                         prevPage = currentPageNo > 1 ? currentPageNo - 1 : 0;
                     }
 
-                    <li class="page-item @(prevPage == 0? "disabled": "")">
+                    <li class="page-item @(prevPage == 0 ? "disabled" : "")">
                         <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
                     </li>
 
-                    @if(pageGroup == 0 || pageGroup ==pageGroupMinPage){
-			            <li class="page-item">
+                    @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
+                    {
+                        <li class="page-item">
                             <a href="?pageNumber=@(Model.PageNumber)" class="noselect page-link alink active">@Model.PageNumber</a>
                         </li>
-		            }
+                    }
 
-		            @for (int i = pageGroupMinPage; i < pageGroup; i++)
-		            {
-                        var active = (i + 1) == Model.PageNumber;
-			            var pageNo = i + 1;
-                        <li class="page-item"><a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active? "active": "")">@(pageNo)</a></li>
-		            }
+                    @for (var i = pageGroupMinPage; i < pageGroup; i++)
+                    {
+                        var active = i + 1 == Model.PageNumber;
+                        var pageNo = i + 1;
+                        <li class="page-item">
+                            <a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                        </li>
+                    }
 
-                    <li class="page-item @(nextPage == 0? "disabled": "")">
+                    <li class="page-item @(nextPage == 0 ? "disabled" : "")">
                         <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
                     </li>
 

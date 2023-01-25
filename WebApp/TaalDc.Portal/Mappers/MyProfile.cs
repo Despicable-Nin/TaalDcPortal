@@ -20,6 +20,5 @@ public class MyProfile : Profile
             .ForMember(dest => dest.BalconyArea, orig => orig.MapFrom(i => i.BalconyArea))
             .ForMember(dest => dest.SellingPrice, orig => orig.MapFrom(i => i.Price))
             .ForMember(dest => dest.UnitId, o => o.MapFrom(i => i.Id));
-
     }
 }

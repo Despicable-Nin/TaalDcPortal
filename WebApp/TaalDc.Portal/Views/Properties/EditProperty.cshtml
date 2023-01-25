@@ -1,5 +1,4 @@
-﻿@using TaalDc.Portal.ViewModels.Catalog
-@model PropertyCreate_ClientDto
+﻿@model TaalDc.Portal.ViewModels.Catalog.PropertyCreate_ClientDto
 
 @{
     ViewBag.Title = "Edit - " + Model.Name;
@@ -15,18 +14,22 @@
     </h4>
     <div>
         <form id="propertyForm" method="post" class="row mb-5 needs-validation" asp-action="EditProperty" asp-controller="Properties">
-            <input asp-for="PropertyId" hidden />
+            <input asp-for="PropertyId" hidden/>
             <div class="mb-3 col-lg-8">
-                <label asp-for="Name" class="form-label"><strong>Property Name</strong></label>
-                <input asp-for="Name" class="form-control" required />
+                <label asp-for="Name" class="form-label">
+                    <strong>Property Name</strong>
+                </label>
+                <input asp-for="Name" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-8">
-                <label class="form-label"><strong>Land Area</strong></label>
+                <label class="form-label">
+                    <strong>Land Area</strong>
+                </label>
                 <div class="input-group mb-3">
-                    <input asp-for="LandArea" type="text" class="form-control" required />
+                    <input asp-for="LandArea" type="text" class="form-control" required/>
                     <span class="input-group-text">sqm</span>
                     <div class="invalid-feedback">
                         This is a required field.
@@ -36,7 +39,7 @@
             </div>
 
             <div class="col-lg-12">
-                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save" />
+                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>

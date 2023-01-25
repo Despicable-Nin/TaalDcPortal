@@ -1,5 +1,4 @@
-﻿@using TaalDc.Portal.ViewModels.Catalog
-@using TaalDc.Portal.DTO.Catalog
+﻿@using TaalDc.Portal.DTO.Catalog
 @model UnitUpdate_ClientDto
 
 @{
@@ -21,7 +20,9 @@
         <form id="unitForm" method="post" class="row mb-5 needs-validation" asp-action="EditUnit" asp-route-id="@Model.UnitId" asp-controller="Properties">
             <input type="hidden" asp-for="UnitId"/>
             <div class="mb-3 col-lg-8">
-                <label asp-for="UnitTypeId" class="form-label"><strong>Unit Type</strong></label>
+                <label asp-for="UnitTypeId" class="form-label">
+                    <strong>Unit Type</strong>
+                </label>
                 <select asp-for="UnitTypeId" class="form-control form-select" required>
                     <option value="1">
                         Not Applicable
@@ -51,7 +52,9 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="ScenicViewId" class="form-label"><strong>Facing View</strong></label>
+                <label asp-for="ScenicViewId" class="form-label">
+                    <strong>Facing View</strong>
+                </label>
 
                 <select asp-for="ScenicViewId" class="form-control form-select" required>
                     <option value="1">
@@ -77,7 +80,9 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="UnitNo" class="form-label"><strong>Unit No.</strong></label>
+                <label asp-for="UnitNo" class="form-label">
+                    <strong>Unit No.</strong>
+                </label>
                 <input asp-for="UnitNo" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
@@ -85,7 +90,9 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="FloorId" class="form-label"><strong>Floor No.</strong></label>
+                <label asp-for="FloorId" class="form-label">
+                    <strong>Floor No.</strong>
+                </label>
 
                 <select asp-for="FloorId" class="form-control form-select" required>
                     @foreach (var floor in floors)
@@ -102,7 +109,9 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="FloorArea" class="form-label"><strong>Floor Area</strong></label>
+                <label asp-for="FloorArea" class="form-label">
+                    <strong>Floor Area</strong>
+                </label>
                 <input id="floorArea" type="decimal" asp-for="FloorArea" class="form-control" required placeholder="0.00"/>
                 <div class="invalid-feedback">
                     This is a required field.
@@ -110,7 +119,9 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="BalconyArea" class="form-label"><strong>Balcony Area</strong></label>
+                <label asp-for="BalconyArea" class="form-label">
+                    <strong>Balcony Area</strong>
+                </label>
                 <input id="balconyArea" type="decimal" asp-for="BalconyArea" class="form-control" required placeholder="0.00"/>
                 <div class="invalid-feedback">
                     This is a required field.
@@ -118,14 +129,18 @@
             </div>
 
             <div class="mb-3 col-lg-8">
-                <label asp-for="SellingPrice" class="form-label"><strong>Selling Price</strong></label>
+                <label asp-for="SellingPrice" class="form-label">
+                    <strong>Selling Price</strong>
+                </label>
                 <input id="sellingPrice" asp-for="SellingPrice" type="decimal" class="form-control" required placeholder="0.00"/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-8">
-                <label asp-for="UnitStatusId" class="form-label"><strong>Availability</strong></label>
+                <label asp-for="UnitStatusId" class="form-label">
+                    <strong>Availability</strong>
+                </label>
                 <select asp-for="UnitStatusId" class="form-control form-select" required>
                     <option value="1">
                         AVAILABLE

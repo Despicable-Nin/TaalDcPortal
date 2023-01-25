@@ -1,8 +1,7 @@
-﻿namespace TaalDc.Portal.Enums
+﻿namespace TaalDc.Portal.Enums;
+
+public enum SortOrderEnum
 {
-    public enum SortOrderEnum
-    {
-        ASC,
-        DESC
-    }
+    ASC,
+    DESC
 }

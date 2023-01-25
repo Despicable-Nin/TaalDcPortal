@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-
 using TaalDc.Portal.Models;
 
 namespace WebApplication2.Controllers;
-
 
 public class HomeController : Controller
 {
@@ -27,8 +25,9 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult PageNotFound(){
-        return View();    
+    public IActionResult PageNotFound()
+    {
+        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

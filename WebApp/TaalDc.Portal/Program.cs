@@ -1,17 +1,12 @@
-using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using SeedWork;
 using Serilog;
 using TaalDc.Portal;
 using TaalDc.Portal.Data;
 using TaalDc.Portal.Infrastructure;
-using TaalDc.Portal.Services;
 using TaalDc.Portal.Seed;
-
+using TaalDc.Portal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +14,11 @@ var configuration = builder.Configuration;
 
 //Add Serilog
 #if DEBUG
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .Enrich.FromLogContext()
-        .MinimumLevel.Verbose()
-        .WriteTo.Console()
-        .WriteTo.Seq("http://localhost:5341"));
+builder.Host.UseSerilog((ctx, lc) => lc
+    .Enrich.FromLogContext()
+    .MinimumLevel.Verbose()
+    .WriteTo.Console()
+    .WriteTo.Seq("http://localhost:5341"));
 #endif
 
 // Add services to the container.
@@ -54,7 +49,7 @@ builder.Services.AddHttpClient<IMarketingService, MarketingService>()
     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
 builder.Services.AddHttpClient<ICatalogService, CatalogService>()
-	.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
 builder.Services.AddHttpClient<ISalesService, SalesService>()
     .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

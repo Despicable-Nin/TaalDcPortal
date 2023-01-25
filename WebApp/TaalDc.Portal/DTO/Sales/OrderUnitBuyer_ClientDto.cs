@@ -2,8 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace TaalDc.Portal.DTO.Sales;
 
-
-public record Unit_Order_DTO
+public record OrderUnitBuyer_ClientDto
 {
     [JsonPropertyName("salutation")] public string Salutation { get; set; }
 

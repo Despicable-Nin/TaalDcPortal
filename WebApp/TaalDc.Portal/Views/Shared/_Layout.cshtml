@@ -1,18 +1,17 @@
 ﻿@using SeedWork
 @inject IAmCurrentUser CurrentUser;
 @{
-    string controller = "";
-    string action = "";
+    var controller = "";
+    var action = "";
     try
     {
-        controller = @ViewContext.RouteData.Values["controller"]?.ToString();
-        action = @ViewContext.RouteData.Values["action"]?.ToString();
+        controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        action = ViewContext.RouteData.Values["action"]?.ToString();
     }
     catch
     {
-        
     }
-   
+
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -20,86 +19,90 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - Portal</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
 </head>
 <body>
- 
-@if(ViewData["Title"].ToString() != "Log in" && User.Identity.IsAuthenticated){
-        <nav class="bg-light p-3 main-nav">
-            <div class="dropdown pb-2" style="float: right;padding-right:1rem;">
-                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="~/user-profile.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                    <span class="d-none d-sm-inline ms-3 mx-1">@CurrentUser.Email</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                    @* <li><a class="dropdown-item" href="#">New project...</a></li> *@
-                    @* <li><a class="dropdown-item" href="#">Settings</a></li> *@
-                    <li><a class="dropdown-item" href="/Identity/Account/Manage/Email">Profile</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li>
-                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                            <button type="submit" class="dropdown-item">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="container-fluid main-section">
-            <div class="row flex-nowrap">
-                <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 taaldc-sidenav">
-                    <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
-                        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                            <span class="fs-5 d-none d-sm-inline"><strong>TAALDC Portal</strong></span>
-                        </a>
-                        <ul class="nav nav-pills flex-column mt-3 mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                            
-                            @Html.Partial("_Sidebar")
-                        </ul>
-                       
-                    </div>
+
+@if (ViewData["Title"].ToString() != "Log in" && User.Identity.IsAuthenticated)
+{
+    <nav class="bg-light p-3 main-nav">
+        <div class="dropdown pb-2" style="float: right;padding-right:1rem;">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="~/user-profile.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                <span class="d-none d-sm-inline ms-3 mx-1">@CurrentUser.Email</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                @* <li><a class="dropdown-item" href="#">New project...</a></li> *@
+                @* <li><a class="dropdown-item" href="#">Settings</a></li> *@
+                <li>
+                    <a class="dropdown-item" href="/Identity/Account/Manage/Email">Profile</a>
+                </li>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <li>
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button type="submit" class="dropdown-item">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid main-section">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 taaldc-sidenav">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <span class="fs-5 d-none d-sm-inline">
+                            <strong>TAALDC Portal</strong>
+                        </span>
+                    </a>
+                    <ul class="nav nav-pills flex-column mt-3 mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
+                        @Html.Partial("_Sidebar")
+                    </ul>
+
                 </div>
-                <div class="col p-0">
-                    <main role="main">
-                      
-                        <div class="content-wrapper">
-                            @try
+            </div>
+            <div class="col p-0">
+                <main role="main">
+
+                    <div class="content-wrapper">
+                        @try
+                        {
+                            @if (!string.IsNullOrEmpty(controller) && controller.ToLower() == "home")
                             {
-                                @if (!string.IsNullOrEmpty(controller) && controller.ToLower() == "home")
-                                {
-                                    
-                                }
-                                else
-                                {
-                                    <div class="container-fluid">
-                                        <div class="card-title pl-5 pb-3 pt-0">
-                                            <a asp-controller="@controller" asp-action="Index">@controller</a> / <a asp-action="@action">@action</a>
-                                        </div>
-                                    </div>
-                                }
-                               
                             }
-                            catch
+                            else
                             {
-                                var area = ViewContext.RouteData.Values["area"];
-                                
                                 <div class="container-fluid">
                                     <div class="card-title pl-5 pb-3 pt-0">
-                                        <a asp-area="@area" asp-page="Manage" asp-page-handler="Email">@area</a>
+                                        <a asp-controller="@controller" asp-action="Index">@controller</a> / <a asp-action="@action">@action</a>
                                     </div>
                                 </div>
                             }
-                            @RenderBody()
-                        </div>
-                    </main>
-                </div>
+                        }
+                        catch
+                        {
+                            var area = ViewContext.RouteData.Values["area"];
+
+                            <div class="container-fluid">
+                                <div class="card-title pl-5 pb-3 pt-0">
+                                    <a asp-area="@area" asp-page="Manage" asp-page-handler="Email">@area</a>
+                                </div>
+                            </div>
+                        }
+                        @RenderBody()
+                    </div>
+                </main>
             </div>
         </div>
-}else
+    </div>
+}
+else
 {
     <main role="main">
         <breadcrumb></breadcrumb>
@@ -113,6 +116,6 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

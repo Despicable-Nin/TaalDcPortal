@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Sales;
-@using TaalDc.Portal.Models;
-@model Unit_Order_DTO
+﻿@model TaalDc.Portal.DTO.Sales.OrderUnitBuyer_ClientDto
 
 @{
     ViewBag.Title = "Sale Details";
@@ -30,50 +28,50 @@
                     @Model.Salutation @Model.FirstName @Model.LastName
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Email Address</strong> <br />
+                    <strong class="primary-color">Email Address</strong> <br/>
                     @Model.EmailAddress
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Contact No.</strong> <br/>
-                   @Model.ContactNo
+                    @Model.ContactNo
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Customer Address</strong> <br />
-                   @Model.Address<br/>
-                   @Model.TownCity, @Model.Province, @Model.Country @Model.ZipCode
+                    <strong class="primary-color">Customer Address</strong> <br/>
+                    @Model.Address<br/>
+                    @Model.TownCity, @Model.Province, @Model.Country @Model.ZipCode
                 </p>
             </div>
             <div class="col-lg-4">
                 <p class="mb-5">
-                    <strong class="primary-color">Property</strong> <br />
-                   @Model.Property
+                    <strong class="primary-color">Property</strong> <br/>
+                    @Model.Property
                 </p>
-                 <p class="mb-5">
+                <p class="mb-5">
                     <strong class="primary-color">Unit</strong> <br/>
                     @Model.Tower - @Model.ScenicView
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Unit No.</strong> <br />
+                    <strong class="primary-color">Unit No.</strong> <br/>
                     @Model.Unit
                 </p>
-                 <p class="mb-5">
+                <p class="mb-5">
                     <strong class="primary-color">Contract/Reference No.</strong> <br/>
                     @Model.Code
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Acquisition Date</strong> <br />
+                    <strong class="primary-color">Acquisition Date</strong> <br/>
                     @Model.TransactionDate.ToString("MMMM dd, yyyy")
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Broker/Sales Agent</strong> <br />
+                    <strong class="primary-color">Broker/Sales Agent</strong> <br/>
                     @Model.Broker
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Remarks</strong> <br />
+                    <strong class="primary-color">Remarks</strong> <br/>
                     @Model.Remarks
                 </p>
                 <p class="mb-5">
-                    <strong class="primary-color">Sales Status</strong> <br />
+                    <strong class="primary-color">Sales Status</strong> <br/>
                     @Model.Status
                 </p>
             </div>

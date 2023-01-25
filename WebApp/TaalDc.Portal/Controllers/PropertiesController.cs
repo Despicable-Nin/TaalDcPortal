@@ -1,302 +1,303 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using System.Drawing.Printing;
-using System.Globalization;
-using AutoMapper;
 using Newtonsoft.Json;
-using NuGet.DependencyResolver;
-using TaalDc.Portal.DTO.Catalog;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
 
-namespace TaalDc.Portal.Controllers
+namespace TaalDc.Portal.Controllers;
+
+[Authorize]
+public class PropertiesController : BaseController<PropertiesController>
 {
-	[Authorize]
-	public class PropertiesController : BaseController<PropertiesController>
+    private readonly ICatalogService _catalogService;
+    private readonly IMapper _mapper;
+
+    public PropertiesController(ICatalogService catalogService, IMapper mapper,
+        ILogger<PropertiesController> loggerInstance) : base(loggerInstance)
     {
-        private readonly ICatalogService _catalogService;
-        private readonly IMapper _mapper;
+        _catalogService = catalogService;
+        _mapper = mapper;
+    }
 
-        public PropertiesController(ICatalogService catalogService, IMapper mapper, ILogger<PropertiesController> loggerInstance) : base(loggerInstance)
-        {
-            _catalogService = catalogService;
-            _mapper = mapper;
-        }
-        public async Task<IActionResult> Index(string filter,
-            string sortBy,
-            SortOrderEnum sortOrder,
-            int pageNumber = 1,
-            int pageSize = 10)
-        {
-            var properties = await _catalogService.GetProperties(filter, sortBy, sortOrder, pageNumber, pageSize);
+    public async Task<IActionResult> Index(string filter,
+        string sortBy,
+        SortOrderEnum sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var properties = await _catalogService.GetProperties(filter, sortBy, sortOrder, pageNumber, pageSize);
 
-            return View(properties);
-        }
+        return View(properties);
+    }
 
 
-        public async Task<IActionResult> CreateProperty()
-        {
-            return View();
-        }
+    public async Task<IActionResult> CreateProperty()
+    {
+        return View();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProperty(PropertyCreate_ClientDto model)
-        {
-            var result = await _catalogService.CreateProperty(model);
+    [HttpPost]
+    public async Task<IActionResult> CreateProperty(PropertyCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateProperty(model);
 
-            if (!result.IsSuccess) return BadRequest(new
+        if (!result.IsSuccess)
+            return BadRequest(new
             {
                 Message = result.ErrorMessage
             });
 
 
-            return Ok();
-        }
+        return Ok();
+    }
 
-        public async Task<IActionResult> EditProperty(int id)
+    public async Task<IActionResult> EditProperty(int id)
+    {
+        try
         {
-            try
-            {
-                var result = await _catalogService.GetPropertyById(id);
+            var result = await _catalogService.GetPropertyById(id);
 
-                if (result == null) RedirectToAction("Index");
+            if (result == null) RedirectToAction("Index");
 
-                PropertyCreate_ClientDto propertyCreateClientDto = _mapper.Map<PropertyCreate_ClientDto>(result);
+            var propertyCreateClientDto = _mapper.Map<PropertyCreate_ClientDto>(result);
 
-                return View(propertyCreateClientDto);
-
-            }catch(Exception err)
-            {
-                return RedirectToAction("Index");
-            }
+            return View(propertyCreateClientDto);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> EditProperty(PropertyCreate_ClientDto model)
+        catch (Exception err)
         {
-            var result = await _catalogService.CreateProperty(model);
-
-            if (!result.IsSuccess) return BadRequest(new
-            {
-                Message = result.ErrorMessage
-            });
-
-            return Ok(result);
+            return RedirectToAction("Index");
         }
+    }
 
-        public async Task<IActionResult> Towers(string filter,
-            string sortBy,
-            SortOrderEnum sortOrder,
-            int pageNumber = 1,
-            int pageSize = 10)
-        {
-            var towers = await _catalogService.GetTowers(filter, sortBy, sortOrder, pageNumber, pageSize);
+    [HttpPost]
+    public async Task<IActionResult> EditProperty(PropertyCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateProperty(model);
 
-            return View(towers);
-        }
-
-
-        public async Task<IActionResult> CreateTower() => View();
-        
-        [HttpPost]
-        public async Task<IActionResult> CreateTower(TowerCreate_ClientDto model)
-        {
-            var result = await _catalogService.CreateTower(model);
-
-            if (!result.IsSuccess) return BadRequest(new
+        if (!result.IsSuccess)
+            return BadRequest(new
             {
                 Message = result.ErrorMessage
             });
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        public async Task<IActionResult> EditTower(int id)
-        {
-            try
-            {
-                var result = await _catalogService.GetTowerById(id);
+    public async Task<IActionResult> Towers(string filter,
+        string sortBy,
+        SortOrderEnum sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var towers = await _catalogService.GetTowers(filter, sortBy, sortOrder, pageNumber, pageSize);
 
-                if (result == null) RedirectToAction("Index");
+        return View(towers);
+    }
 
-                var towerCreateDTO = _mapper.Map<TowerCreate_ClientDto>(result);
-                return View(towerCreateDTO);
 
-            }
-            catch (Exception err)
-            {
-                return RedirectToAction("Index");
-            }
-        }
-        
-        public async Task<IActionResult> CreateFloor()
-        {
-            return View();
-        }
+    public async Task<IActionResult> CreateTower()
+    {
+        return View();
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateFloor(FloorCreate_ClientDto model)
-        {
-            var result = await _catalogService.CreateFloor(model);
+    [HttpPost]
+    public async Task<IActionResult> CreateTower(TowerCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateTower(model);
 
-            if (!result.IsSuccess) return BadRequest(new
+        if (!result.IsSuccess)
+            return BadRequest(new
             {
                 Message = result.ErrorMessage
             });
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        public async Task<IActionResult> EditFloor(int id)
+    public async Task<IActionResult> EditTower(int id)
+    {
+        try
         {
-            try
-            {
-                var result = await _catalogService.GetFloorById(id);
+            var result = await _catalogService.GetTowerById(id);
 
-                if (result == null) RedirectToAction("Floors");
+            if (result == null) RedirectToAction("Index");
 
-                var floorCreateDTO = _mapper.Map<FloorCreate_ClientDto>(
-                        result);
-          
-                return View(floorCreateDTO);
-
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Floors");
-            }
+            var towerCreateDTO = _mapper.Map<TowerCreate_ClientDto>(result);
+            return View(towerCreateDTO);
         }
-
-        public async Task<IActionResult> Floors(string filter,
-            string sortBy,
-            SortOrderEnum sortOrder,
-            int pageNumber = 1,
-            int pageSize = 10)
+        catch (Exception err)
         {
-            var floors = await _catalogService.GetFloors(filter, sortBy, sortOrder, pageNumber, pageSize);
-
-            return View(floors);
+            return RedirectToAction("Index");
         }
+    }
 
+    public async Task<IActionResult> CreateFloor()
+    {
+        return View();
+    }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateFloor(FloorCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateFloor(model);
 
-        public async Task<IActionResult> CreateUnit()
-        {
-            var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
-
-            ViewData["Floors"] = floors.Data;
-
-            return View();
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> CreateUnit(UnitCreate_ClientDto model)
-        {
-            var result = await _catalogService.CreateUnit(model);
-
-            if (!result.IsSuccess) return BadRequest(new
+        if (!result.IsSuccess)
+            return BadRequest(new
             {
                 Message = result.ErrorMessage
             });
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        public async Task<IActionResult> EditUnit(int id)
+    public async Task<IActionResult> EditFloor(int id)
+    {
+        try
         {
-            var result = await _catalogService.GetUnitById(id);
+            var result = await _catalogService.GetFloorById(id);
 
-            if (result == null) RedirectToAction("Units");
+            if (result == null) RedirectToAction("Floors");
 
-            var unitUpdateDto = _mapper.Map<UnitUpdate_ClientDto>(result);
-            
-            var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
+            var floorCreateDTO = _mapper.Map<FloorCreate_ClientDto>(
+                result);
 
-            ViewData["Floors"] = floors.Data;
-
-            return View(unitUpdateDto);
+            return View(floorCreateDTO);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> EditUnit(int id, UnitUpdate_ClientDto model)
+        catch (Exception ex)
         {
-            LoggerInstance.LogDebug(JsonConvert.SerializeObject(model));
-            
-            if (id != model.UnitId) return BadRequest("Invalid id.");
-            
-            LoggerInstance.LogDebug($"Invoke {nameof(CatalogService.UpdateUnit)}");
-            
-            var result = await _catalogService.UpdateUnit(model);
-            
-            LoggerInstance.LogCritical($"Result is: {result.IsSuccess}. {result.ErrorMessage}");
-
-            if (result.IsSuccess)
-            {
-                return RedirectToAction("Units");
-            }
-
-            return View(model);
+            return RedirectToAction("Floors");
         }
+    }
 
-        public async Task<IActionResult> Units(
-            string filter,
-            int? floorId,
-            int? unitTypeId,
-            int? viewId,
-            int? statusId,
-            string sortBy,
-            SortOrderEnum sortOrder,
-            int pageNumber = 1,
-            int pageSize = 10)
-        {
-            var units = await _catalogService.GetUnits(filter,floorId,unitTypeId,viewId,statusId, sortBy, sortOrder, pageNumber, pageSize);
-            return View(units);
-        }
+    public async Task<IActionResult> Floors(string filter,
+        string sortBy,
+        SortOrderEnum sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var floors = await _catalogService.GetFloors(filter, sortBy, sortOrder, pageNumber, pageSize);
+
+        return View(floors);
+    }
 
 
-		public async Task<IActionResult> GetUnits(
-			string filter,
-			int? floorId,
-			int? unitTypeId,
-			int? viewId,
-			int? statusId,
-			string sortBy,
-			SortOrderEnum sortOrder,
-			int pageNumber = 1,
-			int pageSize = 10)
-		{
-			var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder, pageNumber, pageSize);
-            return new JsonResult(units);
-		}
+    public async Task<IActionResult> CreateUnit()
+    {
+        var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
+
+        ViewData["Floors"] = floors.Data;
+
+        return View();
+    }
 
 
-		public async Task<IActionResult> UnitTypes()
-        {
-            var unitTypes = await _catalogService.GetUnitTypes();
+    [HttpPost]
+    public async Task<IActionResult> CreateUnit(UnitCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateUnit(model);
 
-            return View(unitTypes);
-        }
-
-
-        public IActionResult CreateUnitType()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateUnitType(UnitTypeCreate_ClientDto model)
-        {
-            var result = await _catalogService.CreateUnitType(model);
-
-            if (!result.IsSuccess) return BadRequest(new
+        if (!result.IsSuccess)
+            return BadRequest(new
             {
                 Message = result.ErrorMessage
             });
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
+
+    public async Task<IActionResult> EditUnit(int id)
+    {
+        var result = await _catalogService.GetUnitById(id);
+
+        if (result == null) RedirectToAction("Units");
+
+        var unitUpdateDto = _mapper.Map<UnitUpdate_ClientDto>(result);
+
+        var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
+
+        ViewData["Floors"] = floors.Data;
+
+        return View(unitUpdateDto);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditUnit(int id, UnitUpdate_ClientDto model)
+    {
+        LoggerInstance.LogDebug(JsonConvert.SerializeObject(model));
+
+        if (id != model.UnitId) return BadRequest("Invalid id.");
+
+        LoggerInstance.LogDebug($"Invoke {nameof(CatalogService.UpdateUnit)}");
+
+        var result = await _catalogService.UpdateUnit(model);
+
+        LoggerInstance.LogCritical($"Result is: {result.IsSuccess}. {result.ErrorMessage}");
+
+        if (result.IsSuccess) return RedirectToAction("Units");
+
+        return View(model);
+    }
+
+    public async Task<IActionResult> Units(
+        string filter,
+        int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int? statusId,
+        string sortBy,
+        SortOrderEnum sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder,
+            pageNumber, pageSize);
+        return View(units);
+    }
+
+
+    public async Task<IActionResult> GetUnits(
+        string filter,
+        int? floorId,
+        int? unitTypeId,
+        int? viewId,
+        int? statusId,
+        string sortBy,
+        SortOrderEnum sortOrder,
+        int pageNumber = 1,
+        int pageSize = 10)
+    {
+        var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder,
+            pageNumber, pageSize);
+        return new JsonResult(units);
+    }
+
+
+    public async Task<IActionResult> UnitTypes()
+    {
+        var unitTypes = await _catalogService.GetUnitTypes();
+
+        return View(unitTypes);
+    }
+
+
+    public IActionResult CreateUnitType()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateUnitType(UnitTypeCreate_ClientDto model)
+    {
+        var result = await _catalogService.CreateUnitType(model);
+
+        if (!result.IsSuccess)
+            return BadRequest(new
+            {
+                Message = result.ErrorMessage
+            });
+
+        return Ok(result);
     }
 }

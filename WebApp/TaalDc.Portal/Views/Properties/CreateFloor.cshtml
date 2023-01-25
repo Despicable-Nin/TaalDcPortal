@@ -1,5 +1,4 @@
-﻿@using TaalDc.Portal.ViewModels.Catalog
-@model FloorCreate_ClientDto
+﻿@model TaalDc.Portal.ViewModels.Catalog.FloorCreate_ClientDto
 
 @{
     ViewBag.Title = "Create Floor";
@@ -17,7 +16,9 @@
     <div>
         <form id="floorForm" method="post" class="row mb-5 needs-validation" asp-action="CreateFloor" asp-controller="Properties">
             <div class="mb-3 col-lg-8">
-                <label asp-for="TowerId" class="form-label"><strong>Tower</strong></label>
+                <label asp-for="TowerId" class="form-label">
+                    <strong>Tower</strong>
+                </label>
                 <select asp-for="TowerId" class="form-control form-select" required>
                     <option value="1">
                         Common Tower
@@ -27,33 +28,39 @@
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
-                <label asp-for="Name" class="form-label"><strong>Name</strong></label>
-                <input asp-for="Name" class="form-control" required />
+                <label asp-for="Name" class="form-label">
+                    <strong>Name</strong>
+                </label>
+                <input asp-for="Name" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
-                <label asp-for="Description" class="form-label"><strong>Floor Description</strong></label>
-                <input asp-for="Description" class="form-control" required />
+                <label asp-for="Description" class="form-label">
+                    <strong>Floor Description</strong>
+                </label>
+                <input asp-for="Description" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="mb-3 col-lg-8">
-                <label asp-for="FloorPlanFilePath" class="form-label"><strong>Floor Plan File Path</strong></label>
-                <input asp-for="FloorPlanFilePath" class="form-control" />
+                <label asp-for="FloorPlanFilePath" class="form-label">
+                    <strong>Floor Plan File Path</strong>
+                </label>
+                <input asp-for="FloorPlanFilePath" class="form-control"/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
-            
+
             <div class="col-lg-12">
-                <input id="floor-form-submit" class="btn btn-primary" type="submit" value="Save" />
+                <input id="floor-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>

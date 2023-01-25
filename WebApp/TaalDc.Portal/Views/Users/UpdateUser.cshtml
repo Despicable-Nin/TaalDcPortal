@@ -1,12 +1,11 @@
-@model TaalDc.Portal.ViewModels.Users.UpdateUserViewModel;
+@model TaalDc.Portal.ViewModels.Users.UserUpdateDto;
 
 @{
     ViewBag.Title = "Update User";
     Layout = "_Layout";
 
-    IEnumerable<string> Roles = (IEnumerable<string>)ViewData["Roles"];
+    var Roles = (IEnumerable<string>)ViewData["Roles"];
 }
-
 
 
 <div class="container-fluid">
@@ -19,36 +18,48 @@
         <form id="userForm" method="post" class="row mb-5 needs-validation" asp-action="Put" asp-route-id="@Model.Id" asp-controller="Users">
             <input type="hidden" asp-for="Id"/>
             <div class="mb-3 col-lg-4">
-                <label asp-for="FirstName" class="form-label"><strong>First Name</strong></label>
+                <label asp-for="FirstName" class="form-label">
+                    <strong>First Name</strong>
+                </label>
                 <input asp-for="FirstName" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-4">
-                <label asp-for="LastName" class="form-label"><strong>Last Name</strong></label>
+                <label asp-for="LastName" class="form-label">
+                    <strong>Last Name</strong>
+                </label>
                 <input asp-for="LastName" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-3">
-                <label asp-for="MiddleName" class="form-label"><strong>Middle Name</strong></label>
+                <label asp-for="MiddleName" class="form-label">
+                    <strong>Middle Name</strong>
+                </label>
                 <input asp-for="MiddleName" class="form-control"/>
             </div>
             <div class="mb-3 col-lg-1">
-                <label asp-for="NameSuffix" class="form-label"><strong>Suffix</strong></label>
+                <label asp-for="NameSuffix" class="form-label">
+                    <strong>Suffix</strong>
+                </label>
                 <input asp-for="NameSuffix" class="form-control"/>
             </div>
             <div class="mb-3 col-lg-8">
-                <label asp-for="Emailaddress" class="form-label"><strong>Email Address</strong></label>
+                <label asp-for="Emailaddress" class="form-label">
+                    <strong>Email Address</strong>
+                </label>
                 <input asp-for="Emailaddress" class="form-control" readonly="readonly" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-4">
-                <label asp-for="Role" class="form-label"><strong>Role</strong></label>
+                <label asp-for="Role" class="form-label">
+                    <strong>Role</strong>
+                </label>
                 <select asp-for="Role" class="form-control form-select" required>
                     @foreach (var role in Roles)
                     {
@@ -73,8 +84,7 @@
                 <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
-        
-    
+
+
     </div>
 </div>
-

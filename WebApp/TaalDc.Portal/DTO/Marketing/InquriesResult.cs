@@ -9,7 +9,7 @@ public record InquriesResult
         Inquiries = new List<InquiryDto>();
     }
 
-    [JsonPropertyName("inquiries")] public ICollection<InquiryDto> Inquiries { get; set; } 
+    [JsonPropertyName("inquiries")] public ICollection<InquiryDto> Inquiries { get; set; }
 
     [JsonPropertyName("page_size")] public int PageSize { get; set; }
 

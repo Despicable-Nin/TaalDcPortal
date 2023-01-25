@@ -1,6 +1,3 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-
 namespace TaalDc.Portal.ViewModels.Users;
 
 public class UserIndexViewModel
@@ -22,7 +19,8 @@ public class UserIndexViewModel
 
 public record UserViewModel
 {
-    public UserViewModel(string id, string email, string firstName, string lastName, string nameSuffix, string middleName, string[] roles, bool isActive)
+    public UserViewModel(string id, string email, string firstName, string lastName, string nameSuffix,
+        string middleName, string[] roles, bool isActive)
     {
         Id = id;
         Email = email;
@@ -39,14 +37,17 @@ public record UserViewModel
 
     public string FirstName { get; }
 
-    public string LastName { get; } 
-    public string NameSuffix { get; } 
-    public string MiddleName { get; } 
+    public string LastName { get; }
+    public string NameSuffix { get; }
+    public string MiddleName { get; }
     public bool IsActive { get; set; }
-
-    public string GetFullName() => 
-        $"{FirstName} {(!string.IsNullOrEmpty(MiddleName) ? MiddleName[0].ToString() : string.Empty)} {LastName} {NameSuffix}";
     public string[] Roles { get; }
+
+    public string GetFullName()
+    {
+        return
+            $"{FirstName} {(!string.IsNullOrEmpty(MiddleName) ? MiddleName[0].ToString() : string.Empty)} {LastName} {NameSuffix}";
+    }
 
     public string? GetRolesAsString()
     {
