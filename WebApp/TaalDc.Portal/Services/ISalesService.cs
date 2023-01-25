@@ -24,4 +24,20 @@ public interface ISalesService
     Task<CommandResult> AcceptPayment(int orderId, int paymentId);
 
     Task<CommandResult> AddPayment(PaymentCreate_ClientDto model);
+
+
+    Task<IEnumerable<UnitCountByStatus_ClientDto>> GetResidentialUnitsCountByStatus();
+
+    Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType();
+
+    Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView();
+
+
+
+
+    Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus();
+
+    Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType();
+
+    Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor();
 }

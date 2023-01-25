@@ -323,3 +323,54 @@ label {
 .sales-table {
     min-width: 1080px;
 }
+
+.unit-summary {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.stats-card{
+    margin-bottom: 1rem;
+}
+
+.status {
+    margin-bottom: 0.5rem;
+}
+
+.status.available {
+    color: #09FF64;
+}
+
+.status.reserved {
+    color: #FAC301;
+}
+
+.status.sold {
+    color: #FF0000;
+}
+
+.status.blocked {
+    color: #808080;
+}
+
+.stats-card .unit {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Inter Extrabold', Arial, sans-serif;
+}
+
+
+.nav-pills .nav-link {
+    min-width: 150px;
+    text-align: center;
+}
+
+.nav-pills .nav-link.active {
+    background-color: #516C5B;
+    color: white !important;
+}
+
+.stats-table th, .stats-table td{
+    text-align: center;
+}

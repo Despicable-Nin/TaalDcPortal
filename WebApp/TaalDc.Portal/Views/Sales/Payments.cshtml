@@ -75,6 +75,14 @@
                     </tr>
                 }
 
+                    <tr>
+                        <td colspan="2"><strong>Total</strong></td>
+                    <td>
+                        <strong>@Model.Payments.Sum(i => i.AmountPaid).ToString("#,##0.00")</strong>
+                    </td>
+                    <td colspan="5"></td>
+                </tr>
+
 
                 @if (Model.Payments.Count() == 0)
                 {

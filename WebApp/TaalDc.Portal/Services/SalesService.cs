@@ -26,6 +26,83 @@ public class SalesService : ISalesService
         _removeServiceBaseUrl = $"{settings.Value.SalesUrl}";
     }
 
+
+    //DASHBOARD
+    public async Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType()
+    {
+        var uri = API.Sales.GetAvailabilityPerResidentialUnitType(_removeServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<AvailabilityByUnitType_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView()
+    {
+        var uri = API.Sales.GetAvailabilityOfResidentialUnitPerView(_removeServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<AvailabilityByView_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetResidentialUnitsCountByStatus()
+    {
+        var uri = API.Sales.GetUnitCountSummaryByStatus(_removeServiceBaseUrl);
+        
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<UnitCountByStatus_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+
+    public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus()
+    {
+        var uri = API.Sales.GetParkingCountSummaryByStatus(_removeServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<UnitCountByStatus_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType()
+    {
+        var uri = API.Sales.GetAvailabilityPerParkingUnitType(_removeServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor()
+    {
+        var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_removeServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+
+
     public async Task<CommandResult> AcceptPayment(int orderId, int paymentId)
     {
         var uri = API.Sales.AcceptPayment(_removeServiceBaseUrl, orderId, paymentId);
@@ -55,6 +132,8 @@ public class SalesService : ISalesService
 
         throw new Exception("Sale cannot be created.");
     }
+
+  
 
     public async Task<OrderUnitBuyer_ClientDto> GetSalesById(int id)
     {
@@ -113,4 +192,6 @@ public class SalesService : ISalesService
 
         throw new Exception("Sale cannot be created.");
     }
+
+  
 }

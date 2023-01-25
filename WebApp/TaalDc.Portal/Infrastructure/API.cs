@@ -111,6 +111,13 @@ public static class API
             return $"{baseUrl}/api/v1/sales/{orderId}/payments";
         }
 
+
+        public static string GetUnitCountSummaryByStatus(string baseUri)
+        {
+            return $"{baseUri}/api/v1/dashboard/residential/status-summary";
+        }
+
+
         public static string GetAvailableUnitCount(string baseUrl)
         {
             return $"{baseUrl}/api/v1/dashboard/residential/available";
@@ -140,6 +147,12 @@ public static class API
         {
             return $"{baseUrl}/api/v1/dashboard/residential/available-per-unit-type";
         }
+
+        public static string GetParkingCountSummaryByStatus(string baseUri)
+        {
+            return $"{baseUri}/api/v1/dashboard/parking/status-summary";
+        }
+
 
         public static string GetAvailableParkingCount(string baseUrl)
         {

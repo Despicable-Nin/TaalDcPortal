@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Taaldc.Sales.Domain.Exceptions;
 using Taaldc.Sales.Infrastructure;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using Taaldc.Sales.Api.Application.Queries.Orders;
 
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
@@ -74,4 +77,24 @@ public partial class DashboardQueries : IDashboardQueries
         _context.Units
             .AsNoTracking()
             .Count(i =>new[] { 6,7 }.Contains(i.UnitTypeId)&& i.UnitStatusId == (int)UnitStatus.BLOCKED);
+
+    public async Task<IEnumerable<UnitAvailabilitySummaryByStatusDTO>> GetCountByUnitStatus(int[] unitTypes)
+    {
+        var unitTypesJoined = String.Join(",", unitTypes);
+
+        var query = $"SELECT " +
+            $"UnitStatus, " +
+            $"COUNT(*) AS [Count] " +
+            $"FROM sales.unitreplica " +
+            $"WHERE UnitTypeId IN ({unitTypesJoined}) " +
+            $"GROUP BY UnitStatus";
+
+        await using var connection = new SqlConnection(_connectionString);
+
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<UnitAvailabilitySummaryByStatusDTO>(query);
+
+        return result;
+    }
 }

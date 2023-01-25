@@ -188,9 +188,17 @@ public class SalesController : BaseController<SalesController>
                     IsFormError = false,
                     Message = result.ErrorMessage
                 });
-            
+
+            var order = await _salesService.GetSalesById(orderId);
+
             //update Units On Catalog --> Catalog then Replies to update UnitReplica
+            var unitStatus =
+               new UnitStatusUpdate_ClientDto(order.UnitId, 2, $"Sold to {order.FirstName} {order.LastName}");
             
+            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+
+            if (!unitStatusResult.IsSuccess)
+                return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
             return Ok(result);
         }

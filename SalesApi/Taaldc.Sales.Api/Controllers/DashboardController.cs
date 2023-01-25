@@ -22,6 +22,17 @@ namespace Taaldc.Sales.Api.Controllers
             _logger = logger;
         }
 
+        [HttpGet("residential/status-summary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetUnitCountSummaryByStatus()
+        {
+            int[] unitTypes = { 2, 3, 4, 5, 8 };
+            var result = await _dashboardQueries.GetCountByUnitStatus(unitTypes);
+            return Ok(result);
+        }
+
+
         [HttpGet("residential/available")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -41,7 +52,19 @@ namespace Taaldc.Sales.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> GetBlockedUnitCount() => Ok(await _dashboardQueries.GetBlockedUnitCount());
-        
+
+
+        [HttpGet("parking/status-summary")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetParkingCountSummaryByStatus()
+        {
+            int[] unitTypes = { 6,7 };
+            var result = await _dashboardQueries.GetCountByUnitStatus(unitTypes);
+            return Ok(result);
+        }
+
+
         [HttpGet("parking/available")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]

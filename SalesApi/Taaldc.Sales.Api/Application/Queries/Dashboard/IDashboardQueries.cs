@@ -6,6 +6,8 @@ namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public interface IDashboardQueries
 {
+    Task<IEnumerable<UnitAvailabilitySummaryByStatusDTO>> GetCountByUnitStatus(int[] unitTypes);
+
     Task<int> GetAvailableUnitCount();
     Task<int> GetReservedUnitCount();
     Task<int> GetSoldUnitCount();
@@ -17,7 +19,7 @@ public interface IDashboardQueries
     Task<int> GetBlockedParkingCount();
 
     Task<IEnumerable<ParkingUnitAvailabilityPerFloorDTO>> GetParkingUnitTypeAvailabilityPerFloor();
-    Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView();
+    Task<IEnumerable<ResidentialUnitCountPerViewDTO>> GetResidentaialUnitAvailabilityPerView();
     Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType();
     Task<IEnumerable<ResidentialUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType();
 }
