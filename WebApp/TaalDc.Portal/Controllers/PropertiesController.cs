@@ -232,7 +232,7 @@ namespace TaalDc.Portal.Controllers
             return View(unitUpdateDto);
         }
         
-        [HttpPost("{id}")]
+        [HttpPost]
         public async Task<IActionResult> EditUnit(int id, UnitUpdateDTO model)
         {
             if (id != model.UnitId) return BadRequest("Invalid id.");
