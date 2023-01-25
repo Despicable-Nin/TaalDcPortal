@@ -52,7 +52,7 @@ public class UnitsController : ApiBaseController<UnitsController>
     [HttpPost("change-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> ChangeStatusOfUnit( ChangeStatusOfUnitDTO model)
+    public async Task<IActionResult> ChangeStatusOfUnit( UnitUpdateUnitStatus_HostDto model)
     {
         return Ok(await _mediator.Send(new ChangeStatusOfUnitCommand(model.UnitId, model.UnitStatus, model.Remarks)));
     }

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Taaldc.Catalog.API.DTO;
 
-public class ChangeStatusOfUnitDTO
+public class UnitUpdateUnitStatus_HostDto
 {
     [JsonPropertyName("unit_id")] 
     [JsonProperty(Required = Required.Always)]
