@@ -118,6 +118,21 @@ public class SalesService : ISalesService
         throw new Exception("Payment cannot be updated.");
     }
 
+    public async Task<CommandResult> VoidPayment(int orderId, int paymentId)
+    {
+        var uri = API.Sales.VoidPayment(_removeServiceBaseUrl, orderId, paymentId);
+
+        var response = await _httpClient.PostAsync(uri, null);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<CommandResult>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Payment cannot be updated.");
+    }
+
     public async Task<CommandResult> AddPayment(PaymentCreate_ClientDto model)
     {
         var uri = API.Sales.AddPayment(_removeServiceBaseUrl, model.TransactionId);

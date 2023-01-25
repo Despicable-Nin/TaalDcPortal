@@ -58,7 +58,7 @@
                 <tbody>
                 @foreach (var payment in Model.Payments)
                 {
-                    <tr>
+                    <tr class="@(payment.PaymentStatus == "Void"? "danger": payment.PaymentStatus == "Accepted"? "accepted": "")">
                         <td>@payment.Id</td>
                         <td>@(PaymentTypes.FirstOrDefault(i => i.Key == payment.PaymentTypeId).Value)</td>
                         <td>@payment.AmountPaid.ToString("#,##0.00")</td>
@@ -71,14 +71,18 @@
                             {
                                 <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id)" class="action-edit" href="#">Verify</a>
                             }
+
+                            @if(payment.PaymentStatus != "Void" || CurrentUser.IsAdmin()){
+                                <a onclick="openVoidPaymentModal(@payment.OrderId, @payment.Id)" class="action-delete" href="#">Void</a>
+                            }
                         </td>
                     </tr>
                 }
 
                     <tr>
-                        <td colspan="2"><strong>Total</strong></td>
+                        <td colspan="2"><strong>Total (Verified)</strong></td>
                     <td>
-                        <strong>@Model.Payments.Sum(i => i.AmountPaid).ToString("#,##0.00")</strong>
+                        <strong>@Model.Payments.Where(i => i.PaymentStatusId == 1).Sum(i => i.AmountPaid).ToString("#,##0.00")</strong>
                     </td>
                     <td colspan="5"></td>
                 </tr>
@@ -109,7 +113,27 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button onclick="acceptPayment()" type="button" class="btn btn-primary">Accept</button>
+                <button onclick="processPaymentVerification('accept')" type="button" class="btn btn-primary">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="paymentVoidModal" tabindex="-1" aria-labelledby="paymentVoidModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Payment Verification</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to void this payment?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button onclick="processPaymentVerification('void')" type="button" class="btn btn-primary">Void</button>
             </div>
         </div>
     </div>
@@ -224,6 +248,17 @@
 
         function openAcceptPaymentModal(orderId, paymentId){
             var paymentModal = document.getElementById('paymentVerifyModal');
+
+            paymentModal.dataset.orderId = orderId;
+            paymentModal.dataset.paymentId = paymentId;
+
+            var modal = new bootstrap.Modal(paymentModal, {});
+
+            modal.show();
+        }
+
+        function openVoidPaymentModal(orderId, paymentId) {
+            var paymentModal = document.getElementById('paymentVoidModal');
 
             paymentModal.dataset.orderId = orderId;
             paymentModal.dataset.paymentId = paymentId;

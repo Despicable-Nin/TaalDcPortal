@@ -9,6 +9,7 @@ using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
+using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 
 namespace Taaldc.Sales.Api.Controllers
 {
@@ -65,7 +66,26 @@ namespace Taaldc.Sales.Api.Controllers
 
             return BadRequest("Unauthorized.");
         }
-        
+
+
+        [HttpPost("{id}/payments/{paymentId}/void")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> VoidPayment(int id, int paymentId)
+        {
+            //this is for verification purposes --- only admin can do this
+            //for now manually check role of user.. 
+
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
+            {
+
+                VoidPaymentCommand command = new VoidPaymentCommand(id, paymentId);
+                return Ok(await _mediator.Send(command));
+            }
+
+            return BadRequest("Unauthorized.");
+        }
+
         [HttpPost("{id}/payments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]

@@ -2,13 +2,26 @@
     $("#AmountPaid").mask("#,##0.00", {reverse: true});
 }
 
-function acceptPayment() {
+function processPaymentVerification(paymentVerificationType) {
+    console.log(paymentVerificationType);
+
     var modal = document.getElementById("paymentVerifyModal");
+    var endPointAction = "";
+    if (paymentVerificationType === "accept") {
+        endPointAction = "AcceptPayment";
+    } else if (paymentVerificationType === "void") {
+        console.log("Voided")
+        modal = document.getElementById("paymentVoidModal");
+        endPointAction = "VoidPayment";
+    }
 
     var orderId = modal.getAttribute('data-order-id');
     var paymentId = modal.getAttribute('data-payment-id');
+  
 
-    var uri = `/Sales/AcceptPayment?orderId=${orderId}&paymentId=${paymentId}`;
+    var uri = `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
+
+    console.log('sales uri', uri);
 
     const modalBackdrop = document.getElementsByClassName("modal-backdrop");
 
@@ -60,6 +73,7 @@ function acceptPayment() {
         }
     });
 }
+
 
 const paymentForm = document.getElementById('paymentform');
 paymentForm.addEventListener('submit', onPaymentSubmit);

@@ -106,6 +106,11 @@ public static class API
             return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve";
         }
 
+        public static string VoidPayment(string baseUrl, int orderId, int paymentId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/void";
+        }
+
         public static string AddPayment(string baseUrl, int orderId)
         {
             return $"{baseUrl}/api/v1/sales/{orderId}/payments";

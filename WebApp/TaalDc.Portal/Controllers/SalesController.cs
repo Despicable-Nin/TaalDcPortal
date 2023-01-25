@@ -212,6 +212,31 @@ public class SalesController : BaseController<SalesController>
 
 
     [HttpPost]
+    public async Task<IActionResult> VoidPayment(int orderId, int paymentId)
+    {
+        if (orderId > 0 && paymentId > 0)
+        {
+            var result = await _salesService.VoidPayment(orderId, paymentId);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = false,
+            ErrorMessage = "Invalid order and payment id"
+        });
+    }
+
+
+    [HttpPost]
     public async Task<IActionResult> CreatePayment(int id, PaymentCreate_ClientDto model)
     {
         model.TransactionId = id;

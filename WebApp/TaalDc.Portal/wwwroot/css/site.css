@@ -374,3 +374,11 @@ label {
 .stats-table th, .stats-table td{
     text-align: center;
 }
+
+tr.danger td{
+    color: red !important;
+}
+
+tr.accepted td{
+    color: green !important;
+}
