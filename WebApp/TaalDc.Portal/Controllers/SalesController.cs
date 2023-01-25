@@ -188,6 +188,9 @@ public class SalesController : BaseController<SalesController>
                     IsFormError = false,
                     Message = result.ErrorMessage
                 });
+            
+            //update Units On Catalog --> Catalog then Replies to update UnitReplica
+            
 
             return Ok(result);
         }
