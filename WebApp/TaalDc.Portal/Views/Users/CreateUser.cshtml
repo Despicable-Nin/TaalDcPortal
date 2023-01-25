@@ -75,11 +75,11 @@
                 <label asp-for="DefaultPassword" class="form-label">
                     <strong>Default Password</strong>
                 </label>
-                <input asp-for="DefaultPassword" type="password" class="form-control" readonly="readonly" value="defaultPassword1234!" required/>
+                <input id="password" asp-for="DefaultPassword" type="password" class="form-control" readonly="readonly" value="defaultPassword1234!" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
-                <input class="py-1" type="button" id="passwordButton" value="Show Password"/>
+                <input class="py-1 btn  btn-link" type="button" id="passwordButton" value="Show Password" onclick="myFunction()"/>
             </div>
 
 
@@ -89,3 +89,14 @@
         </form>
     </div>
 </div>
+
+<script>
+    function myFunction() {
+      var x = document.getElementById("password");
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+    }
+</script>
