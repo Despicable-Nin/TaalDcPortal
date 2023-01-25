@@ -79,7 +79,7 @@ public class UnitQueries : IUnitQueries
             $"p.Id AS PropertyId," +
             $"ut.Id AS UnitTypeId," +
             $"sv.Id AS ScenicViewId," +
-            $"us.Id AS UnitStatusId " +
+            $"us.Id AS UnitStatusId, " +
             $"u.IsActive " +
             $"FROM catalog.unit u " +
             $"JOIN catalog.floors f " +
