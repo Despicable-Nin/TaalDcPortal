@@ -43,6 +43,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
 builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
 
+
+builder.Services.AddAutoMapper(typeof(Program));
+
+
 builder.Services.AddScoped<IPropertyQueries>(i =>
 {
     return new PropertyQueries(connectionString);

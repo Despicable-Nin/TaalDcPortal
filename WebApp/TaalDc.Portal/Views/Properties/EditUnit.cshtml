@@ -13,12 +13,12 @@
 <div class="container-fluid">
     <h4 class="primary-color mb-3">
         <strong>
-            New Unit
+            @Model.UnitNo
         </strong>
     </h4>
 
     <div>
-        <form id="unitForm" method="post" class="row mb-5 needs-validation" asp-action="CreateUnit" asp-controller="Properties">
+        <form id="unitForm" method="post" class="row mb-5 needs-validation" asp-action="EditUnit" asp-route-id="@Model.UnitId" asp-controller="Properties">
             <input type="hidden" asp-for="UnitId"/>
             <div class="mb-3 col-lg-8">
                 <label asp-for="UnitTypeId" class="form-label"><strong>Unit Type</strong></label>

@@ -15,7 +15,11 @@ public class MyProfile : Profile
         CreateMap<FloorDTO, FloorCreateDTO>()
             .ConstructUsing(o =>
                 new FloorCreateDTO(o.TowerId, o.Id, o.FloorName, o.FloorDescription, o.FloorPlanFilePath));
-        CreateMap<UnitDTO, UnitUpdateDTO>();
+        CreateMap<UnitDTO, UnitUpdateDTO>()
+            .ForMember(dest => dest.UnitNo, orig => orig.MapFrom(i => i.Identifier))
+            .ForMember(dest => dest.BalconyArea, orig => orig.MapFrom(i => i.BalconyArea))
+            .ForMember(dest => dest.SellingPrice, orig => orig.MapFrom(i => i.Price))
+            .ForMember(dest => dest.UnitId, o => o.MapFrom(i => i.Id));
 
     }
 }

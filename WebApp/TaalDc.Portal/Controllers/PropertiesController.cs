@@ -224,8 +224,27 @@ namespace TaalDc.Portal.Controllers
             if (result == null) RedirectToAction("Units");
 
             var unitUpdateDto = _mapper.Map<UnitUpdateDTO>(result);
+            
+            var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
+
+            ViewData["Floors"] = floors.Data;
 
             return View(unitUpdateDto);
+        }
+        
+        [HttpPost("{id}")]
+        public async Task<IActionResult> EditUnit(int id, UnitUpdateDTO model)
+        {
+            if (id != model.UnitId) return BadRequest("Invalid id.");
+            
+            var result = await _catalogService.UpdateUnit(model);
+
+            if (!result.IsSuccess) return BadRequest(new
+            {
+                Message = result.ErrorMessage
+            });
+
+            return Ok(result);
         }
 
         public async Task<IActionResult> Units(

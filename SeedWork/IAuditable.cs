@@ -9,6 +9,6 @@ public interface IAuditable
     public bool IsActive { get; }
 
     void AuditOnCreate(string user);
-    void AuditOnUpdate(string user, bool isActive);
+    void AuditOnUpdate(string user);
     void Deactivate();
 }

@@ -311,6 +311,31 @@ namespace TaalDc.Portal.Services
                 throw;
             }
         }
+        
+        /// <summary>
+        /// Updates unit but only for available and blocked only.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<CommandResult> UpdateUnit(UnitUpdateDTO model)
+        {
+            try
+            {
+                var uri = API.Catalog.EditUnit(_remoteServiceUrl, model.UnitId);
+
+                var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+                var content = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<CommandResult>(content,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
         public async Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model)
         {

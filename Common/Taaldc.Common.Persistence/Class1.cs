@@ -31,7 +31,7 @@ public static class DbContextExtensions
                         break;
 
                     case EntityState.Modified:
-                        auditable.AuditOnUpdate(!string.IsNullOrEmpty(_currentUser?.Email) ? _currentUser?.Email : String.Empty, true);
+                        auditable.AuditOnUpdate(!string.IsNullOrEmpty(_currentUser?.Email) ? _currentUser?.Email : String.Empty);
                         break;
 
                     case EntityState.Deleted:

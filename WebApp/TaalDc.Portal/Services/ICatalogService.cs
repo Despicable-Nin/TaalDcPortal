@@ -52,6 +52,7 @@ namespace TaalDc.Portal.Services
         Task<CommandResult> CreateTower(TowerCreateDTO model);
         Task<CommandResult> CreateFloor(FloorCreateDTO model);
         Task<CommandResult> CreateUnit(UnitCreateDTO model);
+        Task<CommandResult> UpdateUnit(UnitUpdateDTO model);
         Task<CommandResult> CreateUnitType(UnitTypeCreateDTO model);
 		Task<CommandResult> UpdateUnitStatus(UnitStatusUpdateDTO model);
 	}

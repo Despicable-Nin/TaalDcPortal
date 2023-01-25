@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 public class UnitUpdateDTO
 {
     [JsonPropertyName("unit_id")]
-    public int? UnitId { get; set; }
+    public int UnitId { get; set; }
 
     [JsonPropertyName("unit_type_id")]
     [JsonProperty(Required = Required.Always)]
