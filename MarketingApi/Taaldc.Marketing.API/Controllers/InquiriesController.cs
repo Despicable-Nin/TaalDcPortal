@@ -32,7 +32,10 @@ public class InquiriesController : Controller
    [ProducesErrorResponseType(typeof(BadRequestResult))]
    public async Task<IActionResult> GetInquiryById(int id)
    {
-      var inquiry = await _dbContext.Inquiries.Include(i => i.Customer).AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
+      var inquiry = await _dbContext.Inquiries
+            .Include(i => i.Customer)
+            .Include(i => i.Status)
+            .AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
 
       if (inquiry == default) return NoContent();
 

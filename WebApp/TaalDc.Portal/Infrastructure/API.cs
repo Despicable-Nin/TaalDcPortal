@@ -9,6 +9,12 @@ public static class API
             return $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}";
         }
 
+        public static string GetInquiry(string baseUri, int id)
+        {
+            return $"{baseUri}/api/mkt/inquiries/{id}";
+        }
+
+
         public static string PostInquiry(string baseUri)
         {
             return $"{baseUri}/api/mkt/inquiries";

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaalDc.Portal.DTO.Marketing;
 using TaalDc.Portal.Services;
 
 namespace TaalDc.Portal.Controllers;
@@ -19,5 +20,13 @@ public class InquiriesController : BaseController<InquiriesController>
     {
         var result = await _marketingService.GetInquiries(10, 1);
         return View(result);
+    }
+
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var inquiry = await _marketingService.GetInquiryById(id);
+
+        return View(inquiry);
     }
 }
