@@ -11,7 +11,7 @@ public class MyProfile : Profile
         CreateMap<Property_ClientDto, PropertyCreate_ClientDto>()
             .ConstructUsing(o => new PropertyCreate_ClientDto(o.ProjectId, o.Id, o.PropertyName, o.LandArea));
         CreateMap<Tower_ClientDto, TowerCreate_ClientDto>()
-            .ConstructUsing(o => new TowerCreate_ClientDto(o.Id, o.PropertyId, o.PropertyName, o.Address));
+            .ConstructUsing(o => new TowerCreate_ClientDto(o.Id, o.PropertyId, o.TowerName, o.Address));
         CreateMap<Floor_ClientDto, FloorCreate_ClientDto>()
             .ConstructUsing(o =>
                 new FloorCreate_ClientDto(o.TowerId, o.Id, o.FloorName, o.FloorDescription, o.FloorPlanFilePath));
