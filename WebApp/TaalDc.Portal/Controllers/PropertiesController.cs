@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text.Encodings.Web;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -237,10 +238,19 @@ public class PropertiesController : BaseController<PropertiesController>
         var result = await _catalogService.UpdateUnit(model);
 
         LoggerInstance.LogCritical($"Result is: {result.IsSuccess}. {result.ErrorMessage}");
+        
+        var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
 
-        if (result.IsSuccess) return RedirectToAction("Units");
+        ViewData["Floors"] = floors.Data;
 
-        return View(model);
+
+        if (!result.IsSuccess) {
+            TempData["Message"] = result.ErrorMessage.ToString();
+            return View(model);
+        } 
+       
+        return RedirectToAction("Units");
+
     }
 
     public async Task<IActionResult> Units(

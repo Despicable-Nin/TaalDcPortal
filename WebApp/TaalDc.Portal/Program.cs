@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SeedWork;
 using Serilog;
 using TaalDc.Portal;
@@ -7,6 +8,18 @@ using TaalDc.Portal.Data;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Seed;
 using TaalDc.Portal.Services;
+
+
+static async Task MigrateDatabaseAsync(IApplicationBuilder app)
+{
+    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+    {
+        using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
+        {
+            await context.Database.MigrateAsync();
+        }
+    }
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +36,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
@@ -64,6 +78,7 @@ var app = builder.Build();
 
 try
 {
+    await MigrateDatabaseAsync(app);
     await Seed.Initialize(app);
 }
 catch (Exception ex)
@@ -94,6 +109,9 @@ app.Use(async (context, next) =>
         await next();
     }
 });
+
+
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
