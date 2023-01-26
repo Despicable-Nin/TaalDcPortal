@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaalDc.Portal.Controllers;
 
+[Authorize(Policy = "RequiredRolesAtLeastOne")]
 public class BaseController<T> : Controller where T : Controller
 {
     protected readonly string Token;

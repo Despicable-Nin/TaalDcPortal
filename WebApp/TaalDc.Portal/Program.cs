@@ -5,34 +5,25 @@ using SeedWork;
 using Serilog;
 using TaalDc.Portal;
 using TaalDc.Portal.Data;
+using TaalDc.Portal.Extensions;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Seed;
 using TaalDc.Portal.Services;
 
 
-static async Task MigrateDatabaseAsync(IApplicationBuilder app)
-{
-    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-    {
-        using (var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>())
-        {
-            await context.Database.MigrateAsync();
-        }
-    }
-}
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
 //Add Serilog
-#if DEBUG
 builder.Host.UseSerilog((ctx, lc) => lc
     .Enrich.FromLogContext()
     .MinimumLevel.Verbose()
     .WriteTo.Console()
+    .WriteTo.Debug()
     .WriteTo.Seq("http://localhost:5341"));
-#endif
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -44,41 +35,21 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddControllersWithViews();
+builder.Services.AddCustomMvc();
 
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddApiServices();
 
-//dependency injection for services
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<IAmCurrentUser, CurrentUser>();
-
-builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
-builder.Services.AddScoped(typeof(ICatalogService), typeof(CatalogService));
-builder.Services.AddScoped(typeof(IMarketingService), typeof(MarketingService));
-
-builder.Services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-
-builder.Services.AddHttpClient<IMarketingService, MarketingService>()
-    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-
-builder.Services.AddHttpClient<ICatalogService, CatalogService>()
-    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-
-builder.Services.AddHttpClient<ISalesService, SalesService>()
-    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-
+builder.Services.AddPolicies();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOptions();
 builder.Services.Configure<AppSettings>(configuration);
 
-
 var app = builder.Build();
 
 try
 {
-    await MigrateDatabaseAsync(app);
+    await app.MigrateDatabaseAsync();
     await Seed.Initialize(app);
 }
 catch (Exception ex)
