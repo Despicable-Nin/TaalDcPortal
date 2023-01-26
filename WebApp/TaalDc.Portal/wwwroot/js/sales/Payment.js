@@ -17,9 +17,13 @@ function processPaymentVerification(paymentVerificationType) {
 
     var orderId = modal.getAttribute('data-order-id');
     var paymentId = modal.getAttribute('data-payment-id');
-  
+    var paymentTypeId = modal.getAttribute('data-payment-type-id');
 
     var uri = `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
+
+    if (paymentVerificationType === "accept") {
+        uri = uri + `&paymentTypeId=${paymentTypeId}`;
+    }
 
     console.log('sales uri', uri);
 

@@ -69,7 +69,7 @@
                         <td>
                             @if (payment.PaymentStatus == "Pending" && CurrentUser.IsAdmin())
                             {
-                                <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id)" class="action-edit" href="#">Verify</a>
+                                <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id, @payment.PaymentTypeId)" class="action-edit" href="#">Verify</a>
                             }
 
                             @if(payment.PaymentStatus != "Void" || CurrentUser.IsAdmin()){
@@ -246,11 +246,12 @@
         }
 
 
-        function openAcceptPaymentModal(orderId, paymentId){
+        function openAcceptPaymentModal(orderId, paymentId, paymentTypeId){
             var paymentModal = document.getElementById('paymentVerifyModal');
 
             paymentModal.dataset.orderId = orderId;
             paymentModal.dataset.paymentId = paymentId;
+            paymentModal.dataset.paymentTypeId = paymentTypeId;
 
             var modal = new bootstrap.Modal(paymentModal, {});
 

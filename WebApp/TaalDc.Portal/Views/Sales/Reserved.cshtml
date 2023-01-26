@@ -63,7 +63,7 @@
                         <th>Unit No.</th>
                         <th>Sales Status</th>
                         <th>Unit Status</th>
-                        <th></th>
+                       @* <th></th>*@
                     </tr>
                     </thead>
                     <tbody>
@@ -79,10 +79,10 @@
                             <td>@sale.Unit</td>
                             <td>@(sale.Status != null ? sale.Status.ToUpper() : "")</td>
                             <td>@sale.UnitStatus.ToUpper()</td>
-                            <td>
+                            @*<td>
                                 <a class="action-edit" href="#">Edit</a>
                                 <a class="action-delete" href="#">Delete</a>
-                            </td>
+                            </td>*@
                         </tr>
                     }
 

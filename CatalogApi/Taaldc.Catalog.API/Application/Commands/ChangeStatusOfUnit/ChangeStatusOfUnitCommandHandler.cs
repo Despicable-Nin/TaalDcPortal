@@ -25,9 +25,9 @@ public class ChangeStatusOfUnitCommandHandler : IRequestHandler<ChangeStatusOfUn
             throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
                 new Exception("Unit not found."));
         
-        if (request.UnitStatus == unit.GetUnitStatusId())
-            throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
-                new InvalidOperationException("Cannot update unit status with the same."));
+        //if (request.UnitStatus == unit.GetUnitStatusId())
+        //    throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
+        //        new InvalidOperationException("Cannot update unit status with the same."));
 
         if ((int)UnitStatus.UnitIs.BLOCKED == unit.GetUnitStatusId())
         {
