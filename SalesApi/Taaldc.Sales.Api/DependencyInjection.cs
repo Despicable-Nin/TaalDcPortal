@@ -31,6 +31,8 @@ public static class DependencyInjection
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
             );
 
+        services.AddScoped<SalesDbContextInitializer>();
+
         return services;
     }
     

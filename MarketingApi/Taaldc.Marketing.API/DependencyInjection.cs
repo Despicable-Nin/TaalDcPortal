@@ -5,9 +5,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using SeedWork;
-using Taaldc.Marketing.API;
 using Taaldc.Marketing.Infrastructure;
 
 namespace Taaldc.Marketing.API;
@@ -30,6 +27,8 @@ public static class DependencyInjection
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
             );
+
+        services.AddScoped<MarketingDbContextInitializer>();
 
         return services;
     }

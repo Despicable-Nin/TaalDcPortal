@@ -37,6 +37,12 @@ app.UseSwaggerUI(options => {
     options.SwaggerEndpoint("/swagger/V1/swagger.json", "Marketing WebAPI");
 });
 
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<MarketingDbContextInitializer>();
+    await initialiser.InitialiseAsync();
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
