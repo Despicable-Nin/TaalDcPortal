@@ -1,4 +1,5 @@
-﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Unit_ClientDto>
+﻿@using TaalDc.Portal.ViewModels.Catalog
+@model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Unit_ClientDto>
 
 @{
     ViewBag.Title = "Units";
@@ -102,8 +103,16 @@
                             <td>@prop.Price.ToString("#,##0.00")</td>
                             <td>@prop.UnitStatus</td>
                             <td>
-                                <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>
+                                @if (prop.UnitStatusId == 2 || prop.UnitStatusId == 3)
+                                {
+
+                                }
+                                else
+                                {
+                                    <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id">Edit</a>
+                                    <a class="action-delete" href="#">Delete</a>
+                                }
+                                
                             </td>
                         </tr>
                     }
