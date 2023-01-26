@@ -12,7 +12,7 @@ public class CatalogDbContextDesignFactory : IDesignTimeDbContextFactory<Catalog
     {
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>()
             .UseSqlServer("Server=localhost;Database=taaldb_admin;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
-
+       
         return new CatalogDbContext(optionsBuilder.Options, null, new NoMediator());
     }
 

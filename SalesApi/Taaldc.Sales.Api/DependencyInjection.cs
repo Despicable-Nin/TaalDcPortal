@@ -25,7 +25,7 @@ public static class DependencyInjection
                     options.UseSqlServer(connectionString,
                         sqlOptions =>
                         {
-                            sqlOptions.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
+                            sqlOptions.MigrationsAssembly(typeof(SalesDbContext).Assembly.FullName);
                             sqlOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)

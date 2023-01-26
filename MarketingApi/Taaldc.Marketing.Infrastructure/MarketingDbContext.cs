@@ -14,7 +14,7 @@ public class MarketingDbContext : DbContext, IUnitOfWork
     
     public const string DEFAULT_SCHEMA = "marketing";
 
-    public MarketingDbContext(DbContextOptions options, IMediator mediator, IAmCurrentUser currentUser) : base(options)
+    public MarketingDbContext(DbContextOptions<MarketingDbContext> options, IMediator mediator, IAmCurrentUser currentUser) : base(options)
     {
         _mediator = mediator;
         _currentUser = currentUser;
