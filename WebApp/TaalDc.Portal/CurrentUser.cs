@@ -13,10 +13,22 @@ public class CurrentUser : IAmCurrentUser
         IdentityId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         Roles = httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)?.Select(i => i.Value).ToArray();
         _isAuthenticated = !string.IsNullOrEmpty(Email);
+
+        if (Roles == null) Roles = Array.Empty<string>();
     }
-    
+
     public string Name { get; }
     public string[] Roles { get; }
     public string Email { get; }
     public string IdentityId { get; }
+
+    public bool IsAdmin()
+    {
+        return Roles.Contains("ADMIN");
+    }
+
+    public bool IsBroker()
+    {
+        return Roles.Contains("BROKER");
+    }
 }

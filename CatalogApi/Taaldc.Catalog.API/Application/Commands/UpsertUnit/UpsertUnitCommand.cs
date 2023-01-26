@@ -7,6 +7,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
 {
     public UpsertUnitCommand(
         int? unitId, 
+        int? unitStatusId,
         int unitTypeId, 
         int scenicViewId, 
         string unitNo, 
@@ -14,9 +15,11 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         double floorArea, 
         double balconyArea, 
         decimal sellingPrice,
-        string remarks)
+        string remarks,
+        bool isActive)
     {
         UnitId = unitId;
+        UnitStatusId = unitStatusId;
         UnitTypeId = unitTypeId;
         ScenicViewId = scenicViewId;
         UnitNo = unitNo;
@@ -25,6 +28,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         BalconyArea = balconyArea;
         SellingPrice = sellingPrice;
         Remarks = !string.IsNullOrEmpty(remarks)? remarks: "";
+        IsActive = isActive;
     }
 
     public int? UnitId { get; }
@@ -33,9 +37,11 @@ public class UpsertUnitCommand : IRequest<CommandResult>
     public string UnitNo { get; }
     public int FloorId { get; }
     public double FloorArea { get; }
-    public double BalconyArea { get; set; }
+    public double BalconyArea { get;  }
     public decimal SellingPrice { get; }
-    public string Remarks { get; set; }
+    public string Remarks { get; }
+    public int? UnitStatusId { get; }
+    public bool IsActive { get; } 
 }
 
 public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
@@ -49,5 +55,6 @@ public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
         RuleFor(i => i.FloorArea).NotEmpty();
         RuleFor(i => i.BalconyArea).NotEmpty();
         RuleFor(i => i.SellingPrice).NotEmpty();
+        RuleFor(i => i.UnitStatusId).NotEmpty().When(i => i.UnitId.HasValue);
     }
 }

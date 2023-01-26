@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Catalog;
-@using TaalDc.Portal.Models;
-@model IEnumerable<UnitTypeDTO>
+﻿@model IEnumerable<TaalDc.Portal.DTO.Catalog.UnitType_ClientDto>
 
 @{
     ViewBag.Title = "Unit Types";
@@ -37,30 +35,30 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Unit Type</th>
-                            <th>Short Code</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Unit Type</th>
+                        <th>Short Code</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var prop in Model)
-                        {
-                            <tr>
-                                <td>@prop.Id</td>
-                                <td>@prop.Name</td>
-                                <td>@prop.ShortCode</td>
-                                <td>
-                                    <a class="action-edit" href="#">Edit</a>
-                                    <a class="action-delete" href="#">Delete</a>
-                                </td>
-                            </tr>
-                        }
+                    @foreach (var prop in Model)
+                    {
+                        <tr>
+                            <td>@prop.Id</td>
+                            <td>@prop.Name</td>
+                            <td>@prop.ShortCode</td>
+                            <td>
+                                <a class="action-edit" href="#">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
-           @* <div>
+            @* <div>
                 <ul class="pagination">
                     <li class="page-item disabled">
                         <a class="page-link alink noselect">Prev</a>

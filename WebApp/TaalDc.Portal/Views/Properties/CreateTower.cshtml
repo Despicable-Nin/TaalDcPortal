@@ -1,5 +1,4 @@
-﻿@using TaalDc.Portal.ViewModels.Catalog
-@model TowerCreateDTO
+﻿@model TaalDc.Portal.ViewModels.Catalog.TowerCreate_ClientDto
 
 @{
     ViewBag.Title = "Create Tower";
@@ -17,7 +16,9 @@
     <div>
         <form id="towerForm" method="post" class="row mb-5 needs-validation" asp-action="CreateTower" asp-controller="Properties">
             <div class="mb-3 col-lg-8">
-                <label asp-for="PropertyId" class="form-label"><strong>Property</strong></label>
+                <label asp-for="PropertyId" class="form-label">
+                    <strong>Property</strong>
+                </label>
                 <select asp-for="PropertyId" class="form-control form-select" required>
                     <option value="1">
                         One Tolentino East Residences
@@ -28,21 +29,25 @@
                 </div>
             </div>
             <div class="mb-3 col-lg-8">
-                <label asp-for="Name" class="form-label"><strong>Tower Name</strong></label>
-                <input asp-for="Name" class="form-control" required />
+                <label asp-for="Name" class="form-label">
+                    <strong>Tower Name</strong>
+                </label>
+                <input asp-for="Name" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="mb-3 col-lg-8">
-                <label asp-for="Address" class="form-label"><strong>Address</strong></label>
-                <input asp-for="Address" class="form-control" required />
+                <label asp-for="Address" class="form-label">
+                    <strong>Address</strong>
+                </label>
+                <input asp-for="Address" class="form-control" required/>
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
             </div>
             <div class="col-lg-12">
-                <input id="tower-form-submit" class="btn btn-primary" type="submit" value="Save" />
+                <input id="tower-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>
@@ -100,9 +105,11 @@
                             },
                             onClick: function () { } // Callback after click
                         }).showToast();
-                    }, error: function () {
+                        
+                        setTimeout(() => window.location.replace("/Properties/Towers"),500);
+                    }, error: function (XMLHttpRequest, textStatus, errorThrown) {
                         Toastify({
-                            text: "Something went wrong. Please try again later.",
+                            text: errorThrown,
                             duration: 3000,
                             close: true,
                             gravity: "top", // `top` or `bottom`

@@ -8,14 +8,16 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 {
 	public interface IFloorQueries
 	{
-		Task<IEnumerable<AvailableFloor>> GetAvailableFloorsByUnitType(int? unitTypeId);
-		Task<PaginationQueryResult<FloorDTO>> GetActiveFloors(
+		Task<IEnumerable<AvailableFloorsQueryResult>> GetAvailableFloorsByUnitType(int? unitTypeId);
+		Task<PaginationQueryResult<FloorQueryResult>> GetActiveFloors(
 			 string filter,
 			 string sortBy,
 			 SortOrderEnum sortOrder,
 			 int pageNumber = 1,
 			 int pageSize = 10
 		);
+
+		Task<FloorQueryResult> GetFloorById(int id);
 	}
 
 	public class FloorQueries : IFloorQueries
@@ -29,7 +31,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 			: connectionString;
 		}
 
-        public async Task<PaginationQueryResult<FloorDTO>> GetActiveFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginationQueryResult<FloorQueryResult>> GetActiveFloors(string filter, string sortBy, SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
         {
             var query = $"SELECT f.Id," +
 				$"t.Id AS TowerId" +
@@ -59,7 +61,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
             await using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(CancellationToken.None);
 
-            var result = await connection.QueryAsync<FloorDTO>(query);
+            var result = await connection.QueryAsync<FloorQueryResult>(query);
 
             var countQuery = $"WITH floor_cte AS (" +
 				$"SELECT f.Id, t.Id AS TowerId, p.Id AS PropertyId " +
@@ -76,10 +78,38 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 
             var temp = await connection.QueryAsync<int>(countQuery);
 
-            return new PaginationQueryResult<FloorDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+            return new PaginationQueryResult<FloorQueryResult>(pageSize, pageNumber, temp.SingleOrDefault(), result);
         }
 
-        public async Task<IEnumerable<AvailableFloor>> GetAvailableFloorsByUnitType(int? unitTypeId)
+        public async Task<FloorQueryResult> GetFloorById(int id)
+        {
+	        var query = "SELECT DISTINCT f.Id " +
+	                    $",t.Id AS [TowerId] " +
+	                    $",p.Id as [PropertyId] " +
+	                    $",p.[Name] AS [PropertyName] " +
+	                    $",t.[Name] AS [TowerName] " +
+	                    $",f.[Name] AS [FloorName] " +
+	                    $",f.[Description] AS [FloorDescription] " +
+	                    $",f.[FloorPlanFilePath] " +
+	                    $",(SELECT COUNT(Id) FROM [taaldb_admin].[catalog].[unit] WHERE FloorId = f.Id) AS Units " +
+	                    $"FROM catalog.floors f " +
+	                    $"JOIN catalog.tower t ON f.TowerId = t.Id " +
+	                    $"JOIN catalog.property p ON t.PropertyId = p.Id " +
+	                    $"LEFT JOIN catalog.unit u ON u.FloorId = f.Id  " +
+	                    $"WHERE f.Id = {id} ";
+	                   
+
+	        await using var connection = new SqlConnection(_connectionString);
+
+	        await connection.OpenAsync();
+
+	        var result = await connection.QueryAsync<FloorQueryResult>(query);
+
+	        return result.FirstOrDefault();
+
+        }
+
+        public async Task<IEnumerable<AvailableFloorsQueryResult>> GetAvailableFloorsByUnitType(int? unitTypeId)
 		{
 			var availableFloorsQuery = $"SELECT " +
 			$"DISTINCT(f.Id) AS FloorId, " +
@@ -95,7 +125,7 @@ namespace Taaldc.Catalog.API.Application.Queries.Floors
 			await using var connection = new SqlConnection(_connectionString);
 			await connection.OpenAsync(CancellationToken.None);
 
-			var result = await connection.QueryAsync<AvailableFloor>(availableFloorsQuery);
+			var result = await connection.QueryAsync<AvailableFloorsQueryResult>(availableFloorsQuery);
 
 			return result;
 		}

@@ -18,11 +18,19 @@ public class FloorsController : ApiBaseController<FloorsController>
         _floorQueries = floorQueries;
     }
 
+	[HttpGet("{id}")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesErrorResponseType(typeof(BadRequestResult))]
+	public async Task<IActionResult> GetFloorById(int id)
+	{
+		return Ok(await _floorQueries.GetFloorById(id));
+	}
+
     
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertFloor( UpsertFloorDTO model)
+    public async Task<IActionResult> UpsertFloor( FloorUpsert_HostDto model)
     {
         return Ok(await _mediator.Send(new UpsertFloorCommand(model.TowerId, model.FloorId,model.Name, model.Description, model.FloorPlanFilePath)));
     }

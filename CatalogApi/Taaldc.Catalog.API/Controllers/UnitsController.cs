@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,15 +15,20 @@ namespace Taaldc.Catalog.API.Controllers;
 public class UnitsController : ApiBaseController<UnitsController>
 {
     private readonly IUnitQueries _unitQueries;
+    private readonly IMapper _mapper;
 
-    public UnitsController(
-        IUnitQueries unitQueries,
-        ILogger<UnitsController> logger, 
-        IMediator mediator) : base(logger, mediator)
+
+    public UnitsController(ILogger<UnitsController> logger, IMediator mediator, IUnitQueries unitQueries, IMapper mapper) : base(logger, mediator)
     {
         _unitQueries = unitQueries;
+        _mapper = mapper;
     }
 
+    protected UnitsController(IUnitQueries unitQueries, IMapper mapper)
+    {
+        _unitQueries = unitQueries;
+        _mapper = mapper;
+    }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -35,15 +41,18 @@ public class UnitsController : ApiBaseController<UnitsController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertUnit( UpsertUnitDTO model)
+    public async Task<IActionResult> UpsertUnit( UnitUpsert_HostDto dto)
     {
-        return Ok(await _mediator.Send(new UpsertUnitCommand(model.UnitId, model.UnitTypeId, model.ScenicViewId,model.UnitNo, model.FloorId, model.FloorArea, model.BalconyArea, model.Price, model.Remarks)));
+        var command = new UpsertUnitCommand(dto.UnitId, dto.UnitStatusId, dto.UnitTypeId, dto.ScenicViewId, dto.UnitNo,
+            dto.FloorId, dto.FloorArea, dto.BalconyArea, dto.Price, dto.Remarks, dto.IsActive);
+
+        return Ok(await _mediator.Send(command));
     }
     
     [HttpPost("change-status")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> ChangeStatusOfUnit( ChangeStatusOfUnitDTO model)
+    public async Task<IActionResult> ChangeStatusOfUnit( UnitUpdateUnitStatus_HostDto model)
     {
         return Ok(await _mediator.Send(new ChangeStatusOfUnitCommand(model.UnitId, model.UnitStatus, model.Remarks)));
     }

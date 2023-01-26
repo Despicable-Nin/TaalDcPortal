@@ -14,7 +14,7 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.Property(b => b.Id).UseHiLo("paymentseq", SalesDbContext.DEFAULT_SCHEMA);
 
-        builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique();
+       // builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique(false);
 
         builder.Property<int>("OrderId")
             .IsRequired();

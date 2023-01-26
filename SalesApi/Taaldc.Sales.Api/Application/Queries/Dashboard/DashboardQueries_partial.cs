@@ -28,10 +28,10 @@ public partial class DashboardQueries
         return result;
     }
 
-    public async Task<AvailabilityOfResidentialUnitsPerViewDTO> GetResidentaialUnitAvailabilityPerView()
+    public async Task<IEnumerable<ResidentialUnitCountPerViewDTO>> GetResidentaialUnitAvailabilityPerView()
     {
         var query = "SELECT DISTINCT U.[ScenicView] [View] " +
-                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.ScenicViewId = ScenicViewId GROUP BY ScenicViewId) [Available] " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.ScenicViewId = ScenicViewId AND UnitStatusId = 1 GROUP BY ScenicViewId) [Available] " +
                     "FROM [taaldb_sales].[sales].[unitreplica] U " +
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
@@ -43,15 +43,15 @@ public partial class DashboardQueries
         
         var result = await connection.QueryAsync<ResidentialUnitCountPerViewDTO>(query);
 
-        var countQuery = "SELECT COUNT(*) [COUNT] " +
-                         "FROM [taaldb_sales].[sales].[unitreplica] U " +
-                         "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1 ";
-        
-        var countResult = (await connection.QueryAsync<int>(countQuery)).SingleOrDefault();
+        //var countQuery = "SELECT COUNT(*) [COUNT] " +
+        //                 "FROM [taaldb_sales].[sales].[unitreplica] U " +
+        //                 "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1 ";
 
-        return new AvailabilityOfResidentialUnitsPerViewDTO(countResult, result);
+        //var countResult = (await connection.QueryAsync<int>(countQuery)).SingleOrDefault();
 
+        //return new AvailabilityOfResidentialUnitsPerViewDTO(countResult, result);
 
+        return result;
     }
 
     public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType()
@@ -84,7 +84,7 @@ public partial class DashboardQueries
                     ",(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [MaxArea] " +
                     ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] " +
                     ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] " +
-                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.UnitTypeId = UnitTypeId GROUP BY UnitTypeId) [Available] " +
+                    ",(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.UnitTypeId = UnitTypeId AND UnitStatusId = 1 GROUP BY UnitTypeId) [Available] " +
                     "FROM [taaldb_sales].[sales].[unitreplica] U " +
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +

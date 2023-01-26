@@ -1,0 +1,71 @@
+﻿@using TaalDc.Portal.DTO.Marketing;
+@model InquiryDto
+
+@{
+    ViewBag.Title = "Inquiry Details";
+    Layout = "_Layout";
+
+
+    var salutationArray = Model.Salutation.Split(":");
+    var withOtherSalutation = salutationArray[0] == "Other";
+
+    var salutation = withOtherSalutation ? salutationArray[1] : salutationArray[0];
+}
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Inquiries" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+        </li>
+    </ul>
+    
+    <div class="tab-content">
+        <h4 class="primary-color mb-5 mt-3">
+            <strong>Inquiry Details</strong>
+        </h4>
+
+
+        <div class="row">
+            <div class="col-lg-4">
+                <p class="mb-5">
+                    <strong class="primary-color">Inquiry Date</strong> <br />
+                    @Model.DateOfInquiry.ToString("MMMM dd, yyyy hh:mm tt")
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Full Name</strong> <br/>
+                     @salutation @Model.FirstName @Model.LastName
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Inquiry Type</strong> <br/>
+                    @Model.InquiryType
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Email Address</strong> <br/>
+                    @Model.EmailAddress
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Contact No.</strong> <br/>
+                    @Model.ContactNo
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Address</strong> <br/>
+                    @Model.TownCity, @Model.Province, @Model.Country
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Property Inquired</strong> <br/>
+                    @Model.Property
+                </p>
+                <p class="mb-5">
+                    <strong class="primary-color">Message</strong> <br/>
+                    @Model.Message
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <p class="mb-5">
+                    <strong class="primary-color">Status</strong> <br/>
+                    @Model.Status
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

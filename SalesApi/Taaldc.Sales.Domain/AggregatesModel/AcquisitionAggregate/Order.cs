@@ -58,9 +58,9 @@ public class Order : DomainEntity, IAggregateRoot
         string remarks, 
         string correlationId = default)
     {
-        if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
-            throw new SalesDomainException(nameof(AddPayment),
-                new InvalidOperationException("Duplicate payment confirmation number."));
+        //if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
+        //    throw new SalesDomainException(nameof(AddPayment),
+        //        new InvalidOperationException("Duplicate payment confirmation number."));
 
         Payment payment = new(
             paymentTypeId, 
@@ -105,7 +105,17 @@ public class Order : DomainEntity, IAggregateRoot
         {
             _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         }
-        
+    }
+
+    public void VoidPayment(int paymentId, string verifiedBy)
+    {
+        if (_payments.Any(i =>
+                i.Id == paymentId && i.GetPaymentStatusId() != PaymentStatus.GetStatusId(PaymentStatus.Pending)))
+        {
+            throw new SalesDomainException(nameof(AcceptPayment), new Exception("Payment has already been processed."));
+        }
+
+        _payments.SingleOrDefault(i => i.Id == paymentId).VoidPayment(verifiedBy);
     }
 
     public bool HasReservation() => _payments.Any()

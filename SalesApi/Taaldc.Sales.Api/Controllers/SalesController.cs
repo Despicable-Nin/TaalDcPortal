@@ -9,6 +9,7 @@ using Taaldc.Sales.API.Application.Commands.ProcessPayment;
 using Taaldc.Sales.API.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
+using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 
 namespace Taaldc.Sales.Api.Controllers
 {
@@ -37,15 +38,18 @@ namespace Taaldc.Sales.Api.Controllers
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> Post([FromBody] SellUnitDTO dto)
         {
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
+            {
+                dto.Broker = dto.Broker ?? "In-house";
+            }
+
             SellUnitCommand command = _mapper.Map<SellUnitCommand>(dto);
             var result = await _mediator.Send(command);
-            
-
             
             return Ok(result);
         }
         
-        [HttpGet("{id}/payments/{paymentId}/approve")]
+        [HttpPost("{id}/payments/{paymentId}/approve")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> AcceptPayment(int id,int paymentId)
@@ -53,7 +57,7 @@ namespace Taaldc.Sales.Api.Controllers
             //this is for verification purposes --- only admin can do this
             //for now manually check role of user.. 
 
-            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("admin"))
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
             {
 
                 AcceptPaymentCommand command = new AcceptPaymentCommand(id, paymentId);
@@ -62,7 +66,26 @@ namespace Taaldc.Sales.Api.Controllers
 
             return BadRequest("Unauthorized.");
         }
-        
+
+
+        [HttpPost("{id}/payments/{paymentId}/void")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> VoidPayment(int id, int paymentId)
+        {
+            //this is for verification purposes --- only admin can do this
+            //for now manually check role of user.. 
+
+            if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
+            {
+
+                VoidPaymentCommand command = new VoidPaymentCommand(id, paymentId);
+                return Ok(await _mediator.Send(command));
+            }
+
+            return BadRequest("Unauthorized.");
+        }
+
         [HttpPost("{id}/payments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -94,13 +117,14 @@ namespace Taaldc.Sales.Api.Controllers
             int? viewId,
             int unitStatus = 1, 
             int pageNumber = 1,
-            int pageSize = 20
+            int pageSize = 20,
+            string broker = ""
            )
         {
             if (unitStatus <= 0) return BadRequest("Invalid unit status");
             if (unitStatus > 4) return BadRequest("Invalid unit status");
             
-            return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId, unitTypeId, viewId));
+            return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId, unitTypeId, viewId,broker));
         }
 
         [AllowAnonymous]

@@ -17,22 +17,22 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.HasSequence("floorseq", "catalog")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("floorseq", "catalog")
+                .StartsAt(2000L);
 
-            modelBuilder.HasSequence("projectseq", "catalog")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("projectseq", "catalog")
+                .StartsAt(2000L);
 
-            modelBuilder.HasSequence("propertyseq", "catalog")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("propertyseq", "catalog")
+                .StartsAt(2000L);
 
-            modelBuilder.HasSequence("towerseq", "catalog")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("towerseq", "catalog")
+                .StartsAt(2000L);
 
             modelBuilder.HasSequence<int>("unitseq", "catalog")
                 .StartsAt(2000L);

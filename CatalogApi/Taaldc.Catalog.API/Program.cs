@@ -12,6 +12,7 @@ using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
+using Taaldc.Catalog.Infrastructure;
 using Taaldc.Catalog.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,10 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 //register repositories
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
 builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
+
+
+builder.Services.AddAutoMapper(typeof(Program));
+
 
 builder.Services.AddScoped<IPropertyQueries>(i =>
 {
@@ -87,6 +92,12 @@ app.UseSwaggerUI(options => {
     options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI");
 });
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<CatalogDbContextInitializer>();
+    await initialiser.InitialiseAsync();
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

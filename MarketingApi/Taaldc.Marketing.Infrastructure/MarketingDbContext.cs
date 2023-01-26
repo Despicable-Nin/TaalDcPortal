@@ -14,7 +14,7 @@ public class MarketingDbContext : DbContext, IUnitOfWork
     
     public const string DEFAULT_SCHEMA = "marketing";
 
-    public MarketingDbContext(DbContextOptions options, IMediator mediator, IAmCurrentUser currentUser) : base(options)
+    public MarketingDbContext(DbContextOptions<MarketingDbContext> options, IMediator mediator, IAmCurrentUser currentUser) : base(options)
     {
         _mediator = mediator;
         _currentUser = currentUser;
@@ -34,8 +34,6 @@ public class MarketingDbContext : DbContext, IUnitOfWork
 
     public Task<int> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {
-        this.DbAudit(_currentUser);
-
         return base.SaveChangesAsync(cancellationToken);
     }
 

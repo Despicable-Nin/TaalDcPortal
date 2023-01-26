@@ -1,28 +1,25 @@
-using System.Runtime.InteropServices;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using TaalDc.Portal.Data;
 using TaalDc.Portal.ViewModels.Users;
 
 namespace TaalDc.Portal.Services;
 
 public class AccountService : IAccountService
 {
+    private readonly ApplicationDbContext _applicationDbContext;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
-    private readonly IEmailSender _emailSender;
-    private readonly IUserEmailStore<IdentityUser> _emailStore;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private ILogger<AccountService> _logger;
+    private readonly ILogger<AccountService> _logger;
 
 
-    public AccountService(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IEmailSender emailSender, SignInManager<IdentityUser> signInManager,  ILogger<AccountService> logger)
+    public AccountService(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager,
+        ILogger<AccountService> logger, ApplicationDbContext applicationDbContext)
     {
         _roleManager = roleManager;
         _userManager = userManager;
-        _emailSender = emailSender;
-        _signInManager = signInManager;
         _logger = logger;
+        _applicationDbContext = applicationDbContext;
     }
 
     public async Task<UserIndexViewModel> GetListOfUsers()
@@ -32,14 +29,17 @@ public class AccountService : IAccountService
 
         UserIndexViewModel vm = new();
 
-        users.ForEach(i =>
+        foreach (var user in users)
         {
             var currentRoles = new List<string>();
-            foreach (var r in roles)
-                if (_userManager.IsInRoleAsync(i, r.Name).Result)
-                    currentRoles.Add(r.Name);
-            vm.AddUser(new UserViewModel(i.NormalizedUserName, i.NormalizedEmail, i.Id, currentRoles.ToArray()));
-        });
+            foreach (var r in roles.Select(ro => ro.NormalizedName))
+                if (_userManager.IsInRoleAsync(user, r).Result)
+                    currentRoles.Add(r);
+            var profile =
+                _applicationDbContext.UserProfiles.FirstOrDefault(profile => profile.Identity == user.Id);
+            vm.AddUser(new UserViewModel(user.Id, user.Email, profile?.FirstName, profile?.LastName,
+                profile?.NameSuffix, profile?.MiddleName, currentRoles.ToArray(), currentRoles.Any()));
+        }
 
         return vm;
     }
@@ -54,16 +54,18 @@ public class AccountService : IAccountService
         //we can try to store this in localstorage
         return vm.ToArray();
     }
-    
-    public async Task<IEnumerable<string>> GetRolesAsync() => await _roleManager.Roles.AsNoTracking()
-        .Where(i => i.NormalizedName != "GUEST")
-        .Select(i => i.NormalizedName)
-        .OrderBy(i => i)
-        .ToArrayAsync();
-   
-    public async Task<string> CreateUser(CreateUserViewModel vm)
+
+    public async Task<IEnumerable<string>> GetRolesAsync()
     {
-        
+        return await _roleManager.Roles.AsNoTracking()
+            .Where(i => i.NormalizedName != "GUEST")
+            .Select(i => i.NormalizedName)
+            .OrderBy(i => i)
+            .ToArrayAsync();
+    }
+
+    public async Task<string> CreateUser(UserCreateDto vm)
+    {
         var user = await _userManager.FindByEmailAsync(vm.Emailaddress);
 
         if (user == default)
@@ -88,33 +90,47 @@ public class AccountService : IAccountService
 
         //if successfully created or fetched -- try to check if user has a role, if not, assign role
         if (await _userManager.IsInRoleAsync(user, vm.Role))
-        {
             return $"User has been assigned a role already. {user.Email}-{vm.Role}";
-        }
 
         //clear previous roles
         var assignRoleResult = await _userManager.AddToRoleAsync(user, vm.Role);
         if (!assignRoleResult.Succeeded) return string.Join(",", assignRoleResult.Errors);
 
-        _logger.LogInformation("Finished seeding identity...");
+        _logger.LogInformation("Finished creating identity...");
+
+        _logger.LogInformation("Creating user profile");
+
+        var userProfile = new UserProfile(vm.FirstName, vm.LastName, vm.MiddleName, vm.NameSuffix, user.Id);
+
+        try
+        {
+            _applicationDbContext.UserProfiles.Add(userProfile);
+
+            await _applicationDbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(nameof(CreateUser), ex);
+        }
+
 
         return string.Empty;
-
     }
 
-    public async Task<string> UpdateUser(string id, UpdateUserViewModel vm, bool resetPassword = false)
+    public async Task<string> UpdateUser(string id, UserUpdateDto vm, bool resetPassword = false)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(i => i.Id == id);
-        
+
         //get role
         var current = await _userManager.GetRolesAsync(user);
 
         var result = await _userManager.RemoveFromRolesAsync(user, current);
 
         if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
-        
-        result = await _userManager.AddToRoleAsync(user, vm.Role);
-        
+
+        if (vm.IsActive)
+            result = await _userManager.AddToRoleAsync(user, vm.Role);
+
         if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
 
         if (resetPassword)
@@ -123,20 +139,45 @@ public class AccountService : IAccountService
             if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
         }
 
-        //user.UserName = vm.Username;
+        try
+        {
+            var profile =
+                _applicationDbContext.UserProfiles.FirstOrDefault(profile => profile.Identity == user.Id);
 
-        //result = await _userManager.UpdateAsync(user);
-        //if (!result.Succeeded) return string.Join(",", result.Errors.Select(i => $"{i.Code} - {i.Description}"));
+            if (profile == default)
+            {
+                profile = new UserProfile(vm.FirstName, vm.LastName, vm.MiddleName, vm.NameSuffix, user.Id);
+                _applicationDbContext.UserProfiles.Add(profile);
+            }
+            else
+            {
+                profile.FirstName = vm.FirstName;
+                profile.MiddleName = vm.MiddleName;
+                profile.LastName = vm.LastName;
+                profile.NameSuffix = vm.NameSuffix;
+
+                _applicationDbContext.UserProfiles.Update(profile);
+            }
+
+            await _applicationDbContext.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(nameof(UpdateUser), ex, ex.InnerException);
+        }
 
 
         return string.Empty;
-
     }
 
     public async Task<UserViewModel> GetUserById(string id)
     {
         var user = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(i => i.Id == id);
         var roles = await _userManager.GetRolesAsync(user);
-        return new UserViewModel(user.UserName, user.Email, user.Id, roles.ToArray());
+        var profile =
+            _applicationDbContext.UserProfiles.FirstOrDefault(profile => profile.Identity == user.Id);
+
+        return new UserViewModel(user.Id, user.Email, profile?.FirstName, profile?.LastName, profile?.MiddleName,
+            profile?.NameSuffix, roles.ToArray(), roles.Any());
     }
 }

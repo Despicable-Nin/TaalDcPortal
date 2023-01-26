@@ -1,17 +1,16 @@
 ﻿using TaalDc.Portal.DTO.Sales;
 
-namespace TaalDc.Portal.ViewModels.Sales
+namespace TaalDc.Portal.ViewModels.Sales;
+
+public class SalesViewModel
 {
-    public class SalesViewModel
+    public SalesViewModel(IEnumerable<Payment_ClientDto> payments, int orderId)
     {
-        public SalesViewModel(IEnumerable<PaymentDTO> payments, int orderId)
-        {
-            Payments = payments;
-            OrderId = orderId;
-        }
-
-
-        public IEnumerable<PaymentDTO> Payments { get; private set; }
-        public int OrderId { get; private set; }
+        Payments = payments;
+        OrderId = orderId;
     }
+
+
+    public IEnumerable<Payment_ClientDto> Payments { get; }
+    public int OrderId { get; }
 }

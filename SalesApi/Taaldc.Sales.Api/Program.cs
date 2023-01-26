@@ -65,6 +65,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var initialiser = scope.ServiceProvider.GetRequiredService<SalesDbContextInitializer>();
+    await initialiser.InitialiseAsync();
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

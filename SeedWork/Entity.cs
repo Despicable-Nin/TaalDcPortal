@@ -63,7 +63,7 @@ public abstract class Entity: IAuditable
     public DateTimeOffset CreatedOn { get; private set;} = DateTimeOffset.Now;
     public string ModifiedBy { get; private set; } = string.Empty;
     public DateTimeOffset ModifiedOn { get;private set; } = DateTimeOffset.Now;
-    public bool IsActive { get; private set; } = true;
+    public bool IsActive { get;  set; } = true;
 
     public void AuditOnCreate(string user)
     {
@@ -81,7 +81,7 @@ public abstract class Entity: IAuditable
         ModifiedOn = now;
     }
 
-    public void AuditOnUpdate(string user, bool isActive)
+    public void AuditOnUpdate(string user)
     {
         //fail-fast guard clause
         if (string.IsNullOrWhiteSpace(user))
@@ -89,8 +89,7 @@ public abstract class Entity: IAuditable
                 new ArgumentNullException("user field should not be empty."));
         
         ModifiedBy = user;
-        ModifiedOn = DateTimeOffset.Now;;
-        IsActive = isActive;
+        ModifiedOn = DateTimeOffset.Now;
 
     }
 

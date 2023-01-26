@@ -5,7 +5,7 @@ public record BrokerListsViewModel
     public BrokerListsViewModel(string name, string email, string identityId)
     {
         Name = name;
-        Email = email;
+        Email = email.ToUpper();
         IdentityId = identityId;
     }
 

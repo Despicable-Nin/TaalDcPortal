@@ -9,7 +9,13 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Comma
 {
     private readonly IAmCurrentUser _currentUser;
     private readonly IOrderRepository _repository;
-    
+
+    public AddPaymentCommandHandler(IOrderRepository orderRepository, IAmCurrentUser currentUser)
+    {
+        _repository = orderRepository;
+        _currentUser = currentUser;
+    }
+
     public async Task<CommandResult> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
     {
         var order = await _repository.FindOrderByIdAsync(request.TransactionId);

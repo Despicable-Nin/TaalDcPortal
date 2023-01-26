@@ -1,3 +1,4 @@
+using System.Drawing.Printing;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Marketing;
@@ -7,11 +8,11 @@ namespace TaalDc.Portal.Services;
 
 public class MarketingService : IMarketingService
 {
-    private readonly IOptions<AppSettings> _settings;
     private readonly HttpClient _httpClient;
     private readonly ILogger<MarketingService> _logger;
 
     private readonly string _removeServiceBaseUrl;
+    private readonly IOptions<AppSettings> _settings;
 
 
     public MarketingService(IOptions<AppSettings> settings, HttpClient httpClient, ILogger<MarketingService> logger)
@@ -32,8 +33,20 @@ public class MarketingService : IMarketingService
     {
         var uri = API.Marketing.GetInquiries(_removeServiceBaseUrl, pageSize, pageNumber);
         var responseString = await _httpClient.GetStringAsync(uri);
-        
-        var result = JsonSerializer.Deserialize<InquriesResult>(responseString, new JsonSerializerOptions(){PropertyNameCaseInsensitive = true});
+
+        var result = JsonSerializer.Deserialize<InquriesResult>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<InquiryDto> GetInquiryById(int id)
+    {
+        var uri = API.Marketing.GetInquiry(_removeServiceBaseUrl, id);
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<InquiryDto>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }

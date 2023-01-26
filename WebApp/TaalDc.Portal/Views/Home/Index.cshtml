@@ -1,10 +1,195 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using TaalDc.Portal.DTO.Sales;
+@model UnitStats_ClientDto
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
 <div class="container-fluid">
-    <h1><strong>Dashboard</strong></h1>
-    <p>
-        Stats and reports will go here...
-    </p>
+    
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Units</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Home" asp-action="Parking">Parking</a>
+        </li>
+    </ul>
+
+
+    <div class="mt-3 mb-3">
+        <div class="unit-summary">
+            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                <div class="card-body">
+                    <p class="status available">
+                        <strong>Available</strong>
+                    </p>
+                    <p class="unit">
+                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "AVAILABLE").Sum(i => i.Count)
+                    </p>
+                </div>
+            </div>
+
+            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                <div class="card-body">
+                    <p class="status reserved">
+                        <strong>Reserved</strong>
+                    </p>
+                    <p class="unit">
+                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "RESERVED").Sum(i => i.Count)
+                    </p>
+                </div>
+            </div>
+
+          <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                <div class="card-body">
+                    <p class="status sold">
+                        <strong>Sold</strong>
+                    </p>
+                    <p class="unit">
+                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "SOLD").Sum(i => i.Count)
+                    </p>
+                </div>
+            </div>
+
+             <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                <div class="card-body">
+                    <p class="status blocked">
+                        <strong>Blocked</strong>
+                    </p>
+                    <p class="unit">
+                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "BLOCKED").Sum(i => i.Count)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card availability-per-unittype mb-3">
+            <div class="card-header bg-white">
+                <h5 class="text-center mt-2 mb-2"><strong>AVAILABILITY PER UNIT TYPE</strong></h5>
+            </div>
+            
+           <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle stats-table">
+                        <thead>
+                            <tr>
+                                <th>UNIT TYPE</th>
+                                <th>FLOOR AREA</th>
+                                <th>UNIT PRICE RANGE</th>
+                                <th>AVAILABLE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach(var unitType in Model.AvailabilityByUnitType)
+                            {
+                                <tr>
+                                    <td>@unitType.UnitTypeShortCode</td>
+                                    <td>@unitType.FloorArea</td>
+                                    <td>@unitType.UnitPriceRange</td>
+                                    <td>@unitType.Available</td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <td>
+                                    <strong>Total</strong>
+                                </td>
+                                <td colspan="2">
+
+                                </td>
+                                <td>
+                                    <strong>@Model.AvailabilityByUnitType.Sum(i => i.Available)</strong>
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card availability-per-unittype">
+                    <div class="card-header bg-white">
+                        <h5 class="text-center mt-2 mb-2"><strong>RESIDENTIAL AVAILABILITY PER UNIT</strong></h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>UNIT TYPE</th>
+                                        <th>AVAILABLE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var unitType in Model.AvailabilityByUnitType)
+                                    {
+                                        <tr>
+                                            <td>@unitType.UnitTypeShortCode</td>
+                                            <td>@unitType.Available</td>
+                                        </tr>
+                                    }
+
+                                    <tr>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td>
+                                            <strong>@Model.AvailabilityByUnitType.Sum(i => i.Available)</strong>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card availability-per-unittype">
+                    <div class="card-header bg-white">
+                        <h5 class="text-center mt-2 mb-2"><strong>RESIDENTIAL AVAILABILITY PER VIEW</strong></h5>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>VIEW</th>
+                                        <th>AVAILABLE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var unitType in Model.AvailabilityByViews)
+                                    {
+                                        <tr>
+                                            <td>@unitType.View</td>
+                                            <td>@unitType.Available</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td>
+                                            <strong>@Model.AvailabilityByViews.Sum(i => i.Available)</strong>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 </div>

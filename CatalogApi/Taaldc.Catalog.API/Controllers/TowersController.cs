@@ -28,7 +28,7 @@ public class TowersController : ApiBaseController<TowersController>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> UpsertTower( UpsertTowerDTO model)
+    public async Task<IActionResult> UpsertTower( TowerUpsert_HostDto model)
     {
         return Ok(await _mediator.Send(new UpsertTowerCommand(model.PropertyId, model.Name, model.Address, model.TowerId)));
     }

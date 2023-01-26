@@ -7,7 +7,7 @@ namespace Taaldc.Catalog.API.Application.Queries;
 
 public interface IUnitQueries
 {
-    Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+    Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
         int? unitTypeId, 
         int? viewId, 
         int? floorId, 
@@ -16,9 +16,9 @@ public interface IUnitQueries
         int max = 999999999, 
         int pageSize = 20, int pageNumber = 1);
 
-    Task<IEnumerable<UnitTypeAvailability>> GetUnitTypeAvailabilityByTowerId(int towerId);
+    Task<IEnumerable<UnitTypeAvailabilityQueryResult>> GetUnitTypeAvailabilityByTowerId(int towerId);
 
-    Task<PaginationQueryResult<UnitDTO>> GetActiveUnits(
+    Task<PaginationQueryResult<UnitQueryResult>> GetActiveUnits(
              string filter,
              int? floorId,
              int? unitTypeId,
@@ -30,7 +30,7 @@ public interface IUnitQueries
              int pageSize = 10
         );
 
-    Task<UnitDTO> GetUnitById(int unitId);
+    Task<UnitQueryResult> GetUnitById(int unitId);
 }
 
 public class UnitQueries : IUnitQueries
@@ -47,7 +47,7 @@ public class UnitQueries : IUnitQueries
             : connectionString;
     }
 
-    public async Task<PaginationQueryResult<UnitDTO>> GetActiveUnits(
+    public async Task<PaginationQueryResult<UnitQueryResult>> GetActiveUnits(
         string filter,
         int? floorId,
         int? unitTypeId,
@@ -71,7 +71,7 @@ public class UnitQueries : IUnitQueries
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);
 
-        var result = await connection.QueryAsync<UnitDTO>(query);
+        var result = await connection.QueryAsync<UnitQueryResult>(query);
 
         var countQuery = $"WITH unit_cte AS (SELECT u.Id," +
             $"f.Id AS FloorId," +
@@ -79,7 +79,8 @@ public class UnitQueries : IUnitQueries
             $"p.Id AS PropertyId," +
             $"ut.Id AS UnitTypeId," +
             $"sv.Id AS ScenicViewId," +
-            $"us.Id AS UnitStatusId " +
+            $"us.Id AS UnitStatusId, " +
+            $"u.IsActive " +
             $"FROM catalog.unit u " +
             $"JOIN catalog.floors f " +
             $"ON u.FloorId = f.Id " +
@@ -103,22 +104,22 @@ public class UnitQueries : IUnitQueries
 
         var temp = await connection.QueryAsync<int>(countQuery);
 
-        return new PaginationQueryResult<UnitDTO>(pageSize, pageNumber, temp.SingleOrDefault(), result);
+        return new PaginationQueryResult<UnitQueryResult>(pageSize, pageNumber, temp.SingleOrDefault(), result);
     }
 
     
-    public async Task<UnitDTO> GetUnitById(int unitId)
+    public async Task<UnitQueryResult> GetUnitById(int unitId)
     {
         var query = UNIT_QUERY + $" WHERE u.Id = {unitId}";
         
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);
-        var result = await connection.QueryAsync<UnitDTO>(query);
+        var result = await connection.QueryAsync<UnitQueryResult>(query);
 
         return result.SingleOrDefault();
     }
 
-    public async Task<AvailableUnitQueryResult> GetAvailableUnitsAsync(
+    public async Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
         int? unitTypeId, 
         int? viewId, 
         int? floorId,
@@ -153,12 +154,12 @@ public class UnitQueries : IUnitQueries
 
         if (!string.IsNullOrWhiteSpace(where)) query += where;
 
-        query += $" ORDER BY F.Id, U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
+        query += $" ORDER BY F.Id, U.Identifier, U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
 
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);
 
-        var result = await connection.QueryAsync<AvailableUnit>(query);
+        var result = await connection.QueryAsync<AvailableUnitQueryResult>(query);
 
         var countQuery = " SELECT COUNT(*) [Total] ";
         countQuery +=
@@ -170,11 +171,11 @@ public class UnitQueries : IUnitQueries
 
         var temp = await connection.QueryAsync<int>(countQuery);
 
-        return new AvailableUnitQueryResult(pageSize, pageNumber, temp.Single(), result.ToArray());
+        return new PaginatedAvailableUnitsQueryResult(pageSize, pageNumber, temp.Single(), result.ToArray());
     
     }
 
-	public async Task<IEnumerable<UnitTypeAvailability>> GetUnitTypeAvailabilityByTowerId(int towerId)
+	public async Task<IEnumerable<UnitTypeAvailabilityQueryResult>> GetUnitTypeAvailabilityByTowerId(int towerId)
 	{
         var query = $"SELECT f.TowerId," +
             $"ut.Id AS UnitTypeId," +
@@ -191,6 +192,7 @@ public class UnitQueries : IUnitQueries
             $"JOIN [taaldb_admin].catalog.floors f " +
             $"ON f.Id = u.FloorId " +
             $"WHERE f.TowerId = {towerId} " +
+            $"AND u.UnitStatus = 1 " +
             $"GROUP BY u.UnitType, ut.[Name]," +
             $"ut.ShortCode,ut.Id,f.TowerId " +
             $"ORDER BY ut.Id";
@@ -198,7 +200,7 @@ public class UnitQueries : IUnitQueries
         await using var connection = new SqlConnection(_connectionString);
 		await connection.OpenAsync(CancellationToken.None);
 
-		var result = await connection.QueryAsync<UnitTypeAvailability>(query);
+		var result = await connection.QueryAsync<UnitTypeAvailabilityQueryResult>(query);
 
         return result;
 	}

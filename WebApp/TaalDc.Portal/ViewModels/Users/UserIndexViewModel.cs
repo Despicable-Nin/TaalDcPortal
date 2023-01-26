@@ -19,18 +19,35 @@ public class UserIndexViewModel
 
 public record UserViewModel
 {
-    public UserViewModel(string username, string email, string id, string[] roles)
+    public UserViewModel(string id, string email, string firstName, string lastName, string nameSuffix,
+        string middleName, string[] roles, bool isActive)
     {
-        Username = username;
-        Email = email;
         Id = id;
+        Email = email;
+        FirstName = firstName ?? string.Empty;
+        LastName = lastName ?? string.Empty;
+        NameSuffix = nameSuffix ?? string.Empty;
+        MiddleName = middleName ?? string.Empty;
         Roles = roles;
+        IsActive = isActive;
     }
 
     public string Id { get; }
     public string Email { get; }
-    public string Username { get; }
+
+    public string FirstName { get; }
+
+    public string LastName { get; }
+    public string NameSuffix { get; }
+    public string MiddleName { get; }
+    public bool IsActive { get; set; }
     public string[] Roles { get; }
+
+    public string GetFullName()
+    {
+        return
+            $"{FirstName} {(!string.IsNullOrEmpty(MiddleName) ? MiddleName[0].ToString() : string.Empty)} {LastName} {NameSuffix}";
+    }
 
     public string? GetRolesAsString()
     {

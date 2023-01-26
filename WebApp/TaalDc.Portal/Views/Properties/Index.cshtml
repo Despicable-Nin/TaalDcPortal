@@ -1,6 +1,4 @@
-﻿@using TaalDc.Portal.DTO.Catalog;
-@using TaalDc.Portal.Models;
-@model PaginationQueryResult<PropertyDTO>
+﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Property_ClientDto>
 
 @{
     ViewBag.Title = "Properties";
@@ -13,7 +11,7 @@
 
 <div class="container-fluid">
     <ul class="nav nav-tabs">
-       <li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Properties" asp-action="Index">Properties</a>
         </li>
         <li class="nav-item">
@@ -38,7 +36,7 @@
 
             <div class="action-search">
                 <form>
-                    <input name="filter" value="@(!string.IsNullOrEmpty(filter)? filter: "")" class="form-control" placeholder="Search..." />
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
                 </form>
             </div>
         </div>
@@ -47,28 +45,28 @@
             <div class="table-responsive w-100 mb-3">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Property Name</th>
-                            <th>Land Area</th>
-                            <th>Towers</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Property Name</th>
+                        <th>Land Area</th>
+                        <th>Towers</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach(var prop in Model.Data)
-                        {
-                            <tr>
-                                <td>@prop.Id</td>
-                                <td>@prop.PropertyName</td>
-                                <td>@prop.LandArea sqm.</td>
-                                <td>@prop.Towers</td>
-                                <td>
-                                    <a class="action-edit" asp-controller="Properties" asp-action="EditProperty" asp-route-id="@prop.Id">Edit</a>
-                                    <a class="action-delete" href="#">Delete</a>
-                                </td>
-                            </tr>
-                        }
+                    @foreach (var prop in Model.Data)
+                    {
+                        <tr>
+                            <td>@prop.Id</td>
+                            <td>@prop.PropertyName</td>
+                            <td>@prop.LandArea sqm.</td>
+                            <td>@prop.Towers</td>
+                            <td>
+                                <a class="action-edit" asp-controller="Properties" asp-action="EditProperty" asp-route-id="@prop.Id">Edit</a>
+                                <a class="action-delete" href="#">Delete</a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -79,11 +77,13 @@
                         <a class="page-link alink noselect">Prev</a>
                     </li>
 
-                    @for(int i = 0; i<Model.TotalPages; i++)
+                    @for (var i = 0; i < Model.TotalPages; i++)
                     {
-                        var active = (i + 1) == Model.PageNumber;
+                        var active = i + 1 == Model.PageNumber;
 
-                        <li class="page-item"><a href="?pageNumber=@(i+1)" class="noselect page-link alink @(active? "active": "")">@(i+1)</a></li>
+                        <li class="page-item">
+                            <a href="?pageNumber=@(i + 1)" class="noselect page-link alink @(active ? "active" : "")">@(i + 1)</a>
+                        </li>
                     }
 
                     <li class="page-item ">

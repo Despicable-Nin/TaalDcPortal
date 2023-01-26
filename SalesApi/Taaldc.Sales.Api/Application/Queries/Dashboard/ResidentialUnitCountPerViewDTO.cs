@@ -8,6 +8,6 @@ public record ResidentialUnitCountPerViewDTO
         Available = available;
     }
 
-    public string View { get; private set; }
-    public int Available { get; private set; }
+    public string View { get; set; }
+    public int Available { get; set; }
 }

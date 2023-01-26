@@ -37,10 +37,13 @@ public class OrderQueries : IOrderQueries
         int pageSize,   
         int? floorId,
         int? unitTypeId,
-        int? viewId)
+        int? viewId,
+        string broker = "")
     {
-       var query =
-           $"{UnitQuery} WHERE U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) ORDER BY U.[UnitId] OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+        string brokerString = string.IsNullOrEmpty(broker) ? "" : $" O.[Broker] = '{broker}' AND ";
+        
+        var query =
+           $"{UnitQuery} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) ORDER BY U.[UnitId] OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
      
         await using var connection = new SqlConnection(_connectionString);
       
@@ -50,9 +53,9 @@ public class OrderQueries : IOrderQueries
 
 
         //get total count
-        var unitCountQuery = $"SELECT  TOP 1 count(U.Id) FROM   [taaldb_sales].[sales].[unitreplica] U ";
+        var unitCountQuery = $"SELECT  TOP 1 count(U.Id) FROM   [taaldb_sales].[sales].[unitreplica] U LEFT JOIN [taaldb_sales].[sales].[order] O ON O.[UnitId] = U.[UnitId] ";
 
-        var countQuery = $"{unitCountQuery} WHERE U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
+        var countQuery = $"{unitCountQuery} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
 
 		var count = await connection.QueryAsync<int>(countQuery);
 
