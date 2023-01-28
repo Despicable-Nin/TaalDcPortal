@@ -9,7 +9,7 @@ using TaalDc.Portal.ViewModels.Catalog;
 
 namespace TaalDc.Portal.Controllers;
 
-[Authorize(Policy = "AdminOnly")]
+[Authorize]
 public class PropertiesController : BaseController<PropertiesController>
 {
     private readonly ICatalogService _catalogService;
@@ -22,6 +22,7 @@ public class PropertiesController : BaseController<PropertiesController>
         _mapper = mapper;
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> Index(string filter,
         string sortBy,
         SortOrderEnum sortOrder,
@@ -33,12 +34,13 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(properties);
     }
 
-
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateProperty()
     {
         return View();
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateProperty(PropertyCreate_ClientDto model)
     {
@@ -54,6 +56,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok();
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> EditProperty(int id)
     {
         try
@@ -72,6 +75,7 @@ public class PropertiesController : BaseController<PropertiesController>
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> EditProperty(PropertyCreate_ClientDto model)
     {
@@ -89,6 +93,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
+    [Authorize(Roles = "ADMIN,SALES,BROKER")]
     public async Task<IActionResult> Towers(string filter,
         string sortBy,
         SortOrderEnum sortOrder,
@@ -100,12 +105,13 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(towers);
     }
 
-
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateTower()
     {
         return View();
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateTower(TowerCreate_ClientDto model)
     {
@@ -120,6 +126,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> EditTower(int id)
     {
         try
@@ -137,11 +144,13 @@ public class PropertiesController : BaseController<PropertiesController>
         }
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateFloor()
     {
         return View();
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateFloor(FloorCreate_ClientDto model)
     {
@@ -156,6 +165,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> EditFloor(int id)
     {
         try
@@ -175,6 +185,7 @@ public class PropertiesController : BaseController<PropertiesController>
         }
     }
 
+    [Authorize(Roles = "ADMIN,SALES,BROKER")]
     public async Task<IActionResult> Floors(string filter,
         string sortBy,
         SortOrderEnum sortOrder,
@@ -186,7 +197,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(floors);
     }
 
-
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateUnit()
     {
         var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
@@ -196,7 +207,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return View();
     }
 
-
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateUnit(UnitCreate_ClientDto model)
     {
@@ -211,6 +222,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> EditUnit(int id)
     {
         var result = await _catalogService.GetUnitById(id);
@@ -226,6 +238,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(unitUpdateDto);
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> EditUnit(int id, UnitUpdate_ClientDto model)
     {
@@ -253,6 +266,7 @@ public class PropertiesController : BaseController<PropertiesController>
 
     }
 
+    [Authorize(Roles = "ADMIN,SALES,BROKER")]
     public async Task<IActionResult> Units(
         string filter,
         int? floorId,
@@ -270,6 +284,7 @@ public class PropertiesController : BaseController<PropertiesController>
     }
 
 
+    [Authorize(Roles = "ADMIN,SALES, BROKER")]
     public async Task<IActionResult> GetUnits(
         string filter,
         int? floorId,
@@ -286,7 +301,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return new JsonResult(units);
     }
 
-
+    [Authorize(Roles = "ADMIN,SALES, BROKER")]
     public async Task<IActionResult> UnitTypes()
     {
         var unitTypes = await _catalogService.GetUnitTypes();
@@ -294,12 +309,13 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(unitTypes);
     }
 
-
+    [Authorize(Roles = "ADMIN")]
     public IActionResult CreateUnitType()
     {
         return View();
     }
 
+    [Authorize(Roles = "ADMIN")]
     [HttpPost]
     public async Task<IActionResult> CreateUnitType(UnitTypeCreate_ClientDto model)
     {
