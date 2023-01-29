@@ -6,7 +6,7 @@ using TaalDc.Portal.ViewModels.Users;
 
 namespace WebApplication2.Controllers;
 
-[Authorize]
+[Authorize(Policy = "AdminOnly")]
 public class UsersController : BaseController<UsersController>
 {
     private readonly IAccountService _accountService;
