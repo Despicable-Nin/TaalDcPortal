@@ -207,13 +207,27 @@ withDP.addEventListener('change', function () {
 
 
 const salesForm = document.getElementById('salesForm');
-salesForm.addEventListener('submit', onSalesFormSubmit);
+salesForm.addEventListener('submit', openSalesConfirmation);
 
-
-function onSalesFormSubmit(event) {
+function openSalesConfirmation(event){
     event.preventDefault();
 
-    const data = new FormData(event.target);
+    var confirmationModal = document.getElementById("confirmationModal");
+
+    var modal = new bootstrap.Modal(confirmationModal, {});
+
+    modal.show();
+}
+
+
+function onSalesConfirmation() {
+    onSalesFormSubmit(salesForm);
+}
+
+function onSalesFormSubmit(form) {
+    console.log('form', form.target, new FormData(form));
+    
+    const data = new FormData(form);
 
     console.log('form data', data);
 
@@ -224,6 +238,9 @@ function onSalesFormSubmit(event) {
     var isFormValid = event.target.checkValidity();
 
     event.target.classList.add("was-validated");
+
+    var confirmationModal = document.getElementById("confirmationModal");
+    const modalBackdrop = document.getElementsByClassName("modal-backdrop");
 
     if (isFormValid) {
         var formAction = event.target.action
@@ -272,6 +289,15 @@ function onSalesFormSubmit(event) {
                     }
                 }
 
+                confirmationModal.classList.remove("show");
+                confirmationModal.style.display = "none";
+                document.body.classList.remove("modal-open");
+                document.body.removeAttribute("style");
+
+                while (modalBackdrop.length > 0) {
+                    modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+                }
+
                 Toastify({
                     text: response.message ? response.message : "Something went wrong. Please try again later.",
                     duration: 3000,
@@ -288,5 +314,9 @@ function onSalesFormSubmit(event) {
             }
         });
     }
+
+    
+
+
     return false;
 }

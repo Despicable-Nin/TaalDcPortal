@@ -5,7 +5,7 @@ using TaalDc.Portal.Services;
 
 namespace TaalDc.Portal.Controllers;
 
-[Authorize]
+
 public class InquiriesController : BaseController<InquiriesController>
 {
     private readonly IMarketingService _marketingService;

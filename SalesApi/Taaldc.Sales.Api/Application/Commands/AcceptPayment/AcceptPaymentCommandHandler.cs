@@ -32,7 +32,24 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
        
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId, 2, "SOLD"));
+        //update Units On Catalog --> Catalog then Replies to update UnitReplica
+        int unitStatusId = 3;
+        string unitStatus = "";
+
+        var paymnent = order.Payments.FirstOrDefault(i => i.Id == request.PaymentId);
+
+        if (paymnent.GetPaymentTypeId() == 3)
+        {
+            unitStatusId = 2;
+            unitStatus = "SOLD";
+        }
+        else if (paymnent.GetPaymentTypeId() <= 2)
+        {
+            unitStatusId = 3;
+            unitStatus = "RESERVED";
+        }
+
+        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId, unitStatusId, unitStatus));
 
         return CommandResult.Success(request.PaymentId);
     }

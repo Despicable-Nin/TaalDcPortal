@@ -8,6 +8,7 @@ namespace Taaldc.Catalog.API.Application.Queries;
 public interface IUnitQueries
 {
     Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
+        string filter,
         int? unitTypeId, 
         int? viewId, 
         int? floorId, 
@@ -120,6 +121,7 @@ public class UnitQueries : IUnitQueries
     }
 
     public async Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
+        string filter,
         int? unitTypeId, 
         int? viewId, 
         int? floorId,
@@ -136,6 +138,9 @@ public class UnitQueries : IUnitQueries
         query += " JOIN taaldb_admin.[catalog].unittype UT ON U.UnitType = UT.Id ";
 
         List<string> clauses = new();
+
+
+        if (!string.IsNullOrEmpty(filter)) clauses.Add($"U.Identifier LIKE '%{filter}'");
 
         if (unitTypeId.HasValue) clauses.Add($"UT.Id = {unitTypeId.Value}");
 

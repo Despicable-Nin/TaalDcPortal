@@ -176,7 +176,7 @@ public class SalesController : BaseController<SalesController>
 
 
     [HttpPost]
-    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId)
+    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId, int paymentTypeId)
     {
         if (orderId > 0 && paymentId > 0)
         {
@@ -192,8 +192,19 @@ public class SalesController : BaseController<SalesController>
             var order = await _salesService.GetSalesById(orderId);
 
             //update Units On Catalog --> Catalog then Replies to update UnitReplica
+            int unitStatusId = 3;
+
+            if(paymentTypeId == 3)
+            {
+                unitStatusId = 2;
+            }
+            else if (paymentTypeId <= 2)
+            {
+                unitStatusId = 3;
+            }
+
             var unitStatus =
-               new UnitStatusUpdate_ClientDto(order.UnitId, 2, $"Sold to {order.FirstName} {order.LastName}");
+               new UnitStatusUpdate_ClientDto(order.UnitId, unitStatusId, "");
             
             var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 

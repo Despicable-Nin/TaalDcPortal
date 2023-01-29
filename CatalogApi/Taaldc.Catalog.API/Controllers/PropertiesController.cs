@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertProperty;
 using Taaldc.Catalog.API.Application.Commands.UpsertTower;
@@ -7,6 +8,7 @@ using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.DTO;
 
 namespace Taaldc.Catalog.API.Controllers;
+
 
 public class PropertiesController : ApiBaseController<PropertiesController>
 {
