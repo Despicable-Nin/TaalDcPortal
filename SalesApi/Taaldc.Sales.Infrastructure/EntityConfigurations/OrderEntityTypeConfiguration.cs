@@ -54,6 +54,16 @@ class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey("_statusId");
 
         builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
+
+        builder.Property<int?>("_orderCorrelationId")
+            .UsePropertyAccessMode(PropertyAccessMode.Field)
+            .HasColumnName("OrderCorrelationId")
+            .IsRequired(false)
+            .HasDefaultValue(null);
+
+        builder.HasOne<Order>()
+            .WithMany()
+            .HasForeignKey("_orderCorrelationId");
         
 
         builder

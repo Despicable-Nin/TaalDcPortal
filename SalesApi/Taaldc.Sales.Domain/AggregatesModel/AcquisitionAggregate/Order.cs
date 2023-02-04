@@ -9,11 +9,8 @@ public class Order : DomainEntity, IAggregateRoot
     protected Order()
     {
         _payments = new List<Payment>();
-        //_penalties = new List<Penalty>();
     }
-
-
- 
+    
     public Order(int unitId,  int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
     {
         _unitId = unitId;
@@ -27,9 +24,11 @@ public class Order : DomainEntity, IAggregateRoot
     
     private int _unitId;
     public int GetUnitId => _unitId;
+
+    public int? _orderCorrelationId;
+    public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
+    public int? GetOrderCorrelationId() => _orderCorrelationId;
     
-    public int? OrderCorrelationId { get; private set; }
-    public void SetOrderCorrelationId(int orderCorrelationId) => OrderCorrelationId = orderCorrelationId;
     public string Code { get; private set; }
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
