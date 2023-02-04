@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using SeedWork;
 using Taaldc.Sales.Domain.Exceptions;
 
@@ -27,6 +28,8 @@ public class Order : DomainEntity, IAggregateRoot
     private int _unitId;
     public int GetUnitId => _unitId;
     
+    public int? OrderCorrelationId { get; private set; }
+    public void SetOrderCorrelationId(int orderCorrelationId) => OrderCorrelationId = orderCorrelationId;
     public string Code { get; private set; }
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
@@ -57,11 +60,8 @@ public class Order : DomainEntity, IAggregateRoot
         decimal amountPaid, 
         string remarks, 
         string correlationId = default)
-    {
-        //if (_payments.Any(i => i.ConfirmationNumber == confirmationNumber))
-        //    throw new SalesDomainException(nameof(AddPayment),
-        //        new InvalidOperationException("Duplicate payment confirmation number."));
-
+    { 
+        
         Payment payment = new(
             paymentTypeId, 
             transactionTypeId, 
@@ -87,17 +87,23 @@ public class Order : DomainEntity, IAggregateRoot
         {
             throw new SalesDomainException(nameof(AcceptPayment), new Exception("Payment has already been processed."));
         }
-
+        
         _payments.SingleOrDefault(i => i.Id == paymentId).VerifyPayment(verifiedBy);
-       
 
+        ChangeOrderStatus();
+    }
+
+    private void ChangeOrderStatus()
+    {
         if (HasReservation() && HasDownpayment())
         {
             _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
-        }else if (HasReservation() && !HasDownpayment())
+        }
+        else if (HasReservation() && !HasDownpayment())
         {
             _statusId = OrderStatus.GetIdByName(OrderStatus.Reserved);
-        }else if (!HasReservation() && HasDownpayment())
+        }
+        else if (!HasReservation() && HasDownpayment())
         {
             _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
         }
@@ -107,6 +113,12 @@ public class Order : DomainEntity, IAggregateRoot
         }
     }
 
+    /// <summary>
+    /// Void means to not include in the count of payments. It doesn't change status of the Order.
+    /// </summary>
+    /// <param name="paymentId"></param>
+    /// <param name="verifiedBy"></param>
+    /// <exception cref="SalesDomainException"></exception>
     public void VoidPayment(int paymentId, string verifiedBy)
     {
         if (_payments.Any(i =>
@@ -124,7 +136,4 @@ public class Order : DomainEntity, IAggregateRoot
     public bool HasDownpayment() => _payments.Any()
         ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.PartialDownPayment)) : false;
 
-
-    //private List<Penalty> _penalties;
-    //public IEnumerable<Penalty> Penalties => _penalties.AsReadOnly();
 }
