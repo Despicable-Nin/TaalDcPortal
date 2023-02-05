@@ -74,14 +74,7 @@ public class Order : DomainEntity, IAggregateRoot
             correlationId);
         
 
-        if (payment.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation))
-        {
-            ReservationExpiresOn = DateTime.Now;
-        }
-        else
-        {
-            ReservationExpiresOn = default;
-        }
+
 
         _payments.Add(payment);
         return payment;
@@ -102,9 +95,23 @@ public class Order : DomainEntity, IAggregateRoot
             throw new SalesDomainException(nameof(AcceptPayment), new Exception("Payment has already been processed."));
         }
         
-        _payments.SingleOrDefault(i => i.Id == paymentId).VerifyPayment(verifiedBy);
+        var payment = _payments.SingleOrDefault(i => i.Id == paymentId);
+        payment.VerifyPayment(verifiedBy);
 
+        
+        //TODO: This is candidate for pub-sub
         ChangeOrderStatus();
+
+        //TODO: Pub-sub
+        if (_statusId == OrderStatus.GetIdByName(OrderStatus.Reserved) && !ReservationExpiresOn.HasValue)
+        {
+            ReservationExpiresOn ??= ReservationExpiresOn ?? DateTime.Now;
+        }
+        else
+        {
+            ReservationExpiresOn = default;
+        }
+        
     }
 
     private void ChangeOrderStatus()
