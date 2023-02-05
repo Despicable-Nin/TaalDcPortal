@@ -103,9 +103,9 @@ public class Order : DomainEntity, IAggregateRoot
         ChangeOrderStatus();
 
         //TODO: Pub-sub
-        if (_statusId == OrderStatus.GetIdByName(OrderStatus.Reserved) && !ReservationExpiresOn.HasValue)
+        if (_statusId == OrderStatus.GetIdByName(OrderStatus.Reserved))
         {
-            ReservationExpiresOn ??= ReservationExpiresOn ?? DateTime.Now;
+            ReservationExpiresOn ??= DateTime.Now;
         }
         else
         {
