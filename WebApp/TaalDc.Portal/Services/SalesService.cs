@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
-using TaalDc.Portal.ViewModels.Sales;
 
 namespace TaalDc.Portal.Services;
 

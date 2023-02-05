@@ -1,5 +1,6 @@
 ﻿@using SeedWork
-@model TaalDc.Portal.ViewModels.Sales.SalesCreate_ClientDto
+@using TaalDc.Portal.DTO.Sales;
+@model SalesCreate_ClientDto
 @inject IAmCurrentUser CurrentUser
 
 @{
@@ -594,7 +595,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button onclick="onSalesConfirmation()" type="button" class="btn btn-primary">YES</button>
+                <button onclick="onSalesConfirmation(this)" type="button" class="btn btn-primary">YES</button>
             </div>
         </div>
     </div>

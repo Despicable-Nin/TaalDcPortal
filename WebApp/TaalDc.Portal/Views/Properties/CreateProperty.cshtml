@@ -44,6 +44,26 @@
     </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Form Submission</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to add this property?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button onclick="onPropertyFormSubmit(this)" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
@@ -51,32 +71,54 @@
 
     <script>
         const form = document.getElementById('propertyForm');
-        form.addEventListener('submit', onPropertyFormSubmit);
+        form.addEventListener('submit', openFormConfirmation);
 
-        function onPropertyFormSubmit(event) {
+
+        function openFormConfirmation(event){
             event.preventDefault();
 
+            var isFormValid = event.target.checkValidity();
+
+            event.target.classList.add("was-validated");
+
+            if(isFormValid){
+                var confirmationModal = document.getElementById('confirmationModal');
+                var modal = new bootstrap.Modal(confirmationModal, {});
+                modal.show();
+            }
+           return false;
+        }
+
+        function closeModal(){
+            var confirmationModal = document.getElementById("confirmationModal");
+            const modalBackdrop = document.getElementsByClassName("modal-backdrop");
+
+            confirmationModal.classList.remove("show");
+            confirmationModal.style.display = "none";
+            document.body.classList.remove("modal-open");
+            document.body.removeAttribute("style");
+
+            while (modalBackdrop.length > 0) {
+                modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+            }
+    }
+
+        function onPropertyFormSubmit(modalBtn) {
             var btn = document.getElementById("property-form-submit");
 
             btn.disabled = true;
+            modalBtn.disabled = true;
 
-            const data = new FormData(event.target);
+            const data = new FormData(form);
 
             const value = Object.fromEntries(data.entries());
 
             console.log('form values', value);
 
-            var isFormValid = event.target.checkValidity();
-
-            console.log('form validity', isFormValid);
-
-            event.target.classList.add("was-validated");
-
-
-            $("#form-premessage").show();
+            var isFormValid = form.checkValidity();
 
             if (isFormValid) {
-                var formAction = event.target.action
+                var formAction = form.action
 
                 $.ajax({
                     type: 'POST',
@@ -99,9 +141,11 @@
                         
                         //TODO: Toast immediately closes 
                         setTimeout(() => window.location.replace("/Properties/Index"),500);
-                    }, error: function () {
+                    }, error: function (data) {
+                        const response = data.responseJSON;
+
                         Toastify({
-                            text: "Something went wrong. Please try again later.",
+                            text: response && response.message ? response.message : "Something went wrong. Please try again later.",
                             duration: 3000,
                             close: true,
                             gravity: "top", // `top` or `bottom`
@@ -114,10 +158,14 @@
                         }).showToast();
 
                         btn.disabled = false;
+                        modalBtn.disabled = false;
+
+                        closeModal();
                     }
                 });
             }else{
                 btn.disabled = false;
+                modalBtn.disabled = false;
             }
             return false;
         }

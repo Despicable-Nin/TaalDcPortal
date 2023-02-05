@@ -1,6 +1,9 @@
+@using TaalDc.Portal.DTO.Catalog;
 @model TaalDc.Portal.ViewModels.Catalog.FloorCreate_ClientDto
 
 @{
+    List<Tower_ClientDto> towers = ViewBag.Towers;
+
     ViewBag.Title = "Create Floor";
     Layout = "_Layout";
 }
@@ -21,9 +24,12 @@
                     <strong>Tower</strong>
                 </label>
                 <select asp-for="TowerId" class="form-control form-select" required>
-                    <option value="1">
-                        Common Tower
-                    </option>
+                    @foreach(var tower in towers)
+                    {
+                        <option value="@tower.Id">
+                            @tower.PropertyName - @tower.TowerName
+                        </option>
+                    }
                 </select>
                 <div class="invalid-feedback">
                     This is a required field.

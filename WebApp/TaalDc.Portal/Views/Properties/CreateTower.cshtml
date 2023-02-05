@@ -1,6 +1,9 @@
-﻿@model TaalDc.Portal.ViewModels.Catalog.TowerCreate_ClientDto
+﻿@using TaalDc.Portal.DTO.Catalog;
+@model TaalDc.Portal.ViewModels.Catalog.TowerCreate_ClientDto
 
 @{
+    List<Property_ClientDto> properties = ViewBag.Properties;
+
     ViewBag.Title = "Create Tower";
     Layout = "_Layout";
 }
@@ -20,9 +23,11 @@
                     <strong>Property</strong>
                 </label>
                 <select asp-for="PropertyId" class="form-control form-select" required>
-                    <option value="1">
-                        One Tolentino East Residences
+                    @foreach(var prop in properties){
+                    <option value="@prop.Id">
+                        @prop.PropertyName
                     </option>
+                    }
                 </select>
                 <div class="invalid-feedback">
                     This is a required field.
