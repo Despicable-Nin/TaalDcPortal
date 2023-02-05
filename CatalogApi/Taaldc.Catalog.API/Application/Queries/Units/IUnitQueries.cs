@@ -39,7 +39,7 @@ public class UnitQueries : IUnitQueries
     private readonly string _connectionString;
 
     private const string UNIT_QUERY =
-        "SELECT u.Id ,p.[Id] AS PropertyId ,p.[Name] AS PropertyName ,t.[Id] AS TowerId,t.[Name] AS TowerName ,u.UnitType AS UnitTypeId,ut.ShortCode AS UnitType,u.ScenicViewId AS ScenicViewId,sv.Name AS ScenicView,u.FloorId AS FloorId,f.[Name] AS FloorName,u.FloorArea+u.BalconyArea AS TotalArea,u.FloorArea,u.BalconyArea,u.Identifier,u.Price,u.UnitStatus AS UnitStatusId,us.[Name] AS UnitStatus FROM catalog.unit u JOIN catalog.floors f ON u.FloorId = f.Id JOIN catalog.tower t ON f.TowerId = t.Id JOIN catalog.property p ON t.PropertyId = p.Id JOIN catalog.unittype ut ON u.UnitType = ut.Id JOIN catalog.scenicview sv ON u.ScenicViewId = sv.Id JOIN catalog.unitstatus us ON u.UnitStatus = us.Id ";
+        "SELECT u.Id ,p.[Id] AS PropertyId ,p.[Name] AS PropertyName ,t.[Id] AS TowerId,t.[Name] AS TowerName ,u.UnitType AS UnitTypeId,ut.ShortCode AS UnitType,u.ScenicViewId AS ScenicViewId,sv.Name AS ScenicView,u.FloorId AS FloorId,f.[Name] AS FloorName,u.FloorArea+u.BalconyArea AS TotalArea,u.FloorArea,u.BalconyArea,u.Identifier,u.Price,u.UnitStatus AS UnitStatusId,us.[Name] AS UnitStatus, u.[IsActive] AS IsActive FROM catalog.unit u JOIN catalog.floors f ON u.FloorId = f.Id JOIN catalog.tower t ON f.TowerId = t.Id JOIN catalog.property p ON t.PropertyId = p.Id JOIN catalog.unittype ut ON u.UnitType = ut.Id JOIN catalog.scenicview sv ON u.ScenicViewId = sv.Id JOIN catalog.unitstatus us ON u.UnitStatus = us.Id ";
 
     public UnitQueries(string connectionString)
     {
