@@ -2,7 +2,7 @@
 
 namespace Taaldc.Sales.Api.Application.Common.Models
 {
-	public class PaginationQueryResult<T>
+	public record PaginationQueryResult<T>
 	{
 		public PaginationQueryResult(int pageSize, int pageNumber, int totalCount, IEnumerable<T> data)
 		{

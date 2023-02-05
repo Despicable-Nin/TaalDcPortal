@@ -62,6 +62,10 @@ public class SalesDbContext : DbContext, IUnitOfWork
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SalesDbContext).Assembly);
         
+        modelBuilder.HasSequence<int>("orderseq", DEFAULT_SCHEMA)
+            .StartsAt(1000).IncrementsBy(1);
+        
+        
     }
     
     private IDbContextTransaction _currentTransaction;
