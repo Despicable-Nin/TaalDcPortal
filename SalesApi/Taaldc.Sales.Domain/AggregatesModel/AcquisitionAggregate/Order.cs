@@ -25,7 +25,7 @@ public class Order : DomainEntity, IAggregateRoot
     private int _unitId;
     public int GetUnitId => _unitId;
 
-    public int? _orderCorrelationId;
+    private int? _orderCorrelationId;
     public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
     public int? GetOrderCorrelationId() => _orderCorrelationId;
     
@@ -33,6 +33,8 @@ public class Order : DomainEntity, IAggregateRoot
     public string Broker { get; private set; }
     public string Remarks { get; private set; }
     public decimal FinalPrice { get; private set; }
+
+    public DateTime? ReservationExpiresOn { get; private set; } = default;
     public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;
@@ -70,11 +72,24 @@ public class Order : DomainEntity, IAggregateRoot
             amountPaid, 
             remarks, 
             correlationId);
+        
+
+        if (payment.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation))
+        {
+            ReservationExpiresOn = DateTime.Now;
+        }
+        else
+        {
+            ReservationExpiresOn = default;
+        }
 
         _payments.Add(payment);
         return payment;
             
     }
+
+    public void MarkAsFullyPaid() => _statusId = OrderStatus.GetIdByName(OrderStatus.FullyPaid);
+    public void MarkAsCancelled() => _statusId = OrderStatus.GetIdByName(OrderStatus.Cancelled);
 
     public Payment FindPayment(string confirmationNumber) =>
         _payments.SingleOrDefault(i => i.ConfirmationNumber == confirmationNumber);
@@ -94,22 +109,26 @@ public class Order : DomainEntity, IAggregateRoot
 
     private void ChangeOrderStatus()
     {
-        if (HasReservation() && HasDownpayment())
+        if (!HasReservation())
         {
-            _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
+            throw new SalesDomainException(nameof(ChangeOrderStatus),
+                new InvalidOperationException("Cannot process payment. Missing reservation."));
         }
-        else if (HasReservation() && !HasDownpayment())
+
+        if (HasFullyPaid())
         {
-            _statusId = OrderStatus.GetIdByName(OrderStatus.Reserved);
+            _statusId = OrderStatus.GetIdByName(OrderStatus.FullyPaid);
+            return;
         }
-        else if (!HasReservation() && HasDownpayment())
+
+        if (HasAcceptedReservation())
         {
-            _statusId = OrderStatus.GetIdByName(OrderStatus.PartiallyPaid);
+            _statusId = HasAcceptedDownpayment()
+                ? OrderStatus.GetIdByName(OrderStatus.PartiallyPaid)
+                : OrderStatus.GetIdByName(OrderStatus.Reserved);
         }
         else
-        {
             _statusId = OrderStatus.GetIdByName(OrderStatus.New);
-        }
     }
 
     /// <summary>
@@ -129,10 +148,20 @@ public class Order : DomainEntity, IAggregateRoot
         _payments.SingleOrDefault(i => i.Id == paymentId).VoidPayment(verifiedBy);
     }
 
+    public bool HasAcceptedReservation() => _payments.Any()
+        ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation) && i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted)) : false;
+    
     public bool HasReservation() => _payments.Any()
         ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.Reservation)) : false;
     
-    public bool HasDownpayment() => _payments.Any()
-        ? _payments.Any(i => i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.PartialDownPayment)) : false;
+    public bool HasAcceptedDownpayment() => _payments.Any()
+        ? _payments.Any(i =>
+            i.GetPaymentTypeId() == PaymentType.GetId(PaymentType.PartialDownPayment) &&
+            i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted)) : false;
+
+    public bool HasFullyPaid() => _payments.Any()
+        ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
+            .Sum(i => i.AmountPaid) >= FinalPrice
+        : false;
 
 }
