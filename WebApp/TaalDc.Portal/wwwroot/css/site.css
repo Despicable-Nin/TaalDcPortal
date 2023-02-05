@@ -197,7 +197,7 @@ ul.noliststyle > li {
 @media (max-width: 1240px) {
     .taaldc-sidenav {
         display: none;
-        min-width: 300px;
+        min-width: 80%;
     }
 
     .login-banner {
@@ -419,6 +419,6 @@ tr.accepted td{
 
 @media (max-width: 1240px) {
     .hamburger-icon{
-        left: 4%;
+        left: 6%;
     }
 }
