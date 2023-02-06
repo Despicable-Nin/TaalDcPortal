@@ -1,25 +1,16 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Globalization;
-using System.Text.Json.Serialization;
-using Taaldc.Catalog.API.Application.Common.Models;
+﻿using System.Text.Json.Serialization;
 
-namespace Taaldc.Catalog.API.Application.Queries.Properties
+namespace Taaldc.Catalog.API.Application.Queries.Properties;
+
+public class PropertyQueryResult
 {
-    public class PropertyQueryResult
-    {
-        [JsonPropertyName("property_id")]
-        public int Id { get; set; }
+    [JsonPropertyName("property_id")] public int Id { get; set; }
 
-        [JsonPropertyName("project_id")]
-        public int ProjectId { get; set; }
+    [JsonPropertyName("project_id")] public int ProjectId { get; set; }
 
-        [JsonPropertyName("property_name")]
-        public string PropertyName { get; set; }
+    [JsonPropertyName("property_name")] public string PropertyName { get; set; }
 
-        [JsonPropertyName("land_area")]
-        public double LandArea { get; set; }
+    [JsonPropertyName("land_area")] public double LandArea { get; set; }
 
-        [JsonPropertyName("towers")]
-        public int Towers { get; set; }
-    }
+    [JsonPropertyName("towers")] public int Towers { get; set; }
 }

@@ -1,8 +1,7 @@
-﻿namespace Taaldc.Catalog.API.Application.Common.Models
+﻿namespace Taaldc.Catalog.API.Application.Common.Models;
+
+public enum SortOrderEnum
 {
-    public enum SortOrderEnum
-    {
-        ASC,
-        DESC
-    }
+    ASC,
+    DESC
 }

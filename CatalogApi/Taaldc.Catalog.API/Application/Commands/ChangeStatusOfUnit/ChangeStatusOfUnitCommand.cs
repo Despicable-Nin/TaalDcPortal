@@ -11,7 +11,7 @@ public class ChangeStatusOfUnitCommand : IRequest<CommandResult>
         Remarks = remarks;
     }
 
-    public int UnitId { get; private set; }
-    public int UnitStatus { get; private set; }
-    public string Remarks { get; private set; }
+    public int UnitId { get; }
+    public int UnitStatus { get; }
+    public string Remarks { get; }
 }

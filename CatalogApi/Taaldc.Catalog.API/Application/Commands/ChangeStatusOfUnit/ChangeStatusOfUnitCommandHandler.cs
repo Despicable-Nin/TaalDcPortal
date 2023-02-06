@@ -7,11 +7,12 @@ namespace Taaldc.Catalog.API.Application.Commands.ChangeStatusOfUnit;
 
 public class ChangeStatusOfUnitCommandHandler : IRequestHandler<ChangeStatusOfUnitCommand, CommandResult>
 {
-    private readonly IProjectRepository _repository;
     private readonly ILogger<ChangeStatusOfUnitCommandHandler> _logger;
+    private readonly IProjectRepository _repository;
 
 
-    public ChangeStatusOfUnitCommandHandler(IProjectRepository repository, ILogger<ChangeStatusOfUnitCommandHandler> logger)
+    public ChangeStatusOfUnitCommandHandler(IProjectRepository repository,
+        ILogger<ChangeStatusOfUnitCommandHandler> logger)
     {
         _repository = repository;
         _logger = logger;
@@ -24,16 +25,14 @@ public class ChangeStatusOfUnitCommandHandler : IRequestHandler<ChangeStatusOfUn
         if (unit == default)
             throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
                 new Exception("Unit not found."));
-        
+
         if (request.UnitStatus == unit.GetUnitStatusId())
             throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
                 new InvalidOperationException("Cannot update unit status with the same."));
 
         if ((int)UnitStatus.UnitIs.BLOCKED == unit.GetUnitStatusId())
-        {
             throw new CatalogDomainException(nameof(ChangeStatusOfUnitCommandHandler),
                 new InvalidOperationException("Cannot update a blocked unit."));
-        }
 
         unit.SetUnitStatus(request.UnitStatus);
         unit.AddRemarks(request.Remarks);

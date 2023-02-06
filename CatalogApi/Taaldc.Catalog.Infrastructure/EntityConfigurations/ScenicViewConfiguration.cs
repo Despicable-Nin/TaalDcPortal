@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
-class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
+internal class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
 {
     public void Configure(EntityTypeBuilder<ScenicView> builder)
     {

@@ -6,14 +6,14 @@ namespace Taaldc.Catalog.API.Application.Commands.UpsertUnit;
 public class UpsertUnitCommand : IRequest<CommandResult>
 {
     public UpsertUnitCommand(
-        int? unitId, 
+        int? unitId,
         int? unitStatusId,
-        int unitTypeId, 
-        int scenicViewId, 
-        string unitNo, 
+        int unitTypeId,
+        int scenicViewId,
+        string unitNo,
         int floorId,
-        double floorArea, 
-        double balconyArea, 
+        double floorArea,
+        double balconyArea,
         decimal sellingPrice,
         string remarks,
         bool isActive)
@@ -27,7 +27,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         FloorArea = floorArea;
         BalconyArea = balconyArea;
         SellingPrice = sellingPrice;
-        Remarks = !string.IsNullOrEmpty(remarks)? remarks: "";
+        Remarks = !string.IsNullOrEmpty(remarks) ? remarks : "";
         IsActive = isActive;
     }
 
@@ -37,11 +37,11 @@ public class UpsertUnitCommand : IRequest<CommandResult>
     public string UnitNo { get; }
     public int FloorId { get; }
     public double FloorArea { get; }
-    public double BalconyArea { get;  }
+    public double BalconyArea { get; }
     public decimal SellingPrice { get; }
     public string Remarks { get; }
     public int? UnitStatusId { get; }
-    public bool IsActive { get; } 
+    public bool IsActive { get; }
 }
 
 public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>

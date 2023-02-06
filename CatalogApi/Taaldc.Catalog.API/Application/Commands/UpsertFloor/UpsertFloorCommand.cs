@@ -13,15 +13,14 @@ public class UpsertFloorCommand : IRequest<CommandResult>
         FloorId = floorId;
         Name = name;
         Description = description;
-        FloorPlanFilePath = !string.IsNullOrEmpty(floorPlanFilePath)? floorPlanFilePath: "";
-
-	}
+        FloorPlanFilePath = !string.IsNullOrEmpty(floorPlanFilePath) ? floorPlanFilePath : "";
+    }
 
     [DataMember] public int TowerId { get; private set; }
     [DataMember] public int? FloorId { get; private set; }
     [DataMember] public string Name { get; private set; }
     [DataMember] public string Description { get; private set; }
-	[DataMember] public string FloorPlanFilePath { get; private set; }
+    [DataMember] public string FloorPlanFilePath { get; private set; }
 }
 
 public class UpsertFloorCommandValidator : AbstractValidator<UpsertFloorCommand>
