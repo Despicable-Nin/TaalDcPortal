@@ -9,7 +9,6 @@ using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Towers;
-using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 using Taaldc.Catalog.Infrastructure;
@@ -48,39 +47,17 @@ builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepositor
 builder.Services.AddAutoMapper(typeof(Program));
 
 
-builder.Services.AddScoped<IPropertyQueries>(i =>
-{
-    return new PropertyQueries(connectionString);
-});
+builder.Services.AddScoped<IPropertyQueries>(i => { return new PropertyQueries(connectionString); });
 
-builder.Services.AddScoped<IUnitQueries>(i =>
-{
-    return new UnitQueries(connectionString);
-    
-});
+builder.Services.AddScoped<IUnitQueries>(i => { return new UnitQueries(connectionString); });
 
-builder.Services.AddScoped<IFloorQueries>(i =>
-{
-	return new FloorQueries(connectionString);
+builder.Services.AddScoped<IFloorQueries>(i => { return new FloorQueries(connectionString); });
 
-});
+builder.Services.AddScoped<ITowerQueries>(i => { return new TowerQueries(connectionString); });
 
-builder.Services.AddScoped<ITowerQueries>(i =>
-{
-    return new TowerQueries(connectionString);
+builder.Services.AddScoped<IScenicViewQueries>(i => { return new ScenicViewQueries(connectionString); });
 
-});
-
-builder.Services.AddScoped<IScenicViewQueries>(i =>
-{
-	return new ScenicViewQueries(connectionString);
-});
-
-builder.Services.AddScoped<IUnitTypeQueries>(i =>
-{
-    return new UnitTypeQueries(connectionString);
-});
-
+builder.Services.AddScoped<IUnitTypeQueries>(i => { return new UnitTypeQueries(connectionString); });
 
 
 var app = builder.Build();
@@ -88,9 +65,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI(options => {
-    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI");
-});
+app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI"); });
 
 
 using (var scope = app.Services.CreateScope())
