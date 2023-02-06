@@ -140,6 +140,13 @@ public class ProjectRepository : IProjectRepository
             .FirstOrDefaultAsync(i => i.Id == propertyId);
     }
 
+    public async Task<Property> GetPropertyByNameAsync(string name)
+    {
+        return await _context.Properties
+            .Include(i => i.Towers)
+            .FirstOrDefaultAsync(i => i.Name.ToLower() == name.ToLower());
+    }
+
     public async Task<Tower> GetTowerAsync(int towerId)
     {
         return await _context.Towers

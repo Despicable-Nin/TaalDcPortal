@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace TaalDc.Portal.ViewModels.Sales;
+namespace TaalDc.Portal.DTO.Sales;
 
 public class SalesCreate_ClientDto
 {

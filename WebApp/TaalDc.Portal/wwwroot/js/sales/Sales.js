@@ -220,11 +220,13 @@ function openSalesConfirmation(event){
 }
 
 
-function onSalesConfirmation() {
-    onSalesFormSubmit(salesForm);
+function onSalesConfirmation(event) {
+    console.log('btn', event, event);
+    event.disabled = true;
+    onSalesFormSubmit(salesForm, event);
 }
 
-function onSalesFormSubmit(form) {
+function onSalesFormSubmit(form, btn) {
     console.log('form', form.target, new FormData(form));
     
     const data = new FormData(form);
@@ -243,7 +245,7 @@ function onSalesFormSubmit(form) {
     const modalBackdrop = document.getElementsByClassName("modal-backdrop");
 
     if (isFormValid) {
-        var formAction = event.target.action
+        var formAction = form.action
 
         $.ajax({
             type: 'POST',
@@ -264,6 +266,8 @@ function onSalesFormSubmit(form) {
                     onClick: function () {
                     } // Callback after click
                 }).showToast();
+
+                btn.disabled = false;
 
                 window.location.replace("/Sales/Reserved");
 
@@ -311,6 +315,8 @@ function onSalesFormSubmit(form) {
                     onClick: function () {
                     } // Callback after click
                 }).showToast();
+
+                btn.disabled = false;
             }
         });
     }

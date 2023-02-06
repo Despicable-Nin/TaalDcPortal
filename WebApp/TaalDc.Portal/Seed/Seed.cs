@@ -10,7 +10,7 @@ public class Seed
     public const string MARKETING = nameof(MARKETING);
     public const string SALES = nameof(SALES);
     public const string BROKER = nameof(BROKER);
-    public const string GUEST = nameof(GUEST);
+    public const string STAFF = nameof(STAFF);
 
     public static string[] ROLES =
     {
@@ -18,7 +18,7 @@ public class Seed
         MARKETING,
         SALES,
         BROKER,
-        GUEST
+        STAFF
     };
 
     public static async Task CreateRoles(RoleManager<IdentityRole> roleManager)
@@ -94,13 +94,10 @@ public class Seed
     public static async Task Initialize(WebApplication app)
     {
         const string ADMIN_ID = "4940CDBE-BAD7-47BB-BEE5-15DDB92939BA";
-        const string GUEST_ID = "05F633F6-1674-4322-A347-4A8C6EEFADFE";
 
         const string ADMIN_EMAIL = "admin@strator.com";
-        const string GUEST_EMAIL = "guest@taaldc.com";
 
         const string ADMIN_PASSWORD = "@dmini$trat0R2023!";
-        const string GUEST_PASSWORD = "guesT1234!";
 
         using (var scope = app.Services.CreateScope())
         {
@@ -113,7 +110,6 @@ public class Seed
                 await CreateRoles(roleManager);
 
                 await CreateUsers(userManager, ADMIN, ADMIN_ID, ADMIN_EMAIL, ADMIN_PASSWORD);
-                await CreateUsers(userManager, GUEST, GUEST_ID, GUEST_EMAIL, GUEST_PASSWORD);
             }
             catch (Exception ex)
             {

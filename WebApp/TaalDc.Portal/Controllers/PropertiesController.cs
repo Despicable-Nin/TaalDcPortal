@@ -108,6 +108,10 @@ public class PropertiesController : BaseController<PropertiesController>
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateTower()
     {
+        var properties = await _catalogService.GetProperties(null, null, 0, 1, 10000);
+
+        ViewData["Properties"] = properties.Data;
+
         return View();
     }
 
@@ -135,6 +139,10 @@ public class PropertiesController : BaseController<PropertiesController>
 
             if (result == null) RedirectToAction("Index");
 
+            var properties = await _catalogService.GetProperties(null, null, 0, 1, 10000);
+
+            ViewData["Properties"] = properties.Data;
+
             var towerCreateDTO = _mapper.Map<TowerCreate_ClientDto>(result);
             return View(towerCreateDTO);
         }
@@ -147,6 +155,10 @@ public class PropertiesController : BaseController<PropertiesController>
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> CreateFloor()
     {
+        var towers = await _catalogService.GetTowers(null, null, 0, 1, 10000);
+
+        ViewData["Towers"] = towers.Data;
+
         return View();
     }
 
@@ -173,6 +185,10 @@ public class PropertiesController : BaseController<PropertiesController>
             var result = await _catalogService.GetFloorById(id);
 
             if (result == null) RedirectToAction("Floors");
+
+            var towers = await _catalogService.GetTowers(null, null, 0, 1, 10000);
+
+            ViewData["Towers"] = towers.Data;
 
             var floorCreateDTO = _mapper.Map<FloorCreate_ClientDto>(
                 result);

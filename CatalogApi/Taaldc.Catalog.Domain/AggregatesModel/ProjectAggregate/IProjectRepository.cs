@@ -11,6 +11,7 @@ public interface IProjectRepository : IRepository<Project>
     IEnumerable<Project> GetListAsync();
 
     Task<Property> GetPropertyAsync(int propertyId);
+    Task<Property> GetPropertyByNameAsync(string name);
     Property UpdateProperty(Property property);
 
     Task<Tower> GetTowerAsync(int towerId);
