@@ -1,6 +1,9 @@
-﻿@model TaalDc.Portal.ViewModels.Catalog.TowerCreate_ClientDto
+﻿@using TaalDc.Portal.DTO.Catalog;
+@model TaalDc.Portal.ViewModels.Catalog.TowerCreate_ClientDto
 
 @{
+    List<Property_ClientDto> properties = ViewBag.Properties;
+
     ViewBag.Title = "Edit - " + Model.Name;
     Layout = "_Layout";
 }
@@ -14,16 +17,18 @@
     </h4>
 
     <div>
-        <form id="towerForm" method="post" class="row mb-5 needs-validation" asp-action="CreateTower" asp-controller="Properties">
+        <form id="propertyForm" method="post" class="row mb-5 needs-validation" asp-action="CreateTower" asp-controller="Properties">
             <input asp-for="TowerId" hidden/>
             <div class="mb-3 col-lg-8">
                 <label asp-for="PropertyId" class="form-label">
                     <strong>Property</strong>
                 </label>
-                <select asp-for="PropertyId" class="form-control form-select" required>
-                    <option value="1">
-                        One Tolentino East Residences
-                    </option>
+                 <select asp-for="PropertyId" class="form-control form-select" required>
+                    @foreach(var prop in properties){
+                        <option value="@prop.Id">
+                            @prop.PropertyName
+                        </option>
+                    }
                 </select>
                 <div class="invalid-feedback">
                     This is a required field.
@@ -48,11 +53,30 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <input id="tower-form-submit" class="btn btn-primary" type="submit" value="Save"/>
+                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>
 
+</div>
+
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Form Submission</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to submit this?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button onclick="onPropertyFormSubmit(this, '/Properties/Towers')" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -62,74 +86,6 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
-        const form = document.getElementById('towerForm');
-        form.addEventListener('submit', onPropertyFormSubmit);
-
-        function onPropertyFormSubmit(event) {
-            event.preventDefault();
-
-            var btn = document.getElementById("tower-form-submit");
-
-            btn.disabled = true;
-
-            const data = new FormData(event.target);
-
-            const value = Object.fromEntries(data.entries());
-
-            console.log('form values', value);
-
-            var isFormValid = event.target.checkValidity();
-
-            console.log('form validity', isFormValid);
-
-            event.target.classList.add("was-validated");
-
-            if (isFormValid) {
-                var formAction = event.target.action
-
-                $.ajax({
-                    type: 'POST',
-                    url: formAction,
-                    data: value,
-                    success: function (data, status, xhr) {
-                        console.log('tower post', data);
-                        Toastify({
-                            text: "Submitted successfully!",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top", // `top` or `bottom`
-                            position: "right", // `left`, `center` or `right`
-                            stopOnFocus: true, // Prevents dismissing of toast on hover
-                            style: {
-                                background: "#6AB0F8",
-                            },
-                            onClick: function () { } // Callback after click
-                        }).showToast();
-                        
-                            setTimeout(() => window.location.replace("/Properties/Towers"),1000);
-                    }, error: function () {
-                        Toastify({
-                            text: "Something went wrong. Please try again later.",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top", // `top` or `bottom`
-                            position: "center", // `left`, `center` or `right`
-                            stopOnFocus: true, // Prevents dismissing of toast on hover
-                            style: {
-                                background: "#D01818",
-                            },
-                            onClick: function () { } // Callback after click
-                        }).showToast();
-
-                        btn.disabled = false;
-                    }
-                });
-            } else {
-                btn.disabled = false;
-            }
-            return false;
-        }
-    </script>
+   <script src="~/js/catalog/Property.js"></script>
 
 }

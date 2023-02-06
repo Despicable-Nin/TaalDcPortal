@@ -254,7 +254,11 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        if (response.IsSuccessStatusCode) { 
+            return JsonSerializer.Deserialize<CommandResult>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        return new CommandResult("Unit status cannot be updated", false, model.UnitId);
     }
 }

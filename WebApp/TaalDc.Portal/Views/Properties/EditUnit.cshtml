@@ -17,7 +17,7 @@
     </h4>
 
     <div>
-        <form id="unitForm" method="post" class="row mb-5 needs-validation" asp-action="EditUnit" asp-route-id="@Model.UnitId" asp-controller="Properties">
+        <form id="propertyForm" method="post" class="row mb-5 needs-validation" asp-action="EditUnit" asp-route-id="@Model.UnitId" asp-controller="Properties">
             <input type="hidden" asp-for="UnitId"/>
             <div class="mb-3 col-lg-8">
                 <label asp-for="UnitTypeId" class="form-label">
@@ -153,20 +153,53 @@
                     This is a required field.
                 </div>
             </div>
-            <div class="mb-3 col-lg-12">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox"  asp-for="IsActive">
+            <div class="mb-3 col-lg-8">
+               @* <div class="form-check">
+                   <input class="form-check-input" type="checkbox"  asp-for="IsActive" />
                     <label class="form-check-label" asp-for="IsActive">
                         Is Active?
                     </label>
+                </div>*@
+
+                 <label asp-for="IsActive" class="form-label">
+                    <strong>Is Active?</strong>
+                </label>
+                <select asp-for="IsActive" class="form-control form-select" required>
+                    <option value="true">
+                        YES
+                    </option>
+                    <option value="false">
+                        NO
+                    </option>
+                </select>
+                <div class="invalid-feedback">
+                    This is a required field.
                 </div>
             </div>
             <div class="col-lg-12">
-                <input id="unit-form-submit" class="btn btn-primary" type="submit" value="Save"/>
+                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
             </div>
         </form>
     </div>
+</div>
 
+<!-- Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Form Submission</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to submit this?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button onclick="onPropertyFormSubmit(this, '/Properties/Units')" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -203,78 +236,9 @@
 
     <script src="~/js/common/PJMask.js"></script>
     <script>
-        
-     
         applyPJMask("#floorArea");
         applyPJMask("#balconyArea");
         applyPJMask("#sellingPrice");
-
-        const form = document.getElementById('unitForm');
-        form.addEventListener('submit', onPropertyFormSubmit);
-
-        function onPropertyFormSubmit(event) {
-            event.preventDefault();
-
-            var btn = document.getElementById("unit-form-submit");
-
-            btn.disabled = true;
-
-            const data = new FormData(event.target);
-
-            const value = Object.fromEntries(data.entries());
-
-            console.log('form values', value);
-
-            var isFormValid = event.target.checkValidity();
-
-            console.log('form validity', isFormValid);
-
-            event.target.classList.add("was-validated");
-
-            if (isFormValid) {
-                var formAction = event.target.action
-
-                $.ajax({
-                    type: 'POST',
-                    url: formAction,
-                    data: value,
-                    success: function (data, status, xhr) {
-                        console.log('tower post', data);
-                        Toastify({
-                            text: "Submitted successfully!",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top", // `top` or `bottom`
-                            position: "right", // `left`, `center` or `right`
-                            stopOnFocus: true, // Prevents dismissing of toast on hover
-                            style: {
-                                background: "#6AB0F8",
-                            },
-                            onClick: function () { } // Callback after click
-                        }).showToast();
-                            setTimeout(() => window.location.replace("/Properties/Units"),1000);
-                    }, error: function () {
-                        Toastify({
-                            text: "Something went wrong. Please try again later.",
-                            duration: 3000,
-                            close: true,
-                            gravity: "top", // `top` or `bottom`
-                            position: "center", // `left`, `center` or `right`
-                            stopOnFocus: true, // Prevents dismissing of toast on hover
-                            style: {
-                                background: "#D01818",
-                            },
-                            onClick: function () { } // Callback after click
-                        }).showToast();
-
-                        btn.disabled = false;
-                    }
-                });
-            } else {
-                btn.disabled = false;
-            }
-            return false;
-        }
     </script>
-
+     <script src="~/js/catalog/Property.js"></script>
 }
