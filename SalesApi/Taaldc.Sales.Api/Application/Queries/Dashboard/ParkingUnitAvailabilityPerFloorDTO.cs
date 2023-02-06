@@ -9,7 +9,7 @@ public record ParkingUnitAvailabilityPerFloorDTO
         Available = available;
     }
 
-    public string UnitType { get; private set; }
-    public string Floor { get; private set; }
-    public int Available { get; private set; }
+    public string UnitType { get; }
+    public string Floor { get; }
+    public int Available { get; }
 }

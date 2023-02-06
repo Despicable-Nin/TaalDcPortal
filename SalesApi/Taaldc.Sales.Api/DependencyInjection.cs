@@ -1,14 +1,9 @@
-using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SeedWork;
-
+using Microsoft.OpenApi.Models;
 using Taaldc.Sales.Infrastructure;
-
 
 namespace Taaldc.Sales.API;
 
@@ -35,18 +30,21 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options => {
-            options.SwaggerDoc("V1", new OpenApiInfo {
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("V1", new OpenApiInfo
+            {
                 Version = "V1",
                 Title = "WebAPI",
                 Description = "Sales WebAPI"
             });
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
@@ -54,15 +52,18 @@ public static class DependencyInjection
                 Description = "Bearer Authentication with JWT Token",
                 Type = SecuritySchemeType.Http
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    new OpenApiSecurityScheme {
-                        Reference = new OpenApiReference {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
                             Id = "Bearer",
                             Type = ReferenceType.SecurityScheme
                         }
                     },
-                    new List < string > ()
+                    new List<string>()
                 }
             });
         });
@@ -72,7 +73,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
     {
-
 // Adding Authentication
         services.AddAuthentication(options =>
             {
@@ -85,13 +85,13 @@ public static class DependencyInjection
             {
                 // options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ValidateIssuer = true,
                     // ValidateAudience = true,
                     ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                     // ValidateLifetime = true,
                     // ValidateIssuerSigningKey =true,        
                 };

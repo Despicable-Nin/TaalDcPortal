@@ -1,5 +1,3 @@
-namespace Taaldc.Library.Common.Extensions;
-
 public static class GenericTypeExtensions
 {
     public static string GetGenericTypeName(this Type type)

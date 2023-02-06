@@ -66,6 +66,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Common\EventBus\EventBus\EventBus.csproj" />
         <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
         <ProjectReference Include="..\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj" />
     </ItemGroup>

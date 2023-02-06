@@ -4,7 +4,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure.EntityConfigurations;
 
-class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
+internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
 {
     public void Configure(EntityTypeBuilder<Buyer> builder)
     {
@@ -27,6 +27,5 @@ class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
         builder.Property(b => b.ContactNo).IsRequired();
 
         builder.HasIndex(b => b.ContactNo).IsUnique();
-
     }
 }

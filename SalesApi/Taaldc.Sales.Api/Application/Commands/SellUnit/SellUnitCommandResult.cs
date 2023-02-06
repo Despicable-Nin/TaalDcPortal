@@ -1,8 +1,8 @@
 namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
-public record SellUnitCommandResult 
+public record SellUnitCommandResult
 {
-    private SellUnitCommandResult(bool isSuccess, string errorMessage, IDictionary<string,object> ret) 
+    private SellUnitCommandResult(bool isSuccess, string errorMessage, IDictionary<string, object> ret)
     {
         ErrorMessage = errorMessage;
         IsSuccess = isSuccess;
@@ -11,7 +11,7 @@ public record SellUnitCommandResult
 
     public string ErrorMessage { get; }
     public bool IsSuccess { get; }
-    public  IDictionary<string,object> Ret { get; }
+    public IDictionary<string, object> Ret { get; }
 
     public static SellUnitCommandResult Create(bool isSuccess, string errorMessage, IDictionary<string, object> ret)
     {

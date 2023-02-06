@@ -4,27 +4,27 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure.EntityConfigurations;
 
-class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+internal class PaymentConfiguration : IEntityTypeConfiguration<Payment>
 {
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder.ToTable("payment");
-        
+
         builder.HasKey(b => b.Id);
 
         builder.Property(b => b.Id).UseHiLo("paymentseq", SalesDbContext.DEFAULT_SCHEMA);
 
-       // builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique(false);
+        // builder.HasIndex(b => b.ConfirmationNumber).HasDatabaseName("IX_ConfirmationNumber").IsUnique(false);
 
         builder.Property<int>("OrderId")
             .IsRequired();
-            
+
 
         //1.A - mapped to a navigation property -- that is immutable as well
         builder.HasOne(b => b.PaymentType)
             .WithMany()
             .HasForeignKey("_paymentTypeId");
-        
+
         //1.B - shadow property of th reaodnly Entity (PaymentType)
         builder.Property<int>("_paymentTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
@@ -35,7 +35,7 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasOne(b => b.TransactionType)
             .WithMany()
             .HasForeignKey("_transactionTypeId");
-        
+
         //2.B - this field works a shadow prooerty of the readonly Entity (TransactionType)
         builder.Property<int>("_transactionTypeId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
@@ -46,7 +46,7 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.HasOne(b => b.Status)
             .WithMany()
             .HasForeignKey("_statusId");
-        
+
         //3.B
         builder.Property<int>("_statusId")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
@@ -60,6 +60,5 @@ class PaymentConfiguration : IEntityTypeConfiguration<Payment>
         builder.Property(b => b.CorrelationId).IsRequired(false);
         builder.Property(b => b.VerifiedBy).IsRequired(false);
         builder.Property(b => b.Remarks).IsRequired(false);
-
     }
 }

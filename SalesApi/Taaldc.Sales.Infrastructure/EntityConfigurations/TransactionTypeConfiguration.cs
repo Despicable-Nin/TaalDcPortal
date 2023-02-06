@@ -4,16 +4,15 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure.EntityConfigurations;
 
-class TransactionTypeConfiguration : IEntityTypeConfiguration<TransactionType>
+internal class TransactionTypeConfiguration : IEntityTypeConfiguration<TransactionType>
 {
     public void Configure(EntityTypeBuilder<TransactionType> builder)
     {
         builder.ToTable("transactiontype");
-        
-        builder.HasKey(b => b.Id);
-        
 
-        
+        builder.HasKey(b => b.Id);
+
+
         builder.Property(b => b.Name)
             .HasMaxLength(30)
             .IsRequired();

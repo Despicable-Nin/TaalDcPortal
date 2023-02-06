@@ -25,7 +25,7 @@ public record CommandResult
     {
         return Create(true, default, id);
     }
-    
+
 
     public static CommandResult Failed(int? id, string errorMessage)
     {

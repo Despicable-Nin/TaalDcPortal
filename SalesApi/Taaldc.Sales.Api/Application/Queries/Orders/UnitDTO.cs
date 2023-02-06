@@ -2,7 +2,9 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public record UnitDTO
 {
-    public UnitDTO(string property, int propertyId, string tower, int towerId, string floor, int floorId, string unit, int unitId, string scenicView, int scenicViewId, string unitType, int unitTypeId, string unitStatus, int unitStatusId, decimal originalPrice, decimal sellingPrice, double unitArea, double balconyArea)
+    public UnitDTO(string property, int propertyId, string tower, int towerId, string floor, int floorId, string unit,
+        int unitId, string scenicView, int scenicViewId, string unitType, int unitTypeId, string unitStatus,
+        int unitStatusId, decimal originalPrice, decimal sellingPrice, double unitArea, double balconyArea)
     {
         Property = property;
         PropertyId = propertyId;
@@ -24,22 +26,22 @@ public record UnitDTO
         BalconyArea = balconyArea;
     }
 
-    public string Property { get; private set; }
-    public int PropertyId { get; private set; }
-    public string Tower { get; private set; }
-    public int TowerId { get; private set; }
-    public string Floor { get; private set; }
-    public int FloorId { get; private set; }
-    public string Unit { get; private set; }
-    public int UnitId { get; private set; }
-    public string ScenicView { get; private set; }
-    public int ScenicViewId { get; private set; }
-    public string UnitType { get; private set; }
-    public int UnitTypeId { get; private set; }
-    public string UnitStatus { get; private set; }
-    public int UnitStatusId { get; private set; }
-    public decimal OriginalPrice { get; private set; }
-    public decimal SellingPrice { get; private set; }
-    public double UnitArea { get; private set; }
-    public double BalconyArea { get; private set; }
+    public string Property { get; }
+    public int PropertyId { get; }
+    public string Tower { get; }
+    public int TowerId { get; }
+    public string Floor { get; }
+    public int FloorId { get; }
+    public string Unit { get; }
+    public int UnitId { get; }
+    public string ScenicView { get; }
+    public int ScenicViewId { get; }
+    public string UnitType { get; }
+    public int UnitTypeId { get; }
+    public string UnitStatus { get; }
+    public int UnitStatusId { get; }
+    public decimal OriginalPrice { get; }
+    public decimal SellingPrice { get; }
+    public double UnitArea { get; }
+    public double BalconyArea { get; }
 }

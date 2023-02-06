@@ -1,19 +1,24 @@
-using FluentValidation;
 using MediatR;
 using Newtonsoft.Json;
 using SeedWork;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
-using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
 {
+    private readonly IBuyerRepository _buyerRepository;
+    private readonly IAmCurrentUser _currentUser;
+    private readonly ILogger<SellUnitCommandHandler> _logger;
+    private readonly IMediator _mediator;
+
+    private readonly IOrderRepository _salesRepository;
+
     public SellUnitCommandHandler(
-        IOrderRepository salesRepository, 
-        IBuyerRepository buyerRepository, 
-        ILogger<SellUnitCommandHandler> logger, 
+        IOrderRepository salesRepository,
+        IBuyerRepository buyerRepository,
+        ILogger<SellUnitCommandHandler> logger,
         IAmCurrentUser currentUser,
         IMediator mediator)
     {
@@ -24,18 +29,11 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
         _mediator = mediator;
     }
 
-    private readonly IOrderRepository _salesRepository;
-    private readonly IBuyerRepository _buyerRepository;
-    private readonly ILogger<SellUnitCommandHandler> _logger;
-    private readonly IAmCurrentUser _currentUser;
-	private readonly IMediator _mediator;
-
-	public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+    public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         try
         {
-
-            Buyer buyer = _buyerRepository.GetByEmail(request.EmailAddress);
+            var buyer = _buyerRepository.GetByEmail(request.EmailAddress);
 
             var buyerId = buyer?.Id;
 
@@ -60,7 +58,6 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             //if RF has been paid
             if (request.Reservation > 0)
             {
-
                 if (request.ReservationConfirmNo == string.Empty)
                     throw new ArgumentNullException(nameof(SellUnitCommand));
 
@@ -73,8 +70,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                     request.ReservationConfirmNo,
                     request.PaymentMethod,
                     request.Reservation,
-                    request.Remarks,
-                    default);
+                    request.Remarks);
             }
 
             //if DP has been paid
@@ -84,7 +80,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
                 if (request.DownPaymentConfirmNo == string.Empty)
                     throw new ArgumentNullException(nameof(SellUnitCommand));
 
-                string correlationId = (request.DownPaymentConfirmNo == request.ReservationConfirmNo)
+                var correlationId = request.DownPaymentConfirmNo == request.ReservationConfirmNo
                     ? request.DownPaymentConfirmNo
                     : string.Empty;
 
@@ -104,14 +100,13 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             }
 
 
-            await _salesRepository.UnitOfWork.SaveChangesAsync(default);
+            await _salesRepository.UnitOfWork.SaveChangesAsync();
 
             await _mediator.Publish(new UpdateUnitReplicaStatusNotif(request.UnitId, 3, "RESERVED"));
 
-            return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>()
+            return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>
             {
-                { "UnitId", sale.GetUnitId },
-
+                { "UnitId", sale.GetUnitId }
             });
         }
         catch (Exception ex)
@@ -119,7 +114,5 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
             return SellUnitCommandResult.Create(false, ex.InnerException.Message, new Dictionary<string, object>());
         }
-
-
     }
 }
