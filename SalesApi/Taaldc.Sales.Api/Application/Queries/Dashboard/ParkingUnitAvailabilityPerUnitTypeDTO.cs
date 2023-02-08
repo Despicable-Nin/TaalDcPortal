@@ -1,10 +1,9 @@
-using System.Text.Json.Serialization;
-
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public record ParkingUnitAvailabilityPerUnitTypeDTO
 {
-    public ParkingUnitAvailabilityPerUnitTypeDTO(string unitType, double floorArea, decimal min, decimal max, int available)
+    public ParkingUnitAvailabilityPerUnitTypeDTO(string unitType, double floorArea, decimal min, decimal max,
+        int available)
     {
         UnitType = unitType;
         FloorArea = floorArea;
@@ -14,13 +13,13 @@ public record ParkingUnitAvailabilityPerUnitTypeDTO
     }
 
 
-    public string UnitType { get; private set; }
-    public double FloorArea { get; private set; }
-    public decimal Min { get; private set; }
-    public decimal Max { get; private set; }
+    public string UnitType { get; }
+    public double FloorArea { get; }
+    public decimal Min { get; }
+    public decimal Max { get; }
     public string UnitPriceRange => ToPriceRange(Min, Max);
-    public int Available { get; private set; }
-    
+    public int Available { get; }
+
     private static string ToPriceRange(decimal min, decimal max)
     {
         var a = min.ToString("#,##0.00");
@@ -30,10 +29,10 @@ public record ParkingUnitAvailabilityPerUnitTypeDTO
     }
 }
 
-
 public record ResidentialUnitAvailabilityPerUnitTypeDTO
 {
-    public ResidentialUnitAvailabilityPerUnitTypeDTO(string unitTypeShortCode, double minArea, double maxArea, decimal min, decimal max, int available)
+    public ResidentialUnitAvailabilityPerUnitTypeDTO(string unitTypeShortCode, double minArea, double maxArea,
+        decimal min, decimal max, int available)
     {
         UnitTypeShortCode = unitTypeShortCode;
         MinArea = minArea;
@@ -43,15 +42,15 @@ public record ResidentialUnitAvailabilityPerUnitTypeDTO
         Available = available;
     }
 
-    public string UnitTypeShortCode { get; private set; }
-    public double MinArea { get; private set; }
-    public double MaxArea { get; private set; }
+    public string UnitTypeShortCode { get; }
+    public double MinArea { get; }
+    public double MaxArea { get; }
     public string FloorArea => ToFloorArea(MinArea, MaxArea);
-    public decimal Min { get; private set; }
-    public decimal Max { get; private set; }
+    public decimal Min { get; }
+    public decimal Max { get; }
     public string UnitPriceRange => ToPriceRange(Min, Max);
-    public int Available { get; private set; }
-    
+    public int Available { get; }
+
     private static string ToFloorArea(double min, double max)
     {
         var a = min.ToString("#,##0.00");
@@ -59,7 +58,7 @@ public record ResidentialUnitAvailabilityPerUnitTypeDTO
 
         return $"{a} - {b}";
     }
-    
+
     private static string ToPriceRange(decimal min, decimal max)
     {
         var a = min.ToString("#,##0.00");

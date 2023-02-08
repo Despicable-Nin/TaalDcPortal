@@ -70,7 +70,10 @@ public class ProjectRepository : IProjectRepository
         _context.Towers.Remove(tower);
     }
 
-    public Tower UpdateTower(Tower tower) => _context.Towers.Update(tower).Entity;
+    public Tower UpdateTower(Tower tower)
+    {
+        return _context.Towers.Update(tower).Entity;
+    }
 
     public async Task<Floor> GetFloorAsync(int floorId)
     {
@@ -106,10 +109,14 @@ public class ProjectRepository : IProjectRepository
         return _context.Floors.Update(floor).Entity;
     }
 
-    public async Task<Unit> GetUnitAsync(int unitId) => await _context.Units.FirstOrDefaultAsync(i => i.Id == unitId);
+    public async Task<Unit> GetUnitAsync(int unitId)
+    {
+        return await _context.Units.FirstOrDefaultAsync(i => i.Id == unitId);
+    }
 
 
-    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea, double balconyArea, string remarks)
+    public Unit AddUnit(int floorId, int scenicViewId, int unitTypeId, string identifier, decimal price,
+        double floorArea, double balconyArea, string remarks)
     {
         var floor = _context.Floors.Include(i => i.Units).FirstOrDefault(i => i.Id == floorId);
 
@@ -153,7 +160,12 @@ public class ProjectRepository : IProjectRepository
             .Include(i => i.Floors)
             .SingleOrDefaultAsync(i => i.Id == towerId);
     }
-    
+
+    public Unit UpdateUnit(Unit unit)
+    {
+        return _context.Units.Update(unit).Entity;
+    }
+
 
     public void RemoveProperty(int projectId, int propertyId)
     {
@@ -167,9 +179,4 @@ public class ProjectRepository : IProjectRepository
 
         _context.Properties.Remove(property);
     }
-
-	public Unit UpdateUnit(Unit unit)
-	{
-        return _context.Units.Update(unit).Entity;
-	}
 }

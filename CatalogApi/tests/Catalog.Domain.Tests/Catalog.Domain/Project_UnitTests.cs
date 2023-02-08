@@ -8,7 +8,7 @@ public class UnitTest1
 {
     private const string name = nameof(name);
     private const string developer = nameof(developer);
-    
+
     [Fact]
     public void Can_create_instance_by_factory_successful()
     {
@@ -16,7 +16,7 @@ public class UnitTest1
 
         project.SetName("just another name");
         project.Developer = "taal dc";
-        
+
         project.ShouldNotBeNull();
         project.Name.ShouldNotBeNull();
         project.Name.ShouldBe("just another name");
@@ -37,7 +37,6 @@ public class UnitTest1
 
         project.Name.ShouldBe(name);
         project.Developer.ShouldBe(developer);
-
     }
 
     [Fact]
@@ -52,7 +51,7 @@ public class UnitTest1
     public void Can_add_property_successful()
     {
         var project = new Project(name, developer);
-        
+
         project.AddProperty("one tolentino east residences", 1000);
         project.Properties.ShouldNotBeNull();
         project.Properties.Count.ShouldBe(1);
@@ -62,7 +61,7 @@ public class UnitTest1
     public void Can_remove_property()
     {
         var project = CreateProjectWithOneProperty();
-    
+
         var remove = project.Properties.SingleOrDefault(x => x.Name == "one tolentino east residences");
 
         remove.ShouldNotBeNull();
@@ -70,13 +69,12 @@ public class UnitTest1
         project.RemoveProperty(remove.Id);
 
         project.Properties.Any(x => x.Id == remove.Id);
-
     }
 
     private Project CreateProjectWithOneProperty()
     {
         var project = new Project(name, developer);
-        
+
         project.AddProperty("one tolentino east residences", 1000);
         return project;
     }

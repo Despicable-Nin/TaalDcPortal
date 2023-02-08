@@ -1,8 +1,7 @@
-﻿namespace Taaldc.Sales.Api.Application.Queries.Dashboard
+﻿namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
+
+public class UnitAvailabilitySummaryByStatusDTO
 {
-    public class UnitAvailabilitySummaryByStatusDTO
-    {
-        public string UnitStatus { get; set; }
-        public int Count { get; set; }
-    }
+    public string UnitStatus { get; set; }
+    public int Count { get; set; }
 }

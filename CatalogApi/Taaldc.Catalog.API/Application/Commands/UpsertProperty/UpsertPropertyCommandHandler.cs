@@ -32,27 +32,17 @@ public class UpsertPropertyCommandHandler : IRequestHandler<UpsertPropertyComman
 
             //update
             property.Update(request.Name, request.LandArea);
-
-           
         }
         else
         {
-            property = await _propertyRepository.GetPropertyByNameAsync(request.Name);
-
-            if(property != null) return CommandResult.Failed(null, "A property with name: " + request.Name + " already exists.");
             //this will a new thru the root aggregate
             property = project.AddProperty(request.Name, request.LandArea);
         }
-        
+
         _propertyRepository.Update(project);
 
-        try { 
-            await  _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        await _propertyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-            return CommandResult.Success(property.Id);
-        }catch(Exception ex)
-        {
-            return CommandResult.Failed(null, ex.InnerException.Message);
-        }
+        return CommandResult.Success(property.Id);
     }
 }

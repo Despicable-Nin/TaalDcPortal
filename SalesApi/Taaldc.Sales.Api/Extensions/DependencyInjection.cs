@@ -1,13 +1,12 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Taaldc.Sales.Infrastructure;
 
 namespace Taaldc.Sales.Api.Extensions;
-
 
 public static class IServiceCollectionExtensions
 {
@@ -23,7 +22,7 @@ public static class IServiceCollectionExtensions
                         sqlOptions =>
                         {
                             sqlOptions.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
-                           
+
                             sqlOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(30), null);
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
@@ -75,35 +74,33 @@ public static class IServiceCollectionExtensions
     }
 
 
+    public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Adding Authentication
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            // Adding Jwt Bearer
+            .AddJwtBearer(options =>
+            {
+                // options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    // ValidateIssuer = true,
+                    // ValidateAudience = true,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                    // ValidateLifetime = true,
+                    // ValidateIssuerSigningKey =true,        
+                };
+            });
+        services.AddAuthorization();
 
-	public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
-	{
-
-		// Adding Authentication
-		services.AddAuthentication(options =>
-		{
-			options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-			options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			// options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-		})
-			// Adding Jwt Bearer
-			.AddJwtBearer(options =>
-			{
-				// options.SaveToken = true;
-				options.RequireHttpsMetadata = false;
-				options.TokenValidationParameters = new TokenValidationParameters()
-				{
-					// ValidateIssuer = true,
-					// ValidateAudience = true,
-					ValidAudience = configuration["JWT:ValidAudience"],
-					ValidIssuer = configuration["JWT:ValidIssuer"],
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
-					// ValidateLifetime = true,
-					// ValidateIssuerSigningKey =true,        
-				};
-			});
-		services.AddAuthorization();
-
-		return services;
-	}
+        return services;
+    }
 }

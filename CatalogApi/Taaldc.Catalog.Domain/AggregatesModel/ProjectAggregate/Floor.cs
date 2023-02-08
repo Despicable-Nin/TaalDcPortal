@@ -5,22 +5,23 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class Floor : Entity
 {
-    
-    private Floor() => _units = new List<Unit>();
+    private readonly List<Unit> _units;
+
+    private Floor()
+    {
+        _units = new List<Unit>();
+    }
 
     public Floor(string name, string description) : this()
     {
         Name = name;
         Description = description;
     }
-    
-    
+
 
     public string Name { get; private set; }
     public string Description { get; private set; }
     public string FloorPlanFilePath { get; private set; }
-
-    private List<Unit> _units;
     public IReadOnlyCollection<Unit> Units => _units.AsReadOnly();
 
     public void Update(string name, string description)
@@ -33,13 +34,13 @@ public sealed class Floor : Entity
     {
         FloorPlanFilePath = floorPlanFilePath;
     }
-    
+
     public Unit AddUnit(
-        int scenicViewId,  
-        int unitTypeId, 
-        string identifier, 
-        decimal price, 
-        double floorArea, 
+        int scenicViewId,
+        int unitTypeId,
+        string identifier,
+        decimal price,
+        double floorArea,
         double balconyArea,
         string remarks)
     {
@@ -49,7 +50,7 @@ public sealed class Floor : Entity
 
         return unit;
     }
-    
+
     public void RemoveUnit(int id, bool hardDelete = false)
     {
         var remove = _units.SingleOrDefault(x => x.Id.Equals(id));

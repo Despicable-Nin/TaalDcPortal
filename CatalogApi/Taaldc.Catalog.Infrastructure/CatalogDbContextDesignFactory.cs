@@ -1,34 +1,35 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using SeedWork;
 
 namespace Taaldc.Catalog.Infrastructure;
 
 public class CatalogDbContextDesignFactory : IDesignTimeDbContextFactory<CatalogDbContext>
 {
-
     public CatalogDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>()
-            .UseSqlServer("Server=localhost;Database=taaldb_admin;User Id=sa;Password=someThingComplicated1234;", sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
-       
+            .UseSqlServer("Server=localhost;Database=taaldb_admin;User Id=sa;Password=someThingComplicated1234;",
+                x => x.MigrationsAssembly("Taaldc.Catalog.Infrastructure"));
+
         return new CatalogDbContext(optionsBuilder.Options, null, new NoMediator());
     }
 
-    class NoMediator : IMediator
+    private class NoMediator : IMediator
     {
-        public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
+            CancellationToken cancellationToken = default)
         {
-            return default(IAsyncEnumerable<TResponse>);
+            return default;
         }
 
         public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
         {
-            return default(IAsyncEnumerable<object?>);
+            return default;
         }
 
-        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default(CancellationToken)) where TNotification : INotification
+        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+            where TNotification : INotification
         {
             return Task.CompletedTask;
         }
@@ -38,9 +39,10 @@ public class CatalogDbContextDesignFactory : IDesignTimeDbContextFactory<Catalog
             return Task.CompletedTask;
         }
 
-        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TResponse> Send<TResponse>(IRequest<TResponse> request,
+            CancellationToken cancellationToken = default)
         {
-            return Task.FromResult<TResponse>(default(TResponse));
+            return Task.FromResult<TResponse>(default);
         }
 
         public Task<object> Send(object request, CancellationToken cancellationToken = default)
