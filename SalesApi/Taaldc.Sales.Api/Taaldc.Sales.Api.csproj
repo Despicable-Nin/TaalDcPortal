@@ -32,7 +32,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Common\EventBusRabbitMQ\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
         <ProjectReference Include="..\..\Common\EventBus\EventBus\EventBus.csproj" />
+        <ProjectReference Include="..\..\Common\IntegrationEventLogEF\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
         <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
         <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
         <ProjectReference Include="..\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj" />
