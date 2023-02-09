@@ -4,12 +4,6 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class Payment : Entity
 {
-    private readonly int _paymentTypeId;
-
-    private int _statusId;
-
-    private readonly int _transactionTypeId;
-
     public Payment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate, string confirmationNumber,
         string paymentMethod, decimal amountPaid, string remarks, string correlationId)
     {
@@ -24,35 +18,29 @@ public class Payment : Entity
         CorrelationId = correlationId;
     }
 
-    public DateTime ActualPaymentDate { get; }
+    public DateTime ActualPaymentDate { get; private set;}
 
-    public string ConfirmationNumber { get; }
+    public string ConfirmationNumber { get;private set; }
+
+    private int _paymentTypeId;
     public PaymentType PaymentType { get; private set; }
+    public int GetPaymentTypeId() => _paymentTypeId;
+
+    private int _transactionTypeId;
     public TransactionType TransactionType { get; private set; }
+    public int GetTransactionTypeId() => _transactionTypeId;
 
     public string VerifiedBy { get; private set; }
+
+    private int _statusId;
     public PaymentStatus Status { get; private set; }
+    public int GetPaymentStatusId() => _statusId;
 
-    public string PaymentMethod { get; }
-    public decimal AmountPaid { get; }
-    public string Remarks { get; }
+    public string PaymentMethod { get; private set;}
+    public decimal AmountPaid { get;private set; }
+    public string Remarks { get;private set; }
 
-    public string CorrelationId { get; } = string.Empty;
-
-    public int GetPaymentTypeId()
-    {
-        return _paymentTypeId;
-    }
-
-    public int GetTransactionTypeId()
-    {
-        return _transactionTypeId;
-    }
-
-    public int GetPaymentStatusId()
-    {
-        return _statusId;
-    }
+    public string CorrelationId { get;private set; } = string.Empty;
 
     public void VerifyPayment(string verifiedBy)
     {

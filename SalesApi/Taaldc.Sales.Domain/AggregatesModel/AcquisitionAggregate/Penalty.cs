@@ -4,8 +4,6 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class Penalty : Entity
 {
-    private readonly int _statusId;
-
     public Penalty(decimal amount, string reason)
     {
         Amount = amount;
@@ -13,14 +11,13 @@ public class Penalty : Entity
         _statusId = PaymentStatus.GetStatusId(PaymentStatus.Pending);
     }
 
-    public decimal Amount { get; }
-    public string Reason { get; }
+    public decimal Amount { get; private set; }
+    public string Reason { get; private set; }
+
+    private int _statusId;
     public PaymentStatus Status { get; private set; }
     public string ConfirmationNumber { get; private set; }
 
 
-    public bool IsPaid()
-    {
-        return _statusId == PaymentStatus.GetStatusId(PaymentStatus.Accepted);
-    }
+    public bool IsPaid() => _statusId == PaymentStatus.GetStatusId(PaymentStatus.Accepted);
 }

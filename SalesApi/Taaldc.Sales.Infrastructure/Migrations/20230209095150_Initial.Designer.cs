@@ -12,8 +12,8 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20230116071937_renamed-to-order")]
-    partial class renamedtoorder
+    [Migration("20230209095150_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "buyerseq", "sales");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ContactNo")
                         .IsRequired()
@@ -161,8 +165,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReservationExpiresOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("_buyerId")
                         .HasColumnType("int")
@@ -248,10 +254,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<string>("ConfirmationNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CorrelationId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
@@ -279,11 +284,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VerifiedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("_paymentTypeId")
@@ -299,10 +302,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnName("TransactionTypeId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConfirmationNumber")
-                        .IsUnique()
-                        .HasDatabaseName("IX_ConfirmationNumber");
 
                     b.HasIndex("OrderId");
 
@@ -510,6 +509,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<int>("UnitTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UnitTypeShortCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

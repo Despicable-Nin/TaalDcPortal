@@ -48,7 +48,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
             unitStatus = "RESERVED";
         }
 
-        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId, unitStatusId, unitStatus));
+        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
 
         return CommandResult.Success(request.PaymentId);
     }
