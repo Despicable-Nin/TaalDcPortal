@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Data;
 using SeedWork;
 using Taaldc.Catalog.Domain.Exceptions;
 
@@ -8,7 +6,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 public sealed class Project : Entity, IAggregateRoot
 {
     private readonly List<Property> _properties;
-    
+
     public Project(string name, string developer) : this()
     {
         Name = name;
@@ -21,7 +19,7 @@ public sealed class Project : Entity, IAggregateRoot
     }
 
     public string Name { get; private set; }
-    public string Developer { get;  set; }
+    public string Developer { get; set; }
     public IReadOnlyCollection<Property> Properties => _properties.AsReadOnly();
 
     public static Project NewProject()
@@ -37,7 +35,10 @@ public sealed class Project : Entity, IAggregateRoot
         Name = name;
     }
 
-    public Property GetPropertyById(int propertyId) => Properties.FirstOrDefault(i => i.Id == propertyId);
+    public Property GetPropertyById(int propertyId)
+    {
+        return Properties.FirstOrDefault(i => i.Id == propertyId);
+    }
 
     public Property AddProperty(string name, double landArea)
     {
@@ -46,7 +47,7 @@ public sealed class Project : Entity, IAggregateRoot
 
         return property;
     }
-    
+
     public void RemoveProperty(int id, bool hardDelete = false)
     {
         var remove = _properties.SingleOrDefault(x => x.Id.Equals(id));

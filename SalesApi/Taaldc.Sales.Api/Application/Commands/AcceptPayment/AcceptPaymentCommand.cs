@@ -10,6 +10,6 @@ public class AcceptPaymentCommand : IRequest<CommandResult>
         PaymentId = paymentId;
     }
 
-    public int OrderId { get; private set; }
-    public int PaymentId { get; private set; }
+    public int OrderId { get; }
+    public int PaymentId { get; }
 }

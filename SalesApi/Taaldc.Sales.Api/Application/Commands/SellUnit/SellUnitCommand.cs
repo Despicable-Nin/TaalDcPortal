@@ -1,36 +1,17 @@
-using System.Runtime.Serialization;
 using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.SellUnit;
 
 public class SellUnitCommand : IRequest<SellUnitCommandResult>
 {
-    public SellUnitCommand(
-        string code, 
-        string broker,
-        bool isRefundable, 
-        int unitId, 
-        decimal sellingPrice,
-        string salutation, 
-        string firstName, 
-        string lastName, 
-        string emailAddress, 
-        string contactNo, 
-        string address,
-        string country,
-        string province, 
-        string townCity, 
-        string zipCode, 
-        decimal reservation,
-        string reservationConfirmNo, 
-        decimal downPayment, 
-        string downPaymentConfirmNo, 
-        DateTime paymentDate,
-        string paymentMethod, 
-        string remarks)
+    public SellUnitCommand(string code, string broker, bool isRefundable, int unitId, decimal sellingPrice,
+        string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address,
+        string country, string province, string townCity, string zipCode, decimal reservation,
+        string reservationConfirmNo, decimal downPayment, string downPaymentConfirmNo, DateTime paymentDate,
+        string paymentMethod, string remarks)
     {
         Code = code;
-        Broker = broker?? "In-house";
+        Broker = broker ?? "In-house";
         IsRefundable = isRefundable;
         UnitId = unitId;
         SellingPrice = sellingPrice;
@@ -39,7 +20,7 @@ public class SellUnitCommand : IRequest<SellUnitCommandResult>
         LastName = lastName;
         EmailAddress = emailAddress;
         ContactNo = contactNo;
-        Address = address; 
+        Address = address;
         Country = country;
         Province = province;
         TownCity = townCity;
@@ -53,45 +34,44 @@ public class SellUnitCommand : IRequest<SellUnitCommandResult>
         Remarks = remarks;
     }
 
-    public string Code { get; private set; }
- 
-    public string Broker { get;private set; }
-  
-    public bool IsRefundable { get;private set; }
+    public string Code { get; }
 
-    public int UnitId { get;private set; }
-   
-    public decimal SellingPrice { get;private set; }
+    public string Broker { get; }
 
-    public string Salutation { get;private  set; }
-  
-    public string FirstName { get;private  set; }
-    
-    public string LastName { get;private  set; }
-   
-    public string EmailAddress { get;private  set; }
+    public bool IsRefundable { get; }
 
-    public string ContactNo { get;private  set; }
-   
-    public string Address { get; private set; }
-    public string Country { get;private  set; }
-   
-    public string Province { get;private  set; }
-   
-    public string TownCity { get;private  set; }
-    
-    public string ZipCode { get;private set; }
-    
-    public decimal Reservation { get;private set; }
-    public string ReservationConfirmNo { get; private set; }
-    
-    public decimal DownPayment { get;private set; } 
-    public string DownPaymentConfirmNo { get; private set; }
-  
-    public DateTime PaymentDate { get;private set; }
-    
-    public string PaymentMethod { get;private set; }
-    
-    public string Remarks { get; private set; }
+    public int UnitId { get; }
 
+    public decimal SellingPrice { get; }
+
+    public string Salutation { get; }
+
+    public string FirstName { get; }
+
+    public string LastName { get; }
+
+    public string EmailAddress { get; }
+
+    public string ContactNo { get; }
+
+    public string Address { get; }
+    public string Country { get; }
+
+    public string Province { get; }
+
+    public string TownCity { get; }
+
+    public string ZipCode { get; }
+
+    public decimal Reservation { get; }
+    public string ReservationConfirmNo { get; }
+
+    public decimal DownPayment { get; }
+    public string DownPaymentConfirmNo { get; }
+
+    public DateTime PaymentDate { get; }
+
+    public string PaymentMethod { get; }
+
+    public string Remarks { get; }
 }

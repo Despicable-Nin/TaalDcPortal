@@ -35,7 +35,6 @@ public class UpsertTowerCommandHandler : IRequestHandler<UpsertTowerCommand, Com
         }
         else
         {
-            
             tower = property.AddTower(request.Name, request.Address);
         }
 

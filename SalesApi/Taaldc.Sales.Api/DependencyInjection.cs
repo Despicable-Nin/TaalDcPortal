@@ -1,14 +1,13 @@
-using Microsoft.OpenApi.Models;
-using System.Reflection;
 using System.Text;
-using MediatR;
+using Autofac;
+using EventBus;
+using EventBus.Abstractions;
+using EventBusRabbitMQ;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SeedWork;
-
+using Microsoft.OpenApi.Models;
 using Taaldc.Sales.Infrastructure;
-
 
 namespace Taaldc.Sales.API;
 
@@ -35,18 +34,21 @@ public static class DependencyInjection
 
         return services;
     }
-    
+
     public static IServiceCollection AddEndpoints(this IServiceCollection services)
     {
         services.AddControllers();
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options => {
-            options.SwaggerDoc("V1", new OpenApiInfo {
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("V1", new OpenApiInfo
+            {
                 Version = "V1",
                 Title = "WebAPI",
                 Description = "Sales WebAPI"
             });
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
                 Scheme = "Bearer",
                 BearerFormat = "JWT",
                 In = ParameterLocation.Header,
@@ -54,15 +56,18 @@ public static class DependencyInjection
                 Description = "Bearer Authentication with JWT Token",
                 Type = SecuritySchemeType.Http
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
                 {
-                    new OpenApiSecurityScheme {
-                        Reference = new OpenApiReference {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
                             Id = "Bearer",
                             Type = ReferenceType.SecurityScheme
                         }
                     },
-                    new List < string > ()
+                    new List<string>()
                 }
             });
         });
@@ -72,7 +77,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
     {
-
 // Adding Authentication
         services.AddAuthentication(options =>
             {
@@ -85,18 +89,60 @@ public static class DependencyInjection
             {
                 // options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     // ValidateIssuer = true,
                     // ValidateAudience = true,
                     ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                     // ValidateLifetime = true,
                     // ValidateIssuerSigningKey =true,        
                 };
             });
         services.AddAuthorization();
+
+        return services;
+    }
+    
+      public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            // services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+            // {
+            //     var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
+            //     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+            //     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+            //     var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            //     string subscriptionName = configuration["SubscriptionClientName"];
+            //
+            //     return new EventBusServiceBus(serviceBusPersisterConnection, logger,
+            //         eventBusSubcriptionsManager, iLifetimeScope, subscriptionName);
+            // });
+        }
+        else
+        {
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            {
+                var subscriptionClientName = configuration["SubscriptionClientName"];
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new EventBusRabbitMQ.EventBusRabbitMQ(rabbitMQPersistentConnection, logger,
+                    eventBusSubcriptionsManager, iLifetimeScope, retryCount, subscriptionClientName);
+            });
+        }
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
         return services;
     }

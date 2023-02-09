@@ -25,8 +25,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("buyerseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence<int>("orderseq", "sales")
-                .StartsAt(1000L);
+            modelBuilder.HasSequence("orderseq", "sales")
+                .IncrementsBy(10);
 
             modelBuilder.HasSequence("orderstatusseq", "sales")
                 .IncrementsBy(10);
@@ -171,10 +171,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BuyerId");
 
-                    b.Property<int?>("_orderCorrelationId")
-                        .HasColumnType("int")
-                        .HasColumnName("OrderCorrelationId");
-
                     b.Property<int>("_statusId")
                         .HasColumnType("int")
                         .HasColumnName("StatusId");
@@ -186,8 +182,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("_buyerId");
-
-                    b.HasIndex("_orderCorrelationId");
 
                     b.HasIndex("_statusId");
 
@@ -529,10 +523,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasForeignKey("_buyerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", null)
-                        .WithMany()
-                        .HasForeignKey("_orderCorrelationId");
 
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderStatus", "Status")
                         .WithMany()

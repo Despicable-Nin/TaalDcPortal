@@ -1,10 +1,5 @@
-
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Serilog;
-using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
@@ -18,11 +13,11 @@ public partial class DashboardQueries
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
                     "WHERE U.UnitTypeId IN (6,7) AND U.UnitStatusId = 1 ";
-        
+
         await using var connection = new SqlConnection(_connectionString);
-      
+
         await connection.OpenAsync(CancellationToken.None);
-        
+
         var result = await connection.QueryAsync<ParkingUnitAvailabilityPerFloorDTO>(query);
 
         return result;
@@ -36,11 +31,11 @@ public partial class DashboardQueries
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
                     "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1";
-        
+
         await using var connection = new SqlConnection(_connectionString);
-      
+
         await connection.OpenAsync(CancellationToken.None);
-        
+
         var result = await connection.QueryAsync<ResidentialUnitCountPerViewDTO>(query);
 
         //var countQuery = "SELECT COUNT(*) [COUNT] " +
@@ -56,8 +51,7 @@ public partial class DashboardQueries
 
     public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType()
     {
-
-        var query = "SELECT DISTINCT U.[UnitType] " + 
+        var query = "SELECT DISTINCT U.[UnitType] " +
                     ",U.[UnitArea] + U.[BalconyArea] [FloorArea] " +
                     ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] " +
                     ",(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] " +
@@ -66,19 +60,18 @@ public partial class DashboardQueries
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
                     "WHERE U.UnitTypeId IN (6,7)  AND U.UnitStatusId = 1";
-        
+
         await using var connection = new SqlConnection(_connectionString);
-      
+
         await connection.OpenAsync(CancellationToken.None);
 
         var result = await connection.QueryAsync<ParkingUnitAvailabilityPerUnitTypeDTO>(query);
-        
+
         return result;
     }
 
     public async Task<IEnumerable<ResidentialUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType()
     {
-       
         var query = "SELECT DISTINCT U.[UnitTypeShortCode] " +
                     ",(SELECT TOP 1 UnitArea + BalconyArea FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [MinArea] " +
                     ",(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [MaxArea] " +
@@ -89,18 +82,17 @@ public partial class DashboardQueries
                     "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
                     "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id " +
                     "WHERE U.UnitTypeId IN (2,3,4,5,8)  AND U.UnitStatusId = 1";
-        
+
         await using var connection = new SqlConnection(_connectionString);
-      
+
         await connection.OpenAsync(CancellationToken.None);
 
         var result = await connection.QueryAsync<ResidentialUnitAvailabilityPerUnitTypeDTO>(query);
-        
+
         return result;
     }
-    
 
-    
+
     private static string ToPriceRange(decimal min, decimal max)
     {
         var a = min.ToString("#,##0.00");

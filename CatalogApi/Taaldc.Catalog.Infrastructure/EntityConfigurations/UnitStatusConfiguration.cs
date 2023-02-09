@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
-class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
+internal class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
 {
     public void Configure(EntityTypeBuilder<UnitStatus> builder)
     {

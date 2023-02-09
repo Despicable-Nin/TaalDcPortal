@@ -16,7 +16,10 @@ public sealed class Property : Entity
         LandArea = landArea;
     }
 
-    private Property() => _towers = new List<Tower>();
+    private Property()
+    {
+        _towers = new List<Tower>();
+    }
 
     public string Name { get; private set; }
     public double LandArea { get; private set; }
@@ -28,7 +31,7 @@ public sealed class Property : Entity
         LandArea = landArea;
     }
 
-    public Tower AddTower(string name, string  address)
+    public Tower AddTower(string name, string address)
     {
         var tower = new Tower(name, address);
         _towers.Add(tower);
@@ -41,6 +44,4 @@ public sealed class Property : Entity
         var tower = _towers.FirstOrDefault(i => i.Id == towerId);
         _towers.Remove(tower);
     }
-
-
 }

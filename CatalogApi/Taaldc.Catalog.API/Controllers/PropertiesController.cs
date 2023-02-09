@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Taaldc.Catalog.API.Application.Commands.UpsertProperty;
-using Taaldc.Catalog.API.Application.Commands.UpsertTower;
 using Taaldc.Catalog.API.Application.Common.Models;
 using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.DTO;
@@ -14,7 +13,8 @@ public class PropertiesController : ApiBaseController<PropertiesController>
 {
     private readonly IPropertyQueries _propertyQueries;
 
-    public PropertiesController(ILogger<PropertiesController> logger, IMediator mediator, IPropertyQueries propertyQueries) : base(logger, mediator)
+    public PropertiesController(ILogger<PropertiesController> logger, IMediator mediator,
+        IPropertyQueries propertyQueries) : base(logger, mediator)
     {
         _propertyQueries = propertyQueries;
     }

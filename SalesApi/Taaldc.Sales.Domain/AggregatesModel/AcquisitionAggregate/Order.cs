@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using SeedWork;
 using Taaldc.Sales.Domain.Exceptions;
 
@@ -10,8 +9,9 @@ public class Order : DomainEntity, IAggregateRoot
     {
         _payments = new List<Payment>();
     }
-    
-    public Order(int unitId,  int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
+
+
+    public Order(int unitId, int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
     {
         _unitId = unitId;
         _buyerId = buyerId;
@@ -21,18 +21,19 @@ public class Order : DomainEntity, IAggregateRoot
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         FinalPrice = finalPrice;
     }
-    
+
     private int _unitId;
-    public int GetUnitId => _unitId;
+    public int GetUnitId() => _unitId;
+    
 
     private int? _orderCorrelationId;
     public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
     public int? GetOrderCorrelationId() => _orderCorrelationId;
-    
-    public string Code { get; private set; }
-    public string Broker { get; private set; }
-    public string Remarks { get; private set; }
-    public decimal FinalPrice { get; private set; }
+
+    public string Code { get;private set; }
+    public string Broker { get;private set; }
+    public string Remarks { get;private set; }
+    public decimal FinalPrice { get;private set; }
 
     public DateTime? ReservationExpiresOn { get; private set; } = default;
     public bool IsRefundable { get; private set; } = true;
@@ -45,40 +46,36 @@ public class Order : DomainEntity, IAggregateRoot
     public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
     private int _buyerId;
-    public int GetBuyerId => _buyerId;
+    public int GetBuyerId() => _buyerId;
     
     public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
-    
+
     public Payment AddPayment(
-        int paymentTypeId, 
+        int paymentTypeId,
         int transactionTypeId,
         DateTime actualPaymentDate,
-        string confirmationNumber, 
+        string confirmationNumber,
         string paymentMethod,
-        decimal amountPaid, 
-        string remarks, 
+        decimal amountPaid,
+        string remarks,
         string correlationId = default)
-    { 
-        
+    {
+
         Payment payment = new(
-            paymentTypeId, 
-            transactionTypeId, 
+            paymentTypeId,
+            transactionTypeId,
             actualPaymentDate,
             confirmationNumber,
             paymentMethod,
-            amountPaid, 
-            remarks, 
+            amountPaid,
+            remarks,
             correlationId);
-        
-
-
 
         _payments.Add(payment);
         return payment;
-            
     }
 
     public void MarkAsFullyPaid() => _statusId = OrderStatus.GetIdByName(OrderStatus.FullyPaid);
@@ -169,6 +166,6 @@ public class Order : DomainEntity, IAggregateRoot
     public bool HasFullyPaid() => _payments.Any()
         ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
             .Sum(i => i.AmountPaid) >= FinalPrice
-        : false;
+            : false;
 
 }

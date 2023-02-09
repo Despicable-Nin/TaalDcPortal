@@ -40,10 +40,12 @@ public class UpsertFloorCommandHandler : IRequestHandler<UpsertFloorCommand, Com
 
         _repository.UpdateTower(tower);
 
-        try { 
+        try
+        {
             await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
             return CommandResult.Success(floor.Id);
-        }catch(Exception err)
+        }
+        catch (Exception err)
         {
             return CommandResult.Failed(request.FloorId.Value, err.Message);
         }

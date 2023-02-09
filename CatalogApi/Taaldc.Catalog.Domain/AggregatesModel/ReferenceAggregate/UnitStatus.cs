@@ -4,7 +4,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 public sealed class UnitStatus : Enumeration, IAggregateRoot
 {
-    public enum UnitIs : int
+    public enum UnitIs
     {
         AVAILABLE = 1,
         SOLD = 2,

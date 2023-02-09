@@ -27,7 +27,7 @@ public record Unit_Order_DTO
     [JsonPropertyName("order_id")] public string OrderId { get; set; }
 
     [JsonPropertyName("transaction_date")] public DateTime TransactionDate { get; set; }
-    
+
     [JsonPropertyName("code")] public string Code { get; set; }
 
     [JsonPropertyName("broker")] public string Broker { get; set; }

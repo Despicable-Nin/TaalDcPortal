@@ -1,7 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 using TaalDc.Library.Common.Mediator;
 
 namespace Taaldc.Sales.Infrastructure;
@@ -18,9 +16,8 @@ public class SalesDbContextDesignFactory : IDesignTimeDbContextFactory<SalesDbCo
     public SalesDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>()
-            .UseSqlServer(_connectionString, sqlServerOptionsAction: x => x.MigrationsAssembly("Taaldc.Sales.Infrastructure"));
+            .UseSqlServer(_connectionString, x => x.MigrationsAssembly("Taaldc.Sales.Infrastructure"));
 
         return new SalesDbContext(optionsBuilder.Options, new NoMediator());
     }
-
 }
