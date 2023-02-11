@@ -1,14 +1,180 @@
-﻿@{
+﻿@using TaalDc.Portal.DTO.Sales
+@model BuyerCreate_ClientDto
+
+@{
     ViewData["Title"] = "Quick Create";
 }
 
 
 <div class="container-fluid">
     <div class="tab-content">
-        <h1>
+        <h4 class="primary-color mb-3">
             <strong>
-                Quick Create
+                New Buyer
             </strong>
-        </h1>
+        </h4>
+
+        <hr />
+
+        <form class="row mb-5 needs-validation" asp-action="Create" asp-controller="Buyers">
+            <div class="col-lg-12">
+                <label class="form-label">
+                    <strong>Customer Name</strong>
+                </label>
+            </div>
+
+            <div class="mb-3 col-lg-1">
+                <select asp-for="Salutation" class="form-control form-select" required>
+                    <option value="Mr.">
+                        Mr.
+                    </option>
+                    <option value="Ms.">
+                        Ms.
+                    </option>
+                    <option value="Mrs.">
+                        Mrs.
+                    </option>
+                </select>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-11 row px-0">
+                <div class="mb-3 col-lg-4">
+                    <input asp-for="FirstName" class="form-control" required placeholder="First Name" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div class="mb-3 col-lg-4">
+                    <input asp-for="MiddleName" class="form-control" required placeholder="Middle Name" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+
+                <div class="mb-3 col-lg-4">
+                    <input asp-for="LastName" class="form-control" required placeholder="Last Name" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="EmailAddress" class="form-label">
+                    <strong>Email Address</strong>
+                </label>
+                <input asp-for="EmailAddress" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label asp-for="MobileNo" class="form-label">
+                    <strong>Contact No.</strong>
+                </label>
+                <input asp-for="MobileNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <label class="form-label">
+                    <strong>Customer Home Address</strong>
+                </label>
+            </div>
+
+            <div class="mb-3 col-lg-8">
+                <input asp-for="HomeAddress" class="form-control" placeholder="Street/Brgy/Ave." required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="HomeCity" class="form-control" placeholder="City" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="HomeState" class="form-control" placeholder="State" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="HomeCountry" class="form-control" placeholder="Country" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-4">
+                <input asp-for="HomeZipCode" class="form-control" placeholder="Zip Code" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="spacer col-lg-12">
+
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" asp-for="IsCorporate">
+                    <label class="form-check-label" asp-for="IsCorporate">Corporate Account?</label>
+                </div>
+            </div>
+
+            <div class="col-lg-12 row px-0 corpFields">
+                <div class="mb-3 col-lg-12">
+                    <label asp-for="CompanyName" class="form-label">
+                        <strong>Company/Business Name</strong>
+                    </label>
+                    <input asp-for="CompanyName" class="form-control" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div class="mb-3 col-lg-12">
+                    <label asp-for="CompanyAddress" class="form-label">
+                        <strong>Company Address</strong>
+                    </label>
+                    <input asp-for="CompanyAddress" class="form-control" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div class="mb-3 col-lg-12">
+                    <label asp-for="CompanyIndustry" class="form-label">
+                        <strong>Industry</strong>
+                    </label>
+                    <input asp-for="CompanyIndustry" class="form-control" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/js/sales/buyer.js"></script>
+}
