@@ -10,11 +10,17 @@ public class AddBuyerCommand : IRequest<int>
 
     public string FirstName { get; }
 
+    public string MiddleName { get; }
+
     public string LastName { get; }
+
+    public DateTime DoB { get; }
+    public int CivilStatusId { get; set; }
 
     public string EmailAddress { get; }
 
-    public string ContactNo { get; }
+    public string PhoneNo { get; }
+    public string MobileNo { get; }
 
     public string Address { get; }
     public string Country { get; }
@@ -38,10 +44,17 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
         var buyerId = buyer?.Id;
 
         //upsert buyer
-        buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
+        buyer = _buyerRepository.Upsert(
+            request.Salutation,
+            request.FirstName,
+            request.MiddleName,
+            request.LastName,
+            request.DoB,
+            request.CivilStatusId,
             request.EmailAddress,
-            request.ContactNo, request.Address, request.Country, request.Province, request.TownCity,
-            request.ZipCode, buyerId);
+            request.PhoneNo,
+            request.MobileNo,
+            buyerId);
 
         //persist to database
         await _buyerRepository.UnitOfWork.SaveChangesAsync();

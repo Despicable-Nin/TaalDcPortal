@@ -7,7 +7,49 @@ public interface IBuyerRepository : IRepository<Buyer>
     Buyer GetByEmail(string email);
     Buyer GetById(int id);
 
-    Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
+    Buyer Upsert(string salutation,
+        string firstName,
+        string middleName,
+        string lastName,
+        DateTime doB,
+        int civilStatusId,
+        string emailAddress,
+        string phoneNo,
+        string mobileNo,
+        int? buyerId);
+
+    Buyer UpdateIDInformation(
+        int buyerId,
+        string occupation,
+        string tin,
+        string govIssuedID,
+        DateTime govIssuedIDValidUntil
+        );
+
+    Buyer UpdateAddress(
+        int buyerId,
+        AddressTypeEnum type,
+        string street,
+        string city,
+        string state,
+        string country,
+        string zipCode
+        );
+
+
+    Buyer UpdateCompany(
+        int buyerId,
+        string name,
         string address,
-        string country, string province, string townCity, string zipCode, int? buyerId);
+        string industry,
+        string phoneNo,
+        string mobileNo,
+        string faxNo,
+        string emailAddress,
+        string tin,
+        string secRegNo,
+        string president,
+        string corpSec);
+
+
 }
