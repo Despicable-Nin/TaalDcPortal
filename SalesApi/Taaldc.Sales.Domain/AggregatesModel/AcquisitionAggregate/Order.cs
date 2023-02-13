@@ -11,44 +11,46 @@ public class Order : DomainEntity, IAggregateRoot
     }
 
 
-    public Order(int unitId, int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
+    public Order(
+        //TODO: Delete --> int unitId,
+        int buyerId, string code, string broker, string remarks
+        //TODO: Delete --> , decimal finalPrice
+        ) : this()
     {
-        _unitId = unitId;
+        //TODO: Delete --> _unitId = unitId;
         _buyerId = buyerId;
         Code = code;
         Broker = broker;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
-        FinalPrice = finalPrice;
+        //TODO: Delete --> FinalPrice = finalPrice;
     }
 
-    private int _unitId;
-    public int GetUnitId() => _unitId;
+    //TODO: Delete --> private int _unitId;
+    //TODO: Delete --> public int GetUnitId() => _unitId;
     
 
-    private int? _orderCorrelationId;
-    public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
-    public int? GetOrderCorrelationId() => _orderCorrelationId;
+    //TODO: Delete --> private int? _orderCorrelationId;
+    //TODO: Delete --> public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
+    //TODO: Delete --> public int? GetOrderCorrelationId() => _orderCorrelationId;
 
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
-    public decimal FinalPrice { get;private set; }
+    //TODO: Delete --> public decimal FinalPrice { get;private set; }
 
     public DateTime? ReservationExpiresOn { get; private set; } = default;
-    public bool IsRefundable { get; private set; } = true;
+    //TODO: Delete --> public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
     public int GetStatusId() => _statusId;
     public void SetStatus(int status) => _statusId = status;
 
-    public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
-
     private int _buyerId;
     public int GetBuyerId() => _buyerId;
     
-    public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
+    //TODO: Delete --> public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
@@ -165,7 +167,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public bool HasFullyPaid() => _payments.Any()
         ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >= FinalPrice
+            .Sum(i => i.AmountPaid) >= 0 //TODO: Replace this --> FinalPrice
             : false;
 
 }

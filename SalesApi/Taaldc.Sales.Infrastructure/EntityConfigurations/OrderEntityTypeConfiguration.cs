@@ -28,18 +28,20 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey("_buyerId");
 
-        //2.A
-        builder
-            .Property<int>("_unitId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("UnitId")
-            .IsRequired();
-
-        //2.B there is no direct reference to this object so we add relationship here
-        builder
-            .HasOne<UnitReplica>()
-            .WithMany()
-            .HasForeignKey("_unitId");
+        //TODO: Delete from here
+        // //2.A
+        // builder
+        //     .Property<int>("_unitId")
+        //     .UsePropertyAccessMode(PropertyAccessMode.Field)
+        //     .HasColumnName("UnitId")
+        //     .IsRequired();
+        //
+        // //2.B there is no direct reference to this object so we add relationship here
+        // builder
+        //     .HasOne<UnitReplica>()
+        //     .WithMany()
+        //     .HasForeignKey("_unitId");
+        //TODO: Delete up to here
 
         //3.A - this field works a shadow property of the readonly Entity (Purpose)
         builder
@@ -53,7 +55,7 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey("_statusId");
 
-        builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
+        //TODO: Delete --> builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
 
 
         builder

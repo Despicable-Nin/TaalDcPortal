@@ -32,7 +32,7 @@ public class OrderRepository : IOrderRepository
         if (buyer == default)
             throw new SalesDomainException(nameof(AddOrder), new Exception("Buyer not found."));
 
-        return _context.Orders.Add(new Order(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
+        return default; //TODO: Delete --> _context.Orders.Add(new Order(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
     }
 
     public Order UpdateOrder(Order order)
