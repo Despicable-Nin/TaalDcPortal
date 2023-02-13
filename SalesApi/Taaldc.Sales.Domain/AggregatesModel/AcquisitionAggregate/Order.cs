@@ -12,37 +12,24 @@ public class Order : DomainEntity, IAggregateRoot
 
 
     public Order(
-        //TODO: Delete --> int unitId,
         int buyerId, string code, string broker, string remarks, decimal discount
-        //TODO: Delete --> , decimal finalPrice
-        ) : this()
+    ) : this()
     {
-        //TODO: Delete --> _unitId = unitId;
         _buyerId = buyerId;
         Code = code;
         Broker = broker;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         Discount = discount;
-        //TODO: Delete --> FinalPrice = finalPrice;
+
     }
-
-    //TODO: Delete --> private int _unitId;
-    //TODO: Delete --> public int GetUnitId() => _unitId;
-    
-
-    //TODO: Delete --> private int? _orderCorrelationId;
-    //TODO: Delete --> public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
-    //TODO: Delete --> public int? GetOrderCorrelationId() => _orderCorrelationId;
 
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
-    //TODO: Delete --> public decimal FinalPrice { get;private set; }
 
     public DateTime? ReservationExpiresOn { get; private set; } = default;
-    //TODO: Delete --> public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
@@ -54,7 +41,6 @@ public class Order : DomainEntity, IAggregateRoot
     private int _buyerId;
     public int GetBuyerId() => _buyerId;
     
-    //TODO: Delete --> public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
@@ -174,7 +160,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public bool HasFullyPaid() => _payments.Any()
         ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >= 0 //TODO: Replace this --> FinalPrice
+            .Sum(i => i.AmountPaid) >=  _orderItems.Sum(o => o.Price)
             : false;
 
 }
