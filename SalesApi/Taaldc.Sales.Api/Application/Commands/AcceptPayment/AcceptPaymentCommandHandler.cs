@@ -21,6 +21,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
 
     public async Task<CommandResult> Handle(AcceptPaymentCommand request, CancellationToken cancellationToken)
     {
+        return default;
         if (!_currentUser.Roles.Contains("ADMIN")) return CommandResult.Failed(request.PaymentId, "Unauthorized.");
 
         var order = await _repository.FindOrderByIdAsync(request.OrderId);
@@ -48,7 +49,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
             unitStatus = "RESERVED";
         }
 
-        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
+        //await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
 
         return CommandResult.Success(request.PaymentId);
     }

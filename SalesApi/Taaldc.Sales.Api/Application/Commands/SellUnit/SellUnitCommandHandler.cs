@@ -31,6 +31,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
 
     public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
+        return default;
         try
         {
             var buyer = _buyerRepository.GetByEmail(request.EmailAddress);
@@ -106,7 +107,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
 
             return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>
             {
-                { "UnitId", sale.GetUnitId }
+                //{ "UnitId", sale.GetUnitId }
             });
         }
         catch (Exception ex)
