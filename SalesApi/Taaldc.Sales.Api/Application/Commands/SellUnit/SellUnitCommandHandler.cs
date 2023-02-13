@@ -39,10 +39,17 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitC
             var buyerId = buyer?.Id;
 
             //upsert buyer
-            buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
+            buyer = _buyerRepository.Upsert(
+                request.Salutation,
+                request.FirstName,
+                "",
+                request.LastName,
+                new DateTime(1900,1,1),
+                1,
                 request.EmailAddress,
-                request.ContactNo, request.Address, request.Country, request.Province, request.TownCity,
-                request.ZipCode, buyerId);
+                request.ContactNo,
+                "",
+                buyerId);
 
             //persist to database
             await _buyerRepository.UnitOfWork.SaveChangesAsync();

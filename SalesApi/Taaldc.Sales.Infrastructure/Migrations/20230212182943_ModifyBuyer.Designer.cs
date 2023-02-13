@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Sales.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230212182943_ModifyBuyer")]
+    partial class ModifyBuyer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +326,13 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<decimal>("FinalPrice")
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRefundable")
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
@@ -347,11 +356,17 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("StatusId");
 
+                    b.Property<int>("_unitId")
+                        .HasColumnType("int")
+                        .HasColumnName("UnitId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("_buyerId");
 
                     b.HasIndex("_statusId");
+
+                    b.HasIndex("_unitId");
 
                     b.ToTable("order", "sales");
                 });
@@ -726,6 +741,12 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderStatus", "Status")
                         .WithMany()
                         .HasForeignKey("_statusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.UnitReplica", null)
+                        .WithMany()
+                        .HasForeignKey("_unitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

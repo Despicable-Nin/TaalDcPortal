@@ -1,3 +1,6 @@
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -28,23 +31,90 @@ public class BuyerRepository : IBuyerRepository
         return _context.Buyers.AsNoTracking().SingleOrDefault(i => i.Id == id);
     }
 
-    public Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
-        string address,
-        string country, string province, string townCity, string zipCode, int? buyerId)
+    public Buyer UpdateAddress(int buyerId, AddressTypeEnum type, string street, string city, string state, string country, string zipCode)
     {
-        Buyer buyer = default;
-        if (buyerId.HasValue)
+        if(buyerId > 0)
         {
-            //update
-            buyer = _context.Buyers.Find(buyerId.Value);
-            buyer.UpdateName(salutation, firstName, lastName);
-            buyer.UpdateDetails(emailAddress, contactNo, address, country, province, townCity, zipCode);
+            Buyer buyer = _context.Buyers.Find(buyerId);
+
+            if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
+
+            var address = new Address(type, street, city, state, country, zipCode);
+
+            switch (type)
+            {
+                case AddressTypeEnum.Home:
+                    buyer.HomeAddress = address;
+                    break;
+                case AddressTypeEnum.Business:
+                    buyer.BusinessAddress = address;
+                    break;
+                case AddressTypeEnum.Billing:
+                    buyer.BillingAddress = address;
+                    break;
+
+            }
 
             return _context.Buyers.Update(buyer).Entity;
         }
 
-        buyer = new Buyer(salutation, firstName, lastName, emailAddress, contactNo, address, country, province,
-            townCity, zipCode);
+        throw new ArgumentNullException(buyerId.ToString());
+    }
+
+    public Buyer UpdateCompany(int buyerId, string name, string address, string industry, string phoneNo, string mobileNo, string faxNo, string emailAddress, string tin, string secRegNo, string president, string corpSec)
+    {
+        if (buyerId > 0)
+        {
+            Buyer buyer = _context.Buyers.Find(buyerId);
+
+            if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
+
+            buyer.Company = new Company(name, address, industry, phoneNo, mobileNo, faxNo, emailAddress, tin, secRegNo, president, corpSec);
+
+            return _context.Buyers.Update(buyer).Entity;
+        }
+
+        throw new ArgumentNullException(buyerId.ToString());
+    }
+
+    public Buyer UpdateIDInformation(int buyerId, string occupation, string tin, string govIssuedID, DateTime govIssuedIDValidUntil)
+    {
+        if(buyerId > 0)
+        {
+            Buyer buyer = _context.Buyers.Find(buyerId);
+            buyer.UpdateIDInformation(occupation, tin, govIssuedID, govIssuedIDValidUntil);
+            return _context.Buyers.Update(buyer).Entity;
+        }
+
+        throw new ArgumentNullException(buyerId.ToString());
+    }
+
+    public Buyer Upsert(string salutation,
+        string firstName,
+        string middleName,
+        string lastName,
+        DateTime doB,
+        int civilStatusId,
+        string emailAddress,
+        string phoneNo,
+        string mobileNo,
+        int? buyerId)
+    {
+        Buyer buyer = default;
+
+        if (buyerId.HasValue)
+        {
+            //update
+            buyer = _context.Buyers.Find(buyerId.Value);
+            buyer.UpdateBuyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
+            buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
+
+            return _context.Buyers.Update(buyer).Entity;
+        }
+
+        buyer = new Buyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
+        buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
+
         return _context.Buyers.Add(buyer).Entity;
     }
 }
