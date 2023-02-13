@@ -13,7 +13,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public Order(
         //TODO: Delete --> int unitId,
-        int buyerId, string code, string broker, string remarks
+        int buyerId, string code, string broker, string remarks, decimal discount
         //TODO: Delete --> , decimal finalPrice
         ) : this()
     {
@@ -23,6 +23,7 @@ public class Order : DomainEntity, IAggregateRoot
         Broker = broker;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
+        Discount = discount;
         //TODO: Delete --> FinalPrice = finalPrice;
     }
 
@@ -34,6 +35,7 @@ public class Order : DomainEntity, IAggregateRoot
     //TODO: Delete --> public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
     //TODO: Delete --> public int? GetOrderCorrelationId() => _orderCorrelationId;
 
+    public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
@@ -54,6 +56,8 @@ public class Order : DomainEntity, IAggregateRoot
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
+    private List<OrderItem> _orderItems;
+    public IEnumerable<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
     public Payment AddPayment(
         int paymentTypeId,

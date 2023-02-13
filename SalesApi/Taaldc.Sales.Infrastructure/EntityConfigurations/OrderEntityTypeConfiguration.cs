@@ -28,21 +28,6 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .WithMany()
             .HasForeignKey("_buyerId");
 
-        //TODO: Delete from here
-        // //2.A
-        // builder
-        //     .Property<int>("_unitId")
-        //     .UsePropertyAccessMode(PropertyAccessMode.Field)
-        //     .HasColumnName("UnitId")
-        //     .IsRequired();
-        //
-        // //2.B there is no direct reference to this object so we add relationship here
-        // builder
-        //     .HasOne<UnitReplica>()
-        //     .WithMany()
-        //     .HasForeignKey("_unitId");
-        //TODO: Delete up to here
-
         //3.A - this field works a shadow property of the readonly Entity (Purpose)
         builder
             .Property<int>("_statusId")
@@ -61,6 +46,11 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
         builder
             .Metadata
             .FindNavigation(nameof(Order.Payments))
+            .SetPropertyAccessMode(PropertyAccessMode.Field);
+        
+        builder
+            .Metadata
+            .FindNavigation(nameof(Order.OrderItems))
             .SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.Property(b => b.Remarks).IsRequired(false);
