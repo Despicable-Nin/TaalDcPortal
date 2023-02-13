@@ -3,7 +3,7 @@ using SeedWork;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
 {
-	public sealed class CivilStatus : Enumeration, IAggregateRoot
+	public sealed class CivilStatus : Enumeration
 	{
 		public enum CivilStatusIs
 		{

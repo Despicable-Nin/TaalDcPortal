@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Sales.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230213133303_discount_order")]
+    partial class discountorder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,9 +26,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.HasSequence("buyerseq", "sales")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("civilstatusseq", "sales")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("orderitemseq", "sales")
@@ -207,10 +207,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.CivilStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "civilstatusseq", "sales");
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("Name")
                         .IsRequired()

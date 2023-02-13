@@ -46,8 +46,10 @@ public class Order : DomainEntity, IAggregateRoot
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
-    public int GetStatusId() => _statusId;
-    public void SetStatus(int status) => _statusId = status;
+    
+    private int _paymentOptionId;
+    public PaymentOption PaymentOption { get; private set; }
+
 
     private int _buyerId;
     public int GetBuyerId() => _buyerId;
@@ -56,6 +58,7 @@ public class Order : DomainEntity, IAggregateRoot
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
+    
     private List<OrderItem> _orderItems;
     public IEnumerable<OrderItem> OrderItems => _orderItems.AsReadOnly();
 

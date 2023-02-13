@@ -13,14 +13,13 @@ namespace Taaldc.Sales.Infrastructure.EntityConfigurations
 
             builder.HasKey(b => b.Id);
 
-            builder.Property(c => c.Id)
-           .HasDefaultValue(1)
-           .ValueGeneratedNever()
-           .IsRequired();
+            builder.Property(b => b.Id).UseHiLo("civilstatusseq", SalesDbContext.DEFAULT_SCHEMA);
 
             builder.Property(b => b.Name)
                 .HasMaxLength(30)
                 .IsRequired();
+            
+            
 
             builder.HasData(new[]
             {
