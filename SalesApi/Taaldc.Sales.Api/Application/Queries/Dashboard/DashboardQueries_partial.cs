@@ -36,8 +36,14 @@ public partial class DashboardQueries
 
         await connection.OpenAsync(CancellationToken.None);
 
-        var result = await connection.QueryAsync<ResidentialUnitCountPerViewDTO>(query);
-
+        try { 
+            var result = await connection.QueryAsync<ResidentialUnitCountPerViewDTO>(query);
+            return result;
+        }
+        catch
+        {
+            return new List<ResidentialUnitCountPerViewDTO>();
+        }
         //var countQuery = "SELECT COUNT(*) [COUNT] " +
         //                 "FROM [taaldb_sales].[sales].[unitreplica] U " +
         //                 "WHERE U.UnitTypeId IN (2,3,4,5,8) AND U.UnitStatusId = 1 ";
@@ -45,8 +51,6 @@ public partial class DashboardQueries
         //var countResult = (await connection.QueryAsync<int>(countQuery)).SingleOrDefault();
 
         //return new AvailabilityOfResidentialUnitsPerViewDTO(countResult, result);
-
-        return result;
     }
 
     public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerParkingUnitType()
@@ -87,9 +91,14 @@ public partial class DashboardQueries
 
         await connection.OpenAsync(CancellationToken.None);
 
-        var result = await connection.QueryAsync<ResidentialUnitAvailabilityPerUnitTypeDTO>(query);
-
-        return result;
+        try { 
+            var result = await connection.QueryAsync<ResidentialUnitAvailabilityPerUnitTypeDTO>(query);
+            return result;
+        }
+        catch
+        {
+            return new List<ResidentialUnitAvailabilityPerUnitTypeDTO>();
+        }
     }
 
 

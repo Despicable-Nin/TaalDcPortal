@@ -24,6 +24,7 @@
         <div class="row">
             <div class="col-lg-4">
                 <h5><strong>General Information</strong></h5>
+                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
                 <hr />
                 <p class="mb-5">
                     <strong class="primary-color">Customer Name</strong> <br />
@@ -41,6 +42,7 @@
                 </p>
 
                 <h5><strong>Contact  Information</strong></h5>
+                <a onclick="openEditContactInformation()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -80,8 +82,18 @@
                 }
             </div>
 
+
             <div class="col-lg-4">
+                <h5><strong>Spouse</strong></h5>
+                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
+                <hr />
+
+                <p class="mb-5">
+                   Mrs. Ann Smith-Doe
+                </p>
+
                 <h5><strong>ID Information</strong></h5>
+                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -106,6 +118,7 @@
             </div>
             <div class="col-lg-4">
                 <h5><strong>Company Information</strong></h5>
+                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -134,3 +147,182 @@
         </div>
     </div>
 </div>
+
+
+<!--General Info Edit Modal-->
+<div class="modal fade" id="generalInfoForm" tabindex="-1" aria-labelledby="generalInfoForm" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">General Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row needs-validation" method="post" id="generalinfo" asp-action="EditGeneralInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <div class="col-lg-12">
+                        <label class="form-label">
+                            <strong>Customer Name</strong>
+                        </label>
+                    </div>
+
+                    <div class="mb-3 col-lg-1">
+                        <select name="Salutation" class="form-control form-select" required>
+                            <option value="Mr.">
+                                Mr.
+                            </option>
+                            <option value="Ms.">
+                                Ms.
+                            </option>
+                            <option value="Mrs.">
+                                Mrs.
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-11 row px-0">
+                        <div class="mb-3 col-lg-4">
+                            <input name="FirstName" class="form-control" required placeholder="First Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-lg-4">
+                            <input name="MiddleName" class="form-control" required placeholder="Middle Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3 col-lg-4">
+                            <input name="LastName" class="form-control" required placeholder="Last Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-lg-12">
+                        <label for="DoB" class="form-label">
+                            <strong>Date of Birth</strong>
+                        </label>
+                        <input name="DoB" class="form-control" required type="date"/>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="CivilStatusId" class="form-label">
+                            <strong>Civil Status</strong>
+                        </label>
+                        <select name="CivilStatusId" class="form-control form-select" required>
+                            <option value="1">
+                                Single
+                            </option>
+                            <option value="2">
+                                Married
+                            </option>
+                            <option value="3">
+                                Widowed
+                            </option>
+                            <option value="4">
+                                Widowed
+                            </option>
+                            <option value="5"> 
+                                Widowed
+                            </option>
+                            <option value="6">
+                                Others
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    
+               </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Contact Info Edit Modal-->
+<div class="modal fade" id="contactInfoForm" tabindex="-1" aria-labelledby="contactInfoForm" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row needs-validation" method="post" id="contactInfo" asp-action="EditContactInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <div class="mb-3 col-lg-12">
+                        <label for="EmailAddress" class="form-label">
+                            <strong>Email Address</strong>
+                        </label>
+                        <input name="EmailAddress" class="form-control" required type="email" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-12">
+                        <label for="PhoneNo" class="form-label">
+                            <strong>Phone No.</strong>
+                        </label>
+                        <input name="PhoneNo" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="MobileNo" class="form-label">
+                            <strong>Mobile No.</strong>
+                        </label>
+                        <input name="MobileNo" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    
+               </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function openEditGeneralInformation(){
+            var formModal = document.getElementById('generalInfoForm');
+
+            var modal = new bootstrap.Modal(formModal, {});
+
+            modal.show();
+        }
+
+
+        function openEditContactInformation() {
+            var formModal = document.getElementById('contactInfoForm');
+
+            var modal = new bootstrap.Modal(formModal, {});
+
+            modal.show();
+        }
+
+    </script>
+}

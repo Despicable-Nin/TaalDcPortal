@@ -54,5 +54,10 @@ namespace TaalDc.Portal.Controllers
 
             return View(buyer);
         }
+
+
+        public IActionResult Contracts(int id) {
+            return View();
+        }
     }
 }
