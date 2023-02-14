@@ -8,15 +8,20 @@ public class Order : DomainEntity, IAggregateRoot
     protected Order()
     {
         _payments = new List<Payment>();
+        _orderItems = new List<OrderItem>();
     }
 
 
     public Order(
-        int buyerId, string code, string broker, string remarks, decimal discount
+        int buyerId, 
+        string broker, 
+        int paymentOptionId,
+        decimal discount,
+        string remarks
     ) : this()
     {
         _buyerId = buyerId;
-        Code = code;
+        Code = this.Id.ToString("00000");
         Broker = broker;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
@@ -42,12 +47,21 @@ public class Order : DomainEntity, IAggregateRoot
     public int GetBuyerId() => _buyerId;
     
     
-    private List<Payment> _payments;
-    public IEnumerable<Payment> Payments => _payments.AsReadOnly();
+  
     
     private List<OrderItem> _orderItems;
     public IEnumerable<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
+    public OrderItem AddOrderItem(int unitId, decimal price, decimal discount = 0.0M)
+    {
+        var orderItem = new OrderItem(unitId, discount, price);
+        _orderItems.Add(orderItem);
+        return orderItem;
+    }
+    
+    
+    private List<Payment> _payments;
+    public IEnumerable<Payment> Payments => _payments.AsReadOnly();
     public Payment AddPayment(
         int paymentTypeId,
         int transactionTypeId,
