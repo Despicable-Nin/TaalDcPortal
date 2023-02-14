@@ -26,7 +26,7 @@ builder.Services.AddCustomDbContext(configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpoints();
 
-builder.Services.AddCustomAuth(configuration);
+builder.Services.AddCustomAuth(configuration).AddEventBus(configuration).AddIntegrationServices(configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

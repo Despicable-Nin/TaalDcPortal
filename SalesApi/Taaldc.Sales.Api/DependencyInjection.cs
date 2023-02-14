@@ -1,12 +1,17 @@
+using System.Data.Common;
 using System.Text;
 using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
+using IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
+using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Sales.Infrastructure;
 
 namespace Taaldc.Sales.API;
@@ -143,6 +148,59 @@ public static class DependencyInjection
         }
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+        return services;
+    }
+      
+       public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+            sp => (DbConnection c) => new IntegrationEventLogService(c));
+
+        services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            // services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+            // {
+            //     var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+            //     var serviceBusConnection = settings.EventBusConnection;
+            //
+            //     return new DefaultServiceBusPersisterConnection(serviceBusConnection);
+            // });
+        }
+        else
+        {
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
+                {
+                    factory.UserName = configuration["EventBusUserName"];
+                }
+
+                if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
+                {
+                    factory.Password = configuration["EventBusPassword"];
+                }
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            });
+        }
 
         return services;
     }
