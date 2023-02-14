@@ -1,8 +1,8 @@
 using MediatR;
 
-namespace Taaldc.Sales.API.Application.Commands.SellUnit;
+namespace Taaldc.Sales.Api.Application.Commands.SellUnit;
 
-public class SellUnitCommand : IRequest<SellUnitCommandResult>
+public class SellUnitCommand : IRequest<int>
 {
     public SellUnitCommand(int buyerId, string broker,string paymentMethod, int paymentReferenceId, decimal reservationFee, string reservationConfirmation, decimal downpayment, string downpaymentConfirmation, decimal discount, string remarks, ICollection<OrderItemDTO> orderItems)
     {
@@ -20,13 +20,8 @@ public class SellUnitCommand : IRequest<SellUnitCommandResult>
     }
 
     public int BuyerId { get; private set; }
-    
     public string Broker { get; private set; }
-
     public int PaymentReferenceId { get; private set; }
-
-    public DateTime TransactionDate { get; private set; } = DateTime.Now;
-
     public decimal ReservationFee { get; private set; }
     public string ReservationConfirmation { get; private set; }
 

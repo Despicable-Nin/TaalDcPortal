@@ -8,8 +8,8 @@ namespace Taaldc.Sales.Api.Application.IntegrationEvents.Events;
 /// </summary>
 public record UnitStatusChangedReservedIntegrationEvent : IntegrationEvent
 {
-    public int UnitId { get; }
-    public int UnitStatusId { get; }
+    public int UnitId { get; init; }
+    public int UnitStatusId { get; init; }
 
     public UnitStatusChangedReservedIntegrationEvent(int unitId)
     {

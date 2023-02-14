@@ -1,4 +1,5 @@
 using SeedWork;
+using Taaldc.Sales.Domain.Events;
 using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -84,6 +85,7 @@ public class Order : DomainEntity, IAggregateRoot
             correlationId);
 
         _payments.Add(payment);
+        
         return payment;
     }
 
