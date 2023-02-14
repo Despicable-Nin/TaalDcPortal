@@ -4,9 +4,16 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public class OrderItem : DomainEntity
 {
-    protected OrderItem(){}
+    protected OrderItem()
+    {
+        Discount = 0.0M;
+    }
 
-
+    public OrderItem(int unitId, decimal price) : this()
+    {
+        _unitId = unitId;
+        Price = price;
+    }
 
     public OrderItem(int unitId, decimal discount, decimal price)
     {

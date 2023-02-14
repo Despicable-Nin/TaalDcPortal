@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
 using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
@@ -24,15 +25,10 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(i => i.Id == transactionId);
     }
 
-    public Order AddOrder(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks,
-        decimal finalPrice)
+    public Order CreateOrder(int buyerId, string broker, int paymentOptionId, decimal discount, string remarks)
     {
-        var buyer = _context.Buyers.Find(buyerId);
-
-        if (buyer == default)
-            throw new SalesDomainException(nameof(AddOrder), new Exception("Buyer not found."));
-
-        return default; //TODO: Delete --> _context.Orders.Add(new Order(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
+        var order = new Order(buyerId, broker, paymentOptionId, discount, remarks);
+        return _context.Orders.Add(order).Entity;
     }
 
     public Order UpdateOrder(Order order)

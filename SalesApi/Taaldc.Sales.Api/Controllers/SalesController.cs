@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
-using Taaldc.Sales.API.Application.Commands.ProcessPayment;
-using Taaldc.Sales.API.Application.Commands.SellUnit;
+using Taaldc.Sales.API.Application.Commands.AcceptPayment;
+using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
@@ -38,12 +38,9 @@ public class SalesController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> Post([FromBody] SellUnitDTO dto)
+    public async Task<IActionResult> Post([FromBody] SellUnitCommand dto)
     {
-        if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN")) dto.Broker = dto.Broker ?? "In-house";
-
-        var command = _mapper.Map<SellUnitCommand>(dto);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(dto);
 
         return Ok(result);
     }

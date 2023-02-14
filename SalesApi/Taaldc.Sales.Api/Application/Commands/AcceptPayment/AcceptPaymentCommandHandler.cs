@@ -1,9 +1,8 @@
 using MediatR;
 using SeedWork;
-using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-namespace Taaldc.Sales.API.Application.Commands.ProcessPayment;
+namespace Taaldc.Sales.API.Application.Commands.AcceptPayment;
 
 public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand, CommandResult>
 {

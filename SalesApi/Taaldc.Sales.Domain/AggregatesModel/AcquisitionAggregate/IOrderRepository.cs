@@ -4,11 +4,10 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 public interface IOrderRepository : IRepository<Order>
 {
-    Task<Order> FindOrderByIdAsync(int transactionId);
+    [Obsolete("Use BuyerQueries instead")]
+    Task<Order> FindOrderByIdAsync(int orderId);
 
-    Order AddOrder(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks,
-        decimal finalPrice);
-
+    Order CreateOrder(int buyerId, string broker, int paymentOptionId, decimal discount, string remarks);
     Order UpdateOrder(Order order);
 
     Task<IEnumerable<PaymentStatus>> GetPaymentStatus();
