@@ -24,6 +24,6 @@ public class UnitReplicaStatusChangeToReservedDomainEventHandler : INotification
 
         await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        await _integrationEventService.AddAndSaveEventAsync(new UnitStatusChangedReservedIntegrationEvent(unit.Id));
+        await _integrationEventService.AddAndSaveEventAsync(new UnitStatusChangedToReservedIntegrationEvent(unit.Id, ""));
     }
 }
