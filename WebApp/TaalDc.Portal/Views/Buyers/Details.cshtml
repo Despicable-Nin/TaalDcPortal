@@ -60,26 +60,40 @@
                     @Model.PhoneNo
                 </p>
 
-                @if (Model.HomeAddress != null) { 
+                
                     <p class="mb-5">
-                        <strong class="primary-color">Home Adress</strong> <br />
-                        @Model.HomeAddress.Address @Model.HomeAddress.City @Model.HomeAddress.State @Model.HomeAddress.Country @Model.HomeAddress.ZipCode
+                        <strong class="primary-color">Home Address</strong> 
+                        <a onclick="openEditAddress(0)"  href="#">Edit</a>
+                        <br />
+                        @if (Model.HomeAddress != null)
+                        {
+                            <span>@Model.HomeAddress.Street @Model.HomeAddress.City @Model.HomeAddress.State @Model.HomeAddress.Country @Model.HomeAddress.ZipCode</span>
+                        }
                     </p>
-                }
+                
 
-                @if (Model.BusinessAddress != null) { 
                     <p class="mb-5">
-                        <strong class="primary-color">Business Adress</strong> <br />
-                        @Model.BusinessAddress.Address @Model.BusinessAddress.City @Model.BusinessAddress.State @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode
+                        <strong class="primary-color">Business Address</strong> 
+                        <a onclick="openEditAddress(1)" href="#">Edit</a>
+                        <br />
+                        @if (Model.BusinessAddress != null)
+                        {
+                            <span>@Model.BusinessAddress.Street @Model.BusinessAddress.City @Model.BusinessAddress.State @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
+                        }
                     </p>
-                }
+               
 
-                @if (Model.BillingAddress != null) { 
+              
                     <p class="mb-5">
-                        <strong class="primary-color">Billing Adress</strong> <br />
-                        @Model.BillingAddress.Address @Model.BillingAddress.City @Model.BillingAddress.State @Model.BillingAddress.Country @Model.BillingAddress.ZipCode
+                        <strong class="primary-color">Billing Address</strong>
+                        <a  onclick="openEditAddress(2)" href="#">Edit</a>
+                        <br />
+                        @if (Model.BillingAddress != null)
+                        {
+                            <span>@Model.BillingAddress.Street @Model.BillingAddress.City @Model.BillingAddress.State @Model.BillingAddress.Country @Model.BillingAddress.ZipCode</span>
+                        }
                     </p>
-                }
+                
             </div>
 
 
@@ -93,7 +107,7 @@
                 </p>
 
                 <h5><strong>ID Information</strong></h5>
-                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
+                <a onclick="openEditIDInformationm()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -118,7 +132,7 @@
             </div>
             <div class="col-lg-4">
                 <h5><strong>Company Information</strong></h5>
-                <a onclick="openEditGeneralInformation()" href="#">Edit</a>
+                <a onclick="openEditCompanyInformation()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -148,167 +162,36 @@
     </div>
 </div>
 
+@{
+    Html.RenderPartial("_GeneralInfoForm", Model);
+}
 
-<!--General Info Edit Modal-->
-<div class="modal fade" id="generalInfoForm" tabindex="-1" aria-labelledby="generalInfoForm" aria-hidden="true">
-    <div class="modal-dialog  modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">General Information</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="row needs-validation" method="post" id="generalinfo" asp-action="EditGeneralInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
-                    <div class="col-lg-12">
-                        <label class="form-label">
-                            <strong>Customer Name</strong>
-                        </label>
-                    </div>
-
-                    <div class="mb-3 col-lg-1">
-                        <select name="Salutation" class="form-control form-select" required>
-                            <option value="Mr.">
-                                Mr.
-                            </option>
-                            <option value="Ms.">
-                                Ms.
-                            </option>
-                            <option value="Mrs.">
-                                Mrs.
-                            </option>
-                        </select>
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
-
-                    <div class="col-lg-11 row px-0">
-                        <div class="mb-3 col-lg-4">
-                            <input name="FirstName" class="form-control" required placeholder="First Name" />
-                            <div class="invalid-feedback">
-                                This is a required field.
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-lg-4">
-                            <input name="MiddleName" class="form-control" required placeholder="Middle Name" />
-                            <div class="invalid-feedback">
-                                This is a required field.
-                            </div>
-                        </div>
+@{
+    Html.RenderPartial("_ContactInfoForm", Model);
+}
 
 
-                        <div class="mb-3 col-lg-4">
-                            <input name="LastName" class="form-control" required placeholder="Last Name" />
-                            <div class="invalid-feedback">
-                                This is a required field.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3 col-lg-12">
-                        <label for="DoB" class="form-label">
-                            <strong>Date of Birth</strong>
-                        </label>
-                        <input name="DoB" class="form-control" required type="date"/>
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
-
-                    <div class="mb-3 col-lg-12">
-                        <label for="CivilStatusId" class="form-label">
-                            <strong>Civil Status</strong>
-                        </label>
-                        <select name="CivilStatusId" class="form-control form-select" required>
-                            <option value="1">
-                                Single
-                            </option>
-                            <option value="2">
-                                Married
-                            </option>
-                            <option value="3">
-                                Widowed
-                            </option>
-                            <option value="4">
-                                Widowed
-                            </option>
-                            <option value="5"> 
-                                Widowed
-                            </option>
-                            <option value="6">
-                                Others
-                            </option>
-                        </select>
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
-                    
-               </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
+@{
+    Html.RenderPartial("_AddressForm", Model);
+}
 
 
-<!--Contact Info Edit Modal-->
-<div class="modal fade" id="contactInfoForm" tabindex="-1" aria-labelledby="contactInfoForm" aria-hidden="true">
-    <div class="modal-dialog  modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Information</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form class="row needs-validation" method="post" id="contactInfo" asp-action="EditContactInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
-                    <div class="mb-3 col-lg-12">
-                        <label for="EmailAddress" class="form-label">
-                            <strong>Email Address</strong>
-                        </label>
-                        <input name="EmailAddress" class="form-control" required type="email" />
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
 
-                     <div class="mb-3 col-lg-12">
-                        <label for="PhoneNo" class="form-label">
-                            <strong>Phone No.</strong>
-                        </label>
-                        <input name="PhoneNo" class="form-control" required />
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
+@{
+    Html.RenderPartial("_IDInformationForm", Model);
+}
 
-                    <div class="mb-3 col-lg-12">
-                        <label for="MobileNo" class="form-label">
-                            <strong>Mobile No.</strong>
-                        </label>
-                        <input name="MobileNo" class="form-control" required />
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
-                    
-               </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
+@{
+    Html.RenderPartial("_CompanyForm", Model);
+}
+
+
 
 @section Scripts{
+    <script src="~/js/sales/Buyer.js"></script>
     <script>
         function openEditGeneralInformation(){
-            var formModal = document.getElementById('generalInfoForm');
+            var formModal = document.getElementById('generalInfoModal');
 
             var modal = new bootstrap.Modal(formModal, {});
 
@@ -317,7 +200,69 @@
 
 
         function openEditContactInformation() {
-            var formModal = document.getElementById('contactInfoForm');
+            var formModal = document.getElementById('contactInfoModal');
+
+            var modal = new bootstrap.Modal(formModal, {});
+
+            modal.show();
+        }
+
+
+        function openEditAddress(type){
+            var formModal = document.getElementById('addressModal');
+
+            formModal.dataset.type = type;
+
+            let addressType = document.getElementsByName("Type"); 
+            addressType[0].value = type;
+
+            let street = document.getElementsByName("Street");
+            let city = document.getElementsByName("City");
+            let state = document.getElementsByName("State");
+            let country = document.getElementsByName("Country");
+            let zipCode = document.getElementsByName("ZipCode");
+
+            if(type === 0){
+                street[0].value = '@Model.HomeAddress.Street'
+                city[0].value = '@Model.HomeAddress.City'
+                state[0].value = '@Model.HomeAddress.State'
+                country[0].value = '@Model.HomeAddress.Country'
+                zipCode[0].value = '@Model.HomeAddress.ZipCode'
+            }else if(type === 1){
+                street[0].value = '@Model.BusinessAddress.Street'
+                city[0].value = '@Model.BusinessAddress.City'
+                state[0].value = '@Model.BusinessAddress.State'
+                country[0].value = '@Model.BusinessAddress.Country'
+                zipCode[0].value = '@Model.BusinessAddress.ZipCode'
+            }else if (type === 2) {
+                street[0].value = '@Model.BillingAddress.Street'
+                city[0].value = '@Model.BillingAddress.City'
+                state[0].value = '@Model.BillingAddress.State'
+                country[0].value = '@Model.BillingAddress.Country'
+                zipCode[0].value = '@Model.BillingAddress.ZipCode'
+            }
+
+
+
+            console.log('address type', addressType);
+
+            var modal = new bootstrap.Modal(formModal, {});
+
+            modal.show();
+        }
+
+
+        function openEditIDInformationm(){
+            var formModal = document.getElementById('idInformationModal');
+
+            var modal = new bootstrap.Modal(formModal, {});
+
+            modal.show();
+        }
+
+
+        function openEditCompanyInformation() {
+            var formModal = document.getElementById('companyModal');
 
             var modal = new bootstrap.Modal(formModal, {});
 

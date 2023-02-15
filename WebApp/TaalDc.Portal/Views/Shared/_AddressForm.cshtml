@@ -1,0 +1,75 @@
+﻿@model TaalDc.Portal.DTO.Sales.Buyer_ClientDto
+
+
+@{
+
+}
+
+<!--Address Edit Modal-->
+<div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModal" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Address</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row needs-validation" method="post" id="addressForm" asp-action="EditAddress" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <input name="BuyerId" value="@Model.Id" hidden />
+                    <input name="Type" hidden />
+
+                    <div class="col-lg-12">
+                        <label class="form-label">
+                            <strong>Address</strong>
+                        </label>
+                    </div>
+
+                    <div class="mb-3 col-lg-8">
+                        <input name="Street" class="form-control" placeholder="Street/Brgy/Ave." required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-4">
+                        <input name="City" class="form-control" placeholder="City" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-4">
+                        <input name="State" class="form-control" placeholder="State" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-4">
+                        <input name="Country" class="form-control" placeholder="Country" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-4">
+                        <input name="ZipCode" class="form-control" placeholder="Zip Code" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

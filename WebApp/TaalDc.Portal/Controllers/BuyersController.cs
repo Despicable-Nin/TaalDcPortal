@@ -46,8 +46,9 @@ namespace TaalDc.Portal.Controllers
 
             buyer.SetIDInformation("Consultant", "315 408 1234", "National ID", new DateTime(2027, 12, 31));
 
-            buyer.HomeAddress = new ClientAddress("Address", "Manila", "NCR", "Philippines", "1234");
-            buyer.BillingAddress = new ClientAddress("Address", "Manila", "NCR", "Philippines", "1234");
+            buyer.HomeAddress = new ClientAddress("Home Address", "Manila", "NCR", "Philippines", "1234");
+            buyer.BillingAddress = new ClientAddress("Billing Address", "Manila", "NCR", "Philippines", "1234");
+            buyer.BusinessAddress = new ClientAddress("", "", "", "", "");
 
             buyer.IsCorporate = true;
             buyer.Company = new Company("John Doe, Inc.", "Manila City, NCR", "Accounting");
@@ -58,6 +59,38 @@ namespace TaalDc.Portal.Controllers
 
         public IActionResult Contracts(int id) {
             return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult EditGeneralInfo(BuyerGeneralInfoEdit_ClientDto model)
+        {
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult EditContactInfo(BuyerContactInfoEdit_ClientDto model)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult EditAddress(BuyerAddressEdit_ClientDto model)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult EditIDInformation(BuyerIDInformationEdit_ClietnDto model)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
+        {
+            return Ok();
         }
     }
 }
