@@ -1,14 +1,48 @@
+using System.Data.Common;
 using System.Text;
+using Autofac;
+using EventBus;
+using EventBus.Abstractions;
+using EventBusRabbitMQ;
+using IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
+using Taaldc.Catalog.API.Application.IntegrationEvents;
+using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
 using Taaldc.Catalog.Infrastructure;
 
 namespace Taaldc.Catalog.API;
 
 public static class DependencyInjection
 {
+    public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<CatalogSettings>(configuration);
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var problemDetails = new ValidationProblemDetails(context.ModelState)
+                {
+                    Instance = context.HttpContext.Request.Path,
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = "Please refer to the errors property for additional details."
+                };
+
+                return new BadRequestObjectResult(problemDetails)
+                {
+                    ContentTypes = { "application/problem+json", "application/problem+xml" }
+                };
+            };
+        });
+
+        return services;
+    }
     public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -97,6 +131,102 @@ public static class DependencyInjection
                 };
             });
         services.AddAuthorization();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddIntegrationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+            sp => (DbConnection c) => new IntegrationEventLogService(c));
+
+        services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            // services.AddSingleton<IServiceBusPersisterConnection>(sp =>
+            // {
+            //     var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+            //     var serviceBusConnection = settings.EventBusConnection;
+            //
+            //     return new DefaultServiceBusPersisterConnection(serviceBusConnection);
+            // });
+        }
+        else
+        {
+            services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
+            {
+                var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                if (!string.IsNullOrEmpty(configuration["EventBusUserName"]))
+                {
+                    factory.UserName = configuration["EventBusUserName"];
+                }
+
+                if (!string.IsNullOrEmpty(configuration["EventBusPassword"]))
+                {
+                    factory.Password = configuration["EventBusPassword"];
+                }
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+            });
+        }
+
+        return services;
+    }
+    
+     public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
+        {
+            // services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
+            // {
+            //     var serviceBusPersisterConnection = sp.GetRequiredService<IServiceBusPersisterConnection>();
+            //     var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+            //     var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+            //     var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            //     string subscriptionName = configuration["SubscriptionClientName"];
+            //
+            //     return new EventBusServiceBus(serviceBusPersisterConnection, logger,
+            //         eventBusSubcriptionsManager, iLifetimeScope, subscriptionName);
+            // });
+
+        }
+        else
+        {
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            {
+                var subscriptionClientName = configuration["SubscriptionClientName"];
+                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                var retryCount = 5;
+                if (!string.IsNullOrEmpty(configuration["EventBusRetryCount"]))
+                {
+                    retryCount = int.Parse(configuration["EventBusRetryCount"]);
+                }
+
+                return new EventBusRabbitMQ.EventBusRabbitMQ(rabbitMQPersistentConnection, logger, eventBusSubcriptionsManager,iLifetimeScope, retryCount, subscriptionClientName);
+            });
+        }
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+        services.AddTransient<UnitStatusChangedToReservedIntegrationEventHandler>();
 
         return services;
     }

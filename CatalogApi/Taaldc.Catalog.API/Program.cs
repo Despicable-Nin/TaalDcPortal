@@ -22,13 +22,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllers();
 
 //setting up dbcontext and related stuff
-builder.Services.AddCustomDbContext(configuration);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpoints();
-
-builder.Services.AddCustomAuth(configuration);
-
+builder.Services
+    .AddEndpoints()
+    .AddCustomAuth(configuration)
+    .AddCustomDbContext(configuration)
+    .AddCustomOptions(configuration)
+    .AddIntegrationServices(configuration)
+    .AddEventBus(configuration);
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -45,7 +45,6 @@ builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepositor
 
 
 builder.Services.AddAutoMapper(typeof(Program));
-
 
 builder.Services.AddScoped<IPropertyQueries>(i => { return new PropertyQueries(connectionString); });
 
