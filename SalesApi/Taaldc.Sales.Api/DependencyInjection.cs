@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Taaldc.Catalog.API.Application.IntegrationEvents;
+using Taaldc.Sales.Api.Application.IntegrationEvents;
 using Taaldc.Sales.Infrastructure;
 
 namespace Taaldc.Sales.API;
@@ -128,12 +129,12 @@ public static class DependencyInjection
         }
         else
         {
-            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMq>(sp =>
             {
                 var subscriptionClientName = configuration["SubscriptionClientName"];
                 var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
                 var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMq>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                 var retryCount = 5;
@@ -142,7 +143,7 @@ public static class DependencyInjection
                     retryCount = int.Parse(configuration["EventBusRetryCount"]);
                 }
 
-                return new EventBusRabbitMQ.EventBusRabbitMQ(rabbitMQPersistentConnection, logger,
+                return new EventBusRabbitMQ.EventBusRabbitMq(rabbitMQPersistentConnection, logger,
                     eventBusSubcriptionsManager, iLifetimeScope, retryCount, subscriptionClientName);
             });
         }
@@ -157,7 +158,7 @@ public static class DependencyInjection
         services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
             sp => (DbConnection c) => new IntegrationEventLogService(c));
 
-        services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+        services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
 
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
@@ -174,7 +175,7 @@ public static class DependencyInjection
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
                 var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
                 var factory = new ConnectionFactory()
                 {
@@ -198,7 +199,7 @@ public static class DependencyInjection
                     retryCount = int.Parse(configuration["EventBusRetryCount"]);
                 }
 
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+                return new DefaultRabbitMqPersistentConnection(factory, logger, retryCount);
             });
         }
 

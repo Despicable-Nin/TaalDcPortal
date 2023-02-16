@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
+using EventBus.Abstractions;
 using MediatR;
 using SeedWork;
 using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
+using Taaldc.Catalog.API.Application.IntegrationEvents.Events;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.Properties;
@@ -21,14 +25,16 @@ var configuration = builder.Configuration;
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddControllers();
 
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
 //setting up dbcontext and related stuff
-builder.Services.AddCustomDbContext(configuration);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpoints();
-
-builder.Services.AddCustomAuth(configuration);
-
+builder.Services
+    .AddEndpoints()
+    .AddCustomAuth(configuration)
+    .AddCustomDbContext(configuration)
+    .AddCustomOptions(configuration)
+    .AddIntegrationServices(configuration)
+    .AddEventBus(configuration);
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -46,7 +52,6 @@ builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepositor
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-
 builder.Services.AddScoped<IPropertyQueries>(i => { return new PropertyQueries(connectionString); });
 
 builder.Services.AddScoped<IUnitQueries>(i => { return new UnitQueries(connectionString); });
@@ -58,7 +63,6 @@ builder.Services.AddScoped<ITowerQueries>(i => { return new TowerQueries(connect
 builder.Services.AddScoped<IScenicViewQueries>(i => { return new ScenicViewQueries(connectionString); });
 
 builder.Services.AddScoped<IUnitTypeQueries>(i => { return new UnitTypeQueries(connectionString); });
-
 
 var app = builder.Build();
 
@@ -83,5 +87,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+
+//configure event bus
+var eventbus = app.Services.GetRequiredService<IEventBus>();
+eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
+
 
 app.Run();
