@@ -123,3 +123,16 @@ If you find your image starts but then immediately stops or you get an error suc
 https://blog.datalust.co/using-serilog-in-net-6/
 
 https://hub.docker.com/r/datalust/seq
+
+## RabbitMQ
+
+Running RabbitMQ in Docker
+First and foremost, we need to spin up a RabbitMQ server, which we can do simply using Docker. Given that Docker is installed, we’ll open a  command-line terminal and use the docker run command to spin up our server:
+
+```
+docker run -d --hostname my-rabbitmq-server --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+We are using the rabbitmq:3-management image from DockerHub which will provide us with a UI, available on port 15672, to view our queues/message throughput, for instance.
+
+We must also add a port mapping for 5672, which is the default port RabbitMQ uses for communication. In order for us to access the management UI, we open a browser window and navigate to localhost:15672, using the default login of guest/guest.
