@@ -12,8 +12,8 @@ namespace TaalDc.Portal.DTO.Sales
             MiddleName = middleName;
             LastName = lastName;
             DoB = doB;
-            CivilStatusId = 1;
-            CivilStatus = "Single";
+            CivilStatusId = (int)civilStatus;
+            CivilStatus = civilStatus.ToString();
         }
 
         public int Id { get; set; }
@@ -37,7 +37,7 @@ namespace TaalDc.Portal.DTO.Sales
         public DateTime GovIssuedIDValidUntil { get; set; }
 
         public int? SpouseId { get; set; }
-        public BuyerCreate_ClientDto? Spouse { get; set; }
+        public Buyer_ClientDto? Spouse { get; set; }
 
         public ClientAddress HomeAddress { get; set; }
         public ClientAddress BusinessAddress { get; set; }

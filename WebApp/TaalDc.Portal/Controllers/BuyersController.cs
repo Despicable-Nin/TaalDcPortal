@@ -53,6 +53,12 @@ namespace TaalDc.Portal.Controllers
             buyer.IsCorporate = true;
             buyer.Company = new Company("John Doe, Inc.", "Manila City, NCR", "Accounting");
 
+            var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), CivilStatusEnum.Married);
+
+            buyer.SpouseId = 2;
+            spouse.Id = 2;
+            buyer.Spouse = spouse;
+
             return View(buyer);
         }
 
@@ -89,6 +95,12 @@ namespace TaalDc.Portal.Controllers
 
         [HttpPost]
         public IActionResult EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult EditSpouse(BuyerSpouseEdit_ClientDto model)
         {
             return Ok();
         }

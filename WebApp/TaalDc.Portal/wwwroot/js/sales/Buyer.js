@@ -68,6 +68,14 @@ if (companyInformationForm) {
 }
 
 
+const spouseForm = document.getElementById('spouseForm');
+
+
+if (spouseForm) {
+    spouseForm.addEventListener("submit", saveInfo);
+}
+
+
 function saveInfo(event) {
     $('.formLoader').show();
     event.preventDefault();
