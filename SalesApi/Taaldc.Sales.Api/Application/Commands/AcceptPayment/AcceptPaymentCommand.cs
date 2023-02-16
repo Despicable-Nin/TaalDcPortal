@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Sales.API.Application.Commands.ProcessPayment;
+namespace Taaldc.Sales.API.Application.Commands.AcceptPayment;
 
 public class AcceptPaymentCommand : IRequest<CommandResult>
 {

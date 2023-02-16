@@ -25,10 +25,19 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("buyerseq", "sales")
                 .IncrementsBy(10);
 
+            modelBuilder.HasSequence("civilstatusseq", "sales")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("orderitemseq", "sales")
+                .IncrementsBy(10);
+
             modelBuilder.HasSequence("orderseq", "sales")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("orderstatusseq", "sales")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("paymentoptionseq", "sales")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("paymentseq", "sales")
@@ -37,7 +46,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("paymentstatusseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("paymentypeseq", "sales")
+            modelBuilder.HasSequence("paymenttypeseq", "sales")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("transactiontypeseq", "sales")
@@ -45,6 +54,42 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             modelBuilder.HasSequence("unitreplicaseq", "sales")
                 .IncrementsBy(10);
+
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("address", "sales");
+                });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
                 {
@@ -54,17 +99,17 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "buyerseq", "sales");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("BillingAddressId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ContactNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("BusinessAddressId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CivilStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -72,6 +117,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
@@ -81,10 +129,31 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GovIssuedID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("GovIssuedIDValidUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HomeAddressId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsCorporate")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MiddleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -95,31 +164,151 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ModifiedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Province")
+                    b.Property<string>("Occupation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Salutation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TownCity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("SpouseId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ZipCode")
+                    b.Property<string>("TIN")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactNo")
-                        .IsUnique();
+                    b.HasIndex("BillingAddressId");
+
+                    b.HasIndex("BusinessAddressId");
+
+                    b.HasIndex("CivilStatusId");
+
+                    b.HasIndex("CompanyId");
 
                     b.HasIndex("EmailAddress")
                         .IsUnique();
 
+                    b.HasIndex("HomeAddressId");
+
+                    b.HasIndex("PhoneNo")
+                        .IsUnique();
+
                     b.ToTable("buyer", "sales");
+                });
+
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.CivilStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "civilstatusseq", "sales");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("civilStatus", "sales");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Single"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Married"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Widowed"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Divorced"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Separated"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Others"
+                        });
+                });
+
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CorpSec")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FaxNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Industry")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("President")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SECRegNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TIN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("company", "sales");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", b =>
@@ -145,13 +334,12 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<decimal>("FinalPrice")
-                        .HasColumnType("decimal(18,4)");
+                    b.Property<decimal>("Discount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,4)")
+                        .HasDefaultValue(0.0m);
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRefundable")
                         .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
@@ -160,6 +348,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("ModifiedOn")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("PaymentOptionId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
@@ -171,9 +362,64 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BuyerId");
 
+                    b.Property<int>("_paymentOptionId")
+                        .HasColumnType("int")
+                        .HasColumnName("PaymentOptionId");
+
                     b.Property<int>("_statusId")
                         .HasColumnType("int")
                         .HasColumnName("StatusId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentOptionId");
+
+                    b.HasIndex("_buyerId");
+
+                    b.HasIndex("_paymentOptionId");
+
+                    b.ToTable("order", "sales", t =>
+                        {
+                            t.Property("PaymentOptionId")
+                                .HasColumnName("PaymentOptionId1");
+                        });
+                });
+
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderitemseq", "sales");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<decimal>("Discount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,4)")
+                        .HasDefaultValue(0.0m);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("_unitId")
                         .HasColumnType("int")
@@ -181,13 +427,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("_buyerId");
-
-                    b.HasIndex("_statusId");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("_unitId");
 
-                    b.ToTable("order", "sales");
+                    b.ToTable("orderitem", "sales");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderStatus", b =>
@@ -311,6 +555,46 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.ToTable("payment", (string)null);
                 });
 
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.PaymentOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymentoptionseq", "sales");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("ModifiedOn")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("paymentoption", (string)null);
+                });
+
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.PaymentStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -357,7 +641,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymentypeseq", "sales");
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "paymenttypeseq", "sales");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -516,8 +800,47 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.ToTable("unitreplica", "sales");
                 });
 
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
+                {
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Address", "BillingAddress")
+                        .WithMany()
+                        .HasForeignKey("BillingAddressId");
+
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Address", "BusinessAddress")
+                        .WithMany()
+                        .HasForeignKey("BusinessAddressId");
+
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.CivilStatus", null)
+                        .WithMany()
+                        .HasForeignKey("CivilStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId");
+
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Address", "HomeAddress")
+                        .WithMany()
+                        .HasForeignKey("HomeAddressId");
+
+                    b.Navigation("BillingAddress");
+
+                    b.Navigation("BusinessAddress");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("HomeAddress");
+                });
+
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", b =>
                 {
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.PaymentOption", "PaymentOption")
+                        .WithMany()
+                        .HasForeignKey("PaymentOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
                         .WithMany()
                         .HasForeignKey("_buyerId")
@@ -526,7 +849,20 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("_statusId")
+                        .HasForeignKey("_paymentOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PaymentOption");
+
+                    b.Navigation("Status");
+                });
+
+            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderItem", b =>
+                {
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -535,8 +871,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasForeignKey("_unitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Payment", b =>
@@ -574,6 +908,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", b =>
                 {
+                    b.Navigation("OrderItems");
+
                     b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618

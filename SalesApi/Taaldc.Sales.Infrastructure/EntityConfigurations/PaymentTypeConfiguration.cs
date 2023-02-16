@@ -12,7 +12,7 @@ internal class PaymentTypeConfiguration : IEntityTypeConfiguration<PaymentType>
 
         builder.HasKey(b => b.Id);
 
-        builder.Property(b => b.Id).UseHiLo("paymentypeseq", SalesDbContext.DEFAULT_SCHEMA);
+        builder.Property(b => b.Id).UseHiLo("paymenttypeseq", SalesDbContext.DEFAULT_SCHEMA);
 
 
         builder.Property(b => b.Name)
@@ -20,5 +20,28 @@ internal class PaymentTypeConfiguration : IEntityTypeConfiguration<PaymentType>
             .IsRequired();
 
         builder.HasData(PaymentType.Dictionary.Select(b => new PaymentType(b.Key, b.Value)));
+    }
+}
+
+
+internal class PaymentOptionConfiguration : IEntityTypeConfiguration<PaymentOption>
+{
+    public void Configure(EntityTypeBuilder<PaymentOption> builder)
+    {
+        builder.ToTable("paymentoption");
+
+        builder.HasKey(b => b.Id);
+
+        builder.Property(b => b.Id).UseHiLo("paymentoptionseq", SalesDbContext.DEFAULT_SCHEMA);
+
+
+        builder.Property(b => b.Name)
+            .HasMaxLength(100)
+            .IsRequired();
+        
+        builder.Property(b => b.Description)
+            .HasMaxLength(200)
+            .IsRequired();
+        
     }
 }

@@ -14,45 +14,45 @@ GO
 EXEC sp_MSForEachTable 'ENABLE TRIGGER ALL ON ?'
 GO
 
-INSERT INTO catalog.scenicview (Id, Name) VALUES ('1', 'N/A');
-INSERT INTO catalog.scenicview (Id, Name)
+INSERT INTO catalog.scenicview (Id, [Name]) VALUES ('1', 'N/A');
+INSERT INTO catalog.scenicview (Id, [Name])
 VALUES ('2', 'TAAL');
-INSERT INTO catalog.scenicview (Id, Name)
+INSERT INTO catalog.scenicview (Id, [Name])
 VALUES ('3', 'HIGHLANDS');
-INSERT INTO catalog.scenicview (Id, Name)
+INSERT INTO catalog.scenicview (Id, [Name])
 VALUES ('4', 'MANILA SKYLINE');
-INSERT INTO catalog.scenicview (Id, Name)
+INSERT INTO catalog.scenicview (Id, [Name])
 VALUES ('5', 'ROTONDA');
 
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('1', 'N/A', 'NOT APPLICABLE');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('2', '1BR', 'ONE BEDROOM');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('3', '2BR', 'TWO BEDROOM');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('4', '3BR', 'THREE BEDROOM');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('5', 'PH', 'PENTHOUSE');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('6', 'RP', 'RESIDENTIAL PARKING');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('7', 'MP', 'MOTORCYCLE PARKING');
-INSERT INTO catalog.unittype (Id, ShortCode, Name)
+INSERT INTO catalog.unittype (Id, ShortCode, [Name])
 VALUES ('8', 'CS', 'COMMERCIAL SPACE');
 
-INSERT INTO catalog.unitstatus (Id, Name)
+INSERT INTO catalog.unitstatus (Id, [Name])
 VALUES ('1', 'AVAILABLE');
-INSERT INTO catalog.unitstatus (Id, Name)
+INSERT INTO catalog.unitstatus (Id, [Name])
 VALUES ('2', 'SOLD');
-INSERT INTO catalog.unitstatus (Id, Name)
+INSERT INTO catalog.unitstatus (Id, [Name])
 VALUES ('3', 'RESERVED');
-INSERT INTO catalog.unitstatus (Id, Name)
+INSERT INTO catalog.unitstatus (Id, [Name])
 VALUES ('4', 'BLOCKED');
 
 
 INSERT INTO catalog.project
-([Id], [ Name], [Developer], [CreatedOn], [CreatedBy], [ModifiedBy], [ModifiedOn], [IsActive])
+([Id], [Name], [Developer], [CreatedOn], [CreatedBy], [ModifiedBy], [ModifiedOn], [IsActive])
 VALUES (1, 'OTE', 'TAALDC', GETDATE(), '', '', '', '1')
     INSERT
 INTO catalog.property
@@ -1804,13 +1804,13 @@ UPDATE catalog.unit
 SET CreatedOn = GETDATE()
 
 --
-SELECT prop.Name       AS Property,
-       twr.Name        AS Tower,
-       flr.Name        AS Floor,
+SELECT prop.[Name]       AS Property,
+       twr.[Name]        AS Tower,
+       flr.[Name]        AS Floor,
        unit.Identifier AS UnitNo,
-       ut.Name         AS UnitType,
-       sv.Name AS [View],
-	us.Name AS [Status],
+       ut.[Name]         AS UnitType,
+       sv.[Name] AS [View],
+	us.[Name] AS [Status],
 	unit.CreatedOn
 FROM catalog.unit unit
     JOIN catalog.floors flr

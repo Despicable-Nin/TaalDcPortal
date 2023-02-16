@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Buyer Contracts";
+    Layout = "_Layout";
+}
+
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" asp-controller="Buyers" asp-action="Details" asp-route-id="1">Details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Buyers" asp-action="Contracts" asp-route-id="1">Contracts</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <h4 class="primary-color mb-3 mt-3">
+            <strong>Contracts</strong>
+        </h4>
+
+        <div class="action-section">
+            <div class="action-btn text-end">
+                <a asp-controller="Sales" asp-action="Create" class="btn btn-primary">New Contract</a>
+            </div>
+        </div>
+
+        <div class="table-responsive w-100 mb-3">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tower</th>
+                        <th>Unit Type</th>
+                        <th>Unit No.</th>
+                        <th>Sales Status</th>
+                        <th>Unit Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Common Tower</td>
+                            <td>One Bedroom Highlands</td>
+                            <td>4-432</td>
+                            <td>RESERVED</td>
+                            <td>RESERVED</td>
+                            <td></td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -8,30 +8,31 @@ using RabbitMQ.Client.Exceptions;
 
 namespace EventBusRabbitMQ;
 
-public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
+public class DefaultRabbitMqPersistentConnection : IRabbitMQPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
-    private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
+    private readonly ILogger<DefaultRabbitMqPersistentConnection> _logger;
     private readonly int _retryCount;
     private IConnection _connection;
     private bool _disposed;
 
-    private object sync_root = new object();
+    private object _syncRoot = new object();
 
 
-    public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount)
+    public DefaultRabbitMqPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMqPersistentConnection> logger, int retryCount)
     {
         _connectionFactory = connectionFactory;
         _logger = logger;
         _retryCount = retryCount;
     }
 
-    public bool IsConnected { get; }
+    public bool IsConnected =>  _connection != null && _connection.IsOpen && !_disposed;
+     
     public bool TryConnect()
     {
         _logger.LogInformation("RabbitMQ Client is trying to connect");
 
-        lock (sync_root)
+        lock (_syncRoot)
         {
             var policy = RetryPolicy.Handle<SocketException>()
                 .Or<BrokerUnreachableException>()

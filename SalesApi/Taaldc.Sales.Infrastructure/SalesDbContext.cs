@@ -27,6 +27,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
     }
 
     public DbSet<Buyer> Buyers { get; set; }
+    public DbSet<CivilStatus> CivilStatuses { get; set; }
     public DbSet<UnitReplica> Units { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderStatus> AcquisitionStatus { get; set; }

@@ -22,10 +22,12 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
 
         builder.HasIndex(b => b.EmailAddress).IsUnique();
 
-        builder.Property(b => b.ZipCode).IsRequired();
+        builder.Property(b => b.MobileNo).IsRequired();
 
-        builder.Property(b => b.ContactNo).IsRequired();
+        builder.HasIndex(b => b.PhoneNo).IsUnique();
 
-        builder.HasIndex(b => b.ContactNo).IsUnique();
+        builder.HasOne<CivilStatus>()
+            .WithMany()
+            .HasForeignKey("CivilStatusId");
     }
 }

@@ -1,0 +1,113 @@
+﻿@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
+
+<!--General Info Edit Modal-->
+<div class="modal fade" id="generalInfoModal" tabindex="-1" aria-labelledby="generalInfoModal" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">General Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row needs-validation" method="post" id="generalinfo" asp-action="EditGeneralInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <input name="BuyerId" value="@Model.Id" hidden />
+                    <div class="col-lg-12">
+                        <label class="form-label">
+                            <strong>Customer Name</strong>
+                        </label>
+                    </div>
+
+                    <div class="mb-3 col-lg-2">
+                        <select name="Salutation" class="form-control form-select" required>
+                            <option value="Mr.">
+                                Mr.
+                            </option>
+                            <option value="Ms.">
+                                Ms.
+                            </option>
+                            <option value="Mrs.">
+                                Mrs.
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-10 row px-0">
+                        <div class="mb-3 col-lg-4">
+                            <input name="FirstName" class="form-control" required placeholder="First Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+
+                        <div class="mb-3 col-lg-4">
+                            <input name="MiddleName" class="form-control" placeholder="Middle Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3 col-lg-4">
+                            <input name="LastName" class="form-control" required placeholder="Last Name" />
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-lg-12">
+                        <label for="DoB" class="form-label">
+                            <strong>Date of Birth</strong>
+                        </label>
+                        <input name="DoB" class="form-control" required type="date" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="CivilStatusId" class="form-label">
+                            <strong>Civil Status</strong>
+                        </label>
+                        <select name="CivilStatusId" class="form-control form-select" required>
+                            <option value="1">
+                                Single
+                            </option>
+                            <option value="2">
+                                Married
+                            </option>
+                            <option value="3">
+                                Widowed
+                            </option>
+                            <option value="4">
+                                Widowed
+                            </option>
+                            <option value="5">
+                                Widowed
+                            </option>
+                            <option value="6">
+                                Others
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

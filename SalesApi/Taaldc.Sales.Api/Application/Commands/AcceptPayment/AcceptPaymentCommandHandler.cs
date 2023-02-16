@@ -1,9 +1,8 @@
 using MediatR;
 using SeedWork;
-using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-namespace Taaldc.Sales.API.Application.Commands.ProcessPayment;
+namespace Taaldc.Sales.API.Application.Commands.AcceptPayment;
 
 public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand, CommandResult>
 {
@@ -21,6 +20,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
 
     public async Task<CommandResult> Handle(AcceptPaymentCommand request, CancellationToken cancellationToken)
     {
+        return default;
         if (!_currentUser.Roles.Contains("ADMIN")) return CommandResult.Failed(request.PaymentId, "Unauthorized.");
 
         var order = await _repository.FindOrderByIdAsync(request.OrderId);
@@ -48,7 +48,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
             unitStatus = "RESERVED";
         }
 
-        await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
+        //await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
 
         return CommandResult.Success(request.PaymentId);
     }

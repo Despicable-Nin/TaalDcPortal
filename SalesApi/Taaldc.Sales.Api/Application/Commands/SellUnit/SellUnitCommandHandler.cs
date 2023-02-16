@@ -2,117 +2,129 @@ using MediatR;
 using Newtonsoft.Json;
 using SeedWork;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
+using Taaldc.Sales.Api.Application.Queries.Buyers;
+using Taaldc.Sales.Api.Application.Queries.Orders;
+using Taaldc.Sales.Api.Application.Queries.UnitReplicas;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Domain.Events;
+using Taaldc.Sales.Domain.Exceptions;
 
-namespace Taaldc.Sales.API.Application.Commands.SellUnit;
+namespace Taaldc.Sales.Api.Application.Commands.SellUnit;
 
-public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, SellUnitCommandResult>
+public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
 {
-    private readonly IBuyerRepository _buyerRepository;
+    private readonly IBuyerQueries _buyerQueries;
+    private readonly IOrderRepository _orderRepository;
+    private readonly IUnitQueries _unitQueries;
+    
     private readonly IAmCurrentUser _currentUser;
     private readonly ILogger<SellUnitCommandHandler> _logger;
     private readonly IMediator _mediator;
 
     private readonly IOrderRepository _salesRepository;
 
-    public SellUnitCommandHandler(
-        IOrderRepository salesRepository,
-        IBuyerRepository buyerRepository,
-        ILogger<SellUnitCommandHandler> logger,
-        IAmCurrentUser currentUser,
-        IMediator mediator)
-    {
-        _salesRepository = salesRepository;
-        _buyerRepository = buyerRepository;
-        _logger = logger;
-        _currentUser = currentUser;
-        _mediator = mediator;
-    }
+   
 
-    public async Task<SellUnitCommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
+        
         try
         {
-            var buyer = _buyerRepository.GetByEmail(request.EmailAddress);
+            var buyerExists = await _buyerQueries.CheckIfBuyerExists(request.BuyerId);
 
-            var buyerId = buyer?.Id;
+            if (!buyerExists)
+                throw new SalesDomainException(nameof(SellUnitCommandHandler), new Exception("Buyer not found."));
+            
+            var unitAvailabity = await ValidateAndCheckUnitsAvailability(request);
 
-            //upsert buyer
-            buyer = _buyerRepository.Upsert(request.Salutation, request.FirstName, request.LastName,
-                request.EmailAddress,
-                request.ContactNo, request.Address, request.Country, request.Province, request.TownCity,
-                request.ZipCode, buyerId);
+            //create order
+            var order = _salesRepository.CreateOrder(
+                request.BuyerId, 
+                request.Broker, 
+                request.PaymentReferenceId, 
+                request.Discount,
+                request.Remarks);
 
-            //persist to database
-            await _buyerRepository.UnitOfWork.SaveChangesAsync();
-
-            //add order
-            var sale = _salesRepository.AddOrder(request.UnitId,
-                TransactionType.GetTypeId(TransactionType.ForReservation),
-                buyer.Id,
-                request.Code,
-                request.Broker,
-                request.Remarks,
-                request.SellingPrice);
-
-            //if RF has been paid
-            if (request.Reservation > 0)
+            //add order item in order object
+            foreach (var item in request.OrderItems)
             {
-                if (request.ReservationConfirmNo == string.Empty)
-                    throw new ArgumentNullException(nameof(SellUnitCommand));
-
+                order.AddOrderItem(item.UnitId, item.Price);
+                order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
+            }
+            
+            //if RF should had been paid
+            if (request.ReservationFee > 0)
+            {
+                if (request.ReservationConfirmation == string.Empty)
+                    throw new SalesDomainException(nameof(SellUnitCommand),
+                        new ArgumentNullException(
+                            $"{nameof(SellUnitCommand.ReservationConfirmation)} must not be empty or null."));
 
                 // Add payment for reservation
-                sale.AddPayment(
+                order.AddPayment(
                     PaymentType.GetId(PaymentType.Reservation),
                     TransactionType.GetTypeId(TransactionType.ForReservation),
-                    request.PaymentDate,
-                    request.ReservationConfirmNo,
+                    DateTime.Now,
+                    request.ReservationConfirmation,
                     request.PaymentMethod,
-                    request.Reservation,
+                    request.ReservationFee,
                     request.Remarks);
             }
 
             //if DP has been paid
-            if (request.DownPayment > 0)
+            if (request.Downpayment > 0)
             {
                 //if paid, require this
-                if (request.DownPaymentConfirmNo == string.Empty)
+                if (request.DownpaymentConfirmation == string.Empty)
                     throw new ArgumentNullException(nameof(SellUnitCommand));
 
-                var correlationId = request.DownPaymentConfirmNo == request.ReservationConfirmNo
-                    ? request.DownPaymentConfirmNo
-                    : string.Empty;
-
-
                 //add payment fore acquisition
-                sale.AddPayment(
+                order.AddPayment(
                     PaymentType.GetId(PaymentType.PartialDownPayment),
                     TransactionType.GetTypeId(TransactionType.ForAcquisition),
-                    request.PaymentDate,
-                    request.DownPaymentConfirmNo,
+                    DateTime.Now,
+                    request.DownpaymentConfirmation,
                     request.PaymentMethod,
-                    request.Reservation,
-                    request.Remarks,
-                    request.ReservationConfirmNo == request.DownPaymentConfirmNo
-                        ? request.ReservationConfirmNo
-                        : correlationId);
+                    request.Downpayment,
+                    request.Remarks);
             }
 
-
-            await _salesRepository.UnitOfWork.SaveChangesAsync();
-
-            await _mediator.Publish(new UpdateUnitReplicaStatusNotif(request.UnitId, 3, "RESERVED"));
-
-            return SellUnitCommandResult.Create(true, "", new Dictionary<string, object>
-            {
-                { "UnitId", sale.GetUnitId }
-            });
+            return order.Id;
         }
         catch (Exception ex)
         {
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
-            return SellUnitCommandResult.Create(false, ex.InnerException.Message, new Dictionary<string, object>());
+            throw;
         }
+    }
+
+    private async Task<IEnumerable<UnitAvailability>> ValidateAndCheckUnitsAvailability(SellUnitCommand request)
+    {
+        //check for duplicate unit ids on the request
+        if (request.OrderItems.Select(i => i.UnitId).Distinct().Count() == request.OrderItems.Count())
+        {
+            throw new SalesDomainException(nameof(SellUnitCommandHandler),
+                new Exception("Possible duplicate unit id in the request."));
+        }
+
+        //get unit availability of the requested unit ids
+        var unitAvailabity =
+            await _unitQueries.GetUnitAvailabilityAsync(request.OrderItems.Select(i => i.UnitId).ToArray());
+
+        //check if NOT EVERYTHING is available -- even if just one is unavailable
+        if (!unitAvailabity.All(i => i.IsAvailable))
+        {
+            throw new SalesDomainException(nameof(SellUnitCommandHandler),
+                new Exception("A unit or more is not anymore available"));
+        }
+
+        //check if NOT EVERYTHING is a Parking Unit -- must have at least 1 RESIDENTIAL (NON-PARKING)
+        if (unitAvailabity.All(i => new[] { 6, 7, 8 }.Contains(i.UnitTypeId)))
+        {
+            throw new SalesDomainException(nameof(SellUnitCommandHandler),
+                new Exception("A residential (non-park) unit is required."));
+        }
+
+        return unitAvailabity;
     }
 }

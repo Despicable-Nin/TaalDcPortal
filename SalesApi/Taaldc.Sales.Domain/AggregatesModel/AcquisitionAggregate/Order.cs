@@ -1,4 +1,5 @@
 using SeedWork;
+using Taaldc.Sales.Domain.Events;
 using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -8,51 +9,60 @@ public class Order : DomainEntity, IAggregateRoot
     protected Order()
     {
         _payments = new List<Payment>();
+        _orderItems = new List<OrderItem>();
     }
 
 
-    public Order(int unitId, int buyerId, string code, string broker, string remarks, decimal finalPrice) : this()
+    public Order(
+        int buyerId, 
+        string broker, 
+        int paymentOptionId,
+        decimal discount,
+        string remarks
+    ) : this()
     {
-        _unitId = unitId;
         _buyerId = buyerId;
-        Code = code;
+        Code = this.Id.ToString("00000");
         Broker = broker;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
-        FinalPrice = finalPrice;
+        Discount = discount;
+
     }
 
-    private int _unitId;
-    public int GetUnitId() => _unitId;
-    
-
-    private int? _orderCorrelationId;
-    public void SetOrderCorrelationId(int orderCorrelationId) => _orderCorrelationId = orderCorrelationId;
-    public int? GetOrderCorrelationId() => _orderCorrelationId;
-
+    public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
-    public decimal FinalPrice { get;private set; }
 
     public DateTime? ReservationExpiresOn { get; private set; } = default;
-    public bool IsRefundable { get; private set; } = true;
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
-    public int GetStatusId() => _statusId;
-    public void SetStatus(int status) => _statusId = status;
+    
+    private int _paymentOptionId;
+    public PaymentOption PaymentOption { get; private set; }
 
-    public bool IsInHouse() => string.IsNullOrWhiteSpace(Broker);
 
     private int _buyerId;
     public int GetBuyerId() => _buyerId;
     
-    public void SetRefundable(bool isRefundable) => IsRefundable = isRefundable;
+    
+  
+    
+    private List<OrderItem> _orderItems;
+    public IEnumerable<OrderItem> OrderItems => _orderItems.AsReadOnly();
+
+    public OrderItem AddOrderItem(int unitId, decimal price, decimal discount = 0.0M)
+    {
+        var orderItem = new OrderItem(unitId, discount, price);
+        _orderItems.Add(orderItem);
+        return orderItem;
+    }
+    
     
     private List<Payment> _payments;
     public IEnumerable<Payment> Payments => _payments.AsReadOnly();
-
     public Payment AddPayment(
         int paymentTypeId,
         int transactionTypeId,
@@ -75,6 +85,7 @@ public class Order : DomainEntity, IAggregateRoot
             correlationId);
 
         _payments.Add(payment);
+        
         return payment;
     }
 
@@ -165,7 +176,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public bool HasFullyPaid() => _payments.Any()
         ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >= FinalPrice
+            .Sum(i => i.AmountPaid) >=  _orderItems.Sum(o => o.Price)
             : false;
 
 }
