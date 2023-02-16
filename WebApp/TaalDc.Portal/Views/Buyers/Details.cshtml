@@ -1,8 +1,11 @@
-﻿@model TaalDc.Portal.DTO.Sales.Buyer_ClientDto
+﻿@using Newtonsoft.Json;
+@model TaalDc.Portal.DTO.Sales.Buyer_ClientDto
 
 @{
     ViewBag.Title = "Buyer Details";
     Layout = "_Layout";
+
+    var serializedModel = JsonConvert.SerializeObject(Model);
 }
 
 
@@ -107,7 +110,7 @@
                 </p>
 
                 <h5><strong>ID Information</strong></h5>
-                <a onclick="openEditIDInformationm()" href="#">Edit</a>
+                <a onclick="openEditIDInformation()" href="#">Edit</a>
                 <hr />
 
                 <p class="mb-5">
@@ -190,11 +193,30 @@
 @section Scripts{
     <script src="~/js/sales/Buyer.js"></script>
     <script>
+        var modelData = JSON.parse('@Html.Raw(serializedModel)');
+
         function openEditGeneralInformation(){
             var formModal = document.getElementById('generalInfoModal');
 
             var modal = new bootstrap.Modal(formModal, {});
 
+            //assign existing values
+            var inputFields = formModal.getElementsByClassName('form-control');
+
+            for (var i = 0; i < inputFields.length; i++) {
+                if(inputFields[i].name === 'DoB'){
+                    const dateString = modelData[inputFields[i].name];
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    const day = date.getDate().toString().padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+
+                    inputFields[i].value = formattedDate
+                }else{
+                    inputFields[i].value = modelData[inputFields[i].name]
+                }
+            }
             modal.show();
         }
 
@@ -203,6 +225,12 @@
             var formModal = document.getElementById('contactInfoModal');
 
             var modal = new bootstrap.Modal(formModal, {});
+
+            var inputFields = formModal.getElementsByClassName('form-control');
+
+            for (var i = 0; i < inputFields.length; i++) {
+                inputFields[i].value = modelData[inputFields[i].name]
+            }
 
             modal.show();
         }
@@ -216,35 +244,31 @@
             let addressType = document.getElementsByName("Type"); 
             addressType[0].value = type;
 
-            let street = document.getElementsByName("Street");
-            let city = document.getElementsByName("City");
-            let state = document.getElementsByName("State");
-            let country = document.getElementsByName("Country");
-            let zipCode = document.getElementsByName("ZipCode");
-
             if(type === 0){
-                street[0].value = '@Model.HomeAddress.Street'
-                city[0].value = '@Model.HomeAddress.City'
-                state[0].value = '@Model.HomeAddress.State'
-                country[0].value = '@Model.HomeAddress.Country'
-                zipCode[0].value = '@Model.HomeAddress.ZipCode'
+                var homeAddress = modelData.HomeAddress;
+
+                var inputFields = formModal.getElementsByClassName('form-control');
+
+                for (var i = 0; i < inputFields.length; i++) {
+                    inputFields[i].value = homeAddress[inputFields[i].name]
+                }
             }else if(type === 1){
-                street[0].value = '@Model.BusinessAddress.Street'
-                city[0].value = '@Model.BusinessAddress.City'
-                state[0].value = '@Model.BusinessAddress.State'
-                country[0].value = '@Model.BusinessAddress.Country'
-                zipCode[0].value = '@Model.BusinessAddress.ZipCode'
+                var businessAddress = modelData.BusinessAddress;
+
+                var inputFields = formModal.getElementsByClassName('form-control');
+
+                for (var i = 0; i < inputFields.length; i++) {
+                    inputFields[i].value = businessAddress[inputFields[i].name]
+                }
             }else if (type === 2) {
-                street[0].value = '@Model.BillingAddress.Street'
-                city[0].value = '@Model.BillingAddress.City'
-                state[0].value = '@Model.BillingAddress.State'
-                country[0].value = '@Model.BillingAddress.Country'
-                zipCode[0].value = '@Model.BillingAddress.ZipCode'
+                var billingAddress = modelData.BillingAddress;
+
+                var inputFields = formModal.getElementsByClassName('form-control');
+
+                for (var i = 0; i < inputFields.length; i++) {
+                    inputFields[i].value = billingAddress[inputFields[i].name]
+                }
             }
-
-
-
-            console.log('address type', addressType);
 
             var modal = new bootstrap.Modal(formModal, {});
 
@@ -252,10 +276,28 @@
         }
 
 
-        function openEditIDInformationm(){
+        function openEditIDInformation(){
             var formModal = document.getElementById('idInformationModal');
 
             var modal = new bootstrap.Modal(formModal, {});
+
+            var inputFields = formModal.getElementsByClassName('form-control');
+
+            for (var i = 0; i < inputFields.length; i++) {
+                 if (inputFields[i].name === 'GovIssuedIDValidUntil') {
+                    console.log(inputFields[i]);
+                    const dateString = modelData[inputFields[i].name];
+                    const date = new Date(dateString);
+                    const year = date.getFullYear();
+                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                    const day = date.getDate().toString().padStart(2, '0');
+                    const formattedDate = `${year}-${month}-${day}`;
+
+                    inputFields[i].value = formattedDate
+                } else {
+                    inputFields[i].value = modelData[inputFields[i].name]
+                }
+            }
 
             modal.show();
         }
@@ -265,6 +307,14 @@
             var formModal = document.getElementById('companyModal');
 
             var modal = new bootstrap.Modal(formModal, {});
+
+            var inputFields = formModal.getElementsByClassName('form-control');
+
+            companyModel = modelData.Company;
+
+            for(var i=0; i<inputFields.length; i++){
+                inputFields[i].value = companyModel[inputFields[i].name]
+            }
 
             modal.show();
         }
