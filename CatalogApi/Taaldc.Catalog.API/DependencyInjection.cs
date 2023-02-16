@@ -1,9 +1,11 @@
 using System.Data.Common;
+using System.Reflection;
 using System.Text;
 using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
+using IntegrationEventLogEF;
 using IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +61,17 @@ public static class DependencyInjection
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
             );
+        
+        services.AddDbContext<IntegrationEventLogContext>(options =>
+        {
+            options.UseSqlServer(configuration["ConnectionString"],
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
+                    //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                });
+        });
 
         services.AddScoped<CatalogDbContextInitializer>();
 
@@ -157,7 +170,7 @@ public static class DependencyInjection
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
                 var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
                 var factory = new ConnectionFactory()
                 {
@@ -181,7 +194,7 @@ public static class DependencyInjection
                     retryCount = int.Parse(configuration["EventBusRetryCount"]);
                 }
 
-                return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
+                return new DefaultRabbitMqPersistentConnection(factory, logger, retryCount);
             });
         }
 
@@ -207,12 +220,12 @@ public static class DependencyInjection
         }
         else
         {
-            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMQ>(sp =>
+            services.AddSingleton<IEventBus, EventBusRabbitMQ.EventBusRabbitMq>(sp =>
             {
                 var subscriptionClientName = configuration["SubscriptionClientName"];
-                var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
                 var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMQ>>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMQ.EventBusRabbitMq>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                 var retryCount = 5;
@@ -221,13 +234,12 @@ public static class DependencyInjection
                     retryCount = int.Parse(configuration["EventBusRetryCount"]);
                 }
 
-                return new EventBusRabbitMQ.EventBusRabbitMQ(rabbitMQPersistentConnection, logger, eventBusSubcriptionsManager,iLifetimeScope, retryCount, subscriptionClientName);
+                return new EventBusRabbitMQ.EventBusRabbitMq(rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager,iLifetimeScope, retryCount, subscriptionClientName);
             });
         }
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        services.AddTransient<UnitStatusChangedToReservedIntegrationEventHandler>();
-
+    
         return services;
     }
 }

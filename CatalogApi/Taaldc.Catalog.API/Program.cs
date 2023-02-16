@@ -1,8 +1,12 @@
 ﻿using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
+using EventBus.Abstractions;
 using MediatR;
 using SeedWork;
 using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
+using Taaldc.Catalog.API.Application.IntegrationEvents.Events;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.Properties;
@@ -20,6 +24,8 @@ var configuration = builder.Configuration;
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddControllers();
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 //setting up dbcontext and related stuff
 builder.Services
@@ -58,7 +64,6 @@ builder.Services.AddScoped<IScenicViewQueries>(i => { return new ScenicViewQueri
 
 builder.Services.AddScoped<IUnitTypeQueries>(i => { return new UnitTypeQueries(connectionString); });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -82,5 +87,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+
+//configure event bus
+var eventbus = app.Services.GetRequiredService<IEventBus>();
+eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
+
 
 app.Run();

@@ -10,4 +10,5 @@ public interface IAccountService
     Task<string> CreateUser(UserCreateDto vm);
     Task<string> UpdateUser(string id, UserUpdateDto vm, bool resetPassword);
     Task<UserViewModel> GetUserById(string id);
+    Task<string> GetToken(string email);
 }
