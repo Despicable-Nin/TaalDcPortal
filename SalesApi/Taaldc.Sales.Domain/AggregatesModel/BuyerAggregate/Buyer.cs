@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using SeedWork;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -41,12 +42,14 @@ public class Buyer : Entity, IAggregateRoot
 
     public int? SpouseId { get; private set; }
 
-    public Address? HomeAddress { get; set; }
-    public Address? BusinessAddress { get; set; }
-    public Address? BillingAddress { get; set; }
+    // public Address? HomeAddress { get; set; }
+    // public Address? BusinessAddress { get; set; }
+    // public Address? BillingAddress { get; set; }
 
     public bool IsCorporate { get; set; }
     public Company? Company { get; set; }
+    
+    public List<Address> Addresses { get; set; }
 
 
     public void UpdateBuyer(string salutation, string firstName, string middleName, string lastName, DateTime doB,
