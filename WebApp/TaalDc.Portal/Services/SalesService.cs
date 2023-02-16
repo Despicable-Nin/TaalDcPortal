@@ -90,14 +90,20 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor()
     {
-        var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_removeServiceBaseUrl);
+        var parkings = new List<ParkingUnitAvailabilityPerFloor_ClientDto>();
 
-        var responseString = await _httpClient.GetStringAsync(uri);
+        try { 
+            var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_removeServiceBaseUrl);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>>(responseString,
+            var responseString = await _httpClient.GetStringAsync(uri);
+
+            parkings = JsonSerializer.Deserialize<List<ParkingUnitAvailabilityPerFloor_ClientDto>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }catch{
+            throw;
+        }
 
-        return result;
+        return parkings.ToList();
     }
 
 

@@ -1,0 +1,58 @@
+﻿@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
+
+<!--Contact Info Edit Modal-->
+<div class="modal fade" id="contactInfoModal" tabindex="-1" aria-labelledby="contactInfoModal" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row needs-validation" method="post" id="contactInfo" asp-action="EditContactInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <input name="BuyerId" value="@Model.Id" hidden />
+                    <div class="mb-3 col-lg-12">
+                        <label for="EmailAddress" class="form-label">
+                            <strong>Email Address</strong>
+                        </label>
+                        <input name="EmailAddress" class="form-control" required type="email" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="PhoneNo" class="form-label">
+                            <strong>Phone No.</strong>
+                        </label>
+                        <input name="PhoneNo" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="MobileNo" class="form-label">
+                            <strong>Mobile No.</strong>
+                        </label>
+                        <input name="MobileNo" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

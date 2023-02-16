@@ -1,7 +1,7 @@
 ﻿using System;
 using TaalDc.Portal.DTO.Enums;
 
-namespace TaalDc.Portal.DTO.Sales
+namespace TaalDc.Portal.DTO.Sales.Buyer
 {
     public class Buyer_ClientDto
     {
@@ -12,7 +12,8 @@ namespace TaalDc.Portal.DTO.Sales
             MiddleName = middleName;
             LastName = lastName;
             DoB = doB;
-            CivilStatus = civilStatus;
+            CivilStatusId = (int)civilStatus;
+            CivilStatus = civilStatus.ToString();
         }
 
         public int Id { get; set; }
@@ -22,7 +23,8 @@ namespace TaalDc.Portal.DTO.Sales
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTime DoB { get; set; }
-        public CivilStatusEnum CivilStatus { get; set; }
+        public int CivilStatusId { get; set; }
+        public string CivilStatus { get; set; }
 
 
         public string EmailAddress { get; set; }
@@ -35,6 +37,7 @@ namespace TaalDc.Portal.DTO.Sales
         public DateTime GovIssuedIDValidUntil { get; set; }
 
         public int? SpouseId { get; set; }
+        public Buyer_ClientDto Spouse { get; set; }
 
         public ClientAddress HomeAddress { get; set; }
         public ClientAddress BusinessAddress { get; set; }
@@ -86,14 +89,14 @@ namespace TaalDc.Portal.DTO.Sales
     {
         public ClientAddress(string address, string city, string state, string country, string zipCode)
         {
-            Address = address;
+            Street = address;
             City = city;
             State = state;
             Country = country;
             ZipCode = zipCode;
         }
 
-        public string Address { get; set; }
+        public string Street { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string Country { get; set; }
