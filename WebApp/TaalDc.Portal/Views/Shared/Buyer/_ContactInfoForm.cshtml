@@ -1,12 +1,12 @@
-﻿@model TaalDc.Portal.DTO.Sales.Buyer_ClientDto
+﻿@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
 
-
-<!--Address Edit Modal-->
-<div class="modal fade" id="idInformationModal" tabindex="-1" aria-labelledby="idInformationModal" aria-hidden="true">
+<!--Contact Info Edit Modal-->
+<div class="modal fade" id="contactInfoModal" tabindex="-1" aria-labelledby="contactInfoModal" aria-hidden="true">
     <div class="modal-dialog  modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">ID Information</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Information</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -17,49 +17,37 @@
                         <li></li>
                     </ul>
                 </div>
-                <form class="row needs-validation" method="post" id="idForm" asp-action="EditIDInformation" asp-controller="Buyers" asp-route-id="@Model.Id">
+                <form class="row needs-validation" method="post" id="contactInfo" asp-action="EditContactInfo" asp-controller="Buyers" asp-route-id="@Model.Id">
                     <input name="BuyerId" value="@Model.Id" hidden />
-                    
                     <div class="mb-3 col-lg-12">
-                        <label for="Occupation" class="form-label">
-                            <strong>Occupation</strong>
+                        <label for="EmailAddress" class="form-label">
+                            <strong>Email Address</strong>
                         </label>
-                        <input name="Occupation" class="form-control"  />
+                        <input name="EmailAddress" class="form-control" required type="email" />
                         <div class="invalid-feedback">
                             This is a required field.
                         </div>
                     </div>
 
                     <div class="mb-3 col-lg-12">
-                        <label for="TIN" class="form-label">
-                            <strong>TIN</strong>
+                        <label for="PhoneNo" class="form-label">
+                            <strong>Phone No.</strong>
                         </label>
-                        <input name="TIN" class="form-control" />
+                        <input name="PhoneNo" class="form-control" required />
                         <div class="invalid-feedback">
                             This is a required field.
                         </div>
                     </div>
 
                     <div class="mb-3 col-lg-12">
-                        <label for="GovIssuedID" class="form-label">
-                            <strong>Gov't Issued ID</strong>
+                        <label for="MobileNo" class="form-label">
+                            <strong>Mobile No.</strong>
                         </label>
-                        <input name="GovIssuedID" class="form-control" />
+                        <input name="MobileNo" class="form-control" required />
                         <div class="invalid-feedback">
                             This is a required field.
                         </div>
                     </div>
-
-                    <div class="mb-3 col-lg-12">
-                        <label for="GovIssuedIDValidUntil" class="form-label">
-                            <strong>Valid Until</strong>
-                        </label>
-                        <input name="GovIssuedIDValidUntil" class="form-control" type="date"/>
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
-                    </div>
-
                     <div class="col-lg-12">
                         <input class="btn btn-primary" type="submit" value="Save" />
                     </div>

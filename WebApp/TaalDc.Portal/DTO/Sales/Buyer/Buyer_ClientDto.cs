@@ -1,7 +1,7 @@
 ﻿using System;
 using TaalDc.Portal.DTO.Enums;
 
-namespace TaalDc.Portal.DTO.Sales
+namespace TaalDc.Portal.DTO.Sales.Buyer
 {
     public class Buyer_ClientDto
     {
@@ -37,7 +37,7 @@ namespace TaalDc.Portal.DTO.Sales
         public DateTime GovIssuedIDValidUntil { get; set; }
 
         public int? SpouseId { get; set; }
-        public Buyer_ClientDto? Spouse { get; set; }
+        public Buyer_ClientDto Spouse { get; set; }
 
         public ClientAddress HomeAddress { get; set; }
         public ClientAddress BusinessAddress { get; set; }

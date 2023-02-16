@@ -1,5 +1,6 @@
 ﻿@using Newtonsoft.Json;
-@model TaalDc.Portal.DTO.Sales.Buyer_ClientDto
+@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
 
 @{
     ViewBag.Title = "Buyer Details";
@@ -168,32 +169,32 @@
 </div>
 
 @{
-    Html.RenderPartial("_GeneralInfoForm", Model);
+    Html.RenderPartial("~/Views/Shared/Buyer/_GeneralInfoForm.cshtml", Model);
 }
 
 @{
-    Html.RenderPartial("_SpouseForm", Model);
-}
-
-
-
-@{
-    Html.RenderPartial("_ContactInfoForm", Model);
-}
-
-
-@{
-    Html.RenderPartial("_AddressForm", Model);
+    Html.RenderPartial("~/Views/Shared/Buyer/_SpouseForm.cshtml", Model);
 }
 
 
 
 @{
-    Html.RenderPartial("_IDInformationForm", Model);
+    Html.RenderPartial("~/Views/Shared/Buyer/_ContactInfoForm.cshtml", Model);
+}
+
+
+@{
+    Html.RenderPartial("~/Views/Shared/Buyer/_AddressForm.cshtml", Model);
+}
+
+
+
+@{
+    Html.RenderPartial("~/Views/Shared/Buyer/_IDInformationForm.cshtml", Model);
 }
 
 @{
-    Html.RenderPartial("_CompanyForm", Model);
+    Html.RenderPartial("~/Views/Shared/Buyer/_CompanyForm.cshtml", Model);
 }
 
 

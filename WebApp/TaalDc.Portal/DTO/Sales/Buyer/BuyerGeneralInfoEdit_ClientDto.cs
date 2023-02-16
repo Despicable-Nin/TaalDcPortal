@@ -1,4 +1,4 @@
-﻿namespace TaalDc.Portal.DTO.Sales
+﻿namespace TaalDc.Portal.DTO.Sales.Buyer
 {
     public class BuyerGeneralInfoEdit_ClientDto
     {
