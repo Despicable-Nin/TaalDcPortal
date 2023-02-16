@@ -8,10 +8,6 @@ namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public partial class DashboardQueries : IDashboardQueries
 {
-    private const string COUNT_UNIT_QUERY = "SELECT COUNT(*) [Count] " +
-                                            "FROM [taaldb_sales].[sales].[unitreplica] U " +
-                                            "LEFT JOIN [taaldb_sales].[sales].[order] O ON O.UnitId = U.UnitId " +
-                                            "LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id";
 
     private readonly string _connectionString;
     private readonly SalesDbContext _context;
