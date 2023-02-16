@@ -40,20 +40,22 @@ public class BuyerRepository : IBuyerRepository
             if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
 
             var address = new Address(type, street, city, state, country, zipCode);
-
-            switch (type)
-            {
-                case AddressTypeEnum.Home:
-                    buyer.HomeAddress = address;
-                    break;
-                case AddressTypeEnum.Business:
-                    buyer.BusinessAddress = address;
-                    break;
-                case AddressTypeEnum.Billing:
-                    buyer.BillingAddress = address;
-                    break;
-
-            }
+            
+            //TODO: Refactor
+            //
+            // switch (type)
+            // {
+            //     case AddressTypeEnum.Home:
+            //         buyer.HomeAddress = address;
+            //         break;
+            //     case AddressTypeEnum.Business:
+            //         buyer.BusinessAddress = address;
+            //         break;
+            //     case AddressTypeEnum.Billing:
+            //         buyer.BillingAddress = address;
+            //         break;
+            //
+            // }
 
             return _context.Buyers.Update(buyer).Entity;
         }

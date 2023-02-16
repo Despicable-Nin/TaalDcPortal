@@ -10,7 +10,7 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
         public string State { get; private set; }
         public string Country { get; private set; }
         public string ZipCode { get; private set; }
-        public AddressTypeEnum Type { get; set; }
+        public AddressTypeEnum Type { get; private set; }
 
         public Address()
         {
@@ -37,11 +37,11 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
         }
     }
 
-    public enum AddressTypeEnum
+    public enum AddressTypeEnum : int
     {
-        Home,
-        Business,
-        Billing
+        Home = 1,
+        Business = 2,
+        Billing = 3
     }
 }
 

@@ -29,5 +29,15 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
         builder.HasOne<CivilStatus>()
             .WithMany()
             .HasForeignKey("CivilStatusId");
+
+        builder.OwnsMany(p => p.Addresses, a =>
+        {
+            a.ToTable("address");
+            a.WithOwner().HasForeignKey("BuyerId");
+            a.HasKey("Id");
+            a.Property<int>("Id").UseHiLo("addressseq", SalesDbContext.DEFAULT_SCHEMA);
+        });
+
+
     }
 }
