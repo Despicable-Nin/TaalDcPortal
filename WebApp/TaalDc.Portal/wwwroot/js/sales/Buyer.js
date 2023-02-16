@@ -102,6 +102,8 @@ function saveInfo(event) {
                     } // Callback after click
                 }).showToast();
 
+                event.target.classList.remove('was-validated');
+
                 $('.formLoader').hide();
             }, error: function (data) {
                 const response = data.responseJSON;
