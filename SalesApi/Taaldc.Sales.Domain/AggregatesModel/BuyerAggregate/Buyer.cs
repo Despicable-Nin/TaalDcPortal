@@ -42,10 +42,6 @@ public class Buyer : Entity, IAggregateRoot
 
     public int? SpouseId { get; private set; }
 
-    // public Address? HomeAddress { get; set; }
-    // public Address? BusinessAddress { get; set; }
-    // public Address? BillingAddress { get; set; }
-
     public bool IsCorporate { get; set; }
     public Company? Company { get; set; }
     
