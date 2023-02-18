@@ -146,7 +146,7 @@ public class Buyer : Entity, IAggregateRoot
     public Address GetBillingAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Billing);
     public Address GetBusinessAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Business);
 
-    public void UpdateCompany(Company company) => Company = company;
+    public void UpsertCompany(Company company) => Company = company;
 
     #endregion
 
