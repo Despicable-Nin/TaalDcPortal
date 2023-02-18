@@ -30,7 +30,9 @@ public class Buyer : Entity, IAggregateRoot
         DoB = doB;
         _civilStatusId = civilStatusId;
         _addresses.Add(address);
-        Company = company;
+
+        IsCorporate = isCorporate;
+        Company = company ?? new Company();
 
     }
    
