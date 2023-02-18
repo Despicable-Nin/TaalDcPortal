@@ -9,19 +9,34 @@ public class Buyer : Entity, IAggregateRoot
         string firstName,
         string middleName,
         string lastName,
+        string emailAddress,
+        string phoneNumber,
+        string mobileNumber,
         DateTime doB,
-        int civilStatusId)
+        int civilStatusId,
+        Address address,
+        bool isCorporate,
+        Company? company
+        ) : this()
     {
         Salutation = salutation;
         FirstName = firstName;
         MiddleName = middleName;
         LastName = lastName;
+        EmailAddress = emailAddress;
+        PhoneNo = phoneNumber;
+        MobileNo = mobileNumber;
         DoB = doB;
-        CivilStatusId = civilStatusId;
+        _civilStatusId = civilStatusId;
+        _addresses.Add(address);
+        Company = company;
+
     }
+   
 
     protected Buyer()
     {
+        _addresses = new List<Address>();
     }
 
     public string Salutation { get; private set; }
@@ -29,23 +44,28 @@ public class Buyer : Entity, IAggregateRoot
     public string MiddleName { get; private set; }
     public string LastName { get; private set; }
     public DateTime DoB { get; private set; }
-    public int CivilStatusId { get; private set; }
+    
+    private int _civilStatusId;
+    public CivilStatus CivilStatus { get; private set; }
 
     public string EmailAddress { get; private set; }
     public string MobileNo { get; private set; }
     public string PhoneNo { get; private set; }
 
     public string Occupation { get; private set; }
-    public string TIN { get; private set; }
-    public string GovIssuedID { get; private set; }
-    public DateTime GovIssuedIDValidUntil { get; private set; }
+    public string Tin { get; private set; }
+    public string GovIssuedId { get; private set; }
+    public DateTime? GovIssuedIdValidUntil { get; private set; }
 
     public int? SpouseId { get; private set; }
 
-    public bool IsCorporate { get; set; }
-    public Company? Company { get; set; }
-    
-    public List<Address> Addresses { get; set; }
+    public bool IsCorporate { get; private set; }
+
+    //private int? _companyId;
+    public Company? Company { get; private set; }
+
+    private List<Address> _addresses;
+    public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
 
 
     public void UpdateBuyer(string salutation, string firstName, string middleName, string lastName, DateTime doB,
@@ -56,7 +76,7 @@ public class Buyer : Entity, IAggregateRoot
         MiddleName = middleName;
         LastName = lastName;
         DoB = doB;
-        CivilStatusId = civilStatusId;
+        //CivilStatusId = civilStatusId;
     }
 
     public void UpdateContactDetails(string emailAddress, string phoneNo, string mobileNo)
@@ -69,9 +89,9 @@ public class Buyer : Entity, IAggregateRoot
     public void UpdateIDInformation(string occupation, string tin, string govIssuedID, DateTime govIssuedIDValidUntil)
     {
         Occupation = occupation;
-        TIN = tin;
-        GovIssuedID = govIssuedID;
-        GovIssuedIDValidUntil = govIssuedIDValidUntil;
+        Tin = tin;
+        GovIssuedId = govIssuedID;
+        GovIssuedIdValidUntil = govIssuedIDValidUntil;
     }
 
 

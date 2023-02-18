@@ -71,7 +71,7 @@ public class BuyerRepository : IBuyerRepository
 
             if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
 
-            buyer.Company = new Company(name, address, industry, phoneNo, mobileNo, faxNo, emailAddress, tin, secRegNo, president, corpSec);
+            //buyer.Company = new Company(name, address, industry, phoneNo, mobileNo, faxNo, emailAddress, tin, secRegNo, president, corpSec);
 
             return _context.Buyers.Update(buyer).Entity;
         }
@@ -102,21 +102,23 @@ public class BuyerRepository : IBuyerRepository
         string mobileNo,
         int? buyerId)
     {
-        Buyer buyer = default;
+        // Buyer buyer = default;
+        //
+        // if (buyerId.HasValue)
+        // {
+        //     //update
+        //     buyer = _context.Buyers.Find(buyerId.Value);
+        //     buyer.UpdateBuyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
+        //     buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
+        //
+        //     return _context.Buyers.Update(buyer).Entity;
+        // }
+        //
+        // buyer = new Buyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
+        // buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
+        //
+        // return _context.Buyers.Add(buyer).Entity;
 
-        if (buyerId.HasValue)
-        {
-            //update
-            buyer = _context.Buyers.Find(buyerId.Value);
-            buyer.UpdateBuyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
-            buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
-
-            return _context.Buyers.Update(buyer).Entity;
-        }
-
-        buyer = new Buyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
-        buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
-
-        return _context.Buyers.Add(buyer).Entity;
+        return null;
     }
 }
