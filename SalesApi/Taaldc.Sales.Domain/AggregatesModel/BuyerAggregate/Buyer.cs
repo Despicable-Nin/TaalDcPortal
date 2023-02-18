@@ -89,8 +89,13 @@ public class Buyer : Entity, IAggregateRoot
     public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
     
     #endregion
+    
+    #region RowVersion
+    public byte TimeStamp { get; set; }
+    #endregion
 
 
+    #region Behavior(s)
     public void AddPartnerOrSpouse(int buyerIdOfPartnerOrSpouse)
     {
         PartnerId = buyerIdOfPartnerOrSpouse;
@@ -143,5 +148,6 @@ public class Buyer : Entity, IAggregateRoot
 
     public void UpdateCompany(Company company) => Company = company;
 
+    #endregion
 
 }
