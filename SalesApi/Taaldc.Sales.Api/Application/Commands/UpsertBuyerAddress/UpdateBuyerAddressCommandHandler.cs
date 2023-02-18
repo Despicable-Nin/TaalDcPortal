@@ -28,7 +28,7 @@ public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddre
 
             if (buyer == default)
             {
-                throw new SalesDomainException(nameof(UpdateBuyerAddressCommandHandler),
+                throw new SalesDomainException(nameof(UpdateBuyerAddressCommandHandler.Handle),
                     new Exception($"Buyer with id:{request.BuyerId} not found."));
             }
 
