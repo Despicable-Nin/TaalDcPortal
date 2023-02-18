@@ -43,7 +43,7 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
             buyer.UpsertAddress(request.HomeAddress.ToEntity());
 
             _logger.LogInformation($"Update Company -- replace if exists, otherwise just add.");
-            buyer.UpdateCompany(request.Company.ToEntity());
+            buyer.UpsertCompany(request.Company.ToEntity());
 
             return request.BuyerId.Value;
         }
