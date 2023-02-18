@@ -19,7 +19,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
 
     public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator,
-        IAmCurrentUser currentUser = null) : base(options)
+        IAmCurrentUser currentUser = default) : base(options)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _currentUser = currentUser;
