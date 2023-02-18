@@ -103,8 +103,8 @@ public class Buyer : Entity, IAggregateRoot
 
     public void RemovePartnerOrSpouse() => PartnerId = default;
 
-    public void UpdateBuyer(string salutation, string firstName, string middleName, string lastName, DateTime doB,
-        int civilStatusId)
+    public void UpdateBasicInfo(string salutation, string firstName, string middleName, string lastName, DateTime doB,
+        int civilStatusId, bool isCorporate)
     {
         Salutation = salutation;
         FirstName = firstName;
@@ -112,6 +112,7 @@ public class Buyer : Entity, IAggregateRoot
         LastName = lastName;
         DoB = doB;
         _civilStatusId = civilStatusId;
+        IsCorporate = isCorporate;
     }
 
     public void UpdateContactDetails(string emailAddress, string phoneNo, string mobileNo)

@@ -42,6 +42,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Application\Commands\UpdateBuyerContactDetails" />
+      <Folder Include="Application\Commands\UpdateBuyerMisc" />
       <Folder Include="Application\IntegrationEvents\EventHandling" />
     </ItemGroup>
 
