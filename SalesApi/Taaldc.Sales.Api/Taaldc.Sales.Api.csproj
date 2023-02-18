@@ -42,7 +42,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Commands\UpsertCompany" />
       <Folder Include="Application\IntegrationEvents\EventHandling" />
     </ItemGroup>
 
