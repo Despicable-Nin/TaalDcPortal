@@ -2,9 +2,9 @@ using MediatR;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
 
-namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerAddress;
+namespace Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 
-public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpdateBuyerAddressCommand, bool>
+public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddressCommand, bool>
 {
 
     private readonly IBuyerRepository _repository;
@@ -16,7 +16,7 @@ public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpdateBuyerAddre
         _logger = logger;
     }
 
-    public async Task<bool> Handle(UpdateBuyerAddressCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(UpsertBuyerAddressCommand request, CancellationToken cancellationToken)
     {
         try
         {

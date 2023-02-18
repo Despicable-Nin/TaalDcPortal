@@ -1,9 +1,9 @@
 using MediatR;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
-namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerAddress;
+namespace Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 
-public class UpdateBuyerAddressCommand : IRequest<bool>
+public class UpsertBuyerAddressCommand : IRequest<bool>
 {
     public int BuyerId { get; init; }
     public string Street { get; init; }

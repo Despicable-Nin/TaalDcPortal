@@ -1,8 +1,8 @@
 using FluentValidation;
 
-namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerAddress;
+namespace Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 
-public class UpdateBuyerCommmandValidator : AbstractValidator<UpdateBuyerAddressCommand>
+public class UpdateBuyerCommmandValidator : AbstractValidator<UpsertBuyerAddressCommand>
 {
     public UpdateBuyerCommmandValidator()
     {
