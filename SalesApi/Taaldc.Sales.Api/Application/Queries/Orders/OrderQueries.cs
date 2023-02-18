@@ -11,13 +11,10 @@ public class OrderQueries : IOrderQueries
     private const string PaymentCTE =
         "WITH PaymentCTE AS ( SELECT P.*, ROW_NUMBER() OVER (PARTITION BY P.OrderId ORDER BY P.id) as RowNum FROM [taaldb_sales].[dbo].[payment] P) ";
 
-    private const string UnitQuery = @$"{PaymentCTE} SELECT 
-        O.Id 
+    private const string UnitQuery = @$"{PaymentCTE} SELECT  O.Id
         ,O.[Code] 
         ,O.[Broker] 
         ,O.[Remarks] 
-        ,O.[FinalPrice] 
-        ,O.[IsRefundable] 
         ,O.[StatusId]
         ,OS.[Name] AS Status
         ,O.[BuyerId] 
@@ -25,12 +22,12 @@ public class OrderQueries : IOrderQueries
         ,B.[FirstName] 
         ,B.[LastName]
         ,B.[EmailAddress] 
-        ,B.[ContactNo] 
-        ,B.[Address]
-        ,B.[Country] 
-        ,B.[Province] 
-        ,B.[TownCity] 
-        ,B.[ZipCode] 
+        ,B.[PhoneNo] 
+        ,A.[Street]
+        ,A.[Country] 
+        ,A.[State] 
+        ,A.[City] 
+        ,A.[ZipCode] 
         ,O.[Id] [OrderId] 
         ,B.[CreatedBy] 
         ,O.[BuyerId] 
@@ -52,12 +49,13 @@ public class OrderQueries : IOrderQueries
         ,U.[UnitStatusId]
         ,U.[OriginalPrice] 
         ,U.[SellingPrice]
-        ,P.[ActualPaymentDate] AS TransactionDate 
+        --,P.[ActualPaymentDate] AS TransactionDate 
     FROM [taaldb_sales].[sales].[unitreplica] U 
         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
         LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId
         LEFT JOIN [taaldb_sales].[sales].[orderstatus] OS ON O.[StatusId] = OS.Id  
         LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id 
+        LEFT JOIN [taaldb_sales].[sales].[address] A ON A.BuyerId = B.Id AND A.[Type] = 1
         LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
 
     private readonly string _connectionString;
@@ -84,8 +82,13 @@ public class OrderQueries : IOrderQueries
     {
         var brokerString = string.IsNullOrEmpty(broker) ? "" : $" O.[Broker] = '{broker}' AND ";
 
-        var query =
-            $"{UnitQuery} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) ORDER BY U.[UnitId] OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
+        var query =  @$"{UnitQuery} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) 
+            AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
+            AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
+            AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) 
+        ORDER BY U.[UnitId] 
+        OFFSET {(pageNumber - 1) * pageSize} 
+        ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
         await using var connection = new SqlConnection(_connectionString);
 
@@ -96,10 +99,20 @@ public class OrderQueries : IOrderQueries
 
         //get total count
         var unitCountQuery =
-            "SELECT  TOP 1 count(U.Id) FROM   [taaldb_sales].[sales].[unitreplica] U LEFT JOIN [taaldb_sales].[sales].[order] O ON O.[UnitId] = U.[UnitId] ";
+            @"SELECT 
+                TOP 1 count(U.Id) 
+            FROM 
+                [taaldb_sales].[sales].[unitreplica] U 
+                LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
+                LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId ";
 
         var countQuery =
-            $"{unitCountQuery} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
+            @$"{unitCountQuery} 
+            WHERE 
+                {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) 
+                AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
+                AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
+                AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
 
         var count = await connection.QueryAsync<int>(countQuery);
 
