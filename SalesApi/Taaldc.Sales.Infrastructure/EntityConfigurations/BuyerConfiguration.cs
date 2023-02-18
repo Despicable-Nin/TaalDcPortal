@@ -32,7 +32,7 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
 
         builder.HasIndex(b => b.PhoneNo).IsUnique();
 
-        builder.Property(b => b.SpouseId).IsRequired(false).HasDefaultValue(null);
+        builder.Property(b => b.PartnerId).IsRequired(false).HasDefaultValue(null);
         
         //non-required
         builder.Property(b => b.Tin).IsRequired(false);
