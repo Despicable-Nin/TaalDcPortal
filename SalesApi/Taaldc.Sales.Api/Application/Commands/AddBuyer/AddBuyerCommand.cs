@@ -1,76 +1,108 @@
-using FluentValidation;
 using MediatR;
-using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.API.Application.Commands.AddBuyer;
 
 public class AddBuyerCommand : IRequest<int>
 {
-    public string Salutation { get; }
+    public AddBuyerCommand(
+        string salutation,
+        string firstName,
+        string middleName,
+        string lastName,
+        string emailAddress,
+        string phoneNumber,
+        string mobileNumber,
+        DateTime doB,
+        int civilStatusId,
+        AddressDto address,
+        bool isCorporate,
+        CompanyDto company
+    )
+    {
+        Salutation = salutation;
+        FirstName = firstName;
+        MiddleName = middleName;
+        LastName = lastName;
+        EmailAddress = emailAddress;
+        PhoneNo = phoneNumber;
+        MobileNo = mobileNumber;
+        DoB = doB;
+        CivilStatusId = civilStatusId;
+        HomeAddress = address; 
+        Company = company;
 
-    public string FirstName { get; }
-
-    public string MiddleName { get; }
-
-    public string LastName { get; }
-
-    public DateTime DoB { get; }
-    public int CivilStatusId { get; set; }
-
-    public string EmailAddress { get; }
-
-    public string PhoneNo { get; }
-    public string MobileNo { get; }
-
-    public string Address { get; }
-    public string Country { get; }
-
-    public string Province { get; }
-
-    public string TownCity { get; }
-
-    public string ZipCode { get; }
-}
-
-public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
-{
-    private readonly IBuyerRepository _buyerRepository;
-    private readonly ILogger<AddBuyerCommandHandler> _logger;
+    }
+    public int? BuyerId { get; private set; }
+    public string Salutation { get; private set; }
+    public string FirstName { get; private set; }
+    public string MiddleName { get; private set; }
+    public string LastName { get; private set; }
+    public string EmailAddress { get; private set; }
+    public string MobileNo { get; private set; }
+    public string PhoneNo { get; private set; }
+    public DateTime DoB { get; private set; }
+    public int CivilStatusId { get; private set; }
+    public bool IsCorporate { get; private set; }
+    //value object
+    public CompanyDto Company { get; private set; }
+    public AddressDto HomeAddress { get; private set; }
     
-    public async Task<int> Handle(AddBuyerCommand request, CancellationToken cancellationToken)
-    {
-        var buyer = _buyerRepository.GetByEmail(request.EmailAddress);
-
-        var buyerId = buyer?.Id;
-
-        //upsert buyer
-        buyer = _buyerRepository.Upsert(
-            request.Salutation,
-            request.FirstName,
-            request.MiddleName,
-            request.LastName,
-            request.DoB,
-            request.CivilStatusId,
-            request.EmailAddress,
-            request.PhoneNo,
-            request.MobileNo,
-            buyerId);
-
-        //persist to database
-        await _buyerRepository.UnitOfWork.SaveChangesAsync();
-
-        return buyer.Id;
-    }
 }
 
-public class AddBuyerCommandValidator : AbstractValidator<AddBuyerCommand>
+public class AddressDto
 {
-    public AddBuyerCommandValidator()
+    public AddressDto(string street, string city, string state, string country, string zipCode)
     {
-        RuleFor(i => i.FirstName).NotEmpty();
-        RuleFor(i => i.LastName).NotEmpty();
-        RuleFor(i => i.EmailAddress).EmailAddress();
-        RuleFor(i => i.ZipCode).NotEmpty();
-        
+        Street = street;
+        City = city;
+        State = state;
+        Country = country;
+        ZipCode = zipCode;
     }
+
+    public string Street { get; private set; }
+    public string City { get; private set; }
+    public string State { get; private set; }
+    public string Country { get; private set; }
+    public string ZipCode { get; private set; }
+}
+
+public class CompanyDto
+{
+    public CompanyDto(string name,
+        string address,
+        string industry,
+        string phoneNo,
+        string mobileNo,
+        string faxNo,
+        string emailAddress,
+        string tin,
+        string secRegNo,
+        string president,
+        string corpSec)
+    {
+        Name = name;
+        Address = address;
+        Industry = industry;
+        PhoneNo = phoneNo;
+        MobileNo = mobileNo;
+        FaxNo = faxNo;
+        EmailAddress = emailAddress;
+        Tin = tin;
+        SecRegNo = secRegNo;
+        President = president;
+        CorpSec = corpSec;
+    }
+
+    public string Name { get; private set; }
+    public string Address { get; private set; }
+    public string Industry { get; private set; }
+    public string PhoneNo { get; private set; }
+    public string MobileNo { get; private set; }
+    public string FaxNo { get; private set; }
+    public string EmailAddress { get; private set; }
+    public string Tin { get; private set; }
+    public string SecRegNo { get; private set; }
+    public string President { get; private set; }
+    public string CorpSec { get; private set; }
 }
