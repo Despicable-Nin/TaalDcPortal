@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddControllers();
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -52,17 +52,7 @@ builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepositor
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddScoped<IPropertyQueries>(i => { return new PropertyQueries(connectionString); });
-
-builder.Services.AddScoped<IUnitQueries>(i => { return new UnitQueries(connectionString); });
-
-builder.Services.AddScoped<IFloorQueries>(i => { return new FloorQueries(connectionString); });
-
-builder.Services.AddScoped<ITowerQueries>(i => { return new TowerQueries(connectionString); });
-
-builder.Services.AddScoped<IScenicViewQueries>(i => { return new ScenicViewQueries(connectionString); });
-
-builder.Services.AddScoped<IUnitTypeQueries>(i => { return new UnitTypeQueries(connectionString); });
+builder.Services.AddQueries(configuration);
 
 var app = builder.Build();
 

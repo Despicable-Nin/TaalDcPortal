@@ -48,6 +48,7 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
             President = president;
             CorpSec = corpSec;
         }
+        
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

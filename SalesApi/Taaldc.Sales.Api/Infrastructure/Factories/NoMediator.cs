@@ -10,7 +10,7 @@ internal class NoMediator : IMediator
         return default;
     }
 
-    public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<object> CreateStream(object request, CancellationToken cancellationToken = default)
     {
         return default;
     }

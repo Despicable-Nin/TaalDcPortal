@@ -16,12 +16,36 @@ using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
+using Taaldc.Catalog.API.Application.Queries;
+using Taaldc.Catalog.API.Application.Queries.Floors;
+using Taaldc.Catalog.API.Application.Queries.Properties;
+using Taaldc.Catalog.API.Application.Queries.References;
+using Taaldc.Catalog.API.Application.Queries.ScenicViews;
+using Taaldc.Catalog.API.Application.Queries.Towers;
 using Taaldc.Catalog.Infrastructure;
 
 namespace Taaldc.Catalog.API;
 
 public static class DependencyInjection
 {
+    public static IServiceCollection AddQueries(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        
+        services.AddScoped<IPropertyQueries>(i => { return new PropertyQueries(connectionString); });
+
+        services.AddScoped<IUnitQueries>(i => { return new UnitQueries(connectionString); });
+
+        services.AddScoped<IFloorQueries>(i => { return new FloorQueries(connectionString); });
+
+        services.AddScoped<ITowerQueries>(i => { return new TowerQueries(connectionString); });
+
+        services.AddScoped<IScenicViewQueries>(i => { return new ScenicViewQueries(connectionString); });
+
+        services.AddScoped<IUnitTypeQueries>(i => { return new UnitTypeQueries(connectionString); });
+
+        return services;
+    }
     public static IServiceCollection AddCustomOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<CatalogSettings>(configuration);

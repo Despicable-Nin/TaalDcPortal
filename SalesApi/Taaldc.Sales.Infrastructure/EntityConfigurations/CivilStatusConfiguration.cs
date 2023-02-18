@@ -23,12 +23,12 @@ namespace Taaldc.Sales.Infrastructure.EntityConfigurations
 
             builder.HasData(new[]
             {
-                 new CivilStatus(1,CivilStatus.CivilStatusIs.Single.ToString()),
-                 new CivilStatus(2,CivilStatus.CivilStatusIs.Married.ToString()),
-                 new CivilStatus(3,CivilStatus.CivilStatusIs.Widowed.ToString()),
-                 new CivilStatus(4,CivilStatus.CivilStatusIs.Divorced.ToString()),
-                 new CivilStatus(5,CivilStatus.CivilStatusIs.Separated.ToString()),
-                 new CivilStatus(6,CivilStatus.CivilStatusIs.Others.ToString())
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Single,CivilStatus.CivilStatusIs.Single.ToString()),
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Married,CivilStatus.CivilStatusIs.Married.ToString()),
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Widowed,CivilStatus.CivilStatusIs.Widowed.ToString()),
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Divorced,CivilStatus.CivilStatusIs.Divorced.ToString()),
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Separated,CivilStatus.CivilStatusIs.Separated.ToString()),
+                 new CivilStatus((int) CivilStatus.CivilStatusIs.Others,CivilStatus.CivilStatusIs.Others.ToString())
              });
         }
     }

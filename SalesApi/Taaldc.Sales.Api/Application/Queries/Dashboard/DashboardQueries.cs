@@ -32,51 +32,51 @@ public partial class DashboardQueries : IDashboardQueries
 
     public async Task<int> GetReservedUnitCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.RESERVED);
+            .CountAsync(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.RESERVED);
     }
 
     public async Task<int> GetSoldUnitCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.SOLD);
+            .CountAsync(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.SOLD);
     }
 
     public async Task<int> GetBlockedUnitCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .CountAsync(i => new[] { 2, 3, 4, 5, 8 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
     }
 
     public async Task<int> GetAvailableParkingCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .CountAsync(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
     }
 
     public async Task<int> GetReservedParkingCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .CountAsync(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
     }
 
     public async Task<int> GetSoldParkingCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .CountAsync(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
     }
 
     public async Task<int> GetBlockedParkingCount()
     {
-        return _context.Units
+        return await _context.Units
             .AsNoTracking()
-            .Count(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
+            .CountAsync(i => new[] { 6, 7 }.Contains(i.UnitTypeId) && i.UnitStatusId == (int)UnitStatus.BLOCKED);
     }
 
     public async Task<IEnumerable<UnitAvailabilitySummaryByStatusDTO>> GetCountByUnitStatus(int[] unitTypes)

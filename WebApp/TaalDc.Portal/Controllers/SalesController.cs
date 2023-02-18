@@ -204,7 +204,7 @@ public class SalesController : BaseController<SalesController>
             }
 
             var unitStatus =
-               new UnitStatusUpdate_ClientDto(order.UnitId, unitStatusId, "");
+               new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
             
             var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 

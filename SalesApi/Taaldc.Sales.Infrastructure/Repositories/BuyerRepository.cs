@@ -21,100 +21,40 @@ public class BuyerRepository : IBuyerRepository
     public IUnitOfWork UnitOfWork => _context;
 
 
-    public Buyer GetByEmail(string email)
+    /// <summary>
+    /// Only to be used to fetch then update entity.
+    /// Never use AsNoTracking if the fetched entity will be updated.
+    /// </summary>
+    /// <param name="email">Unique email address of the Buyer entity</param>
+    /// <returns></returns>
+    public async Task<Buyer> GetByEmailAsync(string email)
     {
-        return _context.Buyers.AsNoTracking().SingleOrDefault(i => i.EmailAddress == email);
+        return await _context.Buyers.SingleOrDefaultAsync(i => i.EmailAddress == email);
     }
 
-    public Buyer GetById(int id)
+    /// <summary>
+    /// Only to be used to fetch then update entity.
+    ///  Never use AsNoTracking if the fetched entity will be updated.
+    /// </summary>
+    /// <param name="id">Id (PK) Of Buyer entity</param>
+    /// <returns></returns>
+    public async Task<Buyer> GetByIdAsync(int id)
     {
-        return _context.Buyers.AsNoTracking().SingleOrDefault(i => i.Id == id);
+        return await _context.Buyers.SingleOrDefaultAsync(i => i.Id == id);
     }
 
-    public Buyer UpdateAddress(int buyerId, AddressTypeEnum type, string street, string city, string state, string country, string zipCode)
+    /// <summary>
+    /// Add or update a Buyer entity
+    /// </summary>
+    /// <param name="buyer"></param>
+    /// <returns></returns>
+    public Buyer Upsert(Buyer buyer)
     {
-        if(buyerId > 0)
+        if (buyer.IsTransient())
         {
-            Buyer buyer = _context.Buyers.Find(buyerId);
-
-            if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
-
-            var address = new Address(type, street, city, state, country, zipCode);
-
-            switch (type)
-            {
-                case AddressTypeEnum.Home:
-                    buyer.HomeAddress = address;
-                    break;
-                case AddressTypeEnum.Business:
-                    buyer.BusinessAddress = address;
-                    break;
-                case AddressTypeEnum.Billing:
-                    buyer.BillingAddress = address;
-                    break;
-
-            }
-
-            return _context.Buyers.Update(buyer).Entity;
+            return _context.Buyers.Add(buyer).Entity;
         }
 
-        throw new ArgumentNullException(buyerId.ToString());
-    }
-
-    public Buyer UpdateCompany(int buyerId, string name, string address, string industry, string phoneNo, string mobileNo, string faxNo, string emailAddress, string tin, string secRegNo, string president, string corpSec)
-    {
-        if (buyerId > 0)
-        {
-            Buyer buyer = _context.Buyers.Find(buyerId);
-
-            if (buyer == null) throw new ArgumentNullException(nameof(Buyer));
-
-            buyer.Company = new Company(name, address, industry, phoneNo, mobileNo, faxNo, emailAddress, tin, secRegNo, president, corpSec);
-
-            return _context.Buyers.Update(buyer).Entity;
-        }
-
-        throw new ArgumentNullException(buyerId.ToString());
-    }
-
-    public Buyer UpdateIDInformation(int buyerId, string occupation, string tin, string govIssuedID, DateTime govIssuedIDValidUntil)
-    {
-        if(buyerId > 0)
-        {
-            Buyer buyer = _context.Buyers.Find(buyerId);
-            buyer.UpdateIDInformation(occupation, tin, govIssuedID, govIssuedIDValidUntil);
-            return _context.Buyers.Update(buyer).Entity;
-        }
-
-        throw new ArgumentNullException(buyerId.ToString());
-    }
-
-    public Buyer Upsert(string salutation,
-        string firstName,
-        string middleName,
-        string lastName,
-        DateTime doB,
-        int civilStatusId,
-        string emailAddress,
-        string phoneNo,
-        string mobileNo,
-        int? buyerId)
-    {
-        Buyer buyer = default;
-
-        if (buyerId.HasValue)
-        {
-            //update
-            buyer = _context.Buyers.Find(buyerId.Value);
-            buyer.UpdateBuyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
-            buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
-
-            return _context.Buyers.Update(buyer).Entity;
-        }
-
-        buyer = new Buyer(salutation, firstName, middleName, lastName, doB, civilStatusId);
-        buyer.UpdateContactDetails(emailAddress, phoneNo, mobileNo);
-
-        return _context.Buyers.Add(buyer).Entity;
+        return _context.Buyers.Update(buyer).Entity;
     }
 }
