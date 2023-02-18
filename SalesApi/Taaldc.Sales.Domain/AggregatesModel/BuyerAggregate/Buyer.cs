@@ -89,8 +89,13 @@ public class Buyer : Entity, IAggregateRoot
     public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
     
     #endregion
+    
+    #region RowVersion
+    public byte TimeStamp { get; set; }
+    #endregion
 
 
+    #region Behavior(s)
     public void AddPartnerOrSpouse(int buyerIdOfPartnerOrSpouse)
     {
         PartnerId = buyerIdOfPartnerOrSpouse;
@@ -98,8 +103,8 @@ public class Buyer : Entity, IAggregateRoot
 
     public void RemovePartnerOrSpouse() => PartnerId = default;
 
-    public void UpdateBuyer(string salutation, string firstName, string middleName, string lastName, DateTime doB,
-        int civilStatusId)
+    public void UpdateBasicInfo(string salutation, string firstName, string middleName, string lastName, DateTime doB,
+        int civilStatusId, bool isCorporate)
     {
         Salutation = salutation;
         FirstName = firstName;
@@ -107,6 +112,7 @@ public class Buyer : Entity, IAggregateRoot
         LastName = lastName;
         DoB = doB;
         _civilStatusId = civilStatusId;
+        IsCorporate = isCorporate;
     }
 
     public void UpdateContactDetails(string emailAddress, string phoneNo, string mobileNo)
@@ -141,7 +147,8 @@ public class Buyer : Entity, IAggregateRoot
     public Address GetBillingAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Billing);
     public Address GetBusinessAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Business);
 
-    public void UpdateCompany(Company company) => Company = company;
+    public void UpsertCompany(Company company) => Company = company;
 
+    #endregion
 
 }
