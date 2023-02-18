@@ -35,6 +35,11 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
             yield return Country;
             yield return ZipCode;
         }
+
+        public override string ToString()
+        {
+            return $"{Street} {City} {State} {Country} {ZipCode}";
+        }
     }
     
 }
