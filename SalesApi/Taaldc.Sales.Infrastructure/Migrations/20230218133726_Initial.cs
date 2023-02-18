@@ -32,6 +32,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 incrementBy: 10);
 
             migrationBuilder.CreateSequence(
+                name: "companyseq",
+                schema: "sales",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
                 name: "orderitemseq",
                 schema: "sales",
                 incrementBy: 10);
@@ -87,30 +92,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_civilStatus", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "company",
-                schema: "sales",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Industry = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FaxNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SECRegNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    President = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorpSec = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_company", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,21 +204,20 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Salutation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DoB = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CivilStatusId = table.Column<int>(type: "int", nullable: false),
                     EmailAddress = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Occupation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GovIssuedID = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GovIssuedIDValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Occupation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tin = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GovIssuedId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GovIssuedIdValidUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SpouseId = table.Column<int>(type: "int", nullable: true),
                     IsCorporate = table.Column<bool>(type: "bit", nullable: false),
-                    CompanyId = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -254,12 +234,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         principalTable: "civilStatus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_buyer_company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalSchema: "sales",
-                        principalTable: "company",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -281,6 +255,37 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     table.PrimaryKey("PK_address", x => x.Id);
                     table.ForeignKey(
                         name: "FK_address_buyer_BuyerId",
+                        column: x => x.BuyerId,
+                        principalSchema: "sales",
+                        principalTable: "buyer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "company",
+                schema: "sales",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Industry = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FaxNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TIN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SECRegNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    President = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CorpSec = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BuyerId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_company", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_company_buyer_BuyerId",
                         column: x => x.BuyerId,
                         principalSchema: "sales",
                         principalTable: "buyer",
@@ -492,12 +497,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 column: "CivilStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_buyer_CompanyId",
-                schema: "sales",
-                table: "buyer",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_buyer_EmailAddress",
                 schema: "sales",
                 table: "buyer",
@@ -505,10 +504,24 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_buyer_FirstName_MiddleName_LastName",
+                schema: "sales",
+                table: "buyer",
+                columns: new[] { "FirstName", "MiddleName", "LastName" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_buyer_PhoneNo",
                 schema: "sales",
                 table: "buyer",
                 column: "PhoneNo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_company_BuyerId",
+                schema: "sales",
+                table: "company",
+                column: "BuyerId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -570,6 +583,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 schema: "sales");
 
             migrationBuilder.DropTable(
+                name: "company",
+                schema: "sales");
+
+            migrationBuilder.DropTable(
                 name: "orderitem",
                 schema: "sales");
 
@@ -608,10 +625,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 name: "civilStatus",
                 schema: "sales");
 
-            migrationBuilder.DropTable(
-                name: "company",
-                schema: "sales");
-
             migrationBuilder.DropSequence(
                 name: "addressseq",
                 schema: "sales");
@@ -622,6 +635,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             migrationBuilder.DropSequence(
                 name: "civilstatusseq",
+                schema: "sales");
+
+            migrationBuilder.DropSequence(
+                name: "companyseq",
                 schema: "sales");
 
             migrationBuilder.DropSequence(

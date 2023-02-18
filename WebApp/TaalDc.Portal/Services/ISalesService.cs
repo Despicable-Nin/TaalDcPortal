@@ -31,10 +31,7 @@ public interface ISalesService
     Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType();
 
     Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView();
-
-
-
-
+    
     Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus();
 
     Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType();

@@ -12,7 +12,7 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20230216160931_Initial")]
+    [Migration("20230218133726_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,6 +32,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("civilstatusseq", "sales")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("companyseq", "sales")
                 .IncrementsBy(10);
 
             modelBuilder.HasSequence("orderitemseq", "sales")
@@ -69,12 +72,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "buyerseq", "sales");
 
-                    b.Property<int>("CivilStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -91,13 +88,12 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GovIssuedId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GovIssuedID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("GovIssuedIDValidUntil")
+                    b.Property<DateTime?>("GovIssuedIdValidUntil")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
@@ -108,11 +104,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MobileNo")
                         .IsRequired()
@@ -126,7 +122,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Occupation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNo")
@@ -140,20 +135,24 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.Property<int?>("SpouseId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TIN")
-                        .IsRequired()
+                    b.Property<string>("Tin")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("_civilStatusId")
+                        .HasColumnType("int")
+                        .HasColumnName("CivilStatusId");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("CivilStatusId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("EmailAddress")
                         .IsUnique();
 
                     b.HasIndex("PhoneNo")
+                        .IsUnique();
+
+                    b.HasIndex("_civilStatusId");
+
+                    b.HasIndex("FirstName", "MiddleName", "LastName")
                         .IsUnique();
 
                     b.ToTable("buyer", "sales");
@@ -207,63 +206,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                             Id = 6,
                             Name = "Others"
                         });
-                });
-
-            modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Company", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CorpSec")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FaxNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Industry")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MobileNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("President")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SECRegNo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TIN")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("company", "sales");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", b =>
@@ -757,15 +699,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", b =>
                 {
-                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.CivilStatus", null)
+                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.CivilStatus", "CivilStatus")
                         .WithMany()
-                        .HasForeignKey("CivilStatusId")
+                        .HasForeignKey("_civilStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
 
                     b.OwnsMany("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Address", "Addresses", b1 =>
                         {
@@ -811,7 +749,75 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                                 .HasForeignKey("BuyerId");
                         });
 
+                    b.OwnsOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Company", "Company", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseHiLo(b1.Property<int>("Id"), "companyseq", "sales");
+
+                            b1.Property<string>("Address")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("BuyerId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("CorpSec")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("EmailAddress")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FaxNo")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Industry")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("MobileNo")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNo")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("President")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("SECRegNo")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("TIN")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("BuyerId")
+                                .IsUnique();
+
+                            b1.ToTable("company", "sales");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BuyerId");
+                        });
+
                     b.Navigation("Addresses");
+
+                    b.Navigation("CivilStatus");
 
                     b.Navigation("Company");
                 });

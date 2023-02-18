@@ -35,13 +35,12 @@ namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate
             yield return Country;
             yield return ZipCode;
         }
-    }
 
-    public enum AddressTypeEnum : int
-    {
-        Home = 1,
-        Business = 2,
-        Billing = 3
+        public override string ToString()
+        {
+            return $"{Street} {City} {State} {Country} {ZipCode}";
+        }
     }
+    
 }
 
