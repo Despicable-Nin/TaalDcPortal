@@ -27,6 +27,8 @@ public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand,
             _logger.LogInformation("Upsert Company to Buyer.");
             _logger.LogInformation($"Company is replaced if exists.");
             buyer.UpsertCompany(request.ToEntity());
+            
+            _repository.Upsert(buyer);
 
             return true;
         }
