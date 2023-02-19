@@ -44,6 +44,8 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
 
             _logger.LogInformation($"Update Company -- replace if exists, otherwise just add.");
             buyer.UpsertCompany(request.Company.ToEntity());
+            
+            _buyerRepository.Upsert(buyer);
 
             return request.BuyerId.Value;
         }

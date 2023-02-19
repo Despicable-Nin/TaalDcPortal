@@ -20,12 +20,12 @@ public class UpdateBuyerBasicInfoCommand : IRequest<bool>
 public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBasicInfoCommand, bool>
 {
     
-    private readonly IBuyerRepository _repository;
+    private readonly IBuyerRepository    _buyerRepository;
     private readonly ILogger<UpdateBuyerBasicInfoCommandHandler> _logger;
 
     public UpdateBuyerBasicInfoCommandHandler(IBuyerRepository repository, ILogger<UpdateBuyerBasicInfoCommandHandler> logger)
     {
-        _repository = repository;
+        _buyerRepository = repository;
         _logger = logger;
     }
 
@@ -36,7 +36,7 @@ public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBas
             _logger.LogInformation("Update Buyer's basic information.");
 
             _logger.LogInformation($"Searching for Buyer with Id: {request.BuyerId}");
-            var buyer = await _repository.GetByIdAsync(request.BuyerId);
+            var buyer = await _buyerRepository.GetByIdAsync(request.BuyerId);
 
             if (buyer == default)
             {
@@ -53,6 +53,8 @@ public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBas
                 request.DoB, 
                 request.CivilStatusId, 
                 request.IsCorporate);
+            
+            _buyerRepository.Upsert(buyer);
 
             return true;
         }

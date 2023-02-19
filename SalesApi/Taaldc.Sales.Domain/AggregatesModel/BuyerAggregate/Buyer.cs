@@ -122,7 +122,7 @@ public class Buyer : Entity, IAggregateRoot
         MobileNo = mobileNo;
     }
 
-    public void UpdateMiscInformation(string occupation, string tin, string govIssuedId, DateTime govIssuedIdValidUntil)
+    public void UpdateMiscInformation(string occupation, string tin, string govIssuedId, DateTime? govIssuedIdValidUntil)
     {
         Occupation = occupation;
         Tin = tin;

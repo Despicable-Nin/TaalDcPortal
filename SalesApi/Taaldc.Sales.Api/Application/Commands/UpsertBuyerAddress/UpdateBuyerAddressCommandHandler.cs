@@ -43,6 +43,8 @@ public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddre
                     request.ZipCode));
 
             _logger.LogInformation("Saving changes invoked on transaction pipeline...");
+            _repository.Upsert(buyer);
+            
             return true;
         }
         catch (Exception ex)
