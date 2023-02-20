@@ -35,15 +35,16 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
             }
 
             buyer = new Buyer(request.Salutation, request.FirstName, request.MiddleName, request.LastName,
-                request.EmailAddress, request.PhoneNo, request.MobileNo, request.DoB, request.CivilStatusId, null,
+                request.EmailAddress,
+                request.PhoneNo,
+                request.MobileNo,
+                request.DoB,
+                request.CivilStatusId,
+                request.HomeAddress.ToEntity(),
                 request.IsCorporate,
-                null);
+                request.Company.ToEntity());
 
-            _logger.LogInformation($"Upsert address -- replace if same type exists,otherwise just add.");
-            buyer.UpsertAddress(request.HomeAddress.ToEntity());
-
-            _logger.LogInformation($"Update Company -- replace if exists, otherwise just add.");
-            buyer.UpsertCompany(request.Company.ToEntity());
+          
             
             _buyerRepository.Upsert(buyer);
 
