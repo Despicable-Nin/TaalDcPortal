@@ -15,7 +15,7 @@ public class IntegrationEventLogContextDesignTimeFactory : IDesignTimeDbContextF
             .AddEnvironmentVariables()
             .Build();
 
-        var connectionString = config.GetConnectionString("EventConnection");
+        var connectionString = config.GetConnectionString("DefaultConnection");
         
         var optionsBuilder = new DbContextOptionsBuilder<IntegrationEventLogContext>();
 

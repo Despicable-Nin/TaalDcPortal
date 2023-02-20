@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using SeedWork;
+using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
@@ -29,10 +30,15 @@ public class Buyer : Entity, IAggregateRoot
         MobileNo = mobileNumber;
         DoB = doB;
         _civilStatusId = civilStatusId;
-        _addresses.Add(address);
+
+        if (address == default)
+            throw new SalesDomainException(nameof(Buyer), new ArgumentNullException(nameof(address)));
+        
+        UpsertAddress(address);
 
         IsCorporate = isCorporate;
-        Company = company ?? new Company();
+        
+        UpsertCompany(company);
 
     }
    
@@ -134,7 +140,7 @@ public class Buyer : Entity, IAggregateRoot
     {
         var address = _addresses.SingleOrDefault(i => i.Type == newaddress.Type);
 
-        if (_addresses != default)
+        if (address != default)
         {
             //remove first
             _addresses.Remove(address);
@@ -147,7 +153,8 @@ public class Buyer : Entity, IAggregateRoot
     public Address GetBillingAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Billing);
     public Address GetBusinessAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Business);
 
-    public void UpsertCompany(Company company) => Company = company;
+    public void UpsertCompany(Company company) => Company =
+        company ?? new Company("n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a");
 
     #endregion
 

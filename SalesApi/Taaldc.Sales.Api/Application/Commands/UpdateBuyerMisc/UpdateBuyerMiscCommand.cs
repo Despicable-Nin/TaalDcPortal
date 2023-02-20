@@ -1,6 +1,5 @@
 using System.Data;
 using MediatR;
-using Taaldc.Catalog.API.Application.Queries.Floors;
 
 namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using SeedWork;
 using Taaldc.Sales.Api;
@@ -18,35 +19,39 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddControllers();
 
-// Add services to the container.
+//important! injects ILifeTimeScope bullshit
+//TODO: Replace this fucker with built-in lifetime from .net core
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
 
 //setting up dbcontext and related stuff
-builder.Services.AddCustomDbContext(configuration)
+//NOTE: as much as possible -- duplicate in the same order
+builder.Services
     .AddEndpoints()
     .AddCustomAuth(configuration)
-    .AddEventBus(configuration)
-    .AddIntegrationServices(configuration);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    .AddCustomDbContext(configuration)
+    .AddIntegrationServices(configuration)
+    .AddEventBus(configuration);
 
 // register auto-mapper
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+//register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
+//claims middlewares
+builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+//register repositories
 builder.Services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
 builder.Services.AddScoped(typeof(IBuyerRepository), typeof(BuyerRepository));
 builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRepository));
 
-
+//register queries
 builder.Services.AddScoped<IOrderQueries>(i =>
     new OrderQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
 
