@@ -48,9 +48,7 @@ public static class DependencyInjection
                     sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                 });
         });
-
-        return services;
-
+        
         services.AddScoped<SalesDbContextInitializer>();
 
         return services;
