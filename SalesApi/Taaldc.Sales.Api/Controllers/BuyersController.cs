@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Controllers
 {
-    [AllowAnonymous]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class BuyersController : ControllerBase
