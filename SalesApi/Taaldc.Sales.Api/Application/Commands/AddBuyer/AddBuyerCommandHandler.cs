@@ -47,7 +47,7 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
             
             _buyerRepository.Upsert(buyer);
 
-            return request.BuyerId.Value;
+            return buyer.Id;
         }
         catch (Exception ex)
         {
