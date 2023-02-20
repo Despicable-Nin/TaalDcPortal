@@ -1,9 +1,11 @@
 using System.Data.Common;
+using System.Reflection;
 using System.Text;
 using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
+using IntegrationEventLogEF;
 using IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +37,19 @@ public static class DependencyInjection
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
             );
+        
+        services.AddDbContext<IntegrationEventLogContext>(options =>
+        {
+            options.UseSqlServer(configuration["ConnectionString"],
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.MigrationsAssembly(typeof(SalesDbContext).GetTypeInfo().Assembly.GetName().Name);
+                    //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+                    sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                });
+        });
+
+        return services;
 
         services.AddScoped<SalesDbContextInitializer>();
 
@@ -158,7 +173,7 @@ public static class DependencyInjection
         services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
             sp => (DbConnection c) => new IntegrationEventLogService(c));
 
-        services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
+        services.AddTransient<ISalesIntegrationEventService, SalesIntegrationEventService>();
 
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
