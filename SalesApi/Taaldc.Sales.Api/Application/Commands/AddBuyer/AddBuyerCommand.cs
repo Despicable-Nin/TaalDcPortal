@@ -32,7 +32,6 @@ public class AddBuyerCommand : IRequest<int>
         Company = company;
 
     }
-    public int? BuyerId { get; init; }
     public string Salutation { get;init;}
     public string FirstName { get; init;}
     public string MiddleName { get; init; }
