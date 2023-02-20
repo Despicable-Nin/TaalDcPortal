@@ -21,12 +21,11 @@ builder.Services.AddControllers();
 // Add services to the container.
 
 //setting up dbcontext and related stuff
-builder.Services.AddCustomDbContext(configuration);
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpoints();
-
-builder.Services.AddCustomAuth(configuration).AddEventBus(configuration).AddIntegrationServices(configuration);
+builder.Services.AddCustomDbContext(configuration)
+    .AddEndpoints()
+    .AddCustomAuth(configuration)
+    .AddEventBus(configuration)
+    .AddIntegrationServices(configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
