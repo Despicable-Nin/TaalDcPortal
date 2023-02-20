@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ using Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 using Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 using Taaldc.Sales.API.Application.Commands.UpsertCompany;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
+using Taaldc.Sales.Api.DTO.Buyers;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Controllers
@@ -27,12 +29,14 @@ namespace Taaldc.Sales.Api.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<BuyersController> _logger;
         private readonly IAmCurrentUser _currentUser;
+        private readonly IMapper _mapper;
 
-        public BuyersController(IMediator mediator, ILogger<BuyersController> logger, IAmCurrentUser currentUser)
+        public BuyersController(IMediator mediator, ILogger<BuyersController> logger, IAmCurrentUser currentUser, IMapper mapper)
         {
             _mediator = mediator;
             _logger = logger;
             _currentUser = currentUser;
+            _mapper = mapper;
         }
 
         [HttpPost]
