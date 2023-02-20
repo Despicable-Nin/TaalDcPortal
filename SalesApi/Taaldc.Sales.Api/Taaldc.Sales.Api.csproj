@@ -43,6 +43,7 @@
 
     <ItemGroup>
       <Folder Include="Application\IntegrationEvents\EventHandling" />
+      <Folder Include="Infrastructure\IntegrationEventMigrations" />
     </ItemGroup>
 
 </Project>

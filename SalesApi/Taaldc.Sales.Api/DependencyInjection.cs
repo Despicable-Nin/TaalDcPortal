@@ -40,7 +40,7 @@ public static class DependencyInjection
         
         services.AddDbContext<IntegrationEventLogContext>(options =>
         {
-            options.UseSqlServer(configuration["ConnectionString"],
+            options.UseSqlServer(configuration["EventConnection"],
                 sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(SalesDbContext).GetTypeInfo().Assembly.GetName().Name);
