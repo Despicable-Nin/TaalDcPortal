@@ -20,7 +20,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 namespace Taaldc.Sales.Api.Controllers
 {
     [AllowAnonymous]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class BuyersController : ControllerBase
     {
