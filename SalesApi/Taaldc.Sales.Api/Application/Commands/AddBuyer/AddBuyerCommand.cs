@@ -1,8 +1,10 @@
+using System.Runtime.Serialization;
 using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddBuyer;
 
-public class AddBuyerCommand : IRequest<int>
+[DataContract]
+public record AddBuyerCommand : IRequest<int>
 {
     public AddBuyerCommand(
         string salutation,
@@ -10,8 +12,8 @@ public class AddBuyerCommand : IRequest<int>
         string middleName,
         string lastName,
         string emailAddress,
-        string phoneNumber,
-        string mobileNumber,
+        string phoneNo,
+        string mobileNo,
         DateTime doB,
         int civilStatusId,
         AddressDto address,
@@ -24,15 +26,18 @@ public class AddBuyerCommand : IRequest<int>
         MiddleName = middleName;
         LastName = lastName;
         EmailAddress = emailAddress;
-        PhoneNo = phoneNumber;
-        MobileNo = mobileNumber;
+        PhoneNo = phoneNo;
+        MobileNo = mobileNo;
         DoB = doB;
         CivilStatusId = civilStatusId;
         HomeAddress = address; 
         Company = company;
 
     }
+    
+    public AddBuyerCommand(){}
     public string Salutation { get;init;}
+    [DataMember(Name = "first_name")]
     public string FirstName { get; init;}
     public string MiddleName { get; init; }
     public string LastName { get; init; }
@@ -48,7 +53,7 @@ public class AddBuyerCommand : IRequest<int>
     
 }
 
-public class AddressDto
+public record AddressDto
 {
     public string Street { get; init;}
     public string City { get; init;}
@@ -57,7 +62,7 @@ public class AddressDto
     public string ZipCode { get; init; }
 }
 
-public class CompanyDto
+public record CompanyDto
 {
     public string Name { get; init;}
     public string Address { get; init; }
