@@ -92,7 +92,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
             await SaveChangesAsync();
             transaction.Commit();
         }
-        catch
+        catch(Exception ex)
         {
             RollbackTransaction();
             throw;
