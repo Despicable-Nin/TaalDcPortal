@@ -16,7 +16,6 @@ using Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 using Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 using Taaldc.Sales.API.Application.Commands.UpsertCompany;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
-using Taaldc.Sales.Api.DTO.Buyers;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Controllers
