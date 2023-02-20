@@ -12,14 +12,14 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly SalesDbContext _dbContext;
 
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-    private readonly IOrderIntegrationEventService _orderingIntegrationEventService;
+    private readonly ISalesIntegrationEventService _salesIntegrationEventService;
 
     public TransactionBehaviour(SalesDbContext dbContext,
-        IOrderIntegrationEventService orderingIntegrationEventService,
+        ISalesIntegrationEventService salesIntegrationEventService,
         ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
     {
         _dbContext = dbContext ?? throw new ArgumentException(nameof(SalesDbContext));
-        _orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentException(nameof(orderingIntegrationEventService));
+        _salesIntegrationEventService = salesIntegrationEventService ?? throw new ArgumentException(nameof(salesIntegrationEventService));
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }
 
@@ -32,7 +32,6 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
 
         try
         {
-            //TODO: we might not need this but just in case we need to do transactions in SQL
              if (_dbContext.HasActiveTransaction)
              {
                  return await next();
@@ -58,7 +57,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                      transactionId = transaction.TransactionId;
                  }
             
-                 await _orderingIntegrationEventService.PublishEventsThroughtEventBusAsync(transactionId);
+                 await _salesIntegrationEventService.PublishEventsThroughtEventBusAsync(transactionId);
              });
 
             return response;
