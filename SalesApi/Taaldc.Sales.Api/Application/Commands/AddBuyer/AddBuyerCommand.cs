@@ -3,7 +3,6 @@ using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddBuyer;
 
-[DataContract]
 public record AddBuyerCommand : IRequest<int>
 {
     public AddBuyerCommand(
@@ -37,7 +36,6 @@ public record AddBuyerCommand : IRequest<int>
     
     public AddBuyerCommand(){}
     public string Salutation { get;init;}
-    [DataMember(Name = "first_name")]
     public string FirstName { get; init;}
     public string MiddleName { get; init; }
     public string LastName { get; init; }
