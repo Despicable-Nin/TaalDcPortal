@@ -13,7 +13,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
-using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Sales.Api.Application.IntegrationEvents;
 using Taaldc.Sales.Infrastructure;
 
@@ -96,14 +95,14 @@ public static class DependencyInjection
 
     public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
     {
-// Adding Authentication
+        // Adding Authentication
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-// Adding Jwt Bearer
+            // Adding Jwt Bearer
             .AddJwtBearer(options =>
             {
                 // options.SaveToken = true;
@@ -187,7 +186,7 @@ public static class DependencyInjection
         {
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
-                var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                var settings = sp.GetRequiredService<IOptions<SalesSettings>>().Value;
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
                 var factory = new ConnectionFactory()

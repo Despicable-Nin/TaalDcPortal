@@ -32,7 +32,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\CatalogApi\Taaldc.Catalog.API\Taaldc.Catalog.API.csproj" />
         <ProjectReference Include="..\..\Common\EventBusRabbitMQ\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
         <ProjectReference Include="..\..\Common\EventBus\EventBus\EventBus.csproj" />
         <ProjectReference Include="..\..\Common\IntegrationEventLogEF\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
