@@ -25,6 +25,8 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 
+//important! injects ILifeTimeScope bullshit
+//TODO: Replace this fucker with built-in lifetime from .net core
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 //setting up dbcontext and related stuff
@@ -36,12 +38,16 @@ builder.Services
     .AddIntegrationServices(configuration)
     .AddEventBus(configuration);
 
+//register auto-mapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
+//claims middlewares
 builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -49,9 +55,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
 builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
 
-
-builder.Services.AddAutoMapper(typeof(Program));
-
+//register queries
 builder.Services.AddQueries(configuration);
 
 var app = builder.Build();
