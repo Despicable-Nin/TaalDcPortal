@@ -97,7 +97,8 @@ public class Buyer : Entity, IAggregateRoot
     #endregion
     
     #region RowVersion
-    public byte TimeStamp { get; set; }
+
+    public byte[] RowVersion { get; set; }
     #endregion
 
 
