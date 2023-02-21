@@ -17,7 +17,7 @@ public class SalesDbContextFactory : IDesignTimeDbContextFactory<SalesDbContext>
         var connectionString = config.GetConnectionString("DefaultConnection");
 
         var optionsBuilder = new DbContextOptionsBuilder<SalesDbContext>();
-        optionsBuilder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Taaldc.Sales.Api"));
+        optionsBuilder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Taaldc.Sales.Infrastructure"));
 
         return new SalesDbContext(optionsBuilder.Options, new NoMediator());
     }
