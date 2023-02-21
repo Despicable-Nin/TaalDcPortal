@@ -40,7 +40,7 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
         builder.Property(b => b.Occupation).IsRequired(false);
         builder.Property(b => b.GovIssuedIdValidUntil).IsRequired(false).HasDefaultValue(null);
 
-        builder.Property(b => b.TimeStamp).IsRowVersion();
+        builder.Property(b => b.RowVersion).IsRowVersion();
         
         //1.A - this field works a shadow property of the readonly Entity (Purpose)
         builder
