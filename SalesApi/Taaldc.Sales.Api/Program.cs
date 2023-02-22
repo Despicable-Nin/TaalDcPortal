@@ -1,10 +1,13 @@
+using System.Data.Common;
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using IntegrationEventLogEF.Services;
 using MediatR;
 using SeedWork;
 using Taaldc.Sales.Api;
 using Taaldc.Sales.API;
 using Taaldc.Sales.API.Application.Behaviors;
+using Taaldc.Sales.Api.Application.IntegrationEvents;
 using Taaldc.Sales.Api.Application.Queries.Dashboard;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -29,9 +32,16 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Services
     .AddEndpoints()
     .AddCustomAuth(configuration)
-    .AddCustomDbContext(configuration)
-    .AddIntegrationServices(configuration)
-    .AddEventBus(configuration);
+    .AddCustomDbContext(configuration);
+    
+builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+    sp => (DbConnection c) => new IntegrationEventLogService(c));
+
+builder.Services.AddTransient<ISalesIntegrationEventService, SalesIntegrationEventService>();
+    
+// builder.Services
+//     .AddIntegrationServices(configuration)
+//     .AddEventBus(configuration);
 
 // register auto-mapper
 builder.Services.AddAutoMapper(typeof(Program));
