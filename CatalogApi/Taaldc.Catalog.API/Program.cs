@@ -85,8 +85,8 @@ app.MapControllers();
 
 
 //configure event bus
-var eventbus = app.Services.GetRequiredService<IEventBus>();
-eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
+//var eventbus = app.Services.GetRequiredService<IEventBus>();
+//eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
 
 
 app.Run();
