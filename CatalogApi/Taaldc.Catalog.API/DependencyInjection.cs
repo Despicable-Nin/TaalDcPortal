@@ -178,7 +178,8 @@ public static class DependencyInjection
             sp => (DbConnection c) => new IntegrationEventLogService(c));
 
         services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
-        
+
+        return services;
         //if (!configuration.GetValue<bool>("EventsEnabled")) return services;
 
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
@@ -228,8 +229,8 @@ public static class DependencyInjection
     }
     
      public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-    {
-        
+     {
+         return services;
         //if (!configuration.GetValue<bool>("EventsEnabled")) return services;
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
