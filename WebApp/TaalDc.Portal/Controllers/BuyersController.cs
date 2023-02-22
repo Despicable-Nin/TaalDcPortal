@@ -11,9 +11,13 @@ namespace TaalDc.Portal.Controllers
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
-        public BuyersController(ILogger<BuyersController> logger)
+        private readonly ISalesService _salesService;
+
+        public BuyersController(ILogger<BuyersController> logger
+            ,ISalesService salesService)
         {
             _logger = logger;
+            _salesService = salesService;
         }
 
         public IActionResult Index()
@@ -27,12 +31,42 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(BuyerCreate_ClientDto model)
+        public async Task<IActionResult> Create(BuyerCreate_ClientDto model)
         {
             //Check if model is valid
             //If valid, send request to API
             //If not, return back the with error
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                var buyer = new BuyerCreateAPI_ClientDto(
+                    model.Salutation
+                   , model.FirstName
+                   , model.MiddleName
+                   , model.LastName
+                   , model.EmailAddress
+                   , ""
+                   , model.MobileNo
+                   , DateTime.MinValue
+                   , 1
+                   , new AddressDto(model.HomeAddress, model.HomeCity, model.HomeState, model.HomeCountry, model.HomeZipCode)
+                   , model.IsCorporate
+                   ,new CompanyDto(model.CompanyName, model.CompanyAddress, model.CompanyIndustry, "", "", "", "", "", "", "", "")
+                   );
+
+                try
+                {
+                    var result = await _salesService.AddBuyer(buyer);
+                }catch(Exception err)
+                {
+                    return BadRequest(new
+                    {
+                        IsFormError = false,
+                        err.Message
+                    });
+                }
+            }
+
+            return Ok();
         }
 
 

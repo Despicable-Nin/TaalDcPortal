@@ -28,8 +28,11 @@ if (isCorporate) {
     });
 }
 
+const quickCreateForm = document.getElementById('quickcreateForm');
 
-
+if (quickCreateForm) { 
+    quickCreateForm.addEventListener('submit', saveInfo);
+}
 
 const generalInfoForm = document.getElementById("generalinfo");
 
@@ -82,6 +85,13 @@ function saveInfo(event) {
     const form = event.target;
     const data = new FormData(form);
     const value = Object.fromEntries(data.entries());
+
+    console.log('form data', value);
+
+    if (value.IsCorporate) {
+        var isCorpCheckbox = document.getElementById("IsCorporate");
+        value.IsCorporate = isCorpCheckbox.checked;
+    }
 
     var isFormValid = event.target.checkValidity();
 

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Sales;
+using TaalDc.Portal.DTO.Sales.Buyer;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
 
@@ -213,5 +214,18 @@ public class SalesService : ISalesService
         throw new Exception("Sale cannot be created.");
     }
 
-  
+    public async Task<int> AddBuyer(BuyerCreateAPI_ClientDto model)
+    {
+        var uri = API.Sales.AddBuyer(_removeServiceBaseUrl);
+
+        var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<int>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be created.");
+    }
 }

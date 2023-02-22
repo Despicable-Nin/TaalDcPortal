@@ -189,5 +189,13 @@ public static class API
         {
             return $"{baseUrl}/api/v1/dashboard/parking/available-per-unit-type";
         }
+
+        #region Buyer
+        public static string AddBuyer(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/buyers";
+        }
+
+        #endregion
     }
 }

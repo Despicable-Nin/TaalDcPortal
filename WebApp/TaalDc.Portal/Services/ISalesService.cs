@@ -1,4 +1,5 @@
 using TaalDc.Portal.DTO.Sales;
+using TaalDc.Portal.DTO.Sales.Buyer;
 using TaalDc.Portal.Models;
 
 namespace TaalDc.Portal.Services;
@@ -37,4 +38,11 @@ public interface ISalesService
     Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType();
 
     Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor();
+
+
+    #region Buyer
+    Task<int> AddBuyer(BuyerCreateAPI_ClientDto model);
+
+    #endregion
+
 }

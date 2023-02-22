@@ -9,5 +9,6 @@
         public string LastName { get; set; }
         public DateTime DoB { get; set; }
         public int CivilStatusId { get; set; }
+        public bool IsCorporate { get; set; }
     }
 }
