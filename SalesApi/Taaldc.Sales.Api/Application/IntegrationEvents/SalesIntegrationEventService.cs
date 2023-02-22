@@ -11,7 +11,7 @@ namespace Taaldc.Sales.Api.Application.IntegrationEvents;
 public class SalesIntegrationEventService : ISalesIntegrationEventService
 {
     private readonly Func<DbConnection, IIntegrationEventLogService> _integrationEventLogServiceFactory;
-    private readonly IEventBus _eventBus;
+    //private readonly IEventBus _eventBus;
     
     //we need this for the purpose of tracking the current transactions happening on SALES
     //-- this can have the same implementation on other services and their own dbcontex
@@ -23,7 +23,8 @@ public class SalesIntegrationEventService : ISalesIntegrationEventService
     private readonly IIntegrationEventLogService _eventLogService;
     private readonly ILogger<SalesIntegrationEventService> _logger;
 
-    public SalesIntegrationEventService(IEventBus eventBus,
+    public SalesIntegrationEventService(
+        //IEventBus eventBus,
         SalesDbContext salesDbContext,
         IntegrationEventLogContext eventLogContext,
         Func<DbConnection, IIntegrationEventLogService> integrationEventLogServiceFactory,
@@ -31,7 +32,7 @@ public class SalesIntegrationEventService : ISalesIntegrationEventService
     {
         _salesDbContext = salesDbContext ?? throw new ArgumentNullException(nameof(salesDbContext));
         _integrationEventLogServiceFactory = integrationEventLogServiceFactory ?? throw new ArgumentNullException(nameof(integrationEventLogServiceFactory));
-        _eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+        //_eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         
         //we are using connection string from the salesdbcontext --> since they are of the same database
         _eventLogService = _integrationEventLogServiceFactory(_salesDbContext.Database.GetDbConnection());
@@ -55,7 +56,7 @@ public class SalesIntegrationEventService : ISalesIntegrationEventService
             {
                 await _eventLogService.MarkEventAsInProgressAsync(logEvt.EventId);
 
-                _eventBus.Publish(logEvt.IntegrationEvent);
+                //_eventBus.Publish(logEvt.IntegrationEvent);
 
                 await _eventLogService.MarkEventAsPublishedAsync(logEvt.EventId);
             }
