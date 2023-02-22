@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using SeedWork;
 using Taaldc.Sales.Domain.Exceptions;
 
@@ -98,6 +99,7 @@ public class Buyer : Entity, IAggregateRoot
     
     #region RowVersion
 
+    [Timestamp]
     public byte[] RowVersion { get; set; }
     #endregion
 
