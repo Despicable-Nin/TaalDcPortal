@@ -8,6 +8,7 @@ using Taaldc.Sales.Api;
 using Taaldc.Sales.API;
 using Taaldc.Sales.API.Application.Behaviors;
 using Taaldc.Sales.Api.Application.IntegrationEvents;
+using Taaldc.Sales.Api.Application.Queries.Buyers;
 using Taaldc.Sales.Api.Application.Queries.Dashboard;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -63,7 +64,10 @@ builder.Services.AddScoped(typeof(IUnitReplicaRepository), typeof(UnitReplicaRep
 
 //register queries
 builder.Services.AddScoped<IOrderQueries>(i =>
-    new OrderQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
+    new OrderQueries(connectionString));
+
+builder.Services.AddScoped<IBuyerQueries>(i =>
+    new BuyerQueries(connectionString));
 
 builder.Services.AddScoped<IDashboardQueries>(i =>
     new DashboardQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
