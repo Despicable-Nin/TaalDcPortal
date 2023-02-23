@@ -59,16 +59,14 @@ public class OrderQueries : IOrderQueries
         LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
 
     private readonly string _connectionString;
-    private readonly SalesDbContext _context;
 
 
-    public OrderQueries(string connectionString, SalesDbContext context)
+    public OrderQueries(string connectionString)
     {
         _connectionString = connectionString ??
                             throw new SalesDomainException(nameof(OrderQueries),
                                 new ArgumentNullException($"{connectionString} cannot be null."));
 
-        _context = context;
     }
 
     public async Task<PaginationQueryResult<Unit_Order_DTO>> GetUnitAndOrdersByAvailability(

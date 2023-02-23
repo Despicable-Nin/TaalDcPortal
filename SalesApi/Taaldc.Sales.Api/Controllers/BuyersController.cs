@@ -30,19 +30,38 @@ namespace Taaldc.Sales.Api.Controllers
         private readonly ILogger<BuyersController> _logger;
         private readonly IAmCurrentUser _currentUser;
         private readonly IMapper _mapper;
+        private readonly IBuyerQueries _buyerQueries;
 
-        public BuyersController(IMediator mediator, ILogger<BuyersController> logger, IAmCurrentUser currentUser, IMapper mapper)
+        public BuyersController(IMediator mediator, ILogger<BuyersController> logger, IAmCurrentUser currentUser, IMapper mapper, IBuyerQueries buyerQueries)
         {
             _mediator = mediator;
             _logger = logger;
             _currentUser = currentUser;
             _mapper = mapper;
+            _buyerQueries = buyerQueries;
         }
+        
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetPaginatedBuyersAsync(string name,string email, int? civilStatusId, int pageSize = 10, int pageNumber =1)
+        {
+            return Ok(await _buyerQueries.GetPaginatedAsync(pageNumber, pageSize, name, email, civilStatusId));
+        }
+        
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> GetBuyersAsync(int id)
+        {
+            return Ok(await _buyerQueries.GetBuyerByIdAsync(id));
+        }
+        
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> AddBuyer([FromBody] AddBuyerCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> AddBuyerAsync([FromBody] AddBuyerCommand model, CancellationToken ct = default)
         {
             return Ok(await _mediator.Send(model, ct));
         }
@@ -50,7 +69,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPut("{id}/basic-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpdateBuyerBasicInfo(int id,[FromBody] UpdateBuyerBasicInfoCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateBuyerBasicInfoAsync(int id,[FromBody] UpdateBuyerBasicInfoCommand model, CancellationToken ct = default)
         {
             if (id != model.BuyerId) throw new Exception("Invalid request.");
             
@@ -60,7 +79,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPut("{id}/contact-details")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpdateBuyerContactDetails(int id,[FromBody] UpdateBuyerContactDetailsCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateBuyerContactDetailsAsync(int id,[FromBody] UpdateBuyerContactDetailsCommand model, CancellationToken ct = default)
         {
             if (id != model.BuyerId) throw new Exception("Invalid request.");
             
@@ -70,7 +89,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPut("{id}/miscellaneous")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpdateBuyerMiscellaneous(int id,[FromBody] UpdateBuyerMiscCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateBuyerMiscellaneousAsync(int id,[FromBody] UpdateBuyerMiscCommand model, CancellationToken ct = default)
         {
             if (id != model.BuyerId) throw new Exception("Invalid request.");
             
@@ -81,7 +100,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPatch("{id}/address")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpdateBuyerMiscellaneous(int id,[FromBody] UpsertBuyerAddressCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateBuyerMiscellaneousAsync(int id,[FromBody] UpsertBuyerAddressCommand model, CancellationToken ct = default)
         {
             if (id != model.BuyerId) throw new Exception("Invalid request.");
             
@@ -91,7 +110,7 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpPut("{id}/company")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpdateBuyerCompany(int id,[FromBody] UpsertCompanyCommand model, CancellationToken ct = default)
+        public async Task<IActionResult> UpdateBuyerCompanyAsync(int id,[FromBody] UpsertCompanyCommand model, CancellationToken ct = default)
         {
             if (id != model.BuyerId) throw new Exception("Invalid request.");
             

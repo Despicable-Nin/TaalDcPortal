@@ -13,8 +13,8 @@
 
     public enum AddressTypeEnum
     {
-        Home,
-        Business,
-        Billing
+        Home = 1,
+        Business = 2,
+        Billing = 3
     }
 }
