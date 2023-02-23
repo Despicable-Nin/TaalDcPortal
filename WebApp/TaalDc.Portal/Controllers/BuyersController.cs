@@ -103,33 +103,55 @@ namespace TaalDc.Portal.Controllers
 
 
         [HttpPost]
-        public IActionResult EditGeneralInfo(BuyerGeneralInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditGeneralInfo(BuyerGeneralInfoEdit_ClientDto model)
         {
+            await _salesService.UpdateBuyerInfo(model);
+
             return Ok();
         }
 
 
         [HttpPost]
-        public IActionResult EditContactInfo(BuyerContactInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditContactInfo(BuyerContactInfoEdit_ClientDto model)
         {
+            await _salesService.UpdateBuyerContact(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditAddress(BuyerAddressEdit_ClientDto model)
+        public async Task<IActionResult> EditAddress(BuyerAddressEdit_ClientDto model)
         {
+            await _salesService.PatchBuyerAddress(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditIDInformation(BuyerIDInformationEdit_ClietnDto model)
+        public async Task<IActionResult> EditIDInformation(BuyerIDInformationEdit_ClietnDto model)
         {
+            await _salesService.UpdateBuyerMisc(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
+        public async Task<IActionResult> EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
         {
+            model.Name = model.Name ?? string.Empty;
+            model.Address = model.Address ?? string.Empty;
+            model.Industry =  model.Industry ?? string.Empty;
+            model.PhoneNo   = model.PhoneNo ?? string.Empty;
+            model.MobileNo= model.MobileNo ?? string.Empty;
+            model.FaxNo =  model.FaxNo ?? string.Empty;
+            model.EmailAddress = model.EmailAddress ?? string.Empty;
+            model.Tin = model.Tin ?? string.Empty;
+            model.SecRegNo = model.SecRegNo ?? string.Empty;
+            model.President = model.President ?? string.Empty;
+            model.CorpSec = model.CorpSec ?? string.Empty;
+
+            await _salesService.UpdateBuyerCompany(model);
+
             return Ok();
         }
 

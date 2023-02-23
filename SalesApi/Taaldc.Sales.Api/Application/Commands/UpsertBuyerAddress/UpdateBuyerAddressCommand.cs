@@ -11,6 +11,6 @@ public class UpsertBuyerAddressCommand : IRequest<bool>
     public string State { get; init;}
     public string Country { get; init; }
     public string ZipCode { get; init; }
-    public AddressTypeEnum Type { get; private set; }
+    public AddressTypeEnum Type { get; set; }
 
 }

@@ -42,7 +42,11 @@ public interface ISalesService
 
     #region Buyer
     Task<int> AddBuyer(BuyerCreateAPI_ClientDto model);
-
+    Task<bool> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model);
+    Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model);
+    Task<bool> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model);
+    Task<bool> PatchBuyerAddress(BuyerAddressEdit_ClientDto model);
+    Task<bool> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model);
     #endregion
 
 }

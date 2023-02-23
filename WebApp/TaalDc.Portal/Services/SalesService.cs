@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.DTO.Sales.Buyer;
@@ -227,5 +228,84 @@ public class SalesService : ISalesService
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be created.");
+    }
+
+    public async Task<bool> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model)
+    {
+        var uri = API.Sales.UpdateBuyerInfo(_removeServiceBaseUrl, model.BuyerId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
+    }
+
+    public async Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model)
+    {
+        var uri = API.Sales.UpdateBuyerContact(_removeServiceBaseUrl, model.BuyerId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
+    }
+
+    public async Task<bool> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model)
+    {
+        var uri = API.Sales.UpdateBuyerMisc(_removeServiceBaseUrl, model.BuyerId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
+    }
+
+    public async Task<bool> PatchBuyerAddress(BuyerAddressEdit_ClientDto model)
+    {
+        var uri = API.Sales.UpdateBuyerAddress(_removeServiceBaseUrl, model.BuyerId);
+
+        var json = JsonSerializer.Serialize(model);
+
+        var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PatchAsync(uri, jsonContent);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
+    }
+
+    public async Task<bool> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model)
+    {
+        var uri = API.Sales.UpdateBuyerCompany(_removeServiceBaseUrl, model.BuyerId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<bool>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
     }
 }

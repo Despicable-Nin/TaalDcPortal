@@ -1,7 +1,9 @@
 using MediatR;
+using Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 using Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
+using Taaldc.Sales.Infrastructure.Repositories;
 
 namespace Taaldc.Sales.API.Application.Commands.UpsertCompany;
 
@@ -10,7 +12,12 @@ public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand,
     private readonly IBuyerRepository _repository;
     private readonly ILogger<UpsertCompanyCommandHandler> _logger;
 
-    
+    public UpsertCompanyCommandHandler(IBuyerRepository buyerRepository, ILogger<UpsertCompanyCommandHandler> logger)
+    {
+        _repository = buyerRepository;
+        _logger = logger;
+    }
+
     public async Task<bool> Handle(UpsertCompanyCommand request, CancellationToken cancellationToken)
     {
         try
