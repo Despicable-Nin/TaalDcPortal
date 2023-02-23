@@ -5,7 +5,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.AddBuyer;
 
-public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
+public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, CommandResult>
 {
 
     private readonly IBuyerRepository _buyerRepository;
@@ -18,7 +18,7 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
     }
 
 
-    public async Task<int> Handle(AddBuyerCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(AddBuyerCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -48,12 +48,12 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, int>
             
             _buyerRepository.Upsert(buyer);
 
-            return buyer.Id;
+            return CommandResult.Success(buyer.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,nameof(AddBuyerCommandHandler.Handle), new object[]{request,ex.InnerException});
-            throw;
+            return CommandResult.Failed(null, ex.Message);
         }
     }
 }

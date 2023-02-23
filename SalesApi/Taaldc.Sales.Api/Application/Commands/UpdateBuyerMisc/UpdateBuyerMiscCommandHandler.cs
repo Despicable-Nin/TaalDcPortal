@@ -5,7 +5,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 
-public class UpdateBuyerMiscCommandHandler : IRequestHandler<UpdateBuyerMiscCommand, bool>
+public class UpdateBuyerMiscCommandHandler : IRequestHandler<UpdateBuyerMiscCommand, CommandResult>
 {
     private readonly IBuyerRepository _buyerRepository;
     private readonly ILogger<UpdateBuyerMiscCommandHandler> _logger;
@@ -16,7 +16,7 @@ public class UpdateBuyerMiscCommandHandler : IRequestHandler<UpdateBuyerMiscComm
         _logger = logger;
     }
     
-    public async Task<bool> Handle(UpdateBuyerMiscCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(UpdateBuyerMiscCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -35,7 +35,7 @@ public class UpdateBuyerMiscCommandHandler : IRequestHandler<UpdateBuyerMiscComm
 
             _buyerRepository.Upsert(buyer);
 
-            return true;
+            return CommandResult.Success(buyer.Id);
         }
         catch (Exception ex)
         {

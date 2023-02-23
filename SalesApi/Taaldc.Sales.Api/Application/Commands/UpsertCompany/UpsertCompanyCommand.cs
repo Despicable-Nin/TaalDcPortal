@@ -2,7 +2,7 @@ using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.UpsertCompany;
 
-public class UpsertCompanyCommand : IRequest<bool>
+public class UpsertCompanyCommand : IRequest<CommandResult>
 {
     public int BuyerId { get; init; }
     public string Name { get;init; }

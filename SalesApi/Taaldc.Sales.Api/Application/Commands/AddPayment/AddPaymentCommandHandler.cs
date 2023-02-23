@@ -36,8 +36,6 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Comma
 
         _repository.UpdateOrder(order);
 
-        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
         return CommandResult.Success(payment.Id);
     }
 }

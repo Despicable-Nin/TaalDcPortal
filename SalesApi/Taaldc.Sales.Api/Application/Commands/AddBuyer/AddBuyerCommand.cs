@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddBuyer;
 
-public record AddBuyerCommand : IRequest<int>
+public record AddBuyerCommand : IRequest<CommandResult>
 {
     public AddBuyerCommand(
         string salutation,

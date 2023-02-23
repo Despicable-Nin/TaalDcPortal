@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 
-public class UpdateBuyerMiscCommand : IRequest<bool>
+public class UpdateBuyerMiscCommand : IRequest<CommandResult>
 {
     public int BuyerId { get; init; }
     public string Occupation { get; init; }

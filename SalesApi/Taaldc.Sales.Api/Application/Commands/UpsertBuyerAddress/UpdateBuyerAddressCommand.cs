@@ -3,7 +3,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 
-public class UpsertBuyerAddressCommand : IRequest<bool>
+public class UpsertBuyerAddressCommand : IRequest<CommandResult>
 {
     public int BuyerId { get; init; }
     public string Street { get; init; }

@@ -7,7 +7,7 @@ using Taaldc.Sales.Infrastructure.Repositories;
 
 namespace Taaldc.Sales.API.Application.Commands.UpsertCompany;
 
-public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand, bool>
+public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand, CommandResult>
 {
     private readonly IBuyerRepository _repository;
     private readonly ILogger<UpsertCompanyCommandHandler> _logger;
@@ -18,7 +18,7 @@ public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand,
         _logger = logger;
     }
 
-    public async Task<bool> Handle(UpsertCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(UpsertCompanyCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -37,12 +37,12 @@ public class UpsertCompanyCommandHandler : IRequestHandler<UpsertCompanyCommand,
             
             _repository.Upsert(buyer);
 
-            return true;
+            return CommandResult.Success(buyer.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex,nameof(UpsertCompanyCommandHandler.Handle), new object[]{request, ex.InnerException});
-            throw;
+            return CommandResult.Failed(null, ex.Message);
         }
     }
 }

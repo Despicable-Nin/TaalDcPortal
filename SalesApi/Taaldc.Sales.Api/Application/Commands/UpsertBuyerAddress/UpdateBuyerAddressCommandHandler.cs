@@ -4,7 +4,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 
-public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddressCommand, bool>
+public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddressCommand, CommandResult>
 {
 
     private readonly IBuyerRepository _repository;
@@ -16,7 +16,7 @@ public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddre
         _logger = logger;
     }
 
-    public async Task<bool> Handle(UpsertBuyerAddressCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(UpsertBuyerAddressCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -45,12 +45,12 @@ public class UpdateBuyerAddressCommandHandler : IRequestHandler<UpsertBuyerAddre
             _logger.LogInformation("Saving changes invoked on transaction pipeline...");
             _repository.Upsert(buyer);
             
-            return true;
+            return CommandResult.Success(buyer.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, nameof(UpdateBuyerAddressCommandHandler.Handle), new object [] { request, ex.InnerException });
-            throw;
+            return CommandResult.Failed(null, ex.Message);
         }
     }
 }

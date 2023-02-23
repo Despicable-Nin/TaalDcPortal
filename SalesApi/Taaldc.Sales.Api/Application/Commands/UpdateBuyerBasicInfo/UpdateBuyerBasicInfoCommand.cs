@@ -5,7 +5,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.UpdateBuyerBasicInfo;
 
-public class UpdateBuyerBasicInfoCommand : IRequest<bool>
+public class UpdateBuyerBasicInfoCommand : IRequest<CommandResult>
 {
     public int BuyerId { get; init; }
     public string Salutation { get; init; }
@@ -17,7 +17,7 @@ public class UpdateBuyerBasicInfoCommand : IRequest<bool>
     public bool IsCorporate { get; init; }
 }
 
-public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBasicInfoCommand, bool>
+public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBasicInfoCommand, CommandResult>
 {
     
     private readonly IBuyerRepository    _buyerRepository;
@@ -29,7 +29,7 @@ public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBas
         _logger = logger;
     }
 
-    public async Task<bool> Handle(UpdateBuyerBasicInfoCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(UpdateBuyerBasicInfoCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -56,7 +56,7 @@ public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBas
             
             _buyerRepository.Upsert(buyer);
 
-            return true;
+            return CommandResult.Success(buyer.Id);
         }
         catch (Exception ex)
         {

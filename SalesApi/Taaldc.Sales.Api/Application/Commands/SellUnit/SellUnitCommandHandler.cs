@@ -1,6 +1,7 @@
 using MediatR;
 using Newtonsoft.Json;
 using SeedWork;
+using Taaldc.Sales.API.Application.Commands;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
 using Taaldc.Sales.Api.Application.Queries.Orders;
@@ -11,7 +12,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Api.Application.Commands.SellUnit;
 
-public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
+public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandResult>
 {
     private readonly IBuyerQueries _buyerQueries;
     private readonly IOrderRepository _orderRepository;
@@ -25,7 +26,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
 
    
 
-    public async Task<int> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         
         try
@@ -89,12 +90,12 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
                     request.Remarks);
             }
 
-            return order.Id;
+            return CommandResult.Success(order.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
-            throw;
+            return CommandResult.Failed(null, ex.Message);
         }
     }
 
