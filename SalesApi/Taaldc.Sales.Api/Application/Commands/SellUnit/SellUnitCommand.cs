@@ -38,6 +38,6 @@ public class SellUnitCommand : IRequest<CommandResult>
 
 public class OrderItemDTO
 {
-    public int UnitId { get; private set; }
-    public decimal Price { get; private set; }
+    public int UnitId { get; set; }
+    public decimal Price { get; set; }
 }

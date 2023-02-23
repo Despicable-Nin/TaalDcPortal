@@ -133,7 +133,7 @@
 
                 <p class="mb-5">
                     <strong class="primary-color">Valid Until</strong> <br />
-                    @Model.GovIssuedIDValidUntil.ToShortDateString()
+                    @(Model.GovIssuedIDValidUntil.HasValue? Model.GovIssuedIDValidUntil.Value.ToShortDateString(): "-")
                 </p>
             </div>
             <div class="col-lg-4">
@@ -225,7 +225,9 @@
 
                     inputFields[i].value = formattedDate
                 }else if(inputFields[i].name === 'IsCorporate') {
-                    inputFields[i].setAttribute('checked', modelData[inputFields[i].name]);
+                    //console.log('iscorp', modelData[inputFields[i].name]);
+                    inputFields[i].checked = modelData[inputFields[i].name];
+                    //inputFields[i].setAttribute('checked', modelData[inputFields[i].name]);
                 }
                 else {
                     inputFields[i].value = modelData[inputFields[i].name]

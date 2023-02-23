@@ -20,9 +20,11 @@ namespace TaalDc.Portal.Controllers
             _salesService = salesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int pageNumber=1, int pageSize=10, string name = "", string email = "")
         {
-            return View();
+            var buyers = await _salesService.GetBuyers(pageNumber, pageSize, name, email);
+
+            return View(buyers);
         }
 
         public IActionResult QuickCreate()
@@ -70,28 +72,70 @@ namespace TaalDc.Portal.Controllers
         }
 
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var buyer = new Buyer_ClientDto("Mr.", "John", "Smith", "Doe", new DateTime(1990, 1, 1), CivilStatusEnum.Married);
+            var buyerQueryResult = await _salesService.GetBuyer(id);
+            
+            var buyer = new Buyer_ClientDto(
+                buyerQueryResult.Salutation
+                ,buyerQueryResult.FirstName
+                ,buyerQueryResult.MiddleName
+                ,buyerQueryResult.LastName
+                ,buyerQueryResult.Dob
+                ,buyerQueryResult.CivilStatusId
+                ,buyerQueryResult.CivilStatus
+                );
 
             buyer.Id = id;
 
-            buyer.SetContactDetails("johndoe@testmail.com", "09121234567", "");
+            buyer.SetContactDetails(buyerQueryResult.EmailAddress, buyerQueryResult.MobileNo, buyerQueryResult.PhoneNo);
 
-            buyer.SetIDInformation("Consultant", "315 408 1234", "National ID", new DateTime(2027, 12, 31));
+            buyer.SetIDInformation(buyerQueryResult.Occupation, buyerQueryResult.Tin, buyerQueryResult.GovIssuedId, buyerQueryResult.GovIssuedIdValidUntil);
 
-            buyer.HomeAddress = new ClientAddress("Home Address", "Manila", "NCR", "Philippines", "1234");
-            buyer.BillingAddress = new ClientAddress("Billing Address", "Manila", "NCR", "Philippines", "1234");
-            buyer.BusinessAddress = new ClientAddress("", "", "", "", "");
+            buyer.HomeAddress = new ClientAddress(
+                    buyerQueryResult.HomeAddress_Street, 
+                    buyerQueryResult.HomeAddress_City, 
+                    buyerQueryResult.HomeAddress_State, 
+                    buyerQueryResult.HomeAddress_Country, 
+                    buyerQueryResult.HomeAddress_ZipCode);
 
-            buyer.IsCorporate = true;
-            buyer.Company = new Company("John Doe, Inc.", "Manila City, NCR", "Accounting");
+            buyer.BillingAddress = new ClientAddress(
+                    buyerQueryResult.BillingAddress_Street,
+                    buyerQueryResult.BillingAddress_City,
+                    buyerQueryResult.BillingAddress_State,
+                    buyerQueryResult.BillingAddress_Country,
+                    buyerQueryResult.BillingAddress_ZipCode);
 
-            var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), CivilStatusEnum.Married);
+            buyer.BusinessAddress = new ClientAddress(
+                    buyerQueryResult.BusinessAddress_Street,
+                    buyerQueryResult.BusinessAddress_City,
+                    buyerQueryResult.BusinessAddress_State,
+                    buyerQueryResult.BusinessAddress_Country,
+                    buyerQueryResult.BusinessAddress_ZipCode);
 
-            buyer.SpouseId = 2;
-            spouse.Id = 2;
-            buyer.Spouse = spouse;
+            buyer.IsCorporate = buyerQueryResult.IsCorporate;
+
+            buyer.Company = new Company(buyerQueryResult.Company_Name, 
+                buyerQueryResult.Company_Address,
+                buyerQueryResult.Company_Industry,
+                buyerQueryResult.Company_PhoneNo,
+                buyerQueryResult.Company_MobileNo,
+                buyerQueryResult.Company_FaxNo,
+                buyerQueryResult.Company_EmailAddress,
+                buyerQueryResult.Company_TIN,
+                buyerQueryResult.Company_SECRegNo,
+                buyerQueryResult.Company_President,
+                buyerQueryResult.Company_CorpSec);
+
+            buyer.SpouseId = buyerQueryResult.PartnerId;
+
+            if (buyerQueryResult.PartnerId.HasValue) {
+                var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), 2, "Married");
+
+                spouse.Id = buyerQueryResult.PartnerId.Value;
+
+                buyer.Spouse = spouse;
+            }
 
             return View(buyer);
         }
