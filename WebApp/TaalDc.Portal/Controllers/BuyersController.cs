@@ -142,7 +142,7 @@ namespace TaalDc.Portal.Controllers
 
 
         public IActionResult Contracts(int id) {
-            return View();
+            return View(id);
         }
 
 

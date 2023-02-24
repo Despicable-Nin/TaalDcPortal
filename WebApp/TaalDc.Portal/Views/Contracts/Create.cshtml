@@ -1,0 +1,304 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "New Contract";
+}
+
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <h4 class="primary-color mb-3">
+            <strong>
+                New Contract
+            </strong>
+        </h4>
+
+        <hr />
+
+         <div class="formLoader">
+            <ul class="formLoading">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+
+        <form id="contractForm" class="row mb-5 needs-validation" method="post" asp-action="Create" asp-controller="Contracts">
+            <input name="BuyerId" value="@Model" hidden />
+
+            <div class="mb-5 col-lg-12">
+                <label for="TransactionDate" class="form-label">
+                    <strong>Transaction Date</strong>
+                </label>
+                <input name="TransactionDate" class="form-control" required type="date" />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+               <h3><strong>Units</strong></h3>
+            </div>
+            <a class="mb-3" onclick="openAvailableUnits_Modal()" href="#">Add</a>
+            <hr />
+
+            <ul id="selected-units-list">
+            </ul>
+
+             <div class="mb-3 col-lg-12">
+                <label for="Broker" class="form-label">
+                    <strong>Broker</strong>
+                </label>
+                <input name="Broker" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label for="Reservation" class="form-label">
+                    <strong>Reservation Fee</strong>
+                </label>
+                <input id="Reservation" name="Reservation" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label for="ReservationConfirmationNo" class="form-label">
+                    <strong>Reservation Confirmation No</strong>
+                </label>
+                <input name="ReservationConfirmationNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label for="DownPayment" class="form-label">
+                    <strong>Downpayment</strong>
+                </label>
+                <input id="DownPayment" name="DownPayment" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-6">
+                <label for="DownPaymentConfirmationNo" class="form-label">
+                    <strong>Downpayment Confirmation No</strong>
+                </label>
+                <input name="DownPaymentConfirmationNo" class="form-control" required />
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label for="PaymentMethod" class="form-label">
+                    <strong>Payment Method</strong>
+                </label>
+                <select name="PaymentMethod" class="form-control form-select" required>
+                    <option value="Cash">
+                        Cash
+                    </option>
+                    <option value="Check">
+                        Check
+                    </option>
+                </select>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="mb-3 col-lg-12">
+                <label for="Remarks" class="form-label">
+                    <strong>Note/Remarks</strong>
+                </label>
+                <textarea name="Remarks" class="form-control" rows="5" value=""></textarea>
+                <div class="invalid-feedback">
+                    This is a required field.
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <input class="btn btn-primary" type="submit" value="Save" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="available-units-modal" tabindex="-1" aria-labelledby="available-units-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Available Units</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="units-multiple-form" class="mb-3">
+                    <input name="unitFilter" placeholder="Search..." class="form-control"/>
+                </form>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="unit-body">
+
+                    </tbody>
+                </table>
+                <div id="unit-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="order-item-modal" tabindex="-1" aria-labelledby="order-item-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Edit Item</h5>
+                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+               <form id="orderItemForm">
+                    <input name="UnitId" id="UnitId" hidden /> 
+                    <div class="mb-3 col-lg-12">
+                        <label class="form-label" for="Unit">
+                            <strong>Unit</strong>
+                        </label>
+                        <input class="form-control" id="Unit" name="Unit" readonly value="4-413"/>
+                    </div>
+                    <div class="mb-3 col-lg-12">
+                        <label class="form-label" for="Price"><strong>Price</strong></label>
+                        <input class="form-control" id="Price" name="Price" required />
+                    </div>
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+               </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        let selectedUnits = [];
+
+       
+
+        function onRemoveSelected(id){
+            let isSelected = selectedUnits.some(unit => unit.id === id);
+             if (isSelected) {
+                selectedUnits = selectedUnits.filter(unit => unit.id !== id);
+            }
+
+            renderSelectedUnitsList();
+
+        }
+        
+        function onUnitCheckSelect(id, name, price){
+
+            let isSelected = selectedUnits.some(unit => unit.id === id);
+
+            console.log('is selected', isSelected);
+
+            if (isSelected) {
+                selectedUnits = selectedUnits.filter(unit => unit.id !== id);
+            }else{
+                selectedUnits.push({
+                    id
+                    , name
+                    , price
+                })
+            }
+
+            
+            console.log('selected', selectedUnits)
+
+
+            renderSelectedUnitsList();
+
+        }
+
+        function renderSelectedUnitsList() {
+             const selectedUnitList = selectedUnits.map(unit => {
+                unitPrice = unit.price.toLocaleString('en-US', { style: 'currency', currency: 'PHP', minimumFractionDigits: 2 });
+
+                return `<li class="order-item" onclick="openEditOrderItem('${unit.id}')">
+                <a style="color: red;" href="#" onClick="onRemoveSelected('${unit.id}')">
+                <i class="fa-sharp fa-solid fa-minus"></i></a> ${unit.name}
+                <br/>
+                <small>${unitPrice}</small>
+                </li>`;
+            });
+
+            const selectedUnitsListElement = document.getElementById('selected-units-list');
+            selectedUnitsListElement.innerHTML = selectedUnitList.join('');
+
+            console.log(selectedUnitList); // array of <li> elements
+        }
+
+
+
+        function openEditOrderItem(unitId) {
+            const unitsModal = new bootstrap.Modal(document.getElementById('order-item-modal'), {});
+
+            let selectedUnit = selectedUnits.find(unit => unit.id === unitId);
+
+            console.log('selected', selectedUnit);
+
+            var unitInput = document.getElementById("Unit");
+            unitInput.value = selectedUnit.name;
+
+            var priceInput = document.getElementById("Price");
+            priceInput.value = selectedUnit.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            var unitIdInput = document.getElementById("UnitId");
+
+            unitIdInput.value = unitId;
+
+            $("#Price").mask("#,##0.00", { reverse: true });
+
+            unitsModal.show();
+        }
+
+        const orderItemForm = document.getElementById('orderItemForm');
+
+        orderItemForm.addEventListener('submit', saveOrderItem);
+
+        function saveOrderItem(event){
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            const value = Object.fromEntries(data.entries());
+
+            console.log('form data', value);
+
+            let index = selectedUnits.findIndex(el => el.id === value.UnitId);
+
+            if (index !== -1) {
+              // Modify the "name" property of the element
+                selectedUnits[index].price = parseFloat(value.Price.split(",").join(""));
+            }
+
+             renderSelectedUnitsList();
+        }
+
+    </script>
+
+    <script src="~/js/sales/sales.js"></script>
+}
