@@ -16,7 +16,7 @@ public class Order : DomainEntity, IAggregateRoot
     public Order(
         int buyerId, 
         string broker, 
-        int paymentOptionId,
+        DateTime transactionDate,
         decimal discount,
         string remarks
     ) : this()
@@ -27,21 +27,21 @@ public class Order : DomainEntity, IAggregateRoot
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         Discount = discount;
-
+        TransactionDate = transactionDate;
     }
 
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
-
+    public DateTime TransactionDate { get; private set; }
     public DateTime? ReservationExpiresOn { get; private set; } = default;
 
     private int _statusId;
     public OrderStatus Status { get; private set; }
     
-    private int _paymentOptionId;
-    public PaymentOption PaymentOption { get; private set; }
+    //private int _paymentOptionId;
+    //public PaymentOption PaymentOption { get; private set; }
 
 
     private int _buyerId;

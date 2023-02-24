@@ -42,7 +42,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             var order = _salesRepository.CreateOrder(
                 request.BuyerId, 
                 request.Broker, 
-                request.PaymentReferenceId, 
+                request.TransactionDate, 
                 request.Discount,
                 request.Remarks);
 

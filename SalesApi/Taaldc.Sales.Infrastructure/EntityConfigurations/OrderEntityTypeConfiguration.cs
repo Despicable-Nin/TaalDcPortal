@@ -41,16 +41,16 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey("_statusId");
         
         //4.A - this field works a shadow property of the readonly Entity (Purpose)
-        builder
-            .Property<int>("_paymentOptionId")
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasColumnName("PaymentOptionId")
-            .IsRequired();
-
-        //4.B - mapped to a navigation property -- that is immutable
-        builder.HasOne(b => b.Status)
-            .WithMany()
-            .HasForeignKey("_paymentOptionId");
+        // builder
+        //     .Property<int>("_paymentOptionId")
+        //     .UsePropertyAccessMode(PropertyAccessMode.Field)
+        //     .HasColumnName("PaymentOptionId")
+        //     .IsRequired();
+        //
+        // //4.B - mapped to a navigation property -- that is immutable
+        // builder.HasOne(b => b.Status)
+        //     .WithMany()
+        //     .HasForeignKey("_paymentOptionId");
 
         //TODO: Delete --> builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
 

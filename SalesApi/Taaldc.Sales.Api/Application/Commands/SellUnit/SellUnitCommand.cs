@@ -20,6 +20,7 @@ public class SellUnitCommand : IRequest<CommandResult>
         OrderItems = orderItems ?? new List<OrderItemDTO>();
     }
 
+    public DateTime TransactionDate { get; private set; }
     public int BuyerId { get; private set; }
     public string Broker { get; private set; }
     public int PaymentReferenceId { get; private set; }

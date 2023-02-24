@@ -25,9 +25,9 @@ public class OrderRepository : IOrderRepository
             .FirstOrDefaultAsync(i => i.Id == transactionId);
     }
 
-    public Order CreateOrder(int buyerId, string broker, int paymentOptionId, decimal discount, string remarks)
+    public Order CreateOrder(int buyerId, string broker, DateTime transactionDate, decimal discount, string remarks)
     {
-        var order = new Order(buyerId, broker, paymentOptionId, discount, remarks);
+        var order = new Order(buyerId, broker, transactionDate, discount, remarks);
         return _context.Orders.Add(order).Entity;
     }
 
