@@ -525,12 +525,12 @@ tr.accepted td{
 
 
 #selected-units-list li {
-    padding: 1rem 1rem;
-    border: 1px solid black;
-    border-radius: 5px;
+    padding: 1.5rem;
+    border: 1px solid #516C5B;
+    /* border-radius: 5px; */
     list-style: none;
-    font-weight: 700;
-    background: #dcdcdc;
+    /* font-weight: 700; */
+    /* background: #dcdcdc; */
     margin-bottom: 1rem !important;
 }
 
