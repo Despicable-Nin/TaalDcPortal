@@ -200,7 +200,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditSpouse(BuyerSpouseEdit_ClientDto model)
+        public IActionResult EditSpouse(BuyerSpouseUpsert_ClientDto model)
         {
             return Ok();
         }
