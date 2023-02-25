@@ -64,7 +64,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             //add order item in order object
             foreach (var item in request.OrderItems)
             {
-                order.AddOrderItem(item.UnitId, item.Price);
+                order.AddOrUpdateOrderItem(item.UnitId, item.Price,null);
                 order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
             }
             
@@ -80,7 +80,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 order.AddPayment(
                     PaymentType.GetId(PaymentType.Reservation),
                     TransactionType.GetTypeId(TransactionType.ForReservation),
-                    DateTime.Now,
+                    order.TransactionDate,
                     request.ReservationConfirmation,
                     request.PaymentMethod,
                     request.ReservationFee,
@@ -98,7 +98,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 order.AddPayment(
                     PaymentType.GetId(PaymentType.PartialDownPayment),
                     TransactionType.GetTypeId(TransactionType.ForAcquisition),
-                    DateTime.Now,
+                   order.TransactionDate,
                     request.DownpaymentConfirmation,
                     request.PaymentMethod,
                     request.Downpayment,

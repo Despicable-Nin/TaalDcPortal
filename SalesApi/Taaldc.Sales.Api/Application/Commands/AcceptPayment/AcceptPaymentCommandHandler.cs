@@ -34,7 +34,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
 
         order.AcceptPayment(request.PaymentId, _currentUser?.Email);
 
-        _repository.UpdateOrder(order);
+        _repository.Update(order);
 
         await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
