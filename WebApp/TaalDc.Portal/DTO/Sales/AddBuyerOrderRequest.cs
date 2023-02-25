@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 
 namespace TaalDc.Portal.DTO.Sales;
 
-public class SalesCreate_ClientDto
+public class AddBuyerOrderRequest
 {
-    public SalesCreate_ClientDto()
+    public AddBuyerOrderRequest()
     {
         Remarks = "";
         DownPayment = 0.00M;

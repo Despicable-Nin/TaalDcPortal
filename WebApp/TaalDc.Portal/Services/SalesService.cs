@@ -31,77 +31,77 @@ public class SalesService : ISalesService
 
 
     //DASHBOARD
-    public async Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType()
+    public async Task<IEnumerable<GetResidentialAvailabilityByTypeResponse>> GetResidentialAvailabilityByType()
     {
         var uri = API.Sales.GetAvailabilityPerResidentialUnitType(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<AvailabilityByUnitType_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetResidentialAvailabilityByTypeResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView()
+    public async Task<IEnumerable<GetResidentialAvailabilityByViewResponse>> GetResidentialAvailabilityByView()
     {
         var uri = API.Sales.GetAvailabilityOfResidentialUnitPerView(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<AvailabilityByView_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetResidentialAvailabilityByViewResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetResidentialUnitsCountByStatus()
+    public async Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetResidentialUnitsCountByStatus()
     {
         var uri = API.Sales.GetUnitCountSummaryByStatus(_remoteServiceBaseUrl);
         
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<UnitCountByStatus_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetResidentialUnitsCountByStatusResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
 
-    public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus()
+    public async Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetParkingUnitsCountByStatus()
     {
         var uri = API.Sales.GetParkingCountSummaryByStatus(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<UnitCountByStatus_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetResidentialUnitsCountByStatusResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType()
+    public async Task<IEnumerable<GetAvailabilityPerParkingUnitTypeResponse>> GetAvailabilityPerParkingUnitType()
     {
         var uri = API.Sales.GetAvailabilityPerParkingUnitType(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetAvailabilityPerParkingUnitTypeResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor()
+    public async Task<IEnumerable<GetParkingUnitTypeAvailabilityPerFloorResponse>> GetParkingUnitTypeAvailabilityPerFloor()
     {
-        var parkings = new List<ParkingUnitAvailabilityPerFloor_ClientDto>();
+        var parkings = new List<GetParkingUnitTypeAvailabilityPerFloorResponse>();
 
         try { 
             var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_remoteServiceBaseUrl);
 
             var responseString = await _httpClient.GetStringAsync(uri);
 
-            parkings = JsonSerializer.Deserialize<List<ParkingUnitAvailabilityPerFloor_ClientDto>>(responseString,
+            parkings = JsonSerializer.Deserialize<List<GetParkingUnitTypeAvailabilityPerFloorResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }catch{
             throw;
@@ -112,7 +112,7 @@ public class SalesService : ISalesService
 
 
 
-    public async Task<CommandResult> AcceptPayment(int orderId, int paymentId)
+    public async Task<Response> AcceptPayment(int orderId, int paymentId)
     {
         var uri = API.Sales.AcceptPayment(_remoteServiceBaseUrl, orderId, paymentId);
 
@@ -121,13 +121,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Payment cannot be updated.");
     }
 
-    public async Task<CommandResult> VoidPayment(int orderId, int paymentId)
+    public async Task<Response> VoidPayment(int orderId, int paymentId)
     {
         var uri = API.Sales.VoidPayment(_remoteServiceBaseUrl, orderId, paymentId);
 
@@ -136,13 +136,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Payment cannot be updated.");
     }
 
-    public async Task<CommandResult> AddPayment(PaymentCreate_ClientDto model)
+    public async Task<Response> AddPayment(AddPaymentRequest model)
     {
         var uri = API.Sales.AddPayment(_remoteServiceBaseUrl, model.TransactionId);
 
@@ -151,7 +151,7 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Sale cannot be created.");
@@ -159,33 +159,33 @@ public class SalesService : ISalesService
 
   
 
-    public async Task<OrderUnitBuyer_ClientDto> GetSalesById(int id)
+    public async Task<GetSalesByIdResponse> GetSalesById(int id)
     {
         var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
         uri = $"{uri}/{id}";
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<OrderUnitBuyer_ClientDto>(responseString,
+        var result = JsonSerializer.Deserialize<GetSalesByIdResponse>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<IEnumerable<Payment_ClientDto>> GetSalesPayments(int id)
+    public async Task<IEnumerable<GetSalesPaymentResponse>> GetSalesPayments(int id)
     {
         var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
         uri = $"{uri}/{id}/payments";
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<IEnumerable<Payment_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<IEnumerable<GetSalesPaymentResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<PaginationQueryResult<OrderUnitBuyer_ClientDto>> GetUnitAndOrdersAvailability(int unitStatusId,
+    public async Task<PaginationQueryResult<GetSalesByIdResponse>> GetUnitAndOrdersAvailability(int unitStatusId,
         int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string broker = "")
     {
         var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
@@ -196,13 +196,13 @@ public class SalesService : ISalesService
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<PaginationQueryResult<OrderUnitBuyer_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<PaginationQueryResult<GetSalesByIdResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<SellUnitCommandResult> SellUnit(SalesCreate_ClientDto model)
+    public async Task<AddBuyerOrderResponse> AddBuyerOrder(AddBuyerOrderRequest model)
     {
         var uri = API.Sales.SellUnit(_remoteServiceBaseUrl);
 
@@ -211,13 +211,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<SellUnitCommandResult>(content,
+            return JsonSerializer.Deserialize<AddBuyerOrderResponse>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Sale cannot be created.");
     }
 
-    public async Task<CommandResult> AddBuyer(BuyerCreateAPI_ClientDto model)
+    public async Task<Response> AddBuyer(AddBuyerRequest model)
     {
         var uri = API.Sales.AddBuyer(_remoteServiceBaseUrl);
 
@@ -226,13 +226,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be created.");
     }
 
-    public async Task<CommandResult> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model)
+    public async Task<Response> UpdateBuyerInfo(UpdateBuyerInfoRquest model)
     {
         var uri = API.Sales.UpdateBuyerInfo(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -241,13 +241,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be updated.");
     }
 
-    public async Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model)
+    public async Task<bool> UpdateBuyerContact(UpdateBuyerContactRequest model)
     {
         var uri = API.Sales.UpdateBuyerContact(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -262,7 +262,7 @@ public class SalesService : ISalesService
         throw new Exception("Buyer cannot be updated.");
     }
 
-    public async Task<CommandResult> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model)
+    public async Task<Response> UpdateBuyerMisc(UpdateBuyerMiscRequest model)
     {
         var uri = API.Sales.UpdateBuyerMisc(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -271,13 +271,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be updated.");
     }
 
-    public async Task<CommandResult> PatchBuyerAddress(BuyerAddressEdit_ClientDto model)
+    public async Task<Response> PatchBuyerAddress(PatchBuyerAddressRequest model)
     {
         var uri = API.Sales.UpdateBuyerAddress(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -290,13 +290,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be updated.");
     }
 
-    public async Task<CommandResult> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model)
+    public async Task<Response> UpdateBuyerCompany(UpdateBuyerCompanyRequest model)
     {
         var uri = API.Sales.UpdateBuyerCompany(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -305,13 +305,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be updated.");
     }
     
-    public async Task<CommandResult> UpsertSpouse(BuyerSpouseUpsert_ClientDto model)
+    public async Task<Response> UpsertSpouse(UpsertBuyerSpouseRequest model)
     {
         var uri = API.Sales.UpsertSpouse(_remoteServiceBaseUrl, model.BuyerId);
 
@@ -320,13 +320,13 @@ public class SalesService : ISalesService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         throw new Exception("Buyer cannot be updated.");
     }
 
-    public async Task<PaginationQueryResult<BuyerRead_ClientDto>> GetBuyers(int pageNumber, int pageSize, string name, string email)
+    public async Task<PaginationQueryResult<GetBuyerResponse>> GetBuyers(int pageNumber, int pageSize, string name, string email)
     {
         var uri = API.Sales.GetBuyers(_remoteServiceBaseUrl);
 
@@ -335,19 +335,19 @@ public class SalesService : ISalesService
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<PaginationQueryResult<BuyerRead_ClientDto>>(responseString,
+        var result = JsonSerializer.Deserialize<PaginationQueryResult<GetBuyerResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
     }
 
-    public async Task<BuyerRead_ClientDto> GetBuyer(int buyerId)
+    public async Task<GetBuyerResponse> GetBuyer(int buyerId)
     {
         var uri = API.Sales.GetBuyerByID(_remoteServiceBaseUrl, buyerId);
        
         var responseString = await _httpClient.GetStringAsync(uri);
 
-        var result = JsonSerializer.Deserialize<BuyerRead_ClientDto>(responseString,
+        var result = JsonSerializer.Deserialize<GetBuyerResponse>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;

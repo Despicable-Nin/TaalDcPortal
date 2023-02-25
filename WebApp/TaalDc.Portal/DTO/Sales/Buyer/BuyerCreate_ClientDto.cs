@@ -8,27 +8,27 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
         {
         }
 
-        public string Salutation { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; } = string.Empty;
-        public string LastName { get; set; }
-        public string EmailAddress { get; set; }
-        public string MobileNo { get; set; }
-        public string HomeAddress { get; set; }
-        public string HomeCity { get; set; }
-        public string HomeState { get; set; }
-        public string HomeCountry { get; set; }
-        public string HomeZipCode { get; set; }
-        public bool IsCorporate { get; set; }
-        public string CompanyName { get; set; } = string.Empty;
-        public string CompanyAddress { get; set; } = string.Empty;
-        public string CompanyIndustry { get; set; } = string.Empty;
+        public string Salutation { get; init; }
+        public string FirstName { get; init; }
+        public string MiddleName { get; init; } = string.Empty;
+        public string LastName { get; init; }
+        public string EmailAddress { get; init; }
+        public string MobileNo { get; init; }
+        public string HomeAddress { get; init; }
+        public string HomeCity { get; init; }
+        public string HomeState { get; init; }
+        public string HomeCountry { get; init; }
+        public string HomeZipCode { get; init; }
+        public bool IsCorporate { get; init; }
+        public string CompanyName { get; init; } = string.Empty;
+        public string CompanyAddress { get; init; } = string.Empty;
+        public string CompanyIndustry { get; init; } = string.Empty;
     }
 
 
-    public class BuyerCreateAPI_ClientDto
+    public class AddBuyerRequest
     {
-        public BuyerCreateAPI_ClientDto(
+        public AddBuyerRequest(
             string salutation,
             string firstName,
             string middleName,
@@ -55,19 +55,19 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
             Company = company;
         }
 
-        public string Salutation { get; set; }
-        public string FirstName { get; set; }
-        public string MiddleName { get; set; }
-        public string LastName { get; set; }
-        public string EmailAddress { get; set; }
-        public string MobileNo { get; set; }
-        public string PhoneNo { get; set; }
-        public DateTime DoB { get; set; }
-        public int CivilStatusId { get; set; }
-        public bool IsCorporate { get; set; }
+        public string Salutation { get; init; }
+        public string FirstName { get; init; }
+        public string MiddleName { get; init; }
+        public string LastName { get; init; }
+        public string EmailAddress { get; init; }
+        public string MobileNo { get; init; }
+        public string PhoneNo { get; init; }
+        public DateTime DoB { get; init; }
+        public int CivilStatusId { get; init; }
+        public bool IsCorporate { get; init; }
         //value object
-        public CompanyDto Company { get; set; }
-        public AddressDto HomeAddress { get; set; }
+        public CompanyDto Company { get; init; }
+        public AddressDto HomeAddress { get; init; }
     }
 
     public record AddressDto
@@ -85,11 +85,11 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
             ZipCode = !string.IsNullOrEmpty(zipCode) ? zipCode : "";
         }
 
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
-        public string ZipCode { get; set; }
+        public string Street { get; init; }
+        public string City { get; init; }
+        public string State { get; init; }
+        public string Country { get; init; }
+        public string ZipCode { get; init; }
     }
 
     public record CompanyDto
@@ -123,17 +123,17 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
             CorpSec = !string.IsNullOrEmpty(corpSec) ? corpSec : "";
         }
 
-        public string Name { get; private set; }
-        public string Address { get; private set; } 
-        public string Industry { get; private set; }
-        public string PhoneNo { get; private set; }
-        public string MobileNo { get; private set; }
-        public string FaxNo { get; private set; }
-        public string EmailAddress { get; private set; }
-        public string Tin { get; private set; }
-        public string SecRegNo { get; private set; }
-        public string President { get; private set; }
-        public string CorpSec { get; private set; }
+        public string Name { get; private init; }
+        public string Address { get; private init; } 
+        public string Industry { get; private init; }
+        public string PhoneNo { get; private init; }
+        public string MobileNo { get; private init; }
+        public string FaxNo { get; private init; }
+        public string EmailAddress { get; private init; }
+        public string Tin { get; private init; }
+        public string SecRegNo { get; private init; }
+        public string President { get; private init; }
+        public string CorpSec { get; private init; }
     }
 }
 

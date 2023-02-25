@@ -2,7 +2,7 @@
 
 namespace TaalDc.Portal.DTO.Sales;
 
-public class Payment_ClientDto
+public class GetSalesPaymentResponse
 {
     [JsonPropertyName("payment_id")] public int Id { get; set; }
 

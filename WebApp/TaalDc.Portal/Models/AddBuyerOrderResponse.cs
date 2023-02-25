@@ -1,6 +1,6 @@
 ﻿namespace TaalDc.Portal.Models;
 
-public class SellUnitCommandResult
+public class AddBuyerOrderResponse
 {
     public string ErrorMessage { get; set; }
     public bool IsSuccess { get; set; }
