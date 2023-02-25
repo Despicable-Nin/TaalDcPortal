@@ -14,6 +14,7 @@ using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Infrastructure;
 using Taaldc.Sales.Infrastructure.Repositories;
+using Taaldc.Sales.Api.Application.Queries.UnitReplicas;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,9 @@ builder.Services.AddScoped<IOrderQueries>(i =>
 
 builder.Services.AddScoped<IBuyerQueries>(i =>
     new BuyerQueries(connectionString));
+
+builder.Services.AddScoped<IUnitQueries>(i =>
+    new UnitQueries(connectionString));
 
 builder.Services.AddScoped<IDashboardQueries>(i =>
     new DashboardQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));

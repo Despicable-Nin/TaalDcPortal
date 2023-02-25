@@ -24,7 +24,22 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
 
     private readonly IOrderRepository _salesRepository;
 
-   
+    public SellUnitCommandHandler(IBuyerQueries buyerQueries, 
+        IOrderRepository orderRepository, 
+        IUnitQueries unitQueries, 
+        IAmCurrentUser currentUser, 
+        ILogger<SellUnitCommandHandler> logger, 
+        IMediator mediator, 
+        IOrderRepository salesRepository)
+    {
+        _buyerQueries = buyerQueries;
+        _orderRepository = orderRepository;
+        _unitQueries = unitQueries;
+        _currentUser = currentUser;
+        _logger = logger;
+        _mediator = mediator;
+        _salesRepository = salesRepository;
+    }
 
     public async Task<CommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
@@ -102,7 +117,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
     private async Task<IEnumerable<UnitAvailability>> ValidateAndCheckUnitsAvailability(SellUnitCommand request)
     {
         //check for duplicate unit ids on the request
-        if (request.OrderItems.Select(i => i.UnitId).Distinct().Count() == request.OrderItems.Count())
+        if (request.OrderItems.Count() > 1 && request.OrderItems.Select(i => i.UnitId).Distinct().Count() == request.OrderItems.Count())
         {
             throw new SalesDomainException(nameof(SellUnitCommandHandler),
                 new Exception("Possible duplicate unit id in the request."));

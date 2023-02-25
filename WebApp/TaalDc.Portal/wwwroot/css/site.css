@@ -522,3 +522,19 @@ tr.accepted td{
     visibility: hidden;
     transition-duration: 1s
 }
+
+
+#selected-units-list li {
+    padding: 1.5rem;
+    border: 1px solid #516C5B;
+    /* border-radius: 5px; */
+    list-style: none;
+    /* font-weight: 700; */
+    /* background: #dcdcdc; */
+    margin-bottom: 1rem !important;
+}
+
+
+li.order-item{
+    cursor: pointer;
+}

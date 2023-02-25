@@ -222,6 +222,16 @@ public static class API
             return $"{baseUrl}/api/v1/buyers/{buyerId}/company";
         }
 
+        public static string GetBuyers(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/buyers";
+        }
+
+        public static string GetBuyerByID(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}";
+        }
+
         #endregion
     }
 }

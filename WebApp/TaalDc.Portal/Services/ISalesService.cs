@@ -41,12 +41,14 @@ public interface ISalesService
 
 
     #region Buyer
-    Task<int> AddBuyer(BuyerCreateAPI_ClientDto model);
-    Task<bool> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model);
+    Task<CommandResult> AddBuyer(BuyerCreateAPI_ClientDto model);
+    Task<CommandResult> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model);
     Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model);
-    Task<bool> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model);
-    Task<bool> PatchBuyerAddress(BuyerAddressEdit_ClientDto model);
-    Task<bool> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model);
+    Task<CommandResult> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model);
+    Task<CommandResult> PatchBuyerAddress(BuyerAddressEdit_ClientDto model);
+    Task<CommandResult> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model);
+    Task<PaginationQueryResult<BuyerRead_ClientDto>> GetBuyers(int pageNumber, int pageSize, string name, string email);
+    Task<BuyerRead_ClientDto> GetBuyer(int buyerId);
     #endregion
 
 }

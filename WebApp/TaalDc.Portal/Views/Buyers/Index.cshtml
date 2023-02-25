@@ -1,4 +1,7 @@
-﻿@{
+﻿@using TaalDc.Portal.DTO.Sales.Buyer;
+@model PaginationQueryResult<BuyerRead_ClientDto>
+
+@{
     ViewData["Title"] = "Buyers";
 }
 
@@ -28,30 +31,29 @@
                                 <th>Phone No.</th>
                                 <th>Corporate Account?</th>
                                 <th>Company/Business</th>
-                                <th>No. of Contracts</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <a asp-action="Details" asp-controller="Buyers" asp-route-id="1">1</a>
-                                </td>
-                                <td>
-                                    Juan dela Cruz
-                                </td>
-                                <td>juandelacruz@testmail.com</td>
-                                <td>0912 123 4567</td>
-                                <td>YES</td>
-                                <td>Juan Incorporated</td>
-                                <td>
-                                    4
-                                </td>
-                                <td>
-                                    @* <a class="action-edit" href="#">Edit</a>
-                                <a class="action-delete" href="#">Delete</a>*@
-                                </td>
-                            </tr>
+                            @foreach(var buyer in Model.Data)
+                            {
+                                 <tr>
+                                    <td>
+                                        <a asp-action="Details" asp-controller="Buyers" asp-route-id="@buyer.BuyerId">@buyer.BuyerId</a>
+                                    </td>
+                                    <td>
+                                        @buyer.FirstName @buyer.LastName
+                                    </td>
+                                    <td>@buyer.EmailAddress</td>
+                                    <td>@buyer.MobileNo</td>
+                                    <td>@(buyer.IsCorporate? "YES" : "NO")</td>
+                                    <td>@buyer.Company_Name</td>
+                                    <td>
+                                        @* <a class="action-edit" href="#">Edit</a>
+                                    <a class="action-delete" href="#">Delete</a>*@
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

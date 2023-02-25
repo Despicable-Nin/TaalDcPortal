@@ -88,11 +88,14 @@ function saveInfo(event) {
 
     console.log('form data', value);
 
-    if (value.IsCorporate) {
-        var isCorpCheckbox = document.getElementById("IsCorporate");
-        value.IsCorporate = isCorpCheckbox.checked;
-    }
+    var isCorpCheckbox = document.getElementsByName("IsCorporate");
 
+    console.log('corp checkbox', isCorpCheckbox);
+
+    if (isCorpCheckbox) {
+        value.IsCorporate = isCorpCheckbox[0].checked;
+    }
+    
     var isFormValid = event.target.checkValidity();
 
     event.target.classList.add('was-validated');
@@ -122,6 +125,7 @@ function saveInfo(event) {
 
                 event.target.classList.remove('was-validated');
 
+                window.location.reload();
                 $('.formLoader').hide();
             }, error: function (data) {
                 const response = data.responseJSON;

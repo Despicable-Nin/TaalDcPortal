@@ -27,6 +27,7 @@ public class BuyerQueries : IBuyerQueries
           ,B.IsCorporate
           ,CO.Address [Company_Address]
           ,CO.CorpSec [Company_CorpSec]
+          ,CO.TIN [Company_TIN]
           ,CO.EmailAddress [Company_EmailAddress]
           ,CO.FaxNo [Company_FaxNo]
           ,CO.Industry [Company_Industry]
@@ -40,7 +41,7 @@ public class BuyerQueries : IBuyerQueries
           ,HA.[State] [HomeAddress_State]
           ,HA.[Country] [HomeAddress_Country]
           ,HA.ZipCode [HomeAddress_ZipCode]
-          ,BuA.Street [HomeAddress_Street]
+          ,BuA.Street [BusinessAddress_Street]
           ,BuA.City [BusinessAddress_City]
           ,BuA.[State] [BusinessAddress_State]
           ,BuA.[Country] [BusinessAddress_Country]
@@ -54,8 +55,8 @@ public class BuyerQueries : IBuyerQueries
           LEFT JOIN taaldb_sales.sales.civilStatus C ON C.Id = B.CivilStatusId
           LEFT JOIN taaldb_sales.sales.company CO ON CO.BuyerId = B.Id
           LEFT JOIN taaldb_sales.sales.address HA ON HA.BuyerId = B.Id AND HA.[Type] = 1
-          LEFT JOIN taaldb_sales.sales.address BuA ON HA.BuyerId = B.Id AND HA.[Type] = 2
-          LEFT JOIN taaldb_sales.sales.address BA ON HA.BuyerId = B.Id AND HA.[Type] = 3";
+          LEFT JOIN taaldb_sales.sales.address BuA ON BuA.BuyerId = B.Id AND BuA.[Type] = 2
+          LEFT JOIN taaldb_sales.sales.address BA ON BA.BuyerId = B.Id AND BA.[Type] = 3";
     
     
     private readonly string SELECT_BUYER_COUNT = " SELECT COUNT(*) AS Total FROM [taaldb_sales].[sales].[buyer] ";
