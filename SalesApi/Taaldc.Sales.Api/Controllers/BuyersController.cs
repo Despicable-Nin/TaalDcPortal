@@ -16,6 +16,7 @@ using Taaldc.Sales.API.Application.Commands.UpdateBuyerContactDetails;
 using Taaldc.Sales.API.Application.Commands.UpdateBuyerMisc;
 using Taaldc.Sales.API.Application.Commands.UpsertBuyerAddress;
 using Taaldc.Sales.API.Application.Commands.UpsertCompany;
+using Taaldc.Sales.API.Application.Commands.UpsertSpouse;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
@@ -107,6 +108,17 @@ namespace Taaldc.Sales.Api.Controllers
             return Ok(await _mediator.Send(model, ct) );
         }
         
+        
+        [HttpPost,HttpPut("{id}/spouse")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesErrorResponseType(typeof(BadRequestResult))]
+        public async Task<IActionResult> UpserBuyerSpouse(int id,[FromBody] UpsertSpouseCommand model, CancellationToken ct = default)
+        {
+            if (id != model.BuyerId) throw new Exception("Invalid request.");
+            
+            return Ok(await _mediator.Send(model, ct) );
+        }
+        
         [HttpPut("{id}/company")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -116,5 +128,7 @@ namespace Taaldc.Sales.Api.Controllers
             
             return Ok(await _mediator.Send(model, ct) );
         }
+        
+        
     }
 }
