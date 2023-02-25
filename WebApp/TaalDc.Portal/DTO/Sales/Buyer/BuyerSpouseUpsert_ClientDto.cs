@@ -1,6 +1,6 @@
 ﻿namespace TaalDc.Portal.DTO.Sales.Buyer
 {
-    public class BuyerSpouseEdit_ClientDto
+    public class BuyerSpouseUpsert_ClientDto
     {
         public int BuyerId { get; set; }
         public int SpouseId { get; set; }
