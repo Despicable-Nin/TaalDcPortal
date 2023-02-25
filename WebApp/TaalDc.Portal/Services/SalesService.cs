@@ -14,7 +14,7 @@ public class SalesService : ISalesService
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<SalesService> _logger;
-    private readonly string _removeServiceBaseUrl;
+    private readonly string _remoteServiceBaseUrl;
     private readonly IOptions<AppSettings> _settings;
 
     public SalesService(IOptions<AppSettings> settings,
@@ -26,14 +26,14 @@ public class SalesService : ISalesService
         _httpClient = httpClient;
         _logger = logger;
 
-        _removeServiceBaseUrl = $"{settings.Value.SalesUrl}";
+        _remoteServiceBaseUrl = $"{settings.Value.SalesUrl}";
     }
 
 
     //DASHBOARD
     public async Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType()
     {
-        var uri = API.Sales.GetAvailabilityPerResidentialUnitType(_removeServiceBaseUrl);
+        var uri = API.Sales.GetAvailabilityPerResidentialUnitType(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -45,7 +45,7 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView()
     {
-        var uri = API.Sales.GetAvailabilityOfResidentialUnitPerView(_removeServiceBaseUrl);
+        var uri = API.Sales.GetAvailabilityOfResidentialUnitPerView(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -57,7 +57,7 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetResidentialUnitsCountByStatus()
     {
-        var uri = API.Sales.GetUnitCountSummaryByStatus(_removeServiceBaseUrl);
+        var uri = API.Sales.GetUnitCountSummaryByStatus(_remoteServiceBaseUrl);
         
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -70,7 +70,7 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus()
     {
-        var uri = API.Sales.GetParkingCountSummaryByStatus(_removeServiceBaseUrl);
+        var uri = API.Sales.GetParkingCountSummaryByStatus(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -82,7 +82,7 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType()
     {
-        var uri = API.Sales.GetAvailabilityPerParkingUnitType(_removeServiceBaseUrl);
+        var uri = API.Sales.GetAvailabilityPerParkingUnitType(_remoteServiceBaseUrl);
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -97,7 +97,7 @@ public class SalesService : ISalesService
         var parkings = new List<ParkingUnitAvailabilityPerFloor_ClientDto>();
 
         try { 
-            var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_removeServiceBaseUrl);
+            var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_remoteServiceBaseUrl);
 
             var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -114,7 +114,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> AcceptPayment(int orderId, int paymentId)
     {
-        var uri = API.Sales.AcceptPayment(_removeServiceBaseUrl, orderId, paymentId);
+        var uri = API.Sales.AcceptPayment(_remoteServiceBaseUrl, orderId, paymentId);
 
         var response = await _httpClient.PostAsync(uri, null);
 
@@ -129,7 +129,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> VoidPayment(int orderId, int paymentId)
     {
-        var uri = API.Sales.VoidPayment(_removeServiceBaseUrl, orderId, paymentId);
+        var uri = API.Sales.VoidPayment(_remoteServiceBaseUrl, orderId, paymentId);
 
         var response = await _httpClient.PostAsync(uri, null);
 
@@ -144,7 +144,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> AddPayment(PaymentCreate_ClientDto model)
     {
-        var uri = API.Sales.AddPayment(_removeServiceBaseUrl, model.TransactionId);
+        var uri = API.Sales.AddPayment(_remoteServiceBaseUrl, model.TransactionId);
 
         var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -161,7 +161,7 @@ public class SalesService : ISalesService
 
     public async Task<OrderUnitBuyer_ClientDto> GetSalesById(int id)
     {
-        var uri = API.Sales.GetSales(_removeServiceBaseUrl);
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
         uri = $"{uri}/{id}";
 
         var responseString = await _httpClient.GetStringAsync(uri);
@@ -174,7 +174,7 @@ public class SalesService : ISalesService
 
     public async Task<IEnumerable<Payment_ClientDto>> GetSalesPayments(int id)
     {
-        var uri = API.Sales.GetSales(_removeServiceBaseUrl);
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
         uri = $"{uri}/{id}/payments";
 
         var responseString = await _httpClient.GetStringAsync(uri);
@@ -188,7 +188,7 @@ public class SalesService : ISalesService
     public async Task<PaginationQueryResult<OrderUnitBuyer_ClientDto>> GetUnitAndOrdersAvailability(int unitStatusId,
         int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string broker = "")
     {
-        var uri = API.Sales.GetSales(_removeServiceBaseUrl);
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
 
         var brokerString = string.IsNullOrEmpty(broker) ? string.Empty : $"&broker={broker}";
         uri =
@@ -204,7 +204,7 @@ public class SalesService : ISalesService
 
     public async Task<SellUnitCommandResult> SellUnit(SalesCreate_ClientDto model)
     {
-        var uri = API.Sales.SellUnit(_removeServiceBaseUrl);
+        var uri = API.Sales.SellUnit(_remoteServiceBaseUrl);
 
         var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -219,7 +219,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> AddBuyer(BuyerCreateAPI_ClientDto model)
     {
-        var uri = API.Sales.AddBuyer(_removeServiceBaseUrl);
+        var uri = API.Sales.AddBuyer(_remoteServiceBaseUrl);
 
         var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -234,7 +234,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model)
     {
-        var uri = API.Sales.UpdateBuyerInfo(_removeServiceBaseUrl, model.BuyerId);
+        var uri = API.Sales.UpdateBuyerInfo(_remoteServiceBaseUrl, model.BuyerId);
 
         var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -249,7 +249,7 @@ public class SalesService : ISalesService
 
     public async Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model)
     {
-        var uri = API.Sales.UpdateBuyerContact(_removeServiceBaseUrl, model.BuyerId);
+        var uri = API.Sales.UpdateBuyerContact(_remoteServiceBaseUrl, model.BuyerId);
 
         var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -264,7 +264,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model)
     {
-        var uri = API.Sales.UpdateBuyerMisc(_removeServiceBaseUrl, model.BuyerId);
+        var uri = API.Sales.UpdateBuyerMisc(_remoteServiceBaseUrl, model.BuyerId);
 
         var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -279,7 +279,7 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> PatchBuyerAddress(BuyerAddressEdit_ClientDto model)
     {
-        var uri = API.Sales.UpdateBuyerAddress(_removeServiceBaseUrl, model.BuyerId);
+        var uri = API.Sales.UpdateBuyerAddress(_remoteServiceBaseUrl, model.BuyerId);
 
         var json = JsonSerializer.Serialize(model);
 
@@ -298,7 +298,22 @@ public class SalesService : ISalesService
 
     public async Task<CommandResult> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model)
     {
-        var uri = API.Sales.UpdateBuyerCompany(_removeServiceBaseUrl, model.BuyerId);
+        var uri = API.Sales.UpdateBuyerCompany(_remoteServiceBaseUrl, model.BuyerId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<CommandResult>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Buyer cannot be updated.");
+    }
+    
+    public async Task<CommandResult> UpsertSpouse(BuyerSpouseUpsert_ClientDto model)
+    {
+        var uri = API.Sales.UpsertSpouse(_remoteServiceBaseUrl, model.BuyerId);
 
         var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
 
@@ -313,7 +328,7 @@ public class SalesService : ISalesService
 
     public async Task<PaginationQueryResult<BuyerRead_ClientDto>> GetBuyers(int pageNumber, int pageSize, string name, string email)
     {
-        var uri = API.Sales.GetBuyers(_removeServiceBaseUrl);
+        var uri = API.Sales.GetBuyers(_remoteServiceBaseUrl);
 
         uri =
             $"{uri}?pageNumber={pageNumber}&pageSize={pageSize}";
@@ -328,7 +343,7 @@ public class SalesService : ISalesService
 
     public async Task<BuyerRead_ClientDto> GetBuyer(int buyerId)
     {
-        var uri = API.Sales.GetBuyerByID(_removeServiceBaseUrl, buyerId);
+        var uri = API.Sales.GetBuyerByID(_remoteServiceBaseUrl, buyerId);
        
         var responseString = await _httpClient.GetStringAsync(uri);
 
