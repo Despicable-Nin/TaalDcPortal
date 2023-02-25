@@ -54,6 +54,7 @@ internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order>
 
         //TODO: Delete --> builder.Property(b => b.FinalPrice).HasColumnType("decimal(18,4)").IsRequired();
 
+        builder.Ignore(b => b.TransactionDate);
 
         builder
             .Metadata
