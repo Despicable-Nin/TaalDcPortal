@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.AcceptPayment;
+using Taaldc.Sales.API.Application.Commands.AddOrUpdateOrderItem;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 using Taaldc.Sales.Api.Application.Queries.Orders;
@@ -40,6 +41,18 @@ public class SalesController : ControllerBase
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> Post([FromBody] SellUnitCommand dto)
     {
+        var result = await _mediator.Send(dto);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> AddOrUpdateOrderItemAsync(int orderId,[FromBody] AddOrUpdateOrderItemCommand dto)
+    {
+        if (dto.OrderId != orderId) return BadRequest("Invalid request.");
+        
         var result = await _mediator.Send(dto);
 
         return Ok(result);
