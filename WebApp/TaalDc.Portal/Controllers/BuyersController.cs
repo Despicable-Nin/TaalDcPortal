@@ -129,8 +129,13 @@ namespace TaalDc.Portal.Controllers
 
             buyer.SpouseId = buyerQueryResult.PartnerId;
 
-            if (buyerQueryResult.PartnerId.HasValue) {
-                var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), 2, "Married");
+            if (buyerQueryResult.PartnerId.HasValue && buyerQueryResult.PartnerId.Value > 0) {
+                var spouseResult = await _salesService.GetBuyer(buyerQueryResult.PartnerId.Value);
+                var spouse = new Buyer_ClientDto(spouseResult.Salutation, spouseResult.FirstName, spouseResult.MiddleName, spouseResult.LastName, spouseResult.Dob, 2, "Married");
+
+                spouse.SetContactDetails(spouseResult.EmailAddress, spouseResult.MobileNo, spouseResult.PhoneNo);
+
+                spouse.SetIDInformation(spouseResult.Occupation, spouseResult.Tin, spouseResult.GovIssuedId, spouseResult.GovIssuedIdValidUntil);
 
                 spouse.Id = buyerQueryResult.PartnerId.Value;
 

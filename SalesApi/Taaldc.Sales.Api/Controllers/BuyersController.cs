@@ -109,7 +109,7 @@ namespace Taaldc.Sales.Api.Controllers
         }
         
         
-        [HttpPost,HttpPut("{id}/spouse")]
+        [HttpPut("{id}/spouse")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> UpserBuyerSpouse(int id,[FromBody] UpsertSpouseCommand model, CancellationToken ct = default)

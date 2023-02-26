@@ -523,7 +523,7 @@ function saveContractInfo(event) {
         , OrderItems: selectedUnits.map(unit => {
             return {
                 UnitId: unit.id,
-                SellingPrice: unit.price
+                Price: unit.price
             }
         })
     }

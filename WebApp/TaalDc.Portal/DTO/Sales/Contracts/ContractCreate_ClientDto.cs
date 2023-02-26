@@ -21,6 +21,6 @@
     public class OrderItem
     {
         public int UnitId { get; set; }
-        public double SellingPrice { get; set; }
+        public double Price { get; set; }
     }
 }

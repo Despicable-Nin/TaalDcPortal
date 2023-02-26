@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
 
@@ -351,5 +352,20 @@ public class SalesService : ISalesService
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
+    }
+
+    public async Task<Response> CreateContract(ContractCreate_ClientDto model)
+    {
+        var uri = API.Sales.SellUnit(_remoteServiceBaseUrl);
+
+        var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<Response>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        throw new Exception("Sale cannot be created.");
     }
 }

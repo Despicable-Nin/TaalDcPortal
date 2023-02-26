@@ -1,5 +1,6 @@
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Models;
 
 namespace TaalDc.Portal.Services;
@@ -52,4 +53,9 @@ public interface ISalesService
     Task<GetBuyerResponse> GetBuyer(int buyerId);
     #endregion
 
+
+    #region Contracts
+    Task<Response> CreateContract(ContractCreate_ClientDto model);
+
+    #endregion
 }
