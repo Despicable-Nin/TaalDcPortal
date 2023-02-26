@@ -11,6 +11,12 @@
 
 
 <div class="container-fluid">
+    <div class="mb-3" style="text-align: right;">
+        <a class="btn btn-primary" href="#" onclick="generateAcknowledgmentReceipt()">
+            Buyer's Information Sheet
+        </a>
+    </div>
+
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Buyers" asp-action="Details" asp-route-id="@Model.Id">Details</a>
@@ -201,6 +207,23 @@
 
 @section Scripts{
     <script src="~/js/sales/Buyer.js"></script>
+
+    <script>
+        async function generateAcknowledgmentReceipt(){
+            $.ajax({
+                url: "/Documents/AcknowledgmentReceipt",
+                type: "POST",
+                success: function (result) {
+                    console.log('response', result);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    
+    </script>
+
     <script>
         var modelData = JSON.parse('@Html.Raw(serializedModel)');
 

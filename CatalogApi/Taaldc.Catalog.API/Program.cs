@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Data.Common;
+using System.Reflection;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using EventBus.Abstractions;
+using IntegrationEventLogEF.Services;
 using MediatR;
 using SeedWork;
 using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
 using Taaldc.Catalog.API.Application.IntegrationEvents.Events;
 using Taaldc.Catalog.API.Application.Queries;
@@ -32,11 +36,19 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 //setting up dbcontext and related stuff
 builder.Services
     .AddEndpoints()
-    .AddCustomAuth(configuration)
-    .AddCustomDbContext(configuration)
-    .AddCustomOptions(configuration)
-    .AddIntegrationServices(configuration)
-    .AddEventBus(configuration);
+.AddCustomAuth(configuration)
+.AddCustomDbContext(configuration);
+
+
+builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+           sp => (DbConnection c) => new IntegrationEventLogService(c));
+
+
+builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+//.AddCustomOptions(configuration)
+//.AddIntegrationServices(configuration)
+//.AddEventBus(configuration);
 
 //register auto-mapper
 builder.Services.AddAutoMapper(typeof(Program));
