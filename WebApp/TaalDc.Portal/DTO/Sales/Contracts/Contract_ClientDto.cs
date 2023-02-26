@@ -10,6 +10,9 @@
 		public string PaymentMethod { get; set; }
 		public string Remarks { get; set; }
 
+		public int StatusId { get; set; }
+		public string Status { get; set; }
+
 		public IEnumerable<ContractOrderItem_ClientDto> OrderItems { get; set; }
 
 	}

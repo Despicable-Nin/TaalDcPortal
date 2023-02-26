@@ -29,6 +29,7 @@ namespace TaalDc.Portal.Controllers
             return View(id);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Create(ContractCreate_ClientDto model)
         {
@@ -63,6 +64,12 @@ namespace TaalDc.Portal.Controllers
                 Message = "Please check your data entry.",
                 ModelState = Json(ModelState)
             });
+        }
+
+
+        public IActionResult Details(int id)
+        {
+            return View();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Services;
 using WebApplication2.Controllers;
 
@@ -147,7 +148,12 @@ namespace TaalDc.Portal.Controllers
 
 
         public IActionResult Contracts(int id) {
-            return View(id);
+
+            var buyerContracts = new List<Contract_ClientDto>();
+
+            ViewData["BuyerId"] = id;
+
+            return View(buyerContracts);
         }
 
 
