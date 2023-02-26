@@ -289,7 +289,17 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Payments(int id)
     {
         var payments = await _salesService.GetSalesPayments(id);
-        var salesViewModel = new SalesViewModel(payments, id);
+        var salesViewModel = new SalesViewModel(payments, null, id);
+
+        return View(salesViewModel);
+    }
+
+
+    [Route("Sales/{id}/Units")]
+    public async Task<IActionResult> Units(int id)
+    {
+        var units = await _salesService.GetContractOrderItems(id);
+        var salesViewModel = new SalesViewModel(null, units, id);
 
         return View(salesViewModel);
     }

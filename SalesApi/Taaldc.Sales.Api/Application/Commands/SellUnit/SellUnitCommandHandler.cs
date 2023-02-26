@@ -116,14 +116,14 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
         catch (Exception ex)
         {
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
-            return CommandResult.Failed(null, ex.Message);
+            return CommandResult.Failed(null, ex.InnerException.Message);
         }
     }
 
     private async Task<IEnumerable<UnitAvailability>> ValidateAndCheckUnitsAvailability(SellUnitCommand request)
     {
         //check for duplicate unit ids on the request
-        if (request.OrderItems.Count() > 1 && request.OrderItems.Select(i => i.UnitId).Distinct().Count() == request.OrderItems.Count())
+        if (request.OrderItems.Count() > 1 && request.OrderItems.Select(i => i.UnitId).Distinct().Count() != request.OrderItems.Count())
         {
             throw new SalesDomainException(nameof(SellUnitCommandHandler),
                 new Exception("Possible duplicate unit id in the request."));

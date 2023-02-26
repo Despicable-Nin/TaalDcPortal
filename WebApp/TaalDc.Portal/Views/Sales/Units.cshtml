@@ -1,0 +1,67 @@
+﻿@using SeedWork
+@model TaalDc.Portal.ViewModels.Sales.SalesViewModel
+@inject IAmCurrentUser CurrentUser
+
+@{
+    ViewBag.Title = "Sales Units";
+    Layout = "_Layout";
+
+}
+
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Sales" asp-action="Details" asp-route-id="@Model.OrderId">Details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Sales" asp-action="Units" asp-route-id="@Model.OrderId">Units</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link " aria-current="page" asp-controller="Sales" asp-action="Payments" asp-route-id="@Model.OrderId">Payments</a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <h4 class="primary-color mb-3 mt-3">
+            <strong>Unit Details</strong>
+        </h4>
+
+        <div class="table-responsive w-100 mb-3">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Unit No.</th>
+                    <th>Property</th>
+                    <th>Tower</th>
+                    <th>View</th>
+                    <th>Floor</th>
+                    <th>Area</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var unit in Model.Units)
+                {
+                    <tr>
+                        <td>@unit.Id</td>
+                        <td>@unit.Identifier</td>
+                        <td>@unit.Property</td>
+                        <td>@unit.Tower</td>
+                        <td>@unit.ScenicView</td>
+                        <td>@unit.Floor</td>
+                        <td>@unit.UnitArea</td>
+                        <td>
+                            @unit.Price.ToString("#,##0.00")
+                        </td>
+                        <td>
+                            @unit.Status
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

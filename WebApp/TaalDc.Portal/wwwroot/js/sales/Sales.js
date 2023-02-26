@@ -2,7 +2,7 @@
 
 function applyMask() {
     $("#SellingPrice").mask("#,##0.00", {reverse: true});
-    $("#Reservation").mask("#,##0.00", {reverse: true});
+    $("#ReservationFee").mask("#,##0.00", {reverse: true});
     $("#DownPayment").mask("#,##0.00", {reverse: true});
 }
 

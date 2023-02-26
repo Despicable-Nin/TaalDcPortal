@@ -368,4 +368,17 @@ public class SalesService : ISalesService
 
         throw new Exception("Sale cannot be created.");
     }
+
+    public async Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id)
+    {
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
+        uri = $"{uri}/{id}/units";
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ContractOrderItem_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
 }

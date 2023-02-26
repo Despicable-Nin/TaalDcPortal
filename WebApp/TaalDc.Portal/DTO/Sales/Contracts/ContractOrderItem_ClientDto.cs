@@ -3,6 +3,7 @@
 	public record ContractOrderItem_ClientDto
 	{
 		public int Id { get; set; }
+		public int OrderId { get; set; }
 		public int UnitId { get; set; }
 		public string Identifier { get; set; }
 		public string UnitType { get; set; }

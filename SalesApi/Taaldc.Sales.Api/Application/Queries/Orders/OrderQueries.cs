@@ -85,7 +85,7 @@ public class OrderQueries : IOrderQueries
             AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
             AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
             AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) 
-        ORDER BY U.[UnitId] 
+        ORDER BY O.[Id] 
         OFFSET {(pageNumber - 1) * pageSize} 
         ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
@@ -168,5 +168,38 @@ public class OrderQueries : IOrderQueries
         }
 
         return result.FirstOrDefault();
+    }
+
+    public async Task<IEnumerable<OrderItemDTO>> GetOrderItemsByOrderId(int id)
+    {
+        var orderItemQuery = $"SELECT " +
+            $"oi.Id," +
+            $"OrderId," +
+            $"oi.UnitId," +
+            $"u.Unit AS Identifier," +
+            $"u.UnitType," +
+            $"u.Property," +
+            $"u.Tower," +
+            $"u.ScenicView," +
+            $"u.[Floor]," +
+            $"u.UnitArea," +
+            $"u.BalconyArea," +
+            $"u.OriginalPrice," +
+            $"oi.Price," +
+            $"u.UnitStatusId AS StatusId," +
+            $"u.UnitStatus AS Status " +
+            $"FROM [taaldb_sales].[sales].[orderitem] oi  " +
+            $"JOIN [taaldb_sales].[sales].[order] o  " +
+            $"ON oi.OrderId = o.Id  " +
+            $"JOIN [taaldb_sales].[sales].[unitreplica] u  " +
+            $"ON oi.UnitId = u.Id  WHERE o.Id = {id}";
+
+        await using var connection = new SqlConnection(_connectionString);
+
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<OrderItemDTO>(orderItemQuery);
+
+        return result.ToList();
     }
 }
