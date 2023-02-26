@@ -23,6 +23,7 @@ public class OrderQueries : IOrderQueries
         ,B.[LastName]
         ,B.[EmailAddress] 
         ,B.[PhoneNo] 
+        ,B.[MobileNo] 
         ,A.[Street]
         ,A.[Country] 
         ,A.[State] 
@@ -49,7 +50,7 @@ public class OrderQueries : IOrderQueries
         ,U.[UnitStatusId]
         ,U.[OriginalPrice] 
         ,U.[SellingPrice]
-        --,P.[ActualPaymentDate] AS TransactionDate 
+        ,P.[ActualPaymentDate] AS TransactionDate 
     FROM [taaldb_sales].[sales].[unitreplica] U 
         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
         LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId
@@ -160,6 +161,11 @@ public class OrderQueries : IOrderQueries
         await connection.OpenAsync(CancellationToken.None);
 
         var result = await connection.QueryAsync<Unit_Order_DTO>(query);
+
+        foreach(var item in result)
+        {
+            item.Code = item.OrderId.ToString("00000");
+        }
 
         return result.FirstOrDefault();
     }
