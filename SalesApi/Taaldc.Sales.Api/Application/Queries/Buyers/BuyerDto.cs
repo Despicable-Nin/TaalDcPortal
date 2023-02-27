@@ -2,7 +2,7 @@ using Microsoft.Build.ObjectModelRemoting;
 
 namespace Taaldc.Sales.Api.Application.Queries.Buyers;
 
-public record BuyerDto
+public record BuyerQueryDto : IQueryDto
 {
     public int BuyerId { get; init; }
     public string Salutation { get; init; }
