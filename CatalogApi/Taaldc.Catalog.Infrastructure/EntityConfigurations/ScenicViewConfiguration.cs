@@ -12,10 +12,8 @@ internal class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.Id)
-            .HasDefaultValue(1)
-            .ValueGeneratedNever()
-            .IsRequired();
+        builder.Property(o => o.Id)
+            .UseHiLo("scenicviewseq", CatalogDbContext.DEFAULT_SCHEMA);
 
         builder.Property(b => b.Name)
             .HasMaxLength(200)
