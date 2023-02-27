@@ -34,27 +34,33 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Tower</th>
-                        <th>Unit Type</th>
-                        <th>Unit No.</th>
+                        <th>Code</th>
+                        <th>Transaction Date</th>
+                        <th>Broker</th>
                         <th>Sales Status</th>
-                        <th>Unit Status</th>
+                        <th>Amount Paid</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach(var contract in Model.ToList())
                     {
-                        var firstOrderItem = contract.OrderItems.Any() ? contract.OrderItems.FirstOrDefault() : null;
+                        //var firstOrderItem = contract.OrderItems.Any() ? contract.OrderItems.FirstOrDefault() : null;
 
                         <tr>
-                            <td>@contract.Id</td>
-                            <td>@(firstOrderItem != null ? firstOrderItem.Tower: "-")</td>
-                            <td>@(firstOrderItem != null ? firstOrderItem.UnitType + " - " + firstOrderItem.ScenicView : "-")</td>
-                            <td>@(firstOrderItem != null ? firstOrderItem.Identifier : "-")</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Sales" asp-route-id="@contract.OrderId">
+                                    @contract.Code
+                                </a>
+                            </td>
+                            <td>
+                                @(contract.TransactionDate.HasValue ? contract.TransactionDate.Value.ToString("MMMM dd, yyyy") : "-")
+                            </td>
+                            <td>
+                                @contract.Broker
+                            </td>
                             <td>@contract.Status</td>
-                            <td>@(firstOrderItem != null ? firstOrderItem.Status : "-")</td>
+                            <td>@contract.AmountPaid.ToString("#,##0.00")</td>
                             <td></td>
                         </tr>
                     }

@@ -3,7 +3,7 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 internal static class OrderSQL
 {
     public const string SELECT_ORDER_DETAILS = @"SELECT
-    O.Id
+    O.Id AS OrderId
     ,[Code]
     ,[Broker]
     ,[ReservationExpiresOn]
@@ -71,6 +71,7 @@ internal static class OrderSQL
         ,B.[LastName]
         ,B.[EmailAddress] 
         ,B.[PhoneNo] 
+        ,B.[MobileNo] 
         ,A.[Street]
         ,A.[Country] 
         ,A.[State] 
@@ -97,7 +98,7 @@ internal static class OrderSQL
         ,U.[UnitStatusId]
         ,U.[OriginalPrice] 
         ,U.[SellingPrice]
-        --,P.[ActualPaymentDate] AS TransactionDate 
+        ,P.[ActualPaymentDate] AS TransactionDate 
     FROM [taaldb_sales].[sales].[unitreplica] U 
         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
         LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId

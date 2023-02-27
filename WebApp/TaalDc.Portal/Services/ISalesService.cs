@@ -58,4 +58,6 @@ public interface ISalesService
     Task<Response> CreateContract(CreateContractRequest model);
     Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id);
     #endregion
+
+    Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id);
 }

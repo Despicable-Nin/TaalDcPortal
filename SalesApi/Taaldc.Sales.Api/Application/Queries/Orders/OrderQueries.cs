@@ -82,12 +82,40 @@ public class OrderQueries : IOrderQueries
         return result;
     }
 
-    public Task<IEnumerable<OrderItemDTO>> GetOrderItemsByOrderId(int id)
-    {
-        throw new NotImplementedException();
-    }
+	public async Task<IEnumerable<OrderItemDTO>> GetOrderItemsByOrderId(int id)
+	{
+		var orderItemQuery = $"SELECT " +
+			$"oi.Id," +
+			$"OrderId," +
+			$"oi.UnitId," +
+			$"u.Unit AS Identifier," +
+			$"u.UnitType," +
+			$"u.Property," +
+			$"u.Tower," +
+			$"u.ScenicView," +
+			$"u.[Floor]," +
+			$"u.UnitArea," +
+			$"u.BalconyArea," +
+			$"u.OriginalPrice," +
+			$"oi.Price," +
+			$"u.UnitStatusId AS StatusId," +
+			$"u.UnitStatus AS Status " +
+			$"FROM [taaldb_sales].[sales].[orderitem] oi  " +
+			$"JOIN [taaldb_sales].[sales].[order] o  " +
+			$"ON oi.OrderId = o.Id  " +
+			$"JOIN [taaldb_sales].[sales].[unitreplica] u  " +
+			$"ON oi.UnitId = u.Id  WHERE o.Id = {id}";
 
-    public async Task<Unit_Order_DTO> GetOrder(int id)
+		await using var connection = new SqlConnection(_connectionString);
+
+		await connection.OpenAsync(CancellationToken.None);
+
+		var result = await connection.QueryAsync<OrderItemDTO>(orderItemQuery);
+
+		return result.ToList();
+	}
+
+	public async Task<Unit_Order_DTO> GetOrder(int id)
     {
         var query = $"{OrderSQL.SELECT_UNITS_WITH_BUYER} WHERE O.Id = '{id}'";
 

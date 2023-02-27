@@ -30,9 +30,9 @@ public record GetSalesByIdResponse
 
     [JsonPropertyName("transaction_date")] public DateTime? TransactionDate { get; init; }
 
-    [JsonPropertyName("code")] public string? Code { get; init; }
+    [JsonPropertyName("code")] public string? Code { get => this.OrderId.Value.ToString("00000"); }
 
-    [JsonPropertyName("broker")] public string? Broker { get; init; }
+	[JsonPropertyName("broker")] public string? Broker { get; init; }
 
     [JsonPropertyName("final_price")] public decimal? FinalPrice { get; init; }
 
