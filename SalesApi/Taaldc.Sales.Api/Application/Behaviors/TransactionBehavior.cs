@@ -12,14 +12,14 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly SalesDbContext _dbContext;
 
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-    private readonly ISalesIntegrationEventService _salesIntegrationEventService;
+   //TODO: Not this time -> private readonly ISalesIntegrationEventService _salesIntegrationEventService;
 
     public TransactionBehaviour(SalesDbContext dbContext,
-        ISalesIntegrationEventService salesIntegrationEventService,
+       //TODO: Not this time -> ISalesIntegrationEventService salesIntegrationEventService,
         ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
     {
         _dbContext = dbContext ?? throw new ArgumentException(nameof(SalesDbContext));
-        _salesIntegrationEventService = salesIntegrationEventService ?? throw new ArgumentException(nameof(salesIntegrationEventService));
+        //TODO: Not this time -> _salesIntegrationEventService = salesIntegrationEventService ?? throw new ArgumentException(nameof(salesIntegrationEventService));
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }
 
@@ -56,7 +56,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
             
                      transactionId = transaction.TransactionId;
                  }
-                 await _salesIntegrationEventService.PublishEventsThroughtEventBusAsync(transactionId);
+                 //TODO: Not this time -> await _salesIntegrationEventService.PublishEventsThroughtEventBusAsync(transactionId);
              });
 
             return response;
