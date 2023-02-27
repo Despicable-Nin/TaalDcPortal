@@ -18,14 +18,14 @@ public class AddPaymentCommand : IRequest<CommandResult>
         CorrelationId = correlationId;
     }
 
-    public int TransactionId { get; }
-    public string PaymentMethod { get; }
-    public decimal AmountPaid { get; }
-    public string Remarks { get; }
-    public string ConfirmationNumber { get; }
-    public int TransactionTypeId { get; }
-    public int PaymentTypeId { get; }
-    public DateTime PaymentDate { get; }
+    public int TransactionId { get; init; }
+    public string PaymentMethod { get; init; }
+    public decimal AmountPaid { get; init; }
+    public string Remarks { get; init; }
+    public string ConfirmationNumber { get; init; }
+    public int TransactionTypeId { get; init; }
+    public int PaymentTypeId { get; init; }
+    public DateTime PaymentDate { get; init; }
 
-    public string CorrelationId { get; }
+    public string CorrelationId { get; init; }
 }

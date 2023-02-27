@@ -1,6 +1,6 @@
 ﻿namespace TaalDc.Portal.DTO.Sales.Contracts
 {
-    public class ContractCreate_ClientDto
+    public record CreateContractRequest
     {
         public int BuyerId { get; set; }
         public DateTime TransactionDate { get; set; }
@@ -14,11 +14,11 @@
         public string PaymentMethod { get; set; }
         public string Remarks { get; set; }
 
-        public IList<OrderItem> OrderItems { get; set; }
+        public IList<OrderItemDto> OrderItems { get; set; }
     }
 
 
-    public class OrderItem
+    public record OrderItemDto
     {
         public int UnitId { get; set; }
         public double SellingPrice { get; set; }

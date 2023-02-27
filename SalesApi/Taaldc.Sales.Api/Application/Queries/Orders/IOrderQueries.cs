@@ -16,6 +16,7 @@ public interface IOrderQueries
     Task<IEnumerable<PaymentDTO>> GetPayments(int id);
 
     Task<Unit_Order_DTO> GetOrder(int id);
+    Task<object> GetBuyerContractDetails(int buyerId);
 }
 
 // public enum UnitIs : int
