@@ -14,30 +14,45 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "catalog");
 
-            migrationBuilder.CreateSequence(
+            migrationBuilder.CreateSequence<int>(
                 name: "floorseq",
                 schema: "catalog",
-                incrementBy: 10);
+                startValue: 2000L);
 
-            migrationBuilder.CreateSequence(
+            migrationBuilder.CreateSequence<int>(
                 name: "projectseq",
                 schema: "catalog",
-                incrementBy: 10);
+                startValue: 2000L);
 
-            migrationBuilder.CreateSequence(
+            migrationBuilder.CreateSequence<int>(
                 name: "propertyseq",
                 schema: "catalog",
-                incrementBy: 10);
+                startValue: 2000L);
 
             migrationBuilder.CreateSequence(
+                name: "scenicviewseq",
+                schema: "catalog",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence<int>(
                 name: "towerseq",
                 schema: "catalog",
-                incrementBy: 10);
+                startValue: 2000L);
 
-            migrationBuilder.CreateSequence(
+            migrationBuilder.CreateSequence<int>(
                 name: "unitseq",
                 schema: "catalog",
+                startValue: 2000L);
+
+            migrationBuilder.CreateSequence(
+                name: "unitstatusseq",
+                schema: "catalog",
                 incrementBy: 10);
+
+            migrationBuilder.CreateSequence<int>(
+                name: "unittypeseq",
+                schema: "catalog",
+                startValue: 9L);
 
             migrationBuilder.CreateTable(
                 name: "project",
@@ -63,7 +78,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
@@ -76,7 +91,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
@@ -89,7 +104,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ShortCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
@@ -161,6 +176,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FloorPlanFilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TowerId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -187,12 +203,14 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Identifier = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     FloorArea = table.Column<double>(type: "float", nullable: false),
+                    BalconyArea = table.Column<double>(type: "float", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FloorId = table.Column<int>(type: "int", nullable: false),
                     ScenicViewId = table.Column<int>(type: "int", nullable: false),
                     UnitStatus = table.Column<int>(type: "int", nullable: false),
                     UnitType = table.Column<int>(type: "int", nullable: false),
-                    FloorId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -351,11 +369,23 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                 schema: "catalog");
 
             migrationBuilder.DropSequence(
+                name: "scenicviewseq",
+                schema: "catalog");
+
+            migrationBuilder.DropSequence(
                 name: "towerseq",
                 schema: "catalog");
 
             migrationBuilder.DropSequence(
                 name: "unitseq",
+                schema: "catalog");
+
+            migrationBuilder.DropSequence(
+                name: "unitstatusseq",
+                schema: "catalog");
+
+            migrationBuilder.DropSequence(
+                name: "unittypeseq",
                 schema: "catalog");
         }
     }

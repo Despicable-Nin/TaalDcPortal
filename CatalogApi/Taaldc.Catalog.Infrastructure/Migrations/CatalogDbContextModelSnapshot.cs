@@ -31,11 +31,17 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.HasSequence<int>("propertyseq", "catalog")
                 .StartsAt(2000L);
 
+            modelBuilder.HasSequence("scenicviewseq", "catalog")
+                .IncrementsBy(10);
+
             modelBuilder.HasSequence<int>("towerseq", "catalog")
                 .StartsAt(2000L);
 
             modelBuilder.HasSequence<int>("unitseq", "catalog")
                 .StartsAt(2000L);
+
+            modelBuilder.HasSequence("unitstatusseq", "catalog")
+                .IncrementsBy(10);
 
             modelBuilder.HasSequence<int>("unittypeseq", "catalog")
                 .StartsAt(9L);
@@ -261,7 +267,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
@@ -298,8 +304,10 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.ScenicView", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "scenicviewseq", "catalog");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -314,8 +322,10 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
             modelBuilder.Entity("Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate.UnitStatus", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitstatusseq", "catalog");
 
                     b.Property<string>("Name")
                         .IsRequired()
