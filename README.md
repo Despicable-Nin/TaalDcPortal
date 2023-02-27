@@ -55,6 +55,8 @@ dotnet ef database update
 <br/>
 <br/>
 
+NOTE: `IntegrationEventLogContext` coexists on the same database (as needed). It is need to be propagated and migrated before running a service (API) that makes use of an AMQP Event Bus. (See `SalesIntegrationEventService` for example.)
+
 #### ON RIDER
 
 Why I can't see my project in a `Startup projects` field?

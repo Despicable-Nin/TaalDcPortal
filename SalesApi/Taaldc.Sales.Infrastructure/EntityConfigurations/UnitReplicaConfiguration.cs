@@ -4,7 +4,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Infrastructure.EntityConfigurations;
 
-class UnitReplicaConfiguration : IEntityTypeConfiguration<UnitReplica>
+internal class UnitReplicaConfiguration : IEntityTypeConfiguration<UnitReplica>
 {
     public void Configure(EntityTypeBuilder<UnitReplica> builder)
     {

@@ -5,9 +5,14 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 
 public sealed class Tower : Entity
 {
+    private readonly List<Floor> _floors;
 
-    private Tower() => _floors = new List<Floor>();
-    public Tower(string name,  string address) : this()
+    private Tower()
+    {
+        _floors = new List<Floor>();
+    }
+
+    public Tower(string name, string address) : this()
     {
         Name = name;
         Address = address;
@@ -16,11 +21,9 @@ public sealed class Tower : Entity
     public string Name { get; private set; }
     public int Number { get; private set; }
     public string Address { get; private set; }
-    
-    private List<Floor> _floors;
-    public IReadOnlyCollection<Floor> Floors => _floors.AsReadOnly(); 
-    
-              
+    public IReadOnlyCollection<Floor> Floors => _floors.AsReadOnly();
+
+
     public void Update(string name, string address)
     {
         Name = name;
@@ -34,7 +37,7 @@ public sealed class Tower : Entity
 
         return floor;
     }
-    
+
     public void RemoveFloor(int id, bool hardDelete = false)
     {
         var remove = _floors.SingleOrDefault(x => x.Id.Equals(id));

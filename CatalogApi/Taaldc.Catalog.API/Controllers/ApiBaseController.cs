@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Taaldc.Catalog.API.Controllers;
 
-
-[ApiController, Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/adm/[controller]")]
 public class ApiBaseController<T> : ControllerBase where T : ControllerBase
 {
@@ -22,6 +22,5 @@ public class ApiBaseController<T> : ControllerBase where T : ControllerBase
 
     protected ApiBaseController()
     {
-        
     }
 }

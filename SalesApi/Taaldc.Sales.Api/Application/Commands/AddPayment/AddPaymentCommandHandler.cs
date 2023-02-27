@@ -22,23 +22,20 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Comma
 
         if (order == default)
             throw new SalesDomainException(nameof(AddPaymentCommandHandler),
-                new Exception(("Order not found.")));
+                new Exception("Order not found."));
 
-        Payment payment = order.AddPayment(
+        var payment = order.AddPayment(
             request.PaymentTypeId,
-            request.TransactionTypeId, 
+            request.TransactionTypeId,
             request.PaymentDate,
-            request.ConfirmationNumber, 
+            request.ConfirmationNumber,
             request.PaymentMethod,
             request.AmountPaid,
             request.Remarks,
             request.CorrelationId);
-        
-        _repository.UpdateOrder(order);
 
-        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
+        _repository.Update(order);
 
         return CommandResult.Success(payment.Id);
-
     }
 }

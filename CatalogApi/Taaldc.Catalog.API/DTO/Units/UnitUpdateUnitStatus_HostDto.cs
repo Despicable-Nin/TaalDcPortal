@@ -5,15 +5,15 @@ namespace Taaldc.Catalog.API.DTO;
 
 public class UnitUpdateUnitStatus_HostDto
 {
-    [JsonPropertyName("unit_id")] 
+    [JsonPropertyName("unit_id")]
     [JsonProperty(Required = Required.Always)]
     public int UnitId { get; set; }
-    
-    [JsonPropertyName("unit_status_id")] 
+
+    [JsonPropertyName("unit_status_id")]
     [JsonProperty(Required = Required.Always)]
     public int UnitStatus { get; set; }
-    
-    [JsonPropertyName("remarks")] 
+
+    [JsonPropertyName("remarks")]
     [JsonProperty(Required = Required.Always)]
     public string Remarks { get; set; }
 }

@@ -1,5 +1,7 @@
 using MediatR;
-using Taaldc.Library.Common.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Serilog.Context;
+using Taaldc.Sales.Api.Application.IntegrationEvents;
 using Taaldc.Sales.Infrastructure;
 
 namespace Taaldc.Sales.API.Application.Behaviors;
@@ -10,14 +12,14 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly SalesDbContext _dbContext;
 
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-    //private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
+   //TODO: Not this time -> private readonly ISalesIntegrationEventService _salesIntegrationEventService;
 
     public TransactionBehaviour(SalesDbContext dbContext,
-        //IOrderingIntegrationEventService orderingIntegrationEventService,
+       //TODO: Not this time -> ISalesIntegrationEventService salesIntegrationEventService,
         ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
     {
         _dbContext = dbContext ?? throw new ArgumentException(nameof(SalesDbContext));
-        //_orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentException(nameof(orderingIntegrationEventService));
+        //TODO: Not this time -> _salesIntegrationEventService = salesIntegrationEventService ?? throw new ArgumentException(nameof(salesIntegrationEventService));
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }
 
@@ -30,39 +32,34 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
 
         try
         {
-            //remove this when TODO is uncommented
-            return await next();
+             if (_dbContext.HasActiveTransaction)
+             {
+                 return await next();
+             }
+            
+             var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-            //TODO: we might not need this but just in case we need to do transactions in SQL
-            // if (_dbContext.HasActiveTransaction)
-            // {
-            //     return await next();
-            // }
-            //
-            // var strategy = _dbContext.Database.CreateExecutionStrategy();
+             await strategy.ExecuteAsync(async () =>
+             {
+                 Guid transactionId;
+            
+                 using var transaction = await _dbContext.BeginTransactionAsync();
+                 using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
+                 {
+                    _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
 
-            // await strategy.ExecuteAsync(async () =>
-            // {
-            //     Guid transactionId;
-            //
-            //     using var transaction = await _dbContext.BeginTransactionAsync();
-            //     using (LogContext.PushProperty("TransactionContext", transaction.TransactionId))
-            //     {
-            //        _logger.LogInformation("----- Begin transaction {TransactionId} for {CommandName} ({@Command})", transaction.TransactionId, typeName, request);
+                    response = await next();
 
-            //        response = await next();
+                    _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
 
-            //        _logger.LogInformation("----- Commit transaction {TransactionId} for {CommandName}", transaction.TransactionId, typeName);
+                     await _dbContext.CommitTransactionAsync(transaction);
+            
+                     transactionId = transaction.TransactionId;
+                 }
+                 //TODO: Not this time -> await _salesIntegrationEventService.PublishEventsThroughtEventBusAsync(transactionId);
+             });
 
-            //         await _dbContext.CommitTransactionAsync(transaction);
-            //
-            //         transactionId = transaction.TransactionId;
-            //     }
-            //
-            //     await _orderingIntegrationEventService.PublishEventsThroughEventBusAsync(transactionId);
-            // });
-
-            //return response;
+            return response;
         }
         catch (Exception ex)
         {

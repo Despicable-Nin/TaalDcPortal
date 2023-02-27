@@ -4,42 +4,41 @@ using Taaldc.Catalog.API.Application.Commands.UpsertUnitType;
 using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.DTO;
 
-namespace Taaldc.Catalog.API.Controllers
+namespace Taaldc.Catalog.API.Controllers;
+
+public class UnitTypesController : ApiBaseController<UnitTypesController>
 {
-    public class UnitTypesController : ApiBaseController<UnitTypesController>
+    private readonly IUnitTypeQueries _unitTypeQueries;
+
+    public UnitTypesController(ILogger<UnitTypesController> logger, IMediator mediator,
+        IUnitTypeQueries unitTypeQueries) : base(logger, mediator)
     {
+        _unitTypeQueries = unitTypeQueries;
+    }
 
-        private readonly IUnitTypeQueries _unitTypeQueries;
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> UpsertUnitType(UnitTypeUpsert_HostDto model)
+    {
+        return Ok(
+            await _mediator.Send(
+                new UpsertUnitTypeCommand(model.UnitTypeId, model.Name, model.ShortCode)));
+    }
 
-        public UnitTypesController(ILogger<UnitTypesController> logger, IMediator mediator, IUnitTypeQueries unitTypeQueries) : base(logger, mediator)
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnitTypes()
+    {
+        try
         {
-            _unitTypeQueries = unitTypeQueries;
+            var unitTypes = await _unitTypeQueries.GetUnitTypes();
+            return Ok(unitTypes);
         }
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> UpsertUnitType(UnitTypeUpsert_HostDto model)
+        catch (Exception err)
         {
-            return Ok(
-                await _mediator.Send(
-                    new UpsertUnitTypeCommand(model.UnitTypeId, model.Name, model.ShortCode)));
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> GetUnitTypes()
-        {
-            try
-            {
-                var unitTypes = await _unitTypeQueries.GetUnitTypes();
-                return Ok(unitTypes);
-            }
-            catch (Exception err)
-            {
-                return BadRequest(err.Message);
-            }
+            return BadRequest(err.Message);
         }
     }
 }

@@ -1,0 +1,143 @@
+﻿@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
+
+
+<!--Company Edit Modal-->
+<div class="modal fade" id="companyModal" tabindex="-1" aria-labelledby="companyModal" aria-hidden="true">
+    <div class="modal-dialog  modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Company Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row needs-validation" method="post" id="companyForm" asp-action="EditCompanyInformation" asp-controller="Buyers" asp-route-id="@Model.Id">
+                    <input name="BuyerId" value="@Model.Id" hidden />
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="Name" class="form-label">
+                            <strong>Name</strong>
+                        </label>
+                        <input name="Name" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="Address" class="form-label">
+                            <strong>Address</strong>
+                        </label>
+                        <input name="Address" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="Industry" class="form-label">
+                            <strong>Industry</strong>
+                        </label>
+                        <input name="Industry" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="PhoneNo" class="form-label">
+                            <strong>Phone No</strong>
+                        </label>
+                        <input name="PhoneNo" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="MobileNo" class="form-label">
+                            <strong>Mobile No</strong>
+                        </label>
+                        <input name="MobileNo" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                     </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="FaxNo" class="form-label">
+                            <strong>Fax No</strong>
+                        </label>
+                        <input name="FaxNo" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="EmailAddress" class="form-label">
+                            <strong>Email Address</strong>
+                        </label>
+                        <input name="EmailAddress" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-6">
+                        <label for="TIN" class="form-label">
+                            <strong>TIN</strong>
+                        </label>
+                        <input name="TIN" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="SECRegNo" class="form-label">
+                            <strong>SEC Reg No</strong>
+                        </label>
+                        <input name="SECRegNo" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="President" class="form-label">
+                            <strong>President</strong>
+                        </label>
+                        <input name="President" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                     <div class="mb-3 col-lg-6">
+                        <label for="CorpSec" class="form-label">
+                            <strong>Corp Sec</strong>
+                        </label>
+                        <input name="CorpSec" class="form-control" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                 
+
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

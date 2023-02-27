@@ -1,6 +1,6 @@
 ﻿@using SeedWork
 @using TaalDc.Portal.DTO.Sales;
-@model SalesCreate_ClientDto
+@model AddBuyerOrderRequest
 @inject IAmCurrentUser CurrentUser
 
 @{
@@ -498,14 +498,14 @@
         </div>
 
 
-        <div class="mb-3 col-lg-12">
+        @*<div class="mb-3 col-lg-12">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" asp-for="IsRefundable">
                 <label class="form-check-label" asp-for="IsRefundable">
                     Refundable?
                 </label>
             </div>
-        </div>
+        </div>*@
 
         <div class="mb-3 col-lg-12">
             <label asp-for="PaymentDate" class="form-label">

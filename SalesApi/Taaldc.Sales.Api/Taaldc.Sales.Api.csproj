@@ -5,9 +5,12 @@
         <Nullable>disable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <LangVersion>latestmajor</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Autofac" Version="6.5.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
         <PackageReference Include="Dapper" Version="2.0.123" />
         <PackageReference Include="FluentValidation" Version="11.4.0" />
@@ -15,8 +18,8 @@
         <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.13" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.OpenApi" Version="1.4.5" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.11" />
@@ -26,15 +29,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
-      <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
-      <ProjectReference Include="..\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Common\EventBusRabbitMQ\EventBusRabbitMQ\EventBusRabbitMQ.csproj" />
+        <ProjectReference Include="..\..\Common\EventBus\EventBus\EventBus.csproj" />
+        <ProjectReference Include="..\..\Common\IntegrationEventLogEF\IntegrationEventLogEF\IntegrationEventLogEF.csproj" />
+        <ProjectReference Include="..\..\Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj" />
+        <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
+        <ProjectReference Include="..\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\IntegrationEvents\EventHandling" />
+      <Folder Include="Infrastructure\IntegrationEventMigrations" />
     </ItemGroup>
 
 </Project>

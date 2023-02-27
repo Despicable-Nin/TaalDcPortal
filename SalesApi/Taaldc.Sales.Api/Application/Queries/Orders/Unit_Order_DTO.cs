@@ -4,77 +4,80 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public record Unit_Order_DTO
 {
-    [JsonPropertyName("salutation")] public string Salutation { get; set; }
+    [JsonPropertyName("buyer_id")] public int? BuyerId { get;init; }
+    [JsonPropertyName("salutation")] public string? Salutation { get; init; }
 
-    [JsonPropertyName("first_name")] public string FirstName { get; set; }
+    [JsonPropertyName("first_name")] public string? FirstName { get; init; }
 
-    [JsonPropertyName("last_name")] public string LastName { get; set; }
+    [JsonPropertyName("last_name")] public string? LastName { get; init; }
 
-    [JsonPropertyName("email_address")] public string EmailAddress { get; set; }
+    [JsonPropertyName("email_address")] public string? EmailAddress { get; init; }
 
-    [JsonPropertyName("contact_number")] public string ContactNo { get; set; }
+    [JsonPropertyName("contact_number")] public string? PhoneNo { get; init; }
 
-    [JsonPropertyName("address")] public string Address { get; set; }
+    [JsonPropertyName("mobile_number")] public string? MobileNo { get; init; }
 
-    [JsonPropertyName("country")] public string Country { get; set; }
+    [JsonPropertyName("address")] public string? Street { get; init; }
 
-    [JsonPropertyName("province")] public string Province { get; set; }
+    [JsonPropertyName("country")] public string? Country { get; init; }
 
-    [JsonPropertyName("towncity")] public string TownCity { get; set; }
+    [JsonPropertyName("province")] public string? State { get; init; }
 
-    [JsonPropertyName("zip_code")] public string ZipCode { get; set; }
+    [JsonPropertyName("towncity")] public string? City { get; init; }
 
-    [JsonPropertyName("order_id")] public string OrderId { get; set; }
+    [JsonPropertyName("zip_code")] public string? ZipCode { get; init; }
 
-    [JsonPropertyName("transaction_date")] public DateTime TransactionDate { get; set; }
-    
-    [JsonPropertyName("code")] public string Code { get; set; }
+    [JsonPropertyName("order_id")] public int OrderId { get; init; }
 
-    [JsonPropertyName("broker")] public string Broker { get; set; }
+    [JsonPropertyName("transaction_date")] public DateTime? TransactionDate { get; init; }
 
-    [JsonPropertyName("final_price")] public decimal FinalPrice { get; set; }
+    [JsonPropertyName("code")] public string? Code { get; set; }
 
-    [JsonPropertyName("refundable")] public bool IsRefundable { get; set; }
+    [JsonPropertyName("broker")] public string? Broker { get; init; }
 
-    [JsonPropertyName("status")] public string Status { get; set; }
+    [JsonPropertyName("final_price")] public decimal FinalPrice { get; init; }
 
-    [JsonPropertyName("status_id")] public int StatusId { get; set; }
+    [JsonPropertyName("refundable")] public bool IsRefundable { get; init; }
 
-    [JsonPropertyName("remarks")] public string Remarks { get; set; }
+    [JsonPropertyName("status")] public string? Status { get; init; }
 
-    [JsonPropertyName("property")] public string Property { get; set; }
+    [JsonPropertyName("status_id")] public int? StatusId { get; init; }
 
-    [JsonPropertyName("property_id")] public int PropertyId { get; set; }
+    [JsonPropertyName("remarks")] public string? Remarks { get; init; }
 
-    [JsonPropertyName("tower")] public string Tower { get; set; }
+    [JsonPropertyName("property")] public string? Property { get; init; }
 
-    [JsonPropertyName("tower_id")] public int TowerId { get; set; }
+    [JsonPropertyName("property_id")] public int? PropertyId { get; init; }
 
-    [JsonPropertyName("floor")] public string Floor { get; set; }
+    [JsonPropertyName("tower")] public string? Tower { get; init; }
 
-    [JsonPropertyName("floor_id")] public int FloorId { get; set; }
+    [JsonPropertyName("tower_id")] public int? TowerId { get; init; }
 
-    [JsonPropertyName("unit")] public string Unit { get; set; }
+    [JsonPropertyName("floor")] public string? Floor { get; init; }
 
-    [JsonPropertyName("unit_id")] public int UnitId { get; set; }
+    [JsonPropertyName("floor_id")] public int? FloorId { get; init; }
 
-    [JsonPropertyName("view_id")] public string ScenicView { get; set; }
+    [JsonPropertyName("unit")] public string? Unit { get; init; }
 
-    [JsonPropertyName("view")] public int ScenicViewId { get; set; }
+    [JsonPropertyName("unit_id")] public int? UnitId { get; init; }
 
-    [JsonPropertyName("unit_type")] public string UnitType { get; set; }
+    [JsonPropertyName("view_id")] public string? ScenicView { get; init; }
 
-    [JsonPropertyName("unit_type_id")] public int UnitTypeId { get; set; }
+    [JsonPropertyName("view")] public int? ScenicViewId { get; init; }
 
-    [JsonPropertyName("unit_status")] public string UnitStatus { get; set; }
+    [JsonPropertyName("unit_type")] public string? UnitType { get; init; }
 
-    [JsonPropertyName("unit_status_id")] public int UnitStatusId { get; set; }
+    [JsonPropertyName("unit_type_id")] public int? UnitTypeId { get; init; }
 
-    [JsonPropertyName("original_price")] public decimal OriginalPrice { get; set; }
+    [JsonPropertyName("unit_status")] public string? UnitStatus { get; init; }
 
-    [JsonPropertyName("selling_price")] public decimal SellingPrice { get; set; }
+    [JsonPropertyName("unit_status_id")] public int? UnitStatusId { get; init; }
 
-    [JsonPropertyName("unit_area")] public double UnitArea { get; set; }
+    [JsonPropertyName("original_price")] public decimal OriginalPrice { get; init; }
 
-    [JsonPropertyName("balcony_area")] public double BalconyArea { get; set; }
+    [JsonPropertyName("selling_price")] public decimal SellingPrice { get; init; }
+
+    [JsonPropertyName("unit_area")] public double UnitArea { get; init; }
+
+    [JsonPropertyName("balcony_area")] public double BalconyArea { get; init; }
 }

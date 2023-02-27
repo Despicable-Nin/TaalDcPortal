@@ -1,52 +1,165 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using SeedWork;
+using Taaldc.Sales.Domain.Exceptions;
+
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+
 public class Buyer : Entity, IAggregateRoot
 {
-    public Buyer(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
-        string address, string country, string province, string townCity, string zipCode)
+    #region Ctor
+    public Buyer(string salutation,
+        string firstName,
+        string middleName,
+        string lastName,
+        string emailAddress,
+        string phoneNumber,
+        string mobileNumber,
+        DateTime doB,
+        int civilStatusId,
+        Address address,
+        bool isCorporate,
+        Company? company
+        ) : this()
     {
         Salutation = salutation;
         FirstName = firstName;
+        MiddleName = middleName;
         LastName = lastName;
         EmailAddress = emailAddress;
-        ContactNo = contactNo;
-        Address = address;
-        Country = country;
-        Province = province;
-        TownCity = townCity;
-        ZipCode = zipCode;
-    }
-    
-    protected Buyer() {}
+        PhoneNo = phoneNumber;
+        MobileNo = mobileNumber;
+        DoB = doB;
+        _civilStatusId = civilStatusId;
 
+        if (address == default)
+            throw new SalesDomainException(nameof(Buyer), new ArgumentNullException(nameof(address)));
+        
+        UpsertAddress(address);
+
+        IsCorporate = isCorporate;
+        
+        UpsertCompany(company);
+
+    }
+   
+
+    protected Buyer()
+    {
+        _addresses = new List<Address>();
+    }
+    #endregion 
+
+    #region Personal Info
     public string Salutation { get; private set; }
     public string FirstName { get; private set; }
+    public string MiddleName { get; private set; }
     public string LastName { get; private set; }
+    public DateTime DoB { get; private set; }
+    
+    
+    private int _civilStatusId;
+    public CivilStatus CivilStatus { get; private set; }
+    public int GetCivilStatusId() => _civilStatusId;
+    
+    public bool IsCorporate { get; private set; }
+    
+    //value object
+    public Company? Company { get; private set; }
+    
+    #endregion
+    
+    #region Contact information
+
     public string EmailAddress { get; private set; }
-    public string ContactNo { get; private set; }
-    public string Address { get; private set;  }
-    public string Country { get; private set; }
-    public string Province { get; private set; }
-    public string TownCity { get; private set; }
-    public string ZipCode { get; private set; }
+    public string MobileNo { get; private set; }
+    public string PhoneNo { get; private set; }
+    
+    #endregion
+
+    #region Misc
+    public string Occupation { get; private set; }
+    public string Tin { get; private set; }
+    public string GovIssuedId { get; private set; }
+    public DateTime? GovIssuedIdValidUntil { get; private set; }
+    
+    #endregion
     
     
-    public void UpdateName(string salutation, string firstName, string lastName)
+    #region Familiar Affiliate
+    public int? PartnerId { get; private set; }
+    
+    #endregion
+    
+    #region Address
+
+    private List<Address> _addresses;
+    public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
+    
+    #endregion
+    
+    #region RowVersion
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+    #endregion
+
+
+    #region Behavior(s)
+    public void AddPartnerOrSpouse(int buyerIdOfPartnerOrSpouse)
+    {
+        PartnerId = buyerIdOfPartnerOrSpouse;
+    }
+
+    public void RemovePartnerOrSpouse() => PartnerId = default;
+
+    public void UpdateBasicInfo(string salutation, string firstName, string middleName, string lastName, DateTime doB,
+        int civilStatusId, bool isCorporate)
     {
         Salutation = salutation;
         FirstName = firstName;
+        MiddleName = middleName;
         LastName = lastName;
+        DoB = doB;
+        _civilStatusId = civilStatusId;
+        IsCorporate = isCorporate;
+    }
+
+    public void UpdateContactDetails(string emailAddress, string phoneNo, string mobileNo)
+    {
+        EmailAddress = emailAddress;
+        PhoneNo = phoneNo;
+        MobileNo = mobileNo;
+    }
+
+    public void UpdateMiscInformation(string occupation, string tin, string govIssuedId, DateTime? govIssuedIdValidUntil)
+    {
+        Occupation = occupation;
+        Tin = tin;
+        GovIssuedId = govIssuedId;
+        GovIssuedIdValidUntil = govIssuedIdValidUntil;
     }
     
-    public void UpdateDetails(string emailAddress, string contactNo,string address,
-        string country, string province, string townCity, string zipCode)
+    public void UpsertAddress(Address newaddress)
     {
-        Address = address;
-        EmailAddress = emailAddress;
-        ContactNo = contactNo;
-        Country = country;
-        Province = province;
-        TownCity = townCity;
-        ZipCode = zipCode;
+        var address = _addresses.SingleOrDefault(i => i.Type == newaddress.Type);
+
+        if (address != default)
+        {
+            //remove first
+            _addresses.Remove(address);
+        }
+
+        _addresses.Add(newaddress);
     }
+
+    public Address GetHomeAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Home);
+    public Address GetBillingAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Billing);
+    public Address GetBusinessAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Business);
+
+    public void UpsertCompany(Company company) => Company =
+        company ?? new Company("n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a");
+
+    #endregion
+
 }

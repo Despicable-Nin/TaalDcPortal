@@ -189,5 +189,54 @@ public static class API
         {
             return $"{baseUrl}/api/v1/dashboard/parking/available-per-unit-type";
         }
+
+        #region Buyer
+        public static string AddBuyer(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/buyers";
+        }
+
+        public static string UpdateBuyerInfo(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/basic-info";
+        }
+
+
+        public static string UpdateBuyerContact(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/contact-details";
+        }
+
+        public static string UpdateBuyerMisc(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/miscellaneous";
+        }
+
+        public static string UpdateBuyerAddress(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/address";
+        }
+
+        public static string UpdateBuyerCompany(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/company";
+        }
+        
+        public static string UpsertSpouse(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/spouse";
+        }
+
+        public static string GetBuyers(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/buyers";
+        }
+
+        public static string GetBuyerByID(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}";
+        }
+
+        #endregion
     }
 }

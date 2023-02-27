@@ -9,17 +9,20 @@ public class PaymentStatus : Enumeration
     public const string Rejected = nameof(Rejected);
     public const string Void = nameof(Void);
 
-    public static int GetStatusId(string name) => PaymentStatus.Dictionary.FirstOrDefault(i => i.Value == name).Key;
-
-    public static Dictionary<int, string> Dictionary = new Dictionary<int, string>()
+    public static Dictionary<int, string> Dictionary = new()
     {
         { 1, Accepted },
         { 2, Pending },
         { 3, Rejected },
         { 4, Void }
     };
-    
+
     public PaymentStatus(int id, string name) : base(id, name)
     {
+    }
+
+    public static int GetStatusId(string name)
+    {
+        return Dictionary.FirstOrDefault(i => i.Value == name).Key;
     }
 }

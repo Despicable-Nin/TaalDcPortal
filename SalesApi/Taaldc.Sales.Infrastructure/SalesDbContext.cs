@@ -1,8 +1,7 @@
 ﻿using System.Data;
-using System.Data.Common;
+using System.Diagnostics;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage;
 using SeedWork;
 using Taaldc.Common.Persistence;
@@ -13,10 +12,22 @@ namespace Taaldc.Sales.Infrastructure;
 public class SalesDbContext : DbContext, IUnitOfWork
 {
     public const string DEFAULT_SCHEMA = "sales";
-    private readonly IMediator _mediator;
     private readonly IAmCurrentUser _currentUser;
-    
+    private readonly IMediator _mediator;
+
+    private IDbContextTransaction _currentTransaction;
+
+
+    public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator,
+        IAmCurrentUser currentUser = default) : base(options)
+    {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _currentUser = currentUser;
+        Debug.WriteLine("SalesDbContext::ctor ->" + GetHashCode());
+    }
+
     public DbSet<Buyer> Buyers { get; set; }
+    public DbSet<CivilStatus> CivilStatuses { get; set; }
     public DbSet<UnitReplica> Units { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderStatus> AcquisitionStatus { get; set; }
@@ -25,16 +36,9 @@ public class SalesDbContext : DbContext, IUnitOfWork
     public DbSet<PaymentStatus> PaymentStatus { get; set; }
     public DbSet<TransactionType> TransactionTypes { get; set; }
 
+    public bool HasActiveTransaction => _currentTransaction != null;
 
-    public SalesDbContext(DbContextOptions<SalesDbContext> options, IMediator mediator, IAmCurrentUser currentUser = null) : base(options)
-    {                                                                                                                                                                                            
-        
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _currentUser = currentUser;
-        System.Diagnostics.Debug.WriteLine("SalesDbContext::ctor ->" + this.GetHashCode());
-    }
-
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         this.DbAudit(_currentUser);
         return base.SaveChangesAsync(cancellationToken);
@@ -61,18 +65,15 @@ public class SalesDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SalesDbContext).Assembly);
-        
+
         modelBuilder.HasSequence<int>("orderseq", DEFAULT_SCHEMA)
-            .StartsAt(1000).IncrementsBy(1);
-        
-        
+            .StartsAt(1).IncrementsBy(1);
     }
-    
-    private IDbContextTransaction _currentTransaction;
 
-    public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
-
-    public bool HasActiveTransaction => _currentTransaction != null;
+    public IDbContextTransaction GetCurrentTransaction()
+    {
+        return _currentTransaction;
+    }
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
@@ -86,14 +87,15 @@ public class SalesDbContext : DbContext, IUnitOfWork
     public async Task CommitTransactionAsync(IDbContextTransaction transaction)
     {
         if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-        if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
+        if (transaction != _currentTransaction)
+            throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
 
         try
         {
             await SaveChangesAsync();
             transaction.Commit();
         }
-        catch
+        catch(Exception ex)
         {
             RollbackTransaction();
             throw;

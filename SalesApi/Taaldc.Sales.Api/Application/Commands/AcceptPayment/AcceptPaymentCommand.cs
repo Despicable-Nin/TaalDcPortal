@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Taaldc.Sales.API.Application.Commands.ProcessPayment;
+namespace Taaldc.Sales.API.Application.Commands.AcceptPayment;
 
 public class AcceptPaymentCommand : IRequest<CommandResult>
 {
@@ -10,6 +10,6 @@ public class AcceptPaymentCommand : IRequest<CommandResult>
         PaymentId = paymentId;
     }
 
-    public int OrderId { get; private set; }
-    public int PaymentId { get; private set; }
+    public int OrderId { get; }
+    public int PaymentId { get; }
 }

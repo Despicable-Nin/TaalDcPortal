@@ -1,15 +1,22 @@
-﻿using System.Reflection;
+﻿using System.Data.Common;
+using System.Reflection;
+using Autofac.Core;
+using Autofac.Extensions.DependencyInjection;
+using EventBus.Abstractions;
+using IntegrationEventLogEF.Services;
 using MediatR;
 using SeedWork;
 using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.IntegrationEvents;
+using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
+using Taaldc.Catalog.API.Application.IntegrationEvents.Events;
 using Taaldc.Catalog.API.Application.Queries;
 using Taaldc.Catalog.API.Application.Queries.Floors;
 using Taaldc.Catalog.API.Application.Queries.Properties;
 using Taaldc.Catalog.API.Application.Queries.References;
 using Taaldc.Catalog.API.Application.Queries.ScenicViews;
 using Taaldc.Catalog.API.Application.Queries.Towers;
-using Taaldc.Catalog.API.Application.Queries.Units;
 using Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 using Taaldc.Catalog.Infrastructure;
@@ -19,17 +26,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddControllers();
 
+//important! injects ILifeTimeScope bullshit
+//TODO: Replace this fucker with built-in lifetime from .net core
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
 //setting up dbcontext and related stuff
-builder.Services.AddCustomDbContext(configuration);
+builder.Services
+    .AddEndpoints()
+.AddCustomAuth(configuration)
+.AddCustomDbContext(configuration);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpoints();
 
-builder.Services.AddCustomAuth(configuration);
+builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+           sp => (DbConnection c) => new IntegrationEventLogService(c));
 
+
+//TODO: Not this time -> builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+//.AddCustomOptions(configuration)
+//.AddIntegrationServices(configuration)
+//.AddEventBus(configuration);
+
+//register auto-mapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -37,6 +59,7 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavi
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
+//claims middlewares
 builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -44,53 +67,15 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
 builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
 
-
-builder.Services.AddAutoMapper(typeof(Program));
-
-
-builder.Services.AddScoped<IPropertyQueries>(i =>
-{
-    return new PropertyQueries(connectionString);
-});
-
-builder.Services.AddScoped<IUnitQueries>(i =>
-{
-    return new UnitQueries(connectionString);
-    
-});
-
-builder.Services.AddScoped<IFloorQueries>(i =>
-{
-	return new FloorQueries(connectionString);
-
-});
-
-builder.Services.AddScoped<ITowerQueries>(i =>
-{
-    return new TowerQueries(connectionString);
-
-});
-
-builder.Services.AddScoped<IScenicViewQueries>(i =>
-{
-	return new ScenicViewQueries(connectionString);
-});
-
-builder.Services.AddScoped<IUnitTypeQueries>(i =>
-{
-    return new UnitTypeQueries(connectionString);
-});
-
-
+//register queries
+builder.Services.AddQueries(configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI(options => {
-    options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI");
-});
+app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Catalog WebAPI"); });
 
 
 using (var scope = app.Services.CreateScope())
@@ -108,5 +93,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+
+//configure event bus
+//var eventbus = app.Services.GetRequiredService<IEventBus>();
+//eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
+
 
 app.Run();

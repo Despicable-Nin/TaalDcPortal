@@ -9,5 +9,5 @@ public sealed class UnitType : Enumeration, IAggregateRoot
         ShortCode = shortCode;
     }
 
-    public string ShortCode { get; private set; }
+    public string ShortCode { get; }
 }

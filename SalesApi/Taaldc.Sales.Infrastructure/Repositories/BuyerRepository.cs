@@ -1,3 +1,6 @@
+using System.Diagnostics.Metrics;
+using System.IO;
+using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
@@ -13,37 +16,45 @@ public class BuyerRepository : IBuyerRepository
     {
         _context = context ?? throw new SalesDomainException(nameof(BuyerRepository),
             new ArgumentNullException($"{nameof(context)} should not be null."));
-        
     }
 
     public IUnitOfWork UnitOfWork => _context;
-    
-    
-    public Buyer GetByEmail(string email)
+
+
+    /// <summary>
+    /// Only to be used to fetch then update entity.
+    /// Never use AsNoTracking if the fetched entity will be updated.
+    /// </summary>
+    /// <param name="email">Unique email address of the Buyer entity</param>
+    /// <returns></returns>
+    public async Task<Buyer> GetByEmailAsync(string email)
     {
-        return _context.Buyers.AsNoTracking().SingleOrDefault(i => i.EmailAddress == email);
+        return await _context.Buyers.SingleOrDefaultAsync(i => i.EmailAddress == email);
     }
 
-    public Buyer GetById(int id)
+    /// <summary>
+    /// Only to be used to fetch then update entity.
+    ///  Never use AsNoTracking if the fetched entity will be updated.
+    /// </summary>
+    /// <param name="id">Id (PK) Of Buyer entity</param>
+    /// <returns></returns>
+    public async Task<Buyer> GetByIdAsync(int id)
     {
-       return  _context.Buyers.AsNoTracking().SingleOrDefault(i => i.Id == id);
+        return await _context.Buyers.SingleOrDefaultAsync(i => i.Id == id);
     }
 
-    public Buyer Upsert(string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address,
-        string country, string province, string townCity, string zipCode, int? buyerId)
+    /// <summary>
+    /// Add or update a Buyer entity
+    /// </summary>
+    /// <param name="buyer"></param>
+    /// <returns></returns>
+    public Buyer Upsert(Buyer buyer)
     {
-        Buyer buyer = default;
-        if (buyerId.HasValue)
+        if (buyer.IsTransient())
         {
-            //update
-            buyer = _context.Buyers.Find(buyerId.Value);
-            buyer.UpdateName(salutation, firstName,lastName);
-            buyer.UpdateDetails(emailAddress, contactNo, address, country, province, townCity, zipCode);
-
-            return _context.Buyers.Update(buyer).Entity;
+            return _context.Buyers.Add(buyer).Entity;
         }
 
-        buyer = new(salutation, firstName, lastName, emailAddress, contactNo, address, country, province, townCity, zipCode);
-        return _context.Buyers.Add(buyer).Entity;
+        return _context.Buyers.Update(buyer).Entity;
     }
 }

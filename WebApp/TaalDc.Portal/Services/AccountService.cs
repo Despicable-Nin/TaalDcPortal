@@ -1,5 +1,10 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using TaalDc.Portal.Data;
 using TaalDc.Portal.ViewModels.Users;
 
@@ -11,15 +16,61 @@ public class AccountService : IAccountService
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly ILogger<AccountService> _logger;
+    private readonly IConfiguration _configuration;
 
 
-    public AccountService(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager,
-        ILogger<AccountService> logger, ApplicationDbContext applicationDbContext)
+    public AccountService(
+        RoleManager<IdentityRole> roleManager, 
+        UserManager<IdentityUser> userManager,
+        ILogger<AccountService> logger, 
+        ApplicationDbContext applicationDbContext,
+        IConfiguration configuration
+        )
     {
         _roleManager = roleManager;
         _userManager = userManager;
         _logger = logger;
         _applicationDbContext = applicationDbContext;
+        _configuration = configuration;
+    }
+    
+      public async Task<string> GetToken(string email)
+        {
+   
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                var claims = new List<Claim>
+                {
+                    new(ClaimTypes.Email, user.NormalizedEmail),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(ClaimTypes.NameIdentifier, user.Id),
+                    new(ClaimTypes.Name, user.NormalizedUserName)
+                };
+
+                foreach (var r in roles) claims.Add(new Claim(ClaimTypes.Role, r));
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                
+                var token = new JwtSecurityToken(
+                    _configuration["JWT:ValidIssuer"],
+                    _configuration["JWT:ValidAudience"],
+                    expires: DateTime.Now.AddYears(1),
+                    claims: claims,
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+
+                //TODO: we can try storing this to Session or Cookie after..
+                return new JwtSecurityTokenHandler().WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, ex.InnerException?.Message);
+            }
+
+        return string.Empty;
     }
 
     public async Task<UserIndexViewModel> GetListOfUsers()

@@ -1,11 +1,11 @@
-using System.Runtime.InteropServices;
 using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddPayment;
 
 public class AddPaymentCommand : IRequest<CommandResult>
 {
-    public AddPaymentCommand(int transactionId, string paymentMethod, decimal amountPaid, string remarks, string confirmationNumber, int transactionTypeId, int paymentTypeId, DateTime paymentDate, string correlationId)
+    public AddPaymentCommand(int transactionId, string paymentMethod, decimal amountPaid, string remarks,
+        string confirmationNumber, int transactionTypeId, int paymentTypeId, DateTime paymentDate, string correlationId)
     {
         TransactionId = transactionId;
         PaymentMethod = paymentMethod;
@@ -18,14 +18,14 @@ public class AddPaymentCommand : IRequest<CommandResult>
         CorrelationId = correlationId;
     }
 
-    public int TransactionId { get; private set; }
-    public string PaymentMethod { get; private set; }
-    public decimal AmountPaid { get; private set; }
-    public string Remarks { get; private set; }
-    public string ConfirmationNumber { get; private set; }
-    public int TransactionTypeId { get; private set; }
-    public int PaymentTypeId { get; private set; }
-    public DateTime PaymentDate { get; private set; }
+    public int TransactionId { get; init; }
+    public string PaymentMethod { get; init; }
+    public decimal AmountPaid { get; init; }
+    public string Remarks { get; init; }
+    public string ConfirmationNumber { get; init; }
+    public int TransactionTypeId { get; init; }
+    public int PaymentTypeId { get; init; }
+    public DateTime PaymentDate { get; init; }
 
-    public string CorrelationId { get; private set; }
+    public string CorrelationId { get; init; }
 }

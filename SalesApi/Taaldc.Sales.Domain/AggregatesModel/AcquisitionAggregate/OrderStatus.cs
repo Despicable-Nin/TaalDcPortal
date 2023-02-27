@@ -10,22 +10,21 @@ public sealed class OrderStatus : Enumeration
     public const string Reserved = nameof(Reserved);
     public const string New = nameof(New);
 
-    public static Dictionary<int, string> Dictionary = new Dictionary<int, string>()
+    public static Dictionary<int, string> Dictionary = new()
     {
         { 1, FullyPaid },
         { 2, PartiallyPaid },
         { 3, Cancelled },
-        {4, Reserved},
-        {5, New}
+        { 4, Reserved },
+        { 5, New }
     };
 
-    public static int GetIdByName(string name) => Dictionary.FirstOrDefault(i => i.Value == name).Key;
-    
     public OrderStatus(int id, string name) : base(id, name)
     {
     }
-    
-   
-    
-    
+
+    public static int GetIdByName(string name)
+    {
+        return Dictionary.FirstOrDefault(i => i.Value == name).Key;
+    }
 }

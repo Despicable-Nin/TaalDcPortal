@@ -90,7 +90,7 @@ public class HttpClientAuthorizationDelegatingHandler
                 var token = new JwtSecurityToken(
                     _configuration["JWT:ValidIssuer"],
                     _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
+                    expires: DateTime.Now.AddHours(8),
                     claims: claims,
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );

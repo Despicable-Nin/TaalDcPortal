@@ -2,7 +2,8 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public record OrderDTO
 {
-    public OrderDTO(string orderId, string code, string broker, decimal finalPrice, bool isRefundable, string status, int statusId, string remarks)
+    public OrderDTO(string orderId, string code, string broker, decimal finalPrice, bool isRefundable, string status,
+        int statusId, string remarks)
     {
         OrderId = orderId;
         Code = code;
@@ -14,12 +15,12 @@ public record OrderDTO
         Remarks = remarks;
     }
 
-    public string OrderId { get; private set; }
-    public string Code { get; private set; }
-    public string Broker { get; private set; }
-    public decimal FinalPrice { get; private set; }
-    public bool IsRefundable { get; private set; }
-    public string Status { get; private set; }
-    public int StatusId { get; private set; }
-    public string Remarks { get; private set; }
+    public string OrderId { get; }
+    public string Code { get; }
+    public string Broker { get; }
+    public decimal FinalPrice { get; }
+    public bool IsRefundable { get; }
+    public string Status { get; }
+    public int StatusId { get; }
+    public string Remarks { get; }
 }

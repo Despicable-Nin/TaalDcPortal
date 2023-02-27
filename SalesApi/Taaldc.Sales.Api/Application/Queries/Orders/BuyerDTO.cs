@@ -2,7 +2,8 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public record BuyerDTO
 {
-    public BuyerDTO(string salutation, string firstName, string lastName, string emailAddress, string contactNo, string address, string country, string province, string townCity, string zipCode)
+    public BuyerDTO(string salutation, string firstName, string lastName, string emailAddress, string contactNo,
+        string address, string country, string province, string townCity, string zipCode)
     {
         Salutation = salutation;
         FirstName = firstName;
@@ -16,14 +17,14 @@ public record BuyerDTO
         ZipCode = zipCode;
     }
 
-    public string Salutation { get; private set; }
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
-    public string EmailAddress { get; private set; }
-    public string ContactNo { get; private set; }
-	public string Address { get; private set; }
-	public string Country { get; private set; }
-    public string Province { get; private set; }
-    public string TownCity { get; private set; }
-    public string ZipCode { get; private set; }
+    public string Salutation { get; init; }
+    public string FirstName { get; init;}
+    public string LastName { get;init; }
+    public string EmailAddress { get; init;}
+    public string ContactNo { get;init; }
+    public string Address { get; init;}
+    public string Country { get;init; }
+    public string Province { get; init;}
+    public string TownCity { get; init;}
+    public string ZipCode { get;init; }
 }

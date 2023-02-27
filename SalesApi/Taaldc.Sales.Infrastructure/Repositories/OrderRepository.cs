@@ -1,6 +1,5 @@
-using System.Runtime.InteropServices;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Primitives;
 using SeedWork;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Exceptions;
@@ -20,38 +19,25 @@ public class OrderRepository : IOrderRepository
     public IUnitOfWork UnitOfWork => _context;
 
 
-    public async Task<Order> FindOrderByIdAsync(int transactionId) =>
-        await _context.Orders.Include(i => i.Payments).AsNoTracking().FirstOrDefaultAsync(i => i.Id == transactionId);
-
-    public Order AddOrder(int unitId, int transactionTypeId, int buyerId, string code, string broker, string remarks, decimal finalPrice)
+    public async Task<Order> FindOrderByIdAsync(int transactionId)
     {
-        Buyer buyer = _context.Buyers.Find(buyerId);
-
-        if (buyer == default)
-            throw new SalesDomainException(nameof(AddOrder), new Exception($"Buyer not found."));
-
-        return _context.Orders.Add(new(unitId, buyerId, code, broker, remarks, finalPrice)).Entity;
+        return await _context.Orders
+            .Include(i => i.Payments)
+            .Include(i => i.OrderItems)
+            .FirstOrDefaultAsync(i => i.Id == transactionId);
     }
 
-    public Order UpdateOrder(Order order) =>  _context.Orders.Update(order).Entity;
-    
-
-    public async Task<Payment> AddPayment(int acquisitionId, int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate,
-        string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId)
+    public Order CreateOrder(int buyerId, string broker, DateTime transactionDate, decimal discount, string remarks)
     {
-        var tran = await _context.Orders.FirstOrDefaultAsync(i => i.Id == acquisitionId);
-
-        if (tran == default)
-            throw new SalesDomainException(nameof(AddPayment), new Exception("Acquisition not found."));
-
-        var payment = tran.AddPayment(paymentTypeId, transactionTypeId, actualPaymentDate, confirmationNumber, paymentMethod,
-            amountPaid, remarks, correlationId);
-        
-        _context.Orders.Update(tran);
-
-        return payment;
+        var order = new Order(buyerId, broker, transactionDate, discount, remarks);
+        return _context.Orders.Add(order).Entity;
     }
-    
+
+    public Order Update(Order order)
+    {
+        return _context.Orders.Update(order).Entity;
+    }
+
     public async Task<IEnumerable<PaymentStatus>> GetPaymentStatus()
     {
         return await _context.PaymentStatus.AsNoTracking().ToArrayAsync();
@@ -70,5 +56,24 @@ public class OrderRepository : IOrderRepository
     public async Task<IEnumerable<OrderStatus>> GetSaleStatus()
     {
         return await _context.AcquisitionStatus.AsNoTracking().ToArrayAsync();
+    }
+
+
+    public async Task<Payment> AddPayment(int acquisitionId, int paymentTypeId, int transactionTypeId,
+        DateTime actualPaymentDate,
+        string confirmationNumber, string paymentMethod, decimal amountPaid, string remarks, string correlationId)
+    {
+        var tran = await _context.Orders.FirstOrDefaultAsync(i => i.Id == acquisitionId);
+
+        if (tran == default)
+            throw new SalesDomainException(nameof(AddPayment), new Exception("Acquisition not found."));
+
+        var payment = tran.AddPayment(paymentTypeId, transactionTypeId, actualPaymentDate, confirmationNumber,
+            paymentMethod,
+            amountPaid, remarks, correlationId);
+
+        _context.Orders.Update(tran);
+
+        return payment;
     }
 }

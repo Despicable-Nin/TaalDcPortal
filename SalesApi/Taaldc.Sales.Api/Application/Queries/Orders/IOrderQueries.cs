@@ -1,3 +1,4 @@
+using System.Collections;
 using Taaldc.Sales.Api.Application.Common.Models;
 
 namespace Taaldc.Sales.Api.Application.Queries.Orders;
@@ -15,7 +16,10 @@ public interface IOrderQueries
 
     Task<IEnumerable<PaymentDTO>> GetPayments(int id);
 
+    Task<IEnumerable<OrderItemDTO>> GetOrderItemsByOrderId(int id);
+
     Task<Unit_Order_DTO> GetOrder(int id);
+    Task<IEnumerable<ContractDto>> GetBuyerContractDetails(int buyerId);
 }
 
 // public enum UnitIs : int

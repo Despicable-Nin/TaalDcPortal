@@ -1,7 +1,3 @@
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore.Storage;
-using HostingEnvironmentExtensions = Microsoft.Extensions.Hosting.HostingEnvironmentExtensions;
-
 namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public interface IDashboardQueries

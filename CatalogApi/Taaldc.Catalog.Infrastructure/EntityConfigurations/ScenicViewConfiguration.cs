@@ -4,7 +4,7 @@ using Taaldc.Catalog.Domain.AggregatesModel.ReferenceAggregate;
 
 namespace Taaldc.Catalog.Infrastructure.EntityConfigurations;
 
-class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
+internal class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
 {
     public void Configure(EntityTypeBuilder<ScenicView> builder)
     {
@@ -12,10 +12,8 @@ class ScenicViewConfiguration : IEntityTypeConfiguration<ScenicView>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.Id)
-            .HasDefaultValue(1)
-            .ValueGeneratedNever()
-            .IsRequired();
+        builder.Property(o => o.Id)
+            .UseHiLo("scenicviewseq", CatalogDbContext.DEFAULT_SCHEMA);
 
         builder.Property(b => b.Name)
             .HasMaxLength(200)
