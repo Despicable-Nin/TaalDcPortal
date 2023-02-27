@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NuGet.Packaging;
 using TaalDc.Portal.DTO.Sales.Contracts;
 
 namespace TaalDc.Portal.Controllers
@@ -12,7 +11,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateContractRequest model)
+        public IActionResult Create(ContractCreate_ClientDto model)
         {
             return Ok();
         }

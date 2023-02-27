@@ -11,6 +11,12 @@
 
 
 <div class="container-fluid">
+    <div class="mb-3" style="text-align: right;">
+        <a class="btn btn-primary" href="#" onclick="generateAcknowledgmentReceipt()">
+            Buyer's Information Sheet
+        </a>
+    </div>
+
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Buyers" asp-action="Details" asp-route-id="@Model.Id">Details</a>
@@ -201,6 +207,23 @@
 
 @section Scripts{
     <script src="~/js/sales/Buyer.js"></script>
+
+    <script>
+        async function generateAcknowledgmentReceipt(){
+            $.ajax({
+                url: "/Documents/AcknowledgmentReceipt",
+                type: "POST",
+                success: function (result) {
+                    console.log('response', result);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    
+    </script>
+
     <script>
         var modelData = JSON.parse('@Html.Raw(serializedModel)');
 
@@ -246,18 +269,22 @@
 
             var spouseModel = modelData.Spouse;
 
-            for (var i = 0; i < inputFields.length; i++) {
-                if(inputFields[i].name === 'DoB'){
-                    const dateString = spouseModel[inputFields[i].name];
-                    const date = new Date(dateString);
-                    const year = date.getFullYear();
-                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                    const day = date.getDate().toString().padStart(2, '0');
-                    const formattedDate = `${year}-${month}-${day}`;
+            console.log('spouse Model', spouseModel);
 
-                    inputFields[i].value = formattedDate
-                }else{
-                    inputFields[i].value = spouseModel[inputFields[i].name]
+            if(spouseModel){
+                for (var i = 0; i < inputFields.length; i++) {
+                    if(inputFields[i].name === 'DoB'){
+                        const dateString = spouseModel[inputFields[i].name];
+                        const date = new Date(dateString);
+                        const year = date.getFullYear();
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const formattedDate = `${year}-${month}-${day}`;
+
+                        inputFields[i].value = formattedDate
+                    }else{
+                        inputFields[i].value = spouseModel[inputFields[i].name]
+                    }
                 }
             }
             modal.show();

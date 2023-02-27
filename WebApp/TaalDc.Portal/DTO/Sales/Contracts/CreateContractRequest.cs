@@ -6,8 +6,8 @@
         public DateTime TransactionDate { get; set; }
         public string Broker { get; set; }
         
-        public double Reservation { get; set; }
-        public string ReservationConfirmationNo { get; set; }
+        public double ReservationFee { get; set; }
+        public string ReservationConfirmation { get; set; }
         public double DownPayment { get; set; }
         public string DownPaymentConfirmationNo { get; set; }
 
@@ -21,6 +21,6 @@
     public record OrderItemDto
     {
         public int UnitId { get; set; }
-        public double SellingPrice { get; set; }
+        public double Price { get; set; }
     }
 }

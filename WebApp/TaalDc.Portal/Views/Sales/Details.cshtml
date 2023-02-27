@@ -12,6 +12,9 @@
             <a class="nav-link active" aria-current="page" asp-controller="Sales" asp-action="Details" asp-route-id="@Model.OrderId">Details</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Sales" asp-action="Units" asp-route-id="@Model.OrderId">Units</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" aria-current="page" asp-controller="Sales" asp-action="Payments" asp-route-id="@Model.OrderId">Payments</a>
         </li>
     </ul>
@@ -24,8 +27,14 @@
         <div class="row">
             <div class="col-lg-4">
                 <p class="mb-5">
+                    <strong class="primary-color">Contract Code</strong> <br />
+                    @Model.Code
+                </p>
+                <p class="mb-5">
                     <strong class="primary-color">Customer Name</strong> <br/>
-                    @Model.Salutation @Model.FirstName @Model.LastName
+                    <a asp-controller="Buyers" asp-action="Details" asp-route-id="@Model.BuyerId">
+                        @Model.Salutation @Model.FirstName @Model.LastName
+                    </a>
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Email Address</strong> <br/>
@@ -33,12 +42,16 @@
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Contact No.</strong> <br/>
-                    @Model.ContactNo
+                    @(!string.IsNullOrEmpty(Model.PhoneNo) ? Model.PhoneNo:"-")
+                </p>
+                 <p class="mb-5">
+                    <strong class="primary-color">Mobile No.</strong> <br/>
+                    @(!string.IsNullOrEmpty(Model.MobileNo)? Model.MobileNo: "-")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Customer Address</strong> <br/>
-                    @Model.Address<br/>
-                    @Model.TownCity, @Model.Province, @Model.Country @Model.ZipCode
+                    @Model.Street<br/>
+                    @Model.City, @Model.State, @Model.Country @Model.ZipCode
                 </p>
             </div>
             <div class="col-lg-4">
@@ -60,7 +73,7 @@
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Acquisition Date</strong> <br/>
-                    @Model.TransactionDate.Value.ToString("MMMM dd, yyyy")
+                    @(Model.TransactionDate.HasValue ? Model.TransactionDate.Value.ToString("MMMM dd, yyyy"): "-")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Broker/Sales Agent</strong> <br/>
@@ -68,7 +81,7 @@
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Remarks</strong> <br/>
-                    @Model.Remarks
+                    @(!string.IsNullOrEmpty(Model.Remarks)? Model.Remarks: "-")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Sales Status</strong> <br/>

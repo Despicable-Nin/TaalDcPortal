@@ -56,14 +56,22 @@
                 </div>
             </div>
 
-            <div class="mb-3 col-lg-8">
+            <div class="col-lg-8">
                 <label asp-for="FloorPlanFilePath" class="form-label">
                     <strong>Floor Plan File Path</strong>
                 </label>
-                <input asp-for="FloorPlanFilePath" class="form-control"/>
-                <div class="invalid-feedback">
-                    This is a required field.
+                <input asp-for="FloorPlanFilePath" class="form-control" hidden/>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.FloorPlanFilePath))
+            {
+                <div class="col-lg-8 my-5">
+                    <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
                 </div>
+            }
+
+            <div class="mb-3 col-lg-8">
+                <input id="File" name="File" type="file" class="form-control"/>
             </div>
 
             <div class="col-lg-12">
@@ -87,7 +95,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button onclick="onPropertyFormSubmit(this, '/Properties/Floors')" type="button" class="btn btn-primary">Yes</button>
+                <button onclick="onPropertyFormSubmit(this, '/Properties/EditFloor/@Model.FloorId')" type="button" class="btn btn-primary">Yes</button>
             </div>
         </div>
     </div>

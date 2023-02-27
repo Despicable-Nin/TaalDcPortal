@@ -4,6 +4,7 @@ namespace TaalDc.Portal.DTO.Sales;
 
 public record GetSalesByIdResponse
 {
+    [JsonPropertyName("buyer_id")] public int? BuyerId { get; init; }
     [JsonPropertyName("salutation")] public string? Salutation { get; init; }
 
     [JsonPropertyName("first_name")] public string? FirstName { get; init; }
@@ -12,17 +13,20 @@ public record GetSalesByIdResponse
 
     [JsonPropertyName("email_address")] public string? EmailAddress { get; init; }
 
-    [JsonPropertyName("contact_number")] public string? ContactNo { get; init; }
-    [JsonPropertyName("address")] public string? Address { get; init; }
+    [JsonPropertyName("contact_number")] public string? PhoneNo { get; init; }
+
+    [JsonPropertyName("mobile_number")] public string? MobileNo { get; init; }
+
+    [JsonPropertyName("address")] public string? Street { get; init; }
     [JsonPropertyName("country")] public string? Country { get; init; }
 
-    [JsonPropertyName("province")] public string? Province { get; init; }
+    [JsonPropertyName("province")] public string? State { get; init; }
 
-    [JsonPropertyName("towncity")] public string? TownCity { get; init; }
+    [JsonPropertyName("towncity")] public string? City { get; init; }
 
     [JsonPropertyName("zip_code")] public string? ZipCode { get; init; }
 
-    [JsonPropertyName("order_id")] public string? OrderId { get; init; }
+    [JsonPropertyName("order_id")] public int? OrderId { get; init; }
 
     [JsonPropertyName("transaction_date")] public DateTime? TransactionDate { get; init; }
 

@@ -11,6 +11,12 @@ public class UnitReplicaStatusChangeToReservedDomainEventHandler : INotification
     private readonly IUnitReplicaRepository _repository;
     private readonly ISalesIntegrationEventService _integrationEventService;
 
+    public UnitReplicaStatusChangeToReservedDomainEventHandler(IUnitReplicaRepository repository, ISalesIntegrationEventService integrationEventService)
+    {
+        _repository = repository;
+        _integrationEventService = integrationEventService;
+    }
+
     public async Task Handle(UnitReplicaStatusChangedToReservedDomainEvent notification, CancellationToken cancellationToken)
     {
         var unit = _repository.GetById(notification.UnitId);
@@ -24,6 +30,6 @@ public class UnitReplicaStatusChangeToReservedDomainEventHandler : INotification
 
         await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        await _integrationEventService.AddAndSaveEventAsync(new UnitStatusChangedToReservedIntegrationEvent(unit.Id, ""));
+        //await _integrationEventService.AddAndSaveEventAsync(new UnitStatusChangedToReservedIntegrationEvent(unit.Id, ""));
     }
 }

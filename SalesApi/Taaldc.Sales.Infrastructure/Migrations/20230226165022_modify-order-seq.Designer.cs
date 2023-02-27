@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taaldc.Sales.Infrastructure;
 
@@ -11,9 +12,11 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    partial class SalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230226165022_modify-order-seq")]
+    partial class modifyorderseq
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("orderitemseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence<int>("orderseq", "sales");
+            modelBuilder.HasSequence<int>("orderseq", "sales")
+                .StartsAt(0L);
 
             modelBuilder.HasSequence("orderstatusseq", "sales")
                 .IncrementsBy(10);

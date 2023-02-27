@@ -117,6 +117,15 @@ public class SalesController : ControllerBase
         return Ok(await _orderQueries.GetPayments(id));
     }
 
+    [AllowAnonymous]
+    [HttpGet("{id}/units")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnits(int id)
+    {
+        return Ok(await _orderQueries.GetOrderItemsByOrderId(id));
+    }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]

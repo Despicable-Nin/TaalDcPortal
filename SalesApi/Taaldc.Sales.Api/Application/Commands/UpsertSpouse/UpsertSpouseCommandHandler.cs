@@ -41,7 +41,7 @@ public class UpsertSpouseCommandHandler : IRequestHandler<UpsertSpouseCommand, C
 
                 Buyer partnerOrSpouse = default;
 
-                if (principal.PartnerId.HasValue)
+                if (principal.PartnerId.HasValue && principal.PartnerId.Value > 0)
                 {
                         //fetch spouse
                         partnerOrSpouse= await _buyerRepository.GetByIdAsync(request.SpouseId);
@@ -71,10 +71,10 @@ public class UpsertSpouseCommandHandler : IRequestHandler<UpsertSpouseCommand, C
                                 principal.IsCorporate, principal.Company);
                 }
 
+                 _buyerRepository.Upsert(partnerOrSpouse);
+
                 principal.AddPartnerOrSpouse(partnerOrSpouse.Id);
                 
-                _buyerRepository.Upsert(partnerOrSpouse);
-
                 _buyerRepository.Upsert(principal);
                 
                 return CommandResult.Success(partnerOrSpouse.Id);
