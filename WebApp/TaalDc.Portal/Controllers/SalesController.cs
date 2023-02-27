@@ -133,12 +133,12 @@ public class SalesController : BaseController<SalesController>
 
     public IActionResult Create()
     {
-        var salesCreateDTO = new SalesCreate_ClientDto();
+        var salesCreateDTO = new AddBuyerOrderRequest();
         return View(salesCreateDTO);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(SalesCreate_ClientDto model)
+    public async Task<IActionResult> Create(AddBuyerOrderRequest model)
     {
         await ValidateFees(model);
         await ValidateBroker(model);
@@ -146,7 +146,7 @@ public class SalesController : BaseController<SalesController>
 
         if (ModelState.IsValid)
         {
-            var result = await _salesService.SellUnit(model);
+            var result = await _salesService.AddBuyerOrder(model);
 
             if (!result.IsSuccess)
                 return BadRequest(new
@@ -248,7 +248,7 @@ public class SalesController : BaseController<SalesController>
 
 
     [HttpPost]
-    public async Task<IActionResult> CreatePayment(int id, PaymentCreate_ClientDto model)
+    public async Task<IActionResult> CreatePayment(int id, AddPaymentRequest model)
     {
         model.TransactionId = id;
 
@@ -289,7 +289,17 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Payments(int id)
     {
         var payments = await _salesService.GetSalesPayments(id);
-        var salesViewModel = new SalesViewModel(payments, id);
+        var salesViewModel = new SalesViewModel(payments, null, id);
+
+        return View(salesViewModel);
+    }
+
+
+    [Route("Sales/{id}/Units")]
+    public async Task<IActionResult> Units(int id)
+    {
+        var units = await _salesService.GetContractOrderItems(id);
+        var salesViewModel = new SalesViewModel(null, units, id);
 
         return View(salesViewModel);
     }
@@ -322,23 +332,23 @@ public class SalesController : BaseController<SalesController>
         return validationErrors.ToArray();
     }
 
-    private async Task ValidateBroker(SalesCreate_ClientDto model)
+    private async Task ValidateBroker(AddBuyerOrderRequest model)
     {
         var additionalValidation = await AdditionalValidationModelResult(model.Broker);
 
         if (additionalValidation.Any()) ModelState.AddModelError("Broker", string.Join(". ", additionalValidation));
     }
 
-    private async Task ValidateFees(SalesCreate_ClientDto model)
+    private async Task ValidateFees(AddBuyerOrderRequest model)
     {
         if (model.Reservation > 0)
             if (string.IsNullOrEmpty(model.ReservationConfirmNo))
-                ModelState.AddModelError(nameof(SalesCreate_ClientDto.ReservationConfirmNo),
+                ModelState.AddModelError(nameof(AddBuyerOrderRequest.ReservationConfirmNo),
                     "Reservation Confirmation number is required.");
 
         if (model.DownPayment > 0)
             if (string.IsNullOrEmpty(model.DownpaymentConfirmNo))
-                ModelState.AddModelError(nameof(SalesCreate_ClientDto.DownpaymentConfirmNo),
+                ModelState.AddModelError(nameof(AddBuyerOrderRequest.DownpaymentConfirmNo),
                     "Downpayment Confirmation number is required.");
     }
 }

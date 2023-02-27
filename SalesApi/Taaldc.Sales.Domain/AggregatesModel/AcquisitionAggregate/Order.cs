@@ -29,12 +29,32 @@ public class Order : DomainEntity, IAggregateRoot
         Discount = discount;
         TransactionDate = transactionDate;
     }
+    
+    public Order Update(
+        string broker,
+        decimal discount,
+        string remarks
+    ) 
+    {
+        
+        if(_statusId == OrderStatus.GetIdByName(OrderStatus.New))
+        {
+            Broker = broker;
+            Remarks = remarks;
+            Discount = discount;
+            
+            return this;
+
+        }
+
+        throw new SalesDomainException(nameof(Update), new Exception("Cannot update due to status."));
+    }
 
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
     public string Remarks { get;private set; }
-    public DateTime TransactionDate { get; private set; }
+    public DateTime TransactionDate { get; private set; } = DateTime.Now;
     public DateTime? ReservationExpiresOn { get; private set; } = default;
 
     private int _statusId;
@@ -53,11 +73,34 @@ public class Order : DomainEntity, IAggregateRoot
     private List<OrderItem> _orderItems;
     public IEnumerable<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
-    public OrderItem AddOrderItem(int unitId, decimal price, decimal discount = 0.0M)
+    public void AddOrUpdateOrderItem(int unitId, decimal price, int? orderItemId, decimal discount = 0.0M)
     {
-        var orderItem = new OrderItem(unitId, discount, price);
-        _orderItems.Add(orderItem);
-        return orderItem;
+
+        if (orderItemId.HasValue)
+        {
+            //if has value then fetch then update
+            var item = _orderItems.FirstOrDefault(i => i.Id == orderItemId && i.GetUnitId() == unitId);
+            
+            //if null -> then
+            if (item == default)
+            {
+                throw new SalesDomainException(nameof(AddOrUpdateOrderItem), new Exception("Order item not found."));
+            }
+
+            item.UpdatePricingAndDiscount(discount, price);
+        }
+        else
+        {
+            var item = _orderItems.FirstOrDefault(i => i.GetUnitId() == unitId);
+
+            if (item != default)
+            {
+                throw new SalesDomainException(nameof(AddOrUpdateOrderItem), new Exception("UnitId is not available."));
+            }
+            _orderItems.Add(new OrderItem(unitId, discount, price));
+        }
+       
+       
     }
     
     

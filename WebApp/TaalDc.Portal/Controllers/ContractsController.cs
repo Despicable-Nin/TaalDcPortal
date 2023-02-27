@@ -11,8 +11,15 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ContractCreate_ClientDto model)
+        public IActionResult Create(CreateContractRequest model)
         {
+            return Ok();
+        }
+
+        [HttpGet("{buyerId}")]
+        public async Task<IActionResult> GetContractByBuyerId(int buyerId)
+        {
+            //TODO: GetContractResponse
             return Ok();
         }
     }

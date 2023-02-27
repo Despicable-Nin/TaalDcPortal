@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace TaalDc.Portal.DTO.Sales;
 
-public class PaymentCreate_ClientDto
+public class AddPaymentRequest
 {
     [JsonPropertyName("transaction_id")]
     [JsonProperty(Required = Required.Always)]

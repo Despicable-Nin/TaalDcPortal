@@ -60,6 +60,7 @@ public class Buyer : Entity, IAggregateRoot
     
     private int _civilStatusId;
     public CivilStatus CivilStatus { get; private set; }
+    public int GetCivilStatusId() => _civilStatusId;
     
     public bool IsCorporate { get; private set; }
     

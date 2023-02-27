@@ -28,7 +28,7 @@ public class VoidPaymentHandler : IRequestHandler<VoidPaymentCommand, CommandRes
         {
             order.VoidPayment(request.PaymentId, _currentUser?.Email);
 
-            _repository.UpdateOrder(order);
+            _repository.Update(order);
 
             await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -37,8 +37,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("orderitemseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("orderseq", "sales")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("orderseq", "sales");
 
             modelBuilder.HasSequence("orderstatusseq", "sales")
                 .IncrementsBy(10);
@@ -252,9 +251,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReservationExpiresOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("_buyerId")

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Services;
 using WebApplication2.Controllers;
 
@@ -40,7 +41,7 @@ namespace TaalDc.Portal.Controllers
             //If not, return back the with error
             if(ModelState.IsValid)
             {
-                var buyer = new BuyerCreateAPI_ClientDto(
+                var buyer = new AddBuyerRequest(
                     model.Salutation
                    , model.FirstName
                    , model.MiddleName
@@ -129,8 +130,13 @@ namespace TaalDc.Portal.Controllers
 
             buyer.SpouseId = buyerQueryResult.PartnerId;
 
-            if (buyerQueryResult.PartnerId.HasValue) {
-                var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), 2, "Married");
+            if (buyerQueryResult.PartnerId.HasValue && buyerQueryResult.PartnerId.Value > 0) {
+                var spouseResult = await _salesService.GetBuyer(buyerQueryResult.PartnerId.Value);
+                var spouse = new Buyer_ClientDto(spouseResult.Salutation, spouseResult.FirstName, spouseResult.MiddleName, spouseResult.LastName, spouseResult.Dob, 2, "Married");
+
+                spouse.SetContactDetails(spouseResult.EmailAddress, spouseResult.MobileNo, spouseResult.PhoneNo);
+
+                spouse.SetIDInformation(spouseResult.Occupation, spouseResult.Tin, spouseResult.GovIssuedId, spouseResult.GovIssuedIdValidUntil);
 
                 spouse.Id = buyerQueryResult.PartnerId.Value;
 
@@ -142,12 +148,17 @@ namespace TaalDc.Portal.Controllers
 
 
         public IActionResult Contracts(int id) {
-            return View(id);
+
+            var buyerContracts = new List<Contract_ClientDto>();
+
+            ViewData["BuyerId"] = id;
+
+            return View(buyerContracts);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> EditGeneralInfo(BuyerGeneralInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditGeneralInfo(UpdateBuyerInfoRquest model)
         {
             await _salesService.UpdateBuyerInfo(model);
 
@@ -156,7 +167,7 @@ namespace TaalDc.Portal.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> EditContactInfo(BuyerContactInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditContactInfo(UpdateBuyerContactRequest model)
         {
             await _salesService.UpdateBuyerContact(model);
 
@@ -164,7 +175,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAddress(BuyerAddressEdit_ClientDto model)
+        public async Task<IActionResult> EditAddress(PatchBuyerAddressRequest model)
         {
             await _salesService.PatchBuyerAddress(model);
 
@@ -172,7 +183,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditIDInformation(BuyerIDInformationEdit_ClietnDto model)
+        public async Task<IActionResult> EditIDInformation(UpdateBuyerMiscRequest model)
         {
             await _salesService.UpdateBuyerMisc(model);
 
@@ -180,29 +191,18 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
+        public async Task<IActionResult> EditCompanyInformation(UpdateBuyerCompanyRequest model)
         {
-            model.Name = model.Name ?? string.Empty;
-            model.Address = model.Address ?? string.Empty;
-            model.Industry =  model.Industry ?? string.Empty;
-            model.PhoneNo   = model.PhoneNo ?? string.Empty;
-            model.MobileNo= model.MobileNo ?? string.Empty;
-            model.FaxNo =  model.FaxNo ?? string.Empty;
-            model.EmailAddress = model.EmailAddress ?? string.Empty;
-            model.Tin = model.Tin ?? string.Empty;
-            model.SecRegNo = model.SecRegNo ?? string.Empty;
-            model.President = model.President ?? string.Empty;
-            model.CorpSec = model.CorpSec ?? string.Empty;
-
+            
             await _salesService.UpdateBuyerCompany(model);
 
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditSpouse(BuyerSpouseEdit_ClientDto model)
+        public async Task<IActionResult> EditSpouse(UpsertBuyerSpouseRequest model)
         {
-            return Ok();
+            return Ok(await _salesService.UpsertSpouse(model));
         }
     }
 }

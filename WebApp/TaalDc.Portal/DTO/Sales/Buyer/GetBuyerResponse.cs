@@ -1,6 +1,6 @@
 ﻿namespace TaalDc.Portal.DTO.Sales.Buyer
 {
-    public record BuyerRead_ClientDto
+    public record GetBuyerResponse
     {
         public int BuyerId { get; init; }
         public string Salutation { get; init; }

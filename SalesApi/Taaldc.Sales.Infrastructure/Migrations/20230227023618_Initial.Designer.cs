@@ -12,8 +12,8 @@ using Taaldc.Sales.Infrastructure;
 namespace Taaldc.Sales.Infrastructure.Migrations
 {
     [DbContext(typeof(SalesDbContext))]
-    [Migration("20230222051108_timestamp")]
-    partial class timestamp
+    [Migration("20230227023618_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,8 +40,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("orderitemseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("orderseq", "sales")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("orderseq", "sales");
 
             modelBuilder.HasSequence("orderstatusseq", "sales")
                 .IncrementsBy(10);
@@ -107,7 +106,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MiddleName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MobileNo")
@@ -153,13 +151,13 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.HasIndex("EmailAddress")
                         .IsUnique();
 
-                    b.HasIndex("PhoneNo")
-                        .IsUnique();
+                    b.HasIndex("PhoneNo");
 
                     b.HasIndex("_civilStatusId");
 
                     b.HasIndex("FirstName", "MiddleName", "LastName")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MiddleName] IS NOT NULL");
 
                     b.ToTable("buyer", "sales");
                 });
@@ -252,9 +250,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("ModifiedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("PaymentOptionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
 
@@ -265,27 +260,17 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BuyerId");
 
-                    b.Property<int>("_paymentOptionId")
-                        .HasColumnType("int")
-                        .HasColumnName("PaymentOptionId");
-
                     b.Property<int>("_statusId")
                         .HasColumnType("int")
                         .HasColumnName("StatusId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentOptionId");
-
                     b.HasIndex("_buyerId");
 
-                    b.HasIndex("_paymentOptionId");
+                    b.HasIndex("_statusId");
 
-                    b.ToTable("order", "sales", t =>
-                        {
-                            t.Property("PaymentOptionId")
-                                .HasColumnName("PaymentOptionId1");
-                        });
+                    b.ToTable("order", "sales");
                 });
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderItem", b =>
@@ -830,12 +815,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
             modelBuilder.Entity("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Order", b =>
                 {
-                    b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.PaymentOption", "PaymentOption")
-                        .WithMany()
-                        .HasForeignKey("PaymentOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.Buyer", null)
                         .WithMany()
                         .HasForeignKey("_buyerId")
@@ -844,11 +823,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     b.HasOne("Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate.OrderStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("_paymentOptionId")
+                        .HasForeignKey("_statusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("PaymentOption");
 
                     b.Navigation("Status");
                 });

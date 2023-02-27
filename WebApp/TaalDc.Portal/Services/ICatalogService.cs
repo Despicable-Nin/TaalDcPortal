@@ -47,11 +47,11 @@ public interface ICatalogService
     Task<IEnumerable<UnitType_ClientDto>> GetUnitTypes();
 
 
-    Task<CommandResult> CreateProperty(PropertyCreate_ClientDto model);
-    Task<CommandResult> CreateTower(TowerCreate_ClientDto model);
-    Task<CommandResult> CreateFloor(FloorCreate_ClientDto model);
-    Task<CommandResult> CreateUnit(UnitCreate_ClientDto model);
-    Task<CommandResult> UpdateUnit(UnitUpdate_ClientDto model);
-    Task<CommandResult> CreateUnitType(UnitTypeCreate_ClientDto model);
-    Task<CommandResult> UpdateUnitStatus(UnitStatusUpdate_ClientDto model);
+    Task<Response> CreateProperty(PropertyCreate_ClientDto model);
+    Task<Response> CreateTower(TowerCreate_ClientDto model);
+    Task<Response> CreateFloor(FloorCreate_ClientDto model);
+    Task<Response> CreateUnit(UnitCreate_ClientDto model);
+    Task<Response> UpdateUnit(UnitUpdate_ClientDto model);
+    Task<Response> CreateUnitType(UnitTypeCreate_ClientDto model);
+    Task<Response> UpdateUnitStatus(UnitStatusUpdate_ClientDto model);
 }

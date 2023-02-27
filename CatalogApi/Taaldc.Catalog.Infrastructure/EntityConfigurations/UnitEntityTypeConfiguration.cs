@@ -57,5 +57,7 @@ internal class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
         builder.HasOne<UnitType>()
             .WithMany()
             .HasForeignKey("_unitTypeId");
+        
+        builder.Property(i => i.Price).HasColumnType("decimal(18,4)").IsRequired();
     }
 }

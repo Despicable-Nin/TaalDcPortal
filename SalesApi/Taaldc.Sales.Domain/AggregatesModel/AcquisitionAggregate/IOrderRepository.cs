@@ -8,7 +8,7 @@ public interface IOrderRepository : IRepository<Order>
     Task<Order> FindOrderByIdAsync(int orderId);
 
     Order CreateOrder(int buyerId, string broker, DateTime paymentOptionId, decimal discount, string remarks);
-    Order UpdateOrder(Order order);
+    Order Update(Order order);
 
     Task<IEnumerable<PaymentStatus>> GetPaymentStatus();
     Task<IEnumerable<PaymentType>> GetPaymentTypes();

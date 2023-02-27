@@ -1,12 +1,13 @@
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Models;
 
 namespace TaalDc.Portal.Services;
 
 public interface ISalesService
 {
-    Task<PaginationQueryResult<OrderUnitBuyer_ClientDto>> GetUnitAndOrdersAvailability(
+    Task<PaginationQueryResult<GetSalesByIdResponse>> GetUnitAndOrdersAvailability(
         int unitStatusId,
         int pageNumber,
         int pageSize,
@@ -15,40 +16,46 @@ public interface ISalesService
         int? viewId,
         string broker = "");
 
-    Task<SellUnitCommandResult> SellUnit(SalesCreate_ClientDto model);
+    Task<AddBuyerOrderResponse> AddBuyerOrder(AddBuyerOrderRequest model);
 
-    Task<OrderUnitBuyer_ClientDto> GetSalesById(int id);
+    Task<GetSalesByIdResponse> GetSalesById(int id);
 
-    Task<IEnumerable<Payment_ClientDto>> GetSalesPayments(int id);
+    Task<IEnumerable<GetSalesPaymentResponse>> GetSalesPayments(int id);
 
-    Task<CommandResult> AcceptPayment(int orderId, int paymentId);
-    Task<CommandResult> VoidPayment(int orderId, int paymentId);
+    Task<Response> AcceptPayment(int orderId, int paymentId);
+    Task<Response> VoidPayment(int orderId, int paymentId);
 
-    Task<CommandResult> AddPayment(PaymentCreate_ClientDto model);
+    Task<Response> AddPayment(AddPaymentRequest model);
 
 
-    Task<IEnumerable<UnitCountByStatus_ClientDto>> GetResidentialUnitsCountByStatus();
+    Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetResidentialUnitsCountByStatus();
 
-    Task<IEnumerable<AvailabilityByUnitType_ClientDto>> GetResidentialAvailabilityByType();
+    Task<IEnumerable<GetResidentialAvailabilityByTypeResponse>> GetResidentialAvailabilityByType();
 
-    Task<IEnumerable<AvailabilityByView_ClientDto>> GetResidentialAvailabilityByView();
+    Task<IEnumerable<GetResidentialAvailabilityByViewResponse>> GetResidentialAvailabilityByView();
     
-    Task<IEnumerable<UnitCountByStatus_ClientDto>> GetParkingUnitsCountByStatus();
+    Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetParkingUnitsCountByStatus();
 
-    Task<IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto>> GetAvailabilityPerParkingUnitType();
+    Task<IEnumerable<GetAvailabilityPerParkingUnitTypeResponse>> GetAvailabilityPerParkingUnitType();
 
-    Task<IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto>> GetParkingUnitTypeAvailabilityPerFloor();
+    Task<IEnumerable<GetParkingUnitTypeAvailabilityPerFloorResponse>> GetParkingUnitTypeAvailabilityPerFloor();
 
 
     #region Buyer
-    Task<CommandResult> AddBuyer(BuyerCreateAPI_ClientDto model);
-    Task<CommandResult> UpdateBuyerInfo(BuyerGeneralInfoEdit_ClientDto model);
-    Task<bool> UpdateBuyerContact(BuyerContactInfoEdit_ClientDto model);
-    Task<CommandResult> UpdateBuyerMisc(BuyerIDInformationEdit_ClietnDto model);
-    Task<CommandResult> PatchBuyerAddress(BuyerAddressEdit_ClientDto model);
-    Task<CommandResult> UpdateBuyerCompany(BuyerCompanyEdit_ClientDto model);
-    Task<PaginationQueryResult<BuyerRead_ClientDto>> GetBuyers(int pageNumber, int pageSize, string name, string email);
-    Task<BuyerRead_ClientDto> GetBuyer(int buyerId);
+    Task<Response> AddBuyer(AddBuyerRequest model);
+    Task<Response> UpdateBuyerInfo(UpdateBuyerInfoRquest model);
+    Task<bool> UpdateBuyerContact(UpdateBuyerContactRequest model);
+    Task<Response> UpdateBuyerMisc(UpdateBuyerMiscRequest model);
+    Task<Response> PatchBuyerAddress(PatchBuyerAddressRequest model);
+    Task<Response> UpdateBuyerCompany(UpdateBuyerCompanyRequest model);
+    Task<Response> UpsertSpouse(UpsertBuyerSpouseRequest model);
+    Task<PaginationQueryResult<GetBuyerResponse>> GetBuyers(int pageNumber, int pageSize, string name, string email);
+    Task<GetBuyerResponse> GetBuyer(int buyerId);
     #endregion
 
+
+    #region Contracts
+    Task<Response> CreateContract(CreateContractRequest model);
+    Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id);
+    #endregion
 }

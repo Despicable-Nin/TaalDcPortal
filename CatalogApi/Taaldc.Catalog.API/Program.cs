@@ -44,7 +44,7 @@ builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
            sp => (DbConnection c) => new IntegrationEventLogService(c));
 
 
-builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+//TODO: Not this time -> builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
 //.AddCustomOptions(configuration)
 //.AddIntegrationServices(configuration)

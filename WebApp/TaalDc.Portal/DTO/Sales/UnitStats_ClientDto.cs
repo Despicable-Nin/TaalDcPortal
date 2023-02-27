@@ -2,13 +2,13 @@
 
 namespace TaalDc.Portal.DTO.Sales
 {
-    public class UnitCountByStatus_ClientDto
+    public class GetResidentialUnitsCountByStatusResponse
     {
         public string UnitStatus { get; set; }
         public int Count { get; set; }
     }
 
-    public class AvailabilityByUnitType_ClientDto
+    public class GetResidentialAvailabilityByTypeResponse
     {
         public string UnitTypeShortCode { get; set; }
         public double MinArea { get; set; }
@@ -21,7 +21,7 @@ namespace TaalDc.Portal.DTO.Sales
     }
 
 
-    public class AvailabilityByView_ClientDto
+    public class GetResidentialAvailabilityByViewResponse
     {
         public string View { get; set; }
         public int Available { get; set; }
@@ -31,15 +31,15 @@ namespace TaalDc.Portal.DTO.Sales
 
     public class UnitStats_ClientDto
     {
-        public UnitStats_ClientDto(IEnumerable<UnitCountByStatus_ClientDto> unitCountByStatus, IEnumerable<AvailabilityByUnitType_ClientDto> availabilityByUnitType, IEnumerable<AvailabilityByView_ClientDto> availabilityByViews)
+        public UnitStats_ClientDto(IEnumerable<GetResidentialUnitsCountByStatusResponse> unitCountByStatus, IEnumerable<GetResidentialAvailabilityByTypeResponse> availabilityByUnitType, IEnumerable<GetResidentialAvailabilityByViewResponse> availabilityByViews)
         {
             UnitCountByStatus = unitCountByStatus;
             AvailabilityByUnitType = availabilityByUnitType;
             AvailabilityByViews = availabilityByViews;
         }
 
-        public IEnumerable<UnitCountByStatus_ClientDto> UnitCountByStatus { get; set; }
-        public IEnumerable<AvailabilityByUnitType_ClientDto> AvailabilityByUnitType { get; set; }
-        public IEnumerable<AvailabilityByView_ClientDto> AvailabilityByViews { get; set; }
+        public IEnumerable<GetResidentialUnitsCountByStatusResponse> UnitCountByStatus { get; set; }
+        public IEnumerable<GetResidentialAvailabilityByTypeResponse> AvailabilityByUnitType { get; set; }
+        public IEnumerable<GetResidentialAvailabilityByViewResponse> AvailabilityByViews { get; set; }
     }
 }

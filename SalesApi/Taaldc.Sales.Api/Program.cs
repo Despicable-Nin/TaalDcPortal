@@ -39,7 +39,7 @@ builder.Services
 builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
     sp => (DbConnection c) => new IntegrationEventLogService(c));
 
-builder.Services.AddTransient<ISalesIntegrationEventService, SalesIntegrationEventService>();
+//TODO: Not this time ->builder.Services.AddTransient<ISalesIntegrationEventService, SalesIntegrationEventService>();
     
 // builder.Services
 //     .AddIntegrationServices(configuration)

@@ -17,14 +17,14 @@ public record BuyerDTO
         ZipCode = zipCode;
     }
 
-    public string Salutation { get; }
-    public string FirstName { get; }
-    public string LastName { get; }
-    public string EmailAddress { get; }
-    public string ContactNo { get; }
-    public string Address { get; }
-    public string Country { get; }
-    public string Province { get; }
-    public string TownCity { get; }
-    public string ZipCode { get; }
+    public string Salutation { get; init; }
+    public string FirstName { get; init;}
+    public string LastName { get;init; }
+    public string EmailAddress { get; init;}
+    public string ContactNo { get;init; }
+    public string Address { get; init;}
+    public string Country { get;init; }
+    public string Province { get; init;}
+    public string TownCity { get; init;}
+    public string ZipCode { get;init; }
 }

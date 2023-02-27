@@ -12,10 +12,9 @@ internal class UnitStatusConfiguration : IEntityTypeConfiguration<UnitStatus>
 
         builder.HasKey(c => c.Id);
 
-        builder.Property(c => c.Id)
-            .HasDefaultValue(1)
-            .ValueGeneratedNever()
-            .IsRequired();
+        builder.Property(o => o.Id)
+            .UseHiLo("unitstatusseq", CatalogDbContext.DEFAULT_SCHEMA);
+
 
         builder.Property(b => b.Name)
             .HasMaxLength(30)

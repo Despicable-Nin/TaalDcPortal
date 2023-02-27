@@ -2,7 +2,7 @@
 
 function applyMask() {
     $("#SellingPrice").mask("#,##0.00", {reverse: true});
-    $("#Reservation").mask("#,##0.00", {reverse: true});
+    $("#ReservationFee").mask("#,##0.00", {reverse: true});
     $("#DownPayment").mask("#,##0.00", {reverse: true});
 }
 
@@ -523,7 +523,7 @@ function saveContractInfo(event) {
         , OrderItems: selectedUnits.map(unit => {
             return {
                 UnitId: unit.id,
-                SellingPrice: unit.price
+                Price: unit.price
             }
         })
     }

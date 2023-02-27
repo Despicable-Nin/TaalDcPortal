@@ -221,6 +221,11 @@ public static class API
         {
             return $"{baseUrl}/api/v1/buyers/{buyerId}/company";
         }
+        
+        public static string UpsertSpouse(string baseUrl, int buyerId)
+        {
+            return $"{baseUrl}/api/v1/buyers/{buyerId}/spouse";
+        }
 
         public static string GetBuyers(string baseUrl)
         {
