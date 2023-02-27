@@ -11,7 +11,7 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ContractCreate_ClientDto model)
+        public IActionResult Create(CreateContractRequest model)
         {
             return Ok();
         }

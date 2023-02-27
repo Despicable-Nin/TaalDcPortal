@@ -41,10 +41,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 schema: "sales",
                 incrementBy: 10);
 
-            migrationBuilder.CreateSequence(
+            migrationBuilder.CreateSequence<int>(
                 name: "orderseq",
-                schema: "sales",
-                incrementBy: 10);
+                schema: "sales");
 
             migrationBuilder.CreateSequence(
                 name: "orderstatusseq",
@@ -205,10 +204,11 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Salutation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DoB = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CivilStatusId = table.Column<int>(type: "int", nullable: false),
+                    IsCorporate = table.Column<bool>(type: "bit", nullable: false),
                     EmailAddress = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNo = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -216,8 +216,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     Tin = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GovIssuedId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GovIssuedIdValidUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    SpouseId = table.Column<int>(type: "int", nullable: true),
-                    IsCorporate = table.Column<bool>(type: "bit", nullable: false),
+                    PartnerId = table.Column<int>(type: "int", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -304,10 +304,8 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                     Broker = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReservationExpiresOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PaymentOptionId = table.Column<int>(type: "int", nullable: false),
-                    PaymentOptionId1 = table.Column<int>(type: "int", nullable: false),
-                    BuyerId = table.Column<int>(type: "int", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: false),
+                    BuyerId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -325,16 +323,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_order_orderstatus_PaymentOptionId",
-                        column: x => x.PaymentOptionId,
+                        name: "FK_order_orderstatus_StatusId",
+                        column: x => x.StatusId,
                         principalSchema: "sales",
                         principalTable: "orderstatus",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_order_paymentoption_PaymentOptionId1",
-                        column: x => x.PaymentOptionId1,
-                        principalTable: "paymentoption",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -508,14 +500,14 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 schema: "sales",
                 table: "buyer",
                 columns: new[] { "FirstName", "MiddleName", "LastName" },
-                unique: true);
+                unique: true,
+                filter: "[MiddleName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_buyer_PhoneNo",
                 schema: "sales",
                 table: "buyer",
-                column: "PhoneNo",
-                unique: true);
+                column: "PhoneNo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_company_BuyerId",
@@ -531,16 +523,10 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 column: "BuyerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_order_PaymentOptionId",
+                name: "IX_order_StatusId",
                 schema: "sales",
                 table: "order",
-                column: "PaymentOptionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_order_PaymentOptionId1",
-                schema: "sales",
-                table: "order",
-                column: "PaymentOptionId1");
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orderitem_OrderId",
@@ -594,6 +580,9 @@ namespace Taaldc.Sales.Infrastructure.Migrations
                 name: "payment");
 
             migrationBuilder.DropTable(
+                name: "paymentoption");
+
+            migrationBuilder.DropTable(
                 name: "unitreplica",
                 schema: "sales");
 
@@ -617,9 +606,6 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "orderstatus",
                 schema: "sales");
-
-            migrationBuilder.DropTable(
-                name: "paymentoption");
 
             migrationBuilder.DropTable(
                 name: "civilStatus",

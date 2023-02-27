@@ -105,6 +105,7 @@ internal static class OrderSQL
         LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id 
         LEFT JOIN [taaldb_sales].[sales].[address] A ON A.BuyerId = B.Id AND A.[Type] = 1
         LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
+   
 
 
 }

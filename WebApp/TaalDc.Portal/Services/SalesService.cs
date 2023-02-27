@@ -354,7 +354,7 @@ public class SalesService : ISalesService
         return result;
     }
 
-    public async Task<Response> CreateContract(ContractCreate_ClientDto model)
+    public async Task<Response> CreateContract(CreateContractRequest model)
     {
         var uri = API.Sales.SellUnit(_remoteServiceBaseUrl);
 
