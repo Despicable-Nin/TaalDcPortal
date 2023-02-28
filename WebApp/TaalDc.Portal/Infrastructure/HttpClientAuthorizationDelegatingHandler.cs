@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using TaalDc.Portal.Data;
+using TaalDc.Portal.Services;
 
 namespace TaalDc.Portal.Infrastructure;
 
@@ -19,19 +21,22 @@ public class HttpClientAuthorizationDelegatingHandler
     private readonly ILogger<HttpClientAuthorizationDelegatingHandler> _logger;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IAccountService _accountService;
 
     public HttpClientAuthorizationDelegatingHandler(
         ILogger<HttpClientAuthorizationDelegatingHandler> logger,
         IHttpContextAccessor httpContextAccessor,
         IConfiguration configuration,
         UserManager<IdentityUser> userManager,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IAccountService acountService)
     {
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
         _configuration = configuration;
         _userManager = userManager;
         _roleManager = roleManager;
+        _accountService = acountService;
 
         _email = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
         _isAuthenticated = !string.IsNullOrEmpty(_email);
@@ -61,6 +66,9 @@ public class HttpClientAuthorizationDelegatingHandler
             {
                 var user = await _userManager.FindByEmailAsync(_email);
                 var roles = await _userManager.GetRolesAsync(user);
+                var brokers = await _accountService.GetBrokers();
+                var profiles = await _accountService.GetListOfUsers();
+                var prf = profiles.ListOfUsers.SingleOrDefault(i => i.Id == user.Id);
 
                 var claims = new List<Claim>
                 {
@@ -70,7 +78,10 @@ public class HttpClientAuthorizationDelegatingHandler
                     new(ClaimTypes.Name, user.NormalizedUserName)
                 };
 
-                foreach (var r in roles) claims.Add(new Claim(ClaimTypes.Role, r));
+                foreach (var r in roles) 
+                    claims.Add(new Claim(ClaimTypes.Role, r));
+
+                claims.Add(new Claim(ClaimTypes.UserData,$"{prf?.Company}-{prf?.PRCLicense}"));
 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 

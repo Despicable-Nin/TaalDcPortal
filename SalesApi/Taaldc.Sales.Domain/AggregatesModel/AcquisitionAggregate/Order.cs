@@ -53,6 +53,16 @@ public class Order : DomainEntity, IAggregateRoot
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
     public string Broker { get;private set; }
+    public string Broker_Company { get; private set; }
+    public string Broker_PrcLicense { get; private set; }
+
+    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc)
+    {
+        Broker = brokerEmail;
+        Broker_Company = brokerCOmpany;
+        Broker_PrcLicense = brokerPrc;
+    }
+    
     public string Remarks { get;private set; }
     public DateTime TransactionDate { get; private set; } = DateTime.Now;
     public DateTime? ReservationExpiresOn { get; private set; } = default;

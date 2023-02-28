@@ -6,14 +6,20 @@ namespace Taaldc.Catalog.API;
 public class CurrentUser : IAmCurrentUser
 {
     private readonly bool _isAuthenticated;
-
-
     public CurrentUser(IHttpContextAccessor httpContextAccessor)
     {
         Email = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Email);
         Name = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.Name);
         IdentityId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         Roles = httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)?.Select(i => i.Value).ToArray();
+
+        var data = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.UserData);
+        if (data != default)
+        {
+            _company = data.Split("-")[0];
+            _prcLicense = data.Split("-")[1];
+        }
+        
         _isAuthenticated = !string.IsNullOrEmpty(Email);
     }
 
@@ -32,4 +38,9 @@ public class CurrentUser : IAmCurrentUser
     {
         return Roles.Contains("BROKER");
     }
+
+    private readonly string _company;
+    private readonly string _prcLicense;
+    public string GetCompany() => _company;
+    public string GetPrcLicense() => _prcLicense;
 }
