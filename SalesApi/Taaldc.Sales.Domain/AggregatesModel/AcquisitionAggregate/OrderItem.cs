@@ -26,4 +26,10 @@ public class OrderItem : DomainEntity
     public int GetUnitId() => _unitId;
     public decimal Discount { get; private set; }
     public decimal Price { get; private set; }
+
+    public void UpdatePricingAndDiscount(decimal discount, decimal price)
+    {
+        Discount = discount;
+        Price = price;
+    }
 }

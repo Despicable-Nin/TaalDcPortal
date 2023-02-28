@@ -1,6 +1,7 @@
 using MediatR;
 using Newtonsoft.Json;
 using SeedWork;
+using Taaldc.Sales.API.Application.Commands;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
 using Taaldc.Sales.Api.Application.Queries.Orders;
@@ -11,7 +12,7 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Api.Application.Commands.SellUnit;
 
-public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
+public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandResult>
 {
     private readonly IBuyerQueries _buyerQueries;
     private readonly IOrderRepository _orderRepository;
@@ -23,9 +24,24 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
 
     private readonly IOrderRepository _salesRepository;
 
-   
+    public SellUnitCommandHandler(IBuyerQueries buyerQueries, 
+        IOrderRepository orderRepository, 
+        IUnitQueries unitQueries, 
+        IAmCurrentUser currentUser, 
+        ILogger<SellUnitCommandHandler> logger, 
+        IMediator mediator, 
+        IOrderRepository salesRepository)
+    {
+        _buyerQueries = buyerQueries;
+        _orderRepository = orderRepository;
+        _unitQueries = unitQueries;
+        _currentUser = currentUser;
+        _logger = logger;
+        _mediator = mediator;
+        _salesRepository = salesRepository;
+    }
 
-    public async Task<int> Handle(SellUnitCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
     {
         
         try
@@ -41,15 +57,15 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
             var order = _salesRepository.CreateOrder(
                 request.BuyerId, 
                 request.Broker, 
-                request.PaymentReferenceId, 
+                request.TransactionDate, 
                 request.Discount,
                 request.Remarks);
 
             //add order item in order object
             foreach (var item in request.OrderItems)
             {
-                order.AddOrderItem(item.UnitId, item.Price);
-                order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
+                order.AddOrUpdateOrderItem(item.UnitId, item.Price,null);
+                //order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
             }
             
             //if RF should had been paid
@@ -64,7 +80,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
                 order.AddPayment(
                     PaymentType.GetId(PaymentType.Reservation),
                     TransactionType.GetTypeId(TransactionType.ForReservation),
-                    DateTime.Now,
+                    order.TransactionDate,
                     request.ReservationConfirmation,
                     request.PaymentMethod,
                     request.ReservationFee,
@@ -82,26 +98,32 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, int>
                 order.AddPayment(
                     PaymentType.GetId(PaymentType.PartialDownPayment),
                     TransactionType.GetTypeId(TransactionType.ForAcquisition),
-                    DateTime.Now,
+                   order.TransactionDate,
                     request.DownpaymentConfirmation,
                     request.PaymentMethod,
                     request.Downpayment,
                     request.Remarks);
             }
 
-            return order.Id;
+            //add order item in order object
+            foreach (var item in request.OrderItems)
+            {
+                await _mediator.Publish(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
+            }
+
+            return CommandResult.Success(order.Id);
         }
         catch (Exception ex)
         {
             _logger.LogError(nameof(SellUnitCommandHandler), JsonConvert.SerializeObject(ex));
-            throw;
+            return CommandResult.Failed(null, ex.InnerException.Message);
         }
     }
 
     private async Task<IEnumerable<UnitAvailability>> ValidateAndCheckUnitsAvailability(SellUnitCommand request)
     {
         //check for duplicate unit ids on the request
-        if (request.OrderItems.Select(i => i.UnitId).Distinct().Count() == request.OrderItems.Count())
+        if (request.OrderItems.Count() > 1 && request.OrderItems.Select(i => i.UnitId).Distinct().Count() != request.OrderItems.Count())
         {
             throw new SalesDomainException(nameof(SellUnitCommandHandler),
                 new Exception("Possible duplicate unit id in the request."));

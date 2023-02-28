@@ -65,6 +65,9 @@ public class SalesDbContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SalesDbContext).Assembly);
+
+        modelBuilder.HasSequence<int>("orderseq", DEFAULT_SCHEMA)
+            .StartsAt(1).IncrementsBy(1);
     }
 
     public IDbContextTransaction GetCurrentTransaction()
@@ -92,7 +95,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
             await SaveChangesAsync();
             transaction.Commit();
         }
-        catch
+        catch(Exception ex)
         {
             RollbackTransaction();
             throw;

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
+using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Services;
 using WebApplication2.Controllers;
 
@@ -11,14 +12,20 @@ namespace TaalDc.Portal.Controllers
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
-        public BuyersController(ILogger<BuyersController> logger)
+        private readonly ISalesService _salesService;
+
+        public BuyersController(ILogger<BuyersController> logger
+            ,ISalesService salesService)
         {
             _logger = logger;
+            _salesService = salesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int pageNumber=1, int pageSize=10, string name = "", string email = "")
         {
-            return View();
+            var buyers = await _salesService.GetBuyers(pageNumber, pageSize, name, email);
+
+            return View(buyers);
         }
 
         public IActionResult QuickCreate()
@@ -27,82 +34,175 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(BuyerCreate_ClientDto model)
+        public async Task<IActionResult> Create(BuyerCreate_ClientDto model)
         {
             //Check if model is valid
             //If valid, send request to API
             //If not, return back the with error
-            return RedirectToAction("Index");
+            if(ModelState.IsValid)
+            {
+                var buyer = new AddBuyerRequest(
+                    model.Salutation
+                   , model.FirstName
+                   , model.MiddleName
+                   , model.LastName
+                   , model.EmailAddress
+                   , ""
+                   , model.MobileNo
+                   , DateTime.MinValue
+                   , 1
+                   , new AddressDto(model.HomeAddress, model.HomeCity, model.HomeState, model.HomeCountry, model.HomeZipCode)
+                   , model.IsCorporate
+                   ,new CompanyDto(model.CompanyName, model.CompanyAddress, model.CompanyIndustry, "", "", "", "", "", "", "", "")
+                   );
+
+                try
+                {
+                    var result = await _salesService.AddBuyer(buyer);
+                }catch(Exception err)
+                {
+                    return BadRequest(new
+                    {
+                        IsFormError = false,
+                        err.Message
+                    });
+                }
+            }
+
+            return Ok();
         }
 
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var buyer = new Buyer_ClientDto("Mr.", "John", "Smith", "Doe", new DateTime(1990, 1, 1), CivilStatusEnum.Married);
+            var buyerQueryResult = await _salesService.GetBuyer(id);
+            
+            var buyer = new Buyer_ClientDto(
+                buyerQueryResult.Salutation
+                ,buyerQueryResult.FirstName
+                ,buyerQueryResult.MiddleName
+                ,buyerQueryResult.LastName
+                ,buyerQueryResult.Dob
+                ,buyerQueryResult.CivilStatusId
+                ,buyerQueryResult.CivilStatus
+                );
 
             buyer.Id = id;
 
-            buyer.SetContactDetails("johndoe@testmail.com", "09121234567", "");
+            buyer.SetContactDetails(buyerQueryResult.EmailAddress, buyerQueryResult.MobileNo, buyerQueryResult.PhoneNo);
 
-            buyer.SetIDInformation("Consultant", "315 408 1234", "National ID", new DateTime(2027, 12, 31));
+            buyer.SetIDInformation(buyerQueryResult.Occupation, buyerQueryResult.Tin, buyerQueryResult.GovIssuedId, buyerQueryResult.GovIssuedIdValidUntil);
 
-            buyer.HomeAddress = new ClientAddress("Home Address", "Manila", "NCR", "Philippines", "1234");
-            buyer.BillingAddress = new ClientAddress("Billing Address", "Manila", "NCR", "Philippines", "1234");
-            buyer.BusinessAddress = new ClientAddress("", "", "", "", "");
+            buyer.HomeAddress = new ClientAddress(
+                    buyerQueryResult.HomeAddress_Street, 
+                    buyerQueryResult.HomeAddress_City, 
+                    buyerQueryResult.HomeAddress_State, 
+                    buyerQueryResult.HomeAddress_Country, 
+                    buyerQueryResult.HomeAddress_ZipCode);
 
-            buyer.IsCorporate = true;
-            buyer.Company = new Company("John Doe, Inc.", "Manila City, NCR", "Accounting");
+            buyer.BillingAddress = new ClientAddress(
+                    buyerQueryResult.BillingAddress_Street,
+                    buyerQueryResult.BillingAddress_City,
+                    buyerQueryResult.BillingAddress_State,
+                    buyerQueryResult.BillingAddress_Country,
+                    buyerQueryResult.BillingAddress_ZipCode);
 
-            var spouse = new Buyer_ClientDto("Mrs.", "Anna", "Craig", "Doe", new DateTime(1990, 1, 1), CivilStatusEnum.Married);
+            buyer.BusinessAddress = new ClientAddress(
+                    buyerQueryResult.BusinessAddress_Street,
+                    buyerQueryResult.BusinessAddress_City,
+                    buyerQueryResult.BusinessAddress_State,
+                    buyerQueryResult.BusinessAddress_Country,
+                    buyerQueryResult.BusinessAddress_ZipCode);
 
-            buyer.SpouseId = 2;
-            spouse.Id = 2;
-            buyer.Spouse = spouse;
+            buyer.IsCorporate = buyerQueryResult.IsCorporate;
+
+            buyer.Company = new Company(buyerQueryResult.Company_Name, 
+                buyerQueryResult.Company_Address,
+                buyerQueryResult.Company_Industry,
+                buyerQueryResult.Company_PhoneNo,
+                buyerQueryResult.Company_MobileNo,
+                buyerQueryResult.Company_FaxNo,
+                buyerQueryResult.Company_EmailAddress,
+                buyerQueryResult.Company_TIN,
+                buyerQueryResult.Company_SECRegNo,
+                buyerQueryResult.Company_President,
+                buyerQueryResult.Company_CorpSec);
+
+            buyer.SpouseId = buyerQueryResult.PartnerId;
+
+            if (buyerQueryResult.PartnerId.HasValue && buyerQueryResult.PartnerId.Value > 0) {
+                var spouseResult = await _salesService.GetBuyer(buyerQueryResult.PartnerId.Value);
+                var spouse = new Buyer_ClientDto(spouseResult.Salutation, spouseResult.FirstName, spouseResult.MiddleName, spouseResult.LastName, spouseResult.Dob, 2, "Married");
+
+                spouse.SetContactDetails(spouseResult.EmailAddress, spouseResult.MobileNo, spouseResult.PhoneNo);
+
+                spouse.SetIDInformation(spouseResult.Occupation, spouseResult.Tin, spouseResult.GovIssuedId, spouseResult.GovIssuedIdValidUntil);
+
+                spouse.Id = buyerQueryResult.PartnerId.Value;
+
+                buyer.Spouse = spouse;
+            }
 
             return View(buyer);
         }
 
 
         public IActionResult Contracts(int id) {
-            return View();
+
+            var buyerContracts = new List<Contract_ClientDto>();
+
+            ViewData["BuyerId"] = id;
+
+            return View(buyerContracts);
         }
 
 
         [HttpPost]
-        public IActionResult EditGeneralInfo(BuyerGeneralInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditGeneralInfo(UpdateBuyerInfoRquest model)
         {
+            await _salesService.UpdateBuyerInfo(model);
+
             return Ok();
         }
 
 
         [HttpPost]
-        public IActionResult EditContactInfo(BuyerContactInfoEdit_ClientDto model)
+        public async Task<IActionResult> EditContactInfo(UpdateBuyerContactRequest model)
         {
+            await _salesService.UpdateBuyerContact(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditAddress(BuyerAddressEdit_ClientDto model)
+        public async Task<IActionResult> EditAddress(PatchBuyerAddressRequest model)
         {
+            await _salesService.PatchBuyerAddress(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditIDInformation(BuyerIDInformationEdit_ClietnDto model)
+        public async Task<IActionResult> EditIDInformation(UpdateBuyerMiscRequest model)
         {
+            await _salesService.UpdateBuyerMisc(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditCompanyInformation(BuyerCompanyEdit_ClientDto model)
+        public async Task<IActionResult> EditCompanyInformation(UpdateBuyerCompanyRequest model)
         {
+            
+            await _salesService.UpdateBuyerCompany(model);
+
             return Ok();
         }
 
         [HttpPost]
-        public IActionResult EditSpouse(BuyerSpouseEdit_ClientDto model)
+        public async Task<IActionResult> EditSpouse(UpsertBuyerSpouseRequest model)
         {
-            return Ok();
+            return Ok(await _salesService.UpsertSpouse(model));
         }
     }
 }

@@ -21,17 +21,19 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order> FindOrderByIdAsync(int transactionId)
     {
-        return await _context.Orders.Include(i => i.Payments).AsNoTracking()
+        return await _context.Orders
+            .Include(i => i.Payments)
+            .Include(i => i.OrderItems)
             .FirstOrDefaultAsync(i => i.Id == transactionId);
     }
 
-    public Order CreateOrder(int buyerId, string broker, int paymentOptionId, decimal discount, string remarks)
+    public Order CreateOrder(int buyerId, string broker, DateTime transactionDate, decimal discount, string remarks)
     {
-        var order = new Order(buyerId, broker, paymentOptionId, discount, remarks);
+        var order = new Order(buyerId, broker, transactionDate, discount, remarks);
         return _context.Orders.Add(order).Entity;
     }
 
-    public Order UpdateOrder(Order order)
+    public Order Update(Order order)
     {
         return _context.Orders.Update(order).Entity;
     }

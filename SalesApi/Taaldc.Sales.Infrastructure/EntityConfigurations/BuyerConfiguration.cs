@@ -22,6 +22,8 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
 
         builder.Property(b => b.LastName).IsRequired();
 
+        builder.Property(b => b.MiddleName).IsRequired(false);
+
         builder.HasIndex(b => new { b.FirstName, b.MiddleName, b.LastName }).IsUnique();
 
         builder.Property(b => b.EmailAddress).IsRequired();
@@ -30,7 +32,7 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
 
         builder.Property(b => b.MobileNo).IsRequired();
 
-        builder.HasIndex(b => b.PhoneNo).IsUnique();
+        builder.HasIndex(b => b.PhoneNo).IsUnique(false);
 
         builder.Property(b => b.PartnerId).IsRequired(false).HasDefaultValue(null);
         
@@ -39,6 +41,8 @@ internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
         builder.Property(b => b.GovIssuedId).IsRequired(false);
         builder.Property(b => b.Occupation).IsRequired(false);
         builder.Property(b => b.GovIssuedIdValidUntil).IsRequired(false).HasDefaultValue(null);
+
+        builder.Property(b => b.RowVersion).IsRowVersion();
         
         //1.A - this field works a shadow property of the readonly Entity (Purpose)
         builder

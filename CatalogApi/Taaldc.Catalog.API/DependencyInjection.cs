@@ -88,7 +88,7 @@ public static class DependencyInjection
         
         services.AddDbContext<IntegrationEventLogContext>(options =>
         {
-            options.UseSqlServer(configuration["ConnectionString"],
+            options.UseSqlServer(configuration["EventConnection"],
                 sqlServerOptionsAction: sqlOptions =>
                 {
                     sqlOptions.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
@@ -179,6 +179,9 @@ public static class DependencyInjection
 
         services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
+        return services;
+        //if (!configuration.GetValue<bool>("EventsEnabled")) return services;
+
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             // services.AddSingleton<IServiceBusPersisterConnection>(sp =>
@@ -226,7 +229,9 @@ public static class DependencyInjection
     }
     
      public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-    {
+     {
+         return services;
+        //if (!configuration.GetValue<bool>("EventsEnabled")) return services;
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             // services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>

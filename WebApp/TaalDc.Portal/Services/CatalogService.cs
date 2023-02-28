@@ -166,7 +166,7 @@ public class CatalogService : ICatalogService
         return result;
     }
 
-    public async Task<CommandResult> CreateProperty(PropertyCreate_ClientDto model)
+    public async Task<Response> CreateProperty(PropertyCreate_ClientDto model)
     {
         //we are not expecting any new project..
         if (model.ProjectId == 0) model.ProjectId = 1;
@@ -177,11 +177,11 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
-    public async Task<CommandResult> CreateTower(TowerCreate_ClientDto model)
+    public async Task<Response> CreateTower(TowerCreate_ClientDto model)
     {
         var uri = API.Catalog.AddTower(_remoteServiceUrl);
 
@@ -189,23 +189,23 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
-    public async Task<CommandResult> CreateFloor(FloorCreate_ClientDto model)
+    public async Task<Response> CreateFloor(FloorCreate_ClientDto model)
     {
         var uri = API.Catalog.AddFloor(_remoteServiceUrl);
 
         var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
 
         var content = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
 
-    public async Task<CommandResult> CreateUnit(UnitCreate_ClientDto model)
+    public async Task<Response> CreateUnit(UnitCreate_ClientDto model)
     {
         var uri = API.Catalog.AddUnit(_remoteServiceUrl);
 
@@ -213,7 +213,7 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
@@ -222,7 +222,7 @@ public class CatalogService : ICatalogService
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
-    public async Task<CommandResult> UpdateUnit(UnitUpdate_ClientDto model)
+    public async Task<Response> UpdateUnit(UnitUpdate_ClientDto model)
     {
         var uri = API.Catalog.EditUnit(_remoteServiceUrl, model.UnitId);
 
@@ -230,11 +230,11 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
-    public async Task<CommandResult> CreateUnitType(UnitTypeCreate_ClientDto model)
+    public async Task<Response> CreateUnitType(UnitTypeCreate_ClientDto model)
     {
         var uri = API.Catalog.AddUnitType(_remoteServiceUrl);
 
@@ -242,11 +242,11 @@ public class CatalogService : ICatalogService
 
         var content = await response.Content.ReadAsStringAsync();
 
-        return JsonSerializer.Deserialize<CommandResult>(content,
+        return JsonSerializer.Deserialize<Response>(content,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     }
 
-    public async Task<CommandResult> UpdateUnitStatus(UnitStatusUpdate_ClientDto model)
+    public async Task<Response> UpdateUnitStatus(UnitStatusUpdate_ClientDto model)
     {
         var uri = API.Catalog.UpdateUnitStatus(_remoteServiceUrl);
 
@@ -255,10 +255,10 @@ public class CatalogService : ICatalogService
         var content = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode) { 
-            return JsonSerializer.Deserialize<CommandResult>(content,
+            return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        return new CommandResult("Unit status cannot be updated", false, model.UnitId);
+        return new Response("Unit status cannot be updated", false, model.UnitId);
     }
 }

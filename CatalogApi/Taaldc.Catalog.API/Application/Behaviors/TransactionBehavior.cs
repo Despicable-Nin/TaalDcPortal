@@ -12,14 +12,14 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly CatalogDbContext _dbContext;
 
     private readonly ILogger<TransactionBehaviour<TRequest, TResponse>> _logger;
-    private readonly ICatalogIntegrationEventService _orderingIntegrationEventService;
+    //TODO: Not this time ->private readonly ICatalogIntegrationEventService _orderingIntegrationEventService;
 
     public TransactionBehaviour(CatalogDbContext dbContext,
-        ICatalogIntegrationEventService orderingIntegrationEventService,
+        //TODO: Not this time ->ICatalogIntegrationEventService orderingIntegrationEventService,
         ILogger<TransactionBehaviour<TRequest, TResponse>> logger)
     {
         _dbContext = dbContext ?? throw new ArgumentException(nameof(CatalogDbContext));
-        //_orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentException(nameof(orderingIntegrationEventService));
+        //TODO: Not this time ->_orderingIntegrationEventService = orderingIntegrationEventService ?? throw new ArgumentException(nameof(orderingIntegrationEventService));
         _logger = logger ?? throw new ArgumentException(nameof(ILogger));
     }
 
@@ -59,7 +59,7 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                      transactionId = transaction.TransactionId;
                  }
             
-                 await _orderingIntegrationEventService.PublishEventsThroughEventBusAsync(transactionId);
+                 //TODO: Not this time -> await _orderingIntegrationEventService.PublishEventsThroughEventBusAsync(transactionId);
              });
 
             return response;

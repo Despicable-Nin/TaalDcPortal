@@ -5,15 +5,15 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
 {
     public class Buyer_ClientDto
     {
-        public Buyer_ClientDto(string salutation, string firstName, string middleName, string lastName, DateTime doB, CivilStatusEnum civilStatus)
+        public Buyer_ClientDto(string salutation, string firstName, string middleName, string lastName, DateTime doB, int civilStatusId, string civilStatus)
         {
             Salutation = salutation;
             FirstName = firstName;
             MiddleName = middleName;
             LastName = lastName;
             DoB = doB;
-            CivilStatusId = (int)civilStatus;
-            CivilStatus = civilStatus.ToString();
+            CivilStatusId = civilStatusId;
+            CivilStatus = civilStatus;
         }
 
         public int Id { get; set; }
@@ -34,7 +34,7 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
         public string Occupation { get; set; }
         public string TIN { get; set; }
         public string GovIssuedID { get; set; }
-        public DateTime GovIssuedIDValidUntil { get; set; }
+        public DateTime? GovIssuedIDValidUntil { get; set; }
 
         public int? SpouseId { get; set; }
         public Buyer_ClientDto Spouse { get; set; }
@@ -54,7 +54,7 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
             PhoneNo = phoneNo;
         }
 
-        public void SetIDInformation(string occupation, string tin, string govIssuedID, DateTime govIssuedIDValidUntil)
+        public void SetIDInformation(string occupation, string tin, string govIssuedID, DateTime? govIssuedIDValidUntil)
         {
             Occupation = occupation;
             TIN = tin;
@@ -65,11 +65,29 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
 
     public record Company
     {
-        public Company(string name, string address, string industry)
+        public Company(string name, 
+            string address, 
+            string industry,
+            string phoneNo,
+            string mobileNo,
+            string faxNo,
+            string emailAddress,
+            string tin,
+            string secRegNo,
+            string president,
+            string corpSec)
         {
             Name = name;
             Address = address;
             Industry = industry;
+            PhoneNo = phoneNo;
+            MobileNo = mobileNo;
+            FaxNo = faxNo;
+            EmailAddress = emailAddress;
+            TIN = tin;
+            SECRegNo = secRegNo;
+            President = president;
+            CorpSec = corpSec;
         }
 
         public string Name { get; set; }

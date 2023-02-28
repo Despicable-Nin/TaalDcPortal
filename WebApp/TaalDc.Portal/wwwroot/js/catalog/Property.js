@@ -31,7 +31,30 @@ function closeModal() {
     }
 }
 
-function onPropertyFormSubmit(modalBtn, redirectTo) {
+async function uploadFile() {
+    var file = new FormData();
+    file.append("file", $("#File")[0].files[0]);
+   
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/Upload/SaveFile?folder=floor-plans",
+            type: "POST",
+            data: file,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                console.log('response', result);
+                resolve(result);
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+                reject(error);
+            }
+        });
+    });
+}
+
+async function onPropertyFormSubmit(modalBtn, redirectTo) {
     var btn = document.getElementById("property-form-submit");
 
     btn.disabled = true;
@@ -45,13 +68,27 @@ function onPropertyFormSubmit(modalBtn, redirectTo) {
 
     var isFormValid = form.checkValidity();
 
+    let formBody = value;
+
+
     if (isFormValid) {
         var formAction = form.action
+
+
+        if (value.File) {
+            delete formBody.File;
+
+            var filePath = await uploadFile();
+
+            console.log("file path", filePath);
+
+            formBody.FloorPlanFilePath = filePath;
+        }
 
         $.ajax({
             type: 'POST',
             url: formAction,
-            data: value,
+            data: formBody,
             success: function (data, status, xhr) {
                 console.log('property post', data);
                 Toastify({

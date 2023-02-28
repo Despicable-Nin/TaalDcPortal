@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using SeedWork;
+using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
@@ -29,10 +31,15 @@ public class Buyer : Entity, IAggregateRoot
         MobileNo = mobileNumber;
         DoB = doB;
         _civilStatusId = civilStatusId;
-        _addresses.Add(address);
+
+        if (address == default)
+            throw new SalesDomainException(nameof(Buyer), new ArgumentNullException(nameof(address)));
+        
+        UpsertAddress(address);
 
         IsCorporate = isCorporate;
-        Company = company ?? new Company();
+        
+        UpsertCompany(company);
 
     }
    
@@ -53,6 +60,7 @@ public class Buyer : Entity, IAggregateRoot
     
     private int _civilStatusId;
     public CivilStatus CivilStatus { get; private set; }
+    public int GetCivilStatusId() => _civilStatusId;
     
     public bool IsCorporate { get; private set; }
     
@@ -89,8 +97,15 @@ public class Buyer : Entity, IAggregateRoot
     public IReadOnlyCollection<Address> Addresses => _addresses.AsReadOnly();
     
     #endregion
+    
+    #region RowVersion
+
+    [Timestamp]
+    public byte[] RowVersion { get; set; }
+    #endregion
 
 
+    #region Behavior(s)
     public void AddPartnerOrSpouse(int buyerIdOfPartnerOrSpouse)
     {
         PartnerId = buyerIdOfPartnerOrSpouse;
@@ -98,8 +113,8 @@ public class Buyer : Entity, IAggregateRoot
 
     public void RemovePartnerOrSpouse() => PartnerId = default;
 
-    public void UpdateBuyer(string salutation, string firstName, string middleName, string lastName, DateTime doB,
-        int civilStatusId)
+    public void UpdateBasicInfo(string salutation, string firstName, string middleName, string lastName, DateTime doB,
+        int civilStatusId, bool isCorporate)
     {
         Salutation = salutation;
         FirstName = firstName;
@@ -107,6 +122,7 @@ public class Buyer : Entity, IAggregateRoot
         LastName = lastName;
         DoB = doB;
         _civilStatusId = civilStatusId;
+        IsCorporate = isCorporate;
     }
 
     public void UpdateContactDetails(string emailAddress, string phoneNo, string mobileNo)
@@ -116,7 +132,7 @@ public class Buyer : Entity, IAggregateRoot
         MobileNo = mobileNo;
     }
 
-    public void UpdateMiscInformation(string occupation, string tin, string govIssuedId, DateTime govIssuedIdValidUntil)
+    public void UpdateMiscInformation(string occupation, string tin, string govIssuedId, DateTime? govIssuedIdValidUntil)
     {
         Occupation = occupation;
         Tin = tin;
@@ -128,7 +144,7 @@ public class Buyer : Entity, IAggregateRoot
     {
         var address = _addresses.SingleOrDefault(i => i.Type == newaddress.Type);
 
-        if (_addresses != default)
+        if (address != default)
         {
             //remove first
             _addresses.Remove(address);
@@ -141,7 +157,9 @@ public class Buyer : Entity, IAggregateRoot
     public Address GetBillingAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Billing);
     public Address GetBusinessAddress() => _addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Business);
 
-    public void UpdateCompany(Company company) => Company = company;
+    public void UpsertCompany(Company company) => Company =
+        company ?? new Company("n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a", "n/a");
 
+    #endregion
 
 }

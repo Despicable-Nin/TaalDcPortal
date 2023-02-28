@@ -1,9 +1,11 @@
 using System.Data.Common;
+using System.Reflection;
 using System.Text;
 using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
+using IntegrationEventLogEF;
 using IntegrationEventLogEF.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
-using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Sales.Api.Application.IntegrationEvents;
 using Taaldc.Sales.Infrastructure;
 
@@ -35,7 +36,19 @@ public static class DependencyInjection
                         });
                 } //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
             );
-
+        
+        //TODO: Not this time
+        // services.AddDbContext<IntegrationEventLogContext>(options =>
+        // {
+        //     options.UseSqlServer(configuration["EventConnection"],
+        //         sqlServerOptionsAction: sqlOptions =>
+        //         {
+        //             sqlOptions.MigrationsAssembly(typeof(SalesDbContext).GetTypeInfo().Assembly.GetName().Name);
+        //             //Configuring Connection Resiliency: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency 
+        //             sqlOptions.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+        //         });
+        // });
+        
         services.AddScoped<SalesDbContextInitializer>();
 
         return services;
@@ -83,14 +96,14 @@ public static class DependencyInjection
 
     public static IServiceCollection AddCustomAuth(this IServiceCollection services, IConfiguration configuration)
     {
-// Adding Authentication
+        // Adding Authentication
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-// Adding Jwt Bearer
+            // Adding Jwt Bearer
             .AddJwtBearer(options =>
             {
                 // options.SaveToken = true;
@@ -112,7 +125,7 @@ public static class DependencyInjection
     }
     
       public static IServiceCollection AddEventBus(this IServiceCollection services, IConfiguration configuration)
-    {
+      {
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             // services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
@@ -158,8 +171,8 @@ public static class DependencyInjection
         services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
             sp => (DbConnection c) => new IntegrationEventLogService(c));
 
-        services.AddTransient<IOrderIntegrationEventService, OrderIntegrationEventService>();
-
+        services.AddTransient<ISalesIntegrationEventService, SalesIntegrationEventService>();
+     
         if (configuration.GetValue<bool>("AzureServiceBusEnabled"))
         {
             // services.AddSingleton<IServiceBusPersisterConnection>(sp =>
@@ -174,7 +187,7 @@ public static class DependencyInjection
         {
             services.AddSingleton<IRabbitMQPersistentConnection>(sp =>
             {
-                var settings = sp.GetRequiredService<IOptions<CatalogSettings>>().Value;
+                var settings = sp.GetRequiredService<IOptions<SalesSettings>>().Value;
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMqPersistentConnection>>();
 
                 var factory = new ConnectionFactory()

@@ -2,29 +2,29 @@
 {
     public class ParkingStats_ClientDto
     {
-        public ParkingStats_ClientDto(IEnumerable<UnitCountByStatus_ClientDto> unitCountByStatus, 
-            IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto> perFloor,
-            IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto> perUnitType)
+        public ParkingStats_ClientDto(IEnumerable<GetResidentialUnitsCountByStatusResponse> unitCountByStatus, 
+            IEnumerable<GetParkingUnitTypeAvailabilityPerFloorResponse> perFloor,
+            IEnumerable<GetAvailabilityPerParkingUnitTypeResponse> perUnitType)
         {
             UnitCountByStatus= unitCountByStatus;
             UnitsPerFloor= perFloor;
             UnitsPerType= perUnitType;  
         }
 
-        public IEnumerable<UnitCountByStatus_ClientDto> UnitCountByStatus { get; set; }
-        public IEnumerable<ParkingUnitAvailabilityPerFloor_ClientDto> UnitsPerFloor { get; set; }
-        public IEnumerable<ParkingUnitAvailabilityPerUnitType_ClientDto> UnitsPerType { get; set; }
+        public IEnumerable<GetResidentialUnitsCountByStatusResponse> UnitCountByStatus { get; set; }
+        public IEnumerable<GetParkingUnitTypeAvailabilityPerFloorResponse> UnitsPerFloor { get; set; }
+        public IEnumerable<GetAvailabilityPerParkingUnitTypeResponse> UnitsPerType { get; set; }
     }
 
 
-    public class ParkingUnitAvailabilityPerFloor_ClientDto
+    public class GetParkingUnitTypeAvailabilityPerFloorResponse
     {
         public string UnitType { get; set; }
         public string Floor { get; set; }
         public int Available { get; set; }
     }
 
-    public record ParkingUnitAvailabilityPerUnitType_ClientDto
+    public record GetAvailabilityPerParkingUnitTypeResponse
     {
         public string UnitType { get; set; }
         public double FloorArea { get; set; }

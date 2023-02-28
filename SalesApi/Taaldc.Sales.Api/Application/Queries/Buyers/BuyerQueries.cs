@@ -1,32 +1,87 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
+using Taaldc.Sales.Api.Application.Common.Models;
 
 namespace Taaldc.Sales.Api.Application.Queries.Buyers;
 
 public class BuyerQueries : IBuyerQueries
 {
-    private readonly string SELECT_BUYER_COUNT = " SELECT COUNT(*) AS Total FROM [taaldb_sales].[sales].[buyer] ";
-    private readonly string _connectionString;
+   private readonly string _connectionString;
 
     public BuyerQueries(string connectionString)
     {
         _connectionString = connectionString;
     }
 
-    public async Task<BuyerDto> GetBuyerById(int id)
+    public async Task<BuyerResultDto> GetBuyerByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var result = await QueryWrapper<BuyerResultDto>
+            .Create(_connectionString)
+            .Execute(@$"{BuyerSQL.SELECT_BUYER_QUERY} WHERE B.Id = {id}");
+
+        return result.FirstOrDefault();
+
+    }
+
+    public async Task<PaginationQueryResult<BuyerResultDto>> GetPaginatedAsync(int pageNumber, int pageSize, string name, string email, int? civilStatusId)
+    {
+        var query = @$"{BuyerSQL.SELECT_BUYER_QUERY} ";
+
+        var where = "WHERE B.IsActive = 1 ";
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            where += $"AND (B.[FirstName] LIKE '%{name}%' OR B.[LastName] LIKE '%{name}%') ";
+        }
+
+        if (!string.IsNullOrEmpty(email))
+        {
+            where += $"{(string.IsNullOrEmpty(name) ? "AND" : "OR")} B.[EmailAddress] LIKE '%{email}%' ";
+        }
+
+        if (civilStatusId.HasValue)
+        {
+            where += $"AND C.[Id] = {civilStatusId.HasValue} ";
+        }
+
+        query += where;
+        query += @$" ORDER BY B.[LastName]  
+        OFFSET {(pageNumber - 1) * pageSize} 
+        ROWS FETCH NEXT {pageSize} ROWS ONLY";
+
+        var result = await QueryWrapper<BuyerResultDto>
+            .Create(_connectionString)
+            .Execute(query);
+
+        var countQuery = @"SELECT COUNT(*) [Count] 
+                            FROM  [taaldb_sales].[sales].[buyer] ";
+        
+        var countResult = await QueryWrapper<CountResult>
+            .Create(_connectionString)
+            .Execute(countQuery);
+
+        return new PaginationQueryResult<BuyerResultDto>(pageSize, pageNumber,  countResult.SingleOrDefault().Count, result);
     }
 
     public async Task<bool> CheckIfBuyerExists(int id)
     {
-        var query = $"{SELECT_BUYER_COUNT} WHERE Id={id}";
-        using var connection = new SqlConnection(_connectionString);
-        await connection.OpenAsync();
+        
+        var query = $"{BuyerSQL.SELECT_BUYER_COUNT} WHERE Id={id}";
+        var result = await QueryWrapper<CountResult>
+            .Create(_connectionString)
+            .Execute(query);
 
-        var result = await connection.QueryAsync<int>(query);
+        return result.SingleOrDefault()?.Count > 0;
 
-        return result.SingleOrDefault() > 0;
+    }
+
+    public async Task<IEnumerable<BuyerDropdownResultDto>> GetBuyerDropdownDto()
+    {
+        var result = await QueryWrapper<BuyerDropdownResultDto>
+            .Create(_connectionString)
+            .Execute(BuyerSQL.SELECT_BUYER_FULLNAME_AND_ID);
+
+        return result;
 
     }
 }

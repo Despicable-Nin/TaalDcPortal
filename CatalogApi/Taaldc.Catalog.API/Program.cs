@@ -1,10 +1,14 @@
-﻿using System.Reflection;
+﻿using System.Data.Common;
+using System.Reflection;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using EventBus.Abstractions;
+using IntegrationEventLogEF.Services;
 using MediatR;
 using SeedWork;
 using Taaldc.Catalog.API;
 using Taaldc.Catalog.API.Application.Behaviors;
+using Taaldc.Catalog.API.Application.IntegrationEvents;
 using Taaldc.Catalog.API.Application.IntegrationEvents.EventHandling;
 using Taaldc.Catalog.API.Application.IntegrationEvents.Events;
 using Taaldc.Catalog.API.Application.Queries;
@@ -25,16 +29,29 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 
+//important! injects ILifeTimeScope bullshit
+//TODO: Replace this fucker with built-in lifetime from .net core
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 //setting up dbcontext and related stuff
 builder.Services
     .AddEndpoints()
-    .AddCustomAuth(configuration)
-    .AddCustomDbContext(configuration)
-    .AddCustomOptions(configuration)
-    .AddIntegrationServices(configuration)
-    .AddEventBus(configuration);
+.AddCustomAuth(configuration)
+.AddCustomDbContext(configuration);
+
+
+builder.Services.AddTransient<Func<DbConnection, IIntegrationEventLogService>>(
+           sp => (DbConnection c) => new IntegrationEventLogService(c));
+
+
+//TODO: Not this time -> builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
+
+//.AddCustomOptions(configuration)
+//.AddIntegrationServices(configuration)
+//.AddEventBus(configuration);
+
+//register auto-mapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 //register mediatr and pipelines
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -42,6 +59,7 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavi
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
 
+//claims middlewares
 builder.Services.AddScoped(typeof(IAmCurrentUser), typeof(CurrentUser));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -49,9 +67,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped(typeof(IProjectRepository), typeof(ProjectRepository));
 builder.Services.AddScoped(typeof(IUnitTypeRepository), typeof(UnitTypeRepository));
 
-
-builder.Services.AddAutoMapper(typeof(Program));
-
+//register queries
 builder.Services.AddQueries(configuration);
 
 var app = builder.Build();
@@ -81,8 +97,8 @@ app.MapControllers();
 
 
 //configure event bus
-var eventbus = app.Services.GetRequiredService<IEventBus>();
-eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
+//var eventbus = app.Services.GetRequiredService<IEventBus>();
+//eventbus.Subscribe<UnitStatusChangedToReservedIntegrationEvent,UnitStatusChangedToReservedIntegrationEventHandler>();
 
 
 app.Run();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using SeedWork;
 using Taaldc.Sales.API.Application.Commands.AddPayment;
 using Taaldc.Sales.API.Application.Commands.AcceptPayment;
+using Taaldc.Sales.API.Application.Commands.AddOrUpdateOrderItem;
 using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 using Taaldc.Sales.Api.Application.Queries.Orders;
@@ -40,6 +41,19 @@ public class SalesController : ControllerBase
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> Post([FromBody] SellUnitCommand dto)
     {
+        var result = await _mediator.Send(dto);
+
+        return Ok(result);
+    }
+    
+    [HttpPost("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> AddOrUpdateOrderItemAsync(int orderId,[FromBody] AddOrUpdateOrderItemCommand dto)
+    {
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
+        if (dto.OrderId != orderId) return BadRequest("Invalid request.");
+        
         var result = await _mediator.Send(dto);
 
         return Ok(result);
@@ -85,6 +99,7 @@ public class SalesController : ControllerBase
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> AddPayment(int id, [FromBody] AddPaymentDTO dto)
     {
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
         if (id != dto.TransactionId) return BadRequest("Invalid request path.");
 
         var command = _mapper.Map<AddPaymentCommand>(dto);
@@ -102,6 +117,15 @@ public class SalesController : ControllerBase
         return Ok(await _orderQueries.GetPayments(id));
     }
 
+    [AllowAnonymous]
+    [HttpGet("{id}/units")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnits(int id)
+    {
+        return Ok(await _orderQueries.GetOrderItemsByOrderId(id));
+    }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
@@ -115,7 +139,9 @@ public class SalesController : ControllerBase
         string broker = ""
     )
     {
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
         if (unitStatus <= 0) return BadRequest("Invalid unit status");
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
         if (unitStatus > 4) return BadRequest("Invalid unit status");
 
         return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId,
@@ -130,8 +156,20 @@ public class SalesController : ControllerBase
         int id
     )
     {
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
         if (id <= 0) return BadRequest("Invalid order id");
 
         return Ok(await _orderQueries.GetOrder(id));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("{id}/buyer-contract")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetBuyerContractDetails(
+        int id
+    )
+    {
+        return Ok(await _orderQueries.GetBuyerContractDetails(id));
     }
 }

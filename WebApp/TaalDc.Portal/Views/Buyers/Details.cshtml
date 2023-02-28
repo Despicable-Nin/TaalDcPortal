@@ -11,6 +11,12 @@
 
 
 <div class="container-fluid">
+    <div class="mb-3" style="text-align: right;">
+        <a class="btn btn-primary" href="#" onclick="generateAcknowledgmentReceipt()">
+            Buyer's Information Sheet
+        </a>
+    </div>
+
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Buyers" asp-action="Details" asp-route-id="@Model.Id">Details</a>
@@ -67,7 +73,7 @@
                 
                     <p class="mb-5">
                         <strong class="primary-color">Home Address</strong> 
-                        <a onclick="openEditAddress(0)"  href="#">Edit</a>
+                        <a onclick="openEditAddress(1)"  href="#">Edit</a>
                         <br />
                         @if (Model.HomeAddress != null)
                         {
@@ -78,7 +84,7 @@
 
                     <p class="mb-5">
                         <strong class="primary-color">Business Address</strong> 
-                        <a onclick="openEditAddress(1)" href="#">Edit</a>
+                        <a onclick="openEditAddress(2)" href="#">Edit</a>
                         <br />
                         @if (Model.BusinessAddress != null)
                         {
@@ -90,7 +96,7 @@
               
                     <p class="mb-5">
                         <strong class="primary-color">Billing Address</strong>
-                        <a  onclick="openEditAddress(2)" href="#">Edit</a>
+                        <a  onclick="openEditAddress(3)" href="#">Edit</a>
                         <br />
                         @if (Model.BillingAddress != null)
                         {
@@ -133,7 +139,7 @@
 
                 <p class="mb-5">
                     <strong class="primary-color">Valid Until</strong> <br />
-                    @Model.GovIssuedIDValidUntil.ToShortDateString()
+                    @(Model.GovIssuedIDValidUntil.HasValue? Model.GovIssuedIDValidUntil.Value.ToShortDateString(): "-")
                 </p>
             </div>
             <div class="col-lg-4">
@@ -201,8 +207,27 @@
 
 @section Scripts{
     <script src="~/js/sales/Buyer.js"></script>
+
+    <script>
+        async function generateAcknowledgmentReceipt(){
+            $.ajax({
+                url: "/Documents/AcknowledgmentReceipt",
+                type: "POST",
+                success: function (result) {
+                    console.log('response', result);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        }
+    
+    </script>
+
     <script>
         var modelData = JSON.parse('@Html.Raw(serializedModel)');
+
+        console.log('model', modelData);
 
         function openEditGeneralInformation(){
             var formModal = document.getElementById('generalInfoModal');
@@ -222,7 +247,12 @@
                     const formattedDate = `${year}-${month}-${day}`;
 
                     inputFields[i].value = formattedDate
-                }else{
+                }else if(inputFields[i].name === 'IsCorporate') {
+                    //console.log('iscorp', modelData[inputFields[i].name]);
+                    inputFields[i].checked = modelData[inputFields[i].name];
+                    //inputFields[i].setAttribute('checked', modelData[inputFields[i].name]);
+                }
+                else {
                     inputFields[i].value = modelData[inputFields[i].name]
                 }
             }
@@ -239,18 +269,22 @@
 
             var spouseModel = modelData.Spouse;
 
-            for (var i = 0; i < inputFields.length; i++) {
-                if(inputFields[i].name === 'DoB'){
-                    const dateString = spouseModel[inputFields[i].name];
-                    const date = new Date(dateString);
-                    const year = date.getFullYear();
-                    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-                    const day = date.getDate().toString().padStart(2, '0');
-                    const formattedDate = `${year}-${month}-${day}`;
+            console.log('spouse Model', spouseModel);
 
-                    inputFields[i].value = formattedDate
-                }else{
-                    inputFields[i].value = spouseModel[inputFields[i].name]
+            if(spouseModel){
+                for (var i = 0; i < inputFields.length; i++) {
+                    if(inputFields[i].name === 'DoB'){
+                        const dateString = spouseModel[inputFields[i].name];
+                        const date = new Date(dateString);
+                        const year = date.getFullYear();
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const formattedDate = `${year}-${month}-${day}`;
+
+                        inputFields[i].value = formattedDate
+                    }else{
+                        inputFields[i].value = spouseModel[inputFields[i].name]
+                    }
                 }
             }
             modal.show();
@@ -280,7 +314,7 @@
             let addressType = document.getElementsByName("Type"); 
             addressType[0].value = type;
 
-            if(type === 0){
+            if(type === 1){
                 var homeAddress = modelData.HomeAddress;
 
                 var inputFields = formModal.getElementsByClassName('form-control');
@@ -288,7 +322,7 @@
                 for (var i = 0; i < inputFields.length; i++) {
                     inputFields[i].value = homeAddress[inputFields[i].name]
                 }
-            }else if(type === 1){
+            }else if(type === 2){
                 var businessAddress = modelData.BusinessAddress;
 
                 var inputFields = formModal.getElementsByClassName('form-control');
@@ -296,7 +330,7 @@
                 for (var i = 0; i < inputFields.length; i++) {
                     inputFields[i].value = businessAddress[inputFields[i].name]
                 }
-            }else if (type === 2) {
+            }else if (type === 3) {
                 var billingAddress = modelData.BillingAddress;
 
                 var inputFields = formModal.getElementsByClassName('form-control');
