@@ -9,12 +9,12 @@ namespace Taaldc.Sales.Api.Application.DomainEventHandlers.UnitReserved;
 public class UnitReplicaStatusChangeToReservedDomainEventHandler : INotificationHandler<UnitReplicaStatusChangedToReservedDomainEvent>
 {
     private readonly IUnitReplicaRepository _repository;
-    private readonly ISalesIntegrationEventService _integrationEventService;
+    //private readonly ISalesIntegrationEventService _integrationEventService;
 
-    public UnitReplicaStatusChangeToReservedDomainEventHandler(IUnitReplicaRepository repository, ISalesIntegrationEventService integrationEventService)
+    public UnitReplicaStatusChangeToReservedDomainEventHandler(IUnitReplicaRepository repository)
     {
         _repository = repository;
-        _integrationEventService = integrationEventService;
+        //_integrationEventService = integrationEventService;
     }
 
     public async Task Handle(UnitReplicaStatusChangedToReservedDomainEvent notification, CancellationToken cancellationToken)

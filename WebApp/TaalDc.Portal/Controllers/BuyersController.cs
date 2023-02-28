@@ -147,9 +147,9 @@ namespace TaalDc.Portal.Controllers
         }
 
 
-        public IActionResult Contracts(int id) {
+        public async Task<IActionResult> Contracts(int id) {
 
-            var buyerContracts = new List<Contract_ClientDto>();
+            var buyerContracts = await _salesService.GetBuyerContracts(id);
 
             ViewData["BuyerId"] = id;
 

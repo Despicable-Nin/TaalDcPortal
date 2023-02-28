@@ -381,4 +381,17 @@ public class SalesService : ISalesService
 
         return result;
     }
+
+    public async Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id)
+    {
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
+        uri = $"{uri}/{id}/buyer-contract";
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<Contract_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
 }

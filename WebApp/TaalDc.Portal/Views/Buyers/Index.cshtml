@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Buyers";
+    var filter = Context.Request.Query["filter"].FirstOrDefault();
 }
 
 
@@ -18,6 +19,12 @@
        <div class="action-section">
             <div class="action-btn text-end">
                 <a asp-controller="Buyers" asp-action="QuickCreate" class="btn btn-primary">New Buyer</a>
+            </div>
+
+            <div class="action-search">
+                <form>
+                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..." />
+                </form>
             </div>
         </div>
             <div class="data-section">

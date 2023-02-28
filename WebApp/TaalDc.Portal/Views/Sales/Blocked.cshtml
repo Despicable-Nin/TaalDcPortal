@@ -40,9 +40,9 @@
 
     <div class="tab-content">
         <div class="action-section">
-            <div class="action-btn text-end">
+          @*  <div class="action-btn text-end">
                 <a asp-controller="Sales" asp-action="Create" class="btn btn-primary">New Sales</a>
-            </div>
+            </div>*@
 
             <div class="action-search">
                 <form>
@@ -70,7 +70,7 @@
                     @foreach (var sale in Model.Data)
                     {
                         <tr>
-                            <td>@sale.OrderId</td>
+                            <td>@(sale.OrderId > 0? sale.OrderId: "")</td>
                             <td>@sale.FirstName @sale.LastName</td>
                             <td>@sale.Tower</td>
                             <td>@sale.UnitType @sale.ScenicView</td>
