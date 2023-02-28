@@ -10,6 +10,7 @@ namespace TaalDc.Portal.DTO.Sales
 
     public class GetResidentialAvailabilityByTypeResponse
     {
+        public int UnitTypeId { get; set; }
         public string UnitTypeShortCode { get; set; }
         public double MinArea { get; set; }
         public double MaxArea { get; set; }
@@ -23,6 +24,7 @@ namespace TaalDc.Portal.DTO.Sales
 
     public class GetResidentialAvailabilityByViewResponse
     {
+        public int ViewId { get; set; }
         public string View { get; set; }
         public int Available { get; set; }
     }

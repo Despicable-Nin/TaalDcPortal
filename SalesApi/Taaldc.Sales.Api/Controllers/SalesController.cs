@@ -133,6 +133,7 @@ public class SalesController : ControllerBase
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int unitStatus = 1,
         int pageNumber = 1,
         int pageSize = 20,
@@ -145,7 +146,7 @@ public class SalesController : ControllerBase
         if (unitStatus > 4) return BadRequest("Invalid unit status");
 
         return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId,
-            unitTypeId, viewId, broker));
+            unitTypeId, viewId, filter, broker));
     }
 
     [AllowAnonymous]

@@ -187,13 +187,15 @@ public class SalesService : ISalesService
     }
 
     public async Task<PaginationQueryResult<GetSalesByIdResponse>> GetUnitAndOrdersAvailability(int unitStatusId,
-        int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string broker = "")
+        int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string? filter, string broker = "")
     {
         var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
 
         var brokerString = string.IsNullOrEmpty(broker) ? string.Empty : $"&broker={broker}";
+        var filterString = string.IsNullOrEmpty(filter) ? string.Empty : $"&filter={filter}";
+
         uri =
-            $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}{brokerString}";
+            $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}{brokerString}{filterString}";
 
         var responseString = await _httpClient.GetStringAsync(uri);
 

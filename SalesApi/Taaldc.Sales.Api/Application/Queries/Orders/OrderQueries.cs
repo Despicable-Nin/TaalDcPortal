@@ -28,6 +28,7 @@ public class OrderQueries : IOrderQueries
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         string broker = "")
     {
         var brokerString = string.IsNullOrEmpty(broker) ? "" : $" O.[Broker] = '{broker}' AND ";
@@ -35,7 +36,8 @@ public class OrderQueries : IOrderQueries
         var query =  @$"{OrderSQL.SELECT_UNITS_WITH_BUYER} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) 
             AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
             AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
-            AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) 
+            AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)
+            AND B.FirstName + ' ' + B.LastName LIKE '%{(!string.IsNullOrEmpty(filter)? filter: "")}%'
         ORDER BY U.[UnitId] 
         OFFSET {(pageNumber - 1) * pageSize} 
         ROWS FETCH NEXT {pageSize} ROWS ONLY";

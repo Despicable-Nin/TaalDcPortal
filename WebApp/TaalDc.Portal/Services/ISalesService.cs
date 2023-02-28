@@ -14,6 +14,7 @@ public interface ISalesService
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         string broker = "");
 
     Task<AddBuyerOrderResponse> AddBuyerOrder(AddBuyerOrderRequest model);

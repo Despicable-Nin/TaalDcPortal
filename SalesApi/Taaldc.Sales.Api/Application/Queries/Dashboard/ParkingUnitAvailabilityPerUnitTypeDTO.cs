@@ -31,9 +31,10 @@ public record ParkingUnitAvailabilityPerUnitTypeDTO
 
 public record ResidentialUnitAvailabilityPerUnitTypeDTO
 {
-    public ResidentialUnitAvailabilityPerUnitTypeDTO(string unitTypeShortCode, double minArea, double maxArea,
+    public ResidentialUnitAvailabilityPerUnitTypeDTO(int unitTypeId, string unitTypeShortCode, double minArea, double maxArea,
         decimal min, decimal max, int available)
     {
+        UnitTypeId = unitTypeId;
         UnitTypeShortCode = unitTypeShortCode;
         MinArea = minArea;
         MaxArea = maxArea;
@@ -42,6 +43,7 @@ public record ResidentialUnitAvailabilityPerUnitTypeDTO
         Available = available;
     }
 
+    public int UnitTypeId { get; }
     public string UnitTypeShortCode { get; }
     public double MinArea { get; }
     public double MaxArea { get; }

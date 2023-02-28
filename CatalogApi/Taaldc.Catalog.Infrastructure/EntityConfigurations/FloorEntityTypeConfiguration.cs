@@ -20,6 +20,8 @@ internal class FloorEntityTypeConfiguration : IEntityTypeConfiguration<Floor>
         //matches Toower.Floors configuration on FloorEntityTypeConfiguration
         builder.Property<int>("TowerId").IsRequired();
 
+        builder.Property(i => i.FloorPlanFilePath).IsRequired(false);
+
         //matches Floor config on UnitEntityTypeConfiguration
         builder.Metadata
             .FindNavigation(nameof(Floor.Units))
