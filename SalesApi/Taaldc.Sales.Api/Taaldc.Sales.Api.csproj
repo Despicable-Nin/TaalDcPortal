@@ -44,6 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Application\Commands\AddBrokerToOrder" />
       <Folder Include="Application\IntegrationEvents\EventHandling" />
       <Folder Include="Infrastructure\IntegrationEventMigrations" />
     </ItemGroup>
