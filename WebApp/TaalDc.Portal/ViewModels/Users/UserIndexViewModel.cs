@@ -20,7 +20,7 @@ public class UserIndexViewModel
 public record UserViewModel
 {
     public UserViewModel(string id, string email, string firstName, string lastName, string nameSuffix,
-        string middleName, string[] roles, bool isActive)
+        string middleName, string[] roles, bool isActive, string company, string prc)
     {
         Id = id;
         Email = email;
@@ -30,6 +30,8 @@ public record UserViewModel
         MiddleName = middleName ?? string.Empty;
         Roles = roles;
         IsActive = isActive;
+        Company = company;
+        PRCLicense = prc;
     }
 
     public string Id { get; }
@@ -40,6 +42,8 @@ public record UserViewModel
     public string LastName { get; }
     public string NameSuffix { get; }
     public string MiddleName { get; }
+    public string Company { get; set; }
+    public string PRCLicense { get; set; }
     public bool IsActive { get; set; }
     public string[] Roles { get; }
 
