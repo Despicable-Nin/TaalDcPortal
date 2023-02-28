@@ -8,6 +8,7 @@ namespace Taaldc.Catalog.API.Application.Queries;
 public interface IUnitQueries
 {
     Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
+        string? filter,
         int? unitTypeId,
         int? viewId,
         int? floorId,
@@ -36,7 +37,7 @@ public interface IUnitQueries
 public class UnitQueries : IUnitQueries
 {
     private const string UNIT_QUERY =
-        "SELECT u.Id ,p.[Id] AS PropertyId ,p.[Name] AS PropertyName ,t.[Id] AS TowerId,t.[Name] AS TowerName ,u.UnitType AS UnitTypeId,ut.ShortCode AS UnitType,u.ScenicViewId AS ScenicViewId,sv.Name AS ScenicView,u.FloorId AS FloorId,f.[Name] AS FloorName,u.FloorArea+u.BalconyArea AS TotalArea,u.FloorArea,u.BalconyArea,u.Identifier,u.Price,u.UnitStatus AS UnitStatusId,us.[Name] AS UnitStatus FROM catalog.unit u JOIN catalog.floors f ON u.FloorId = f.Id JOIN catalog.tower t ON f.TowerId = t.Id JOIN catalog.property p ON t.PropertyId = p.Id JOIN catalog.unittype ut ON u.UnitType = ut.Id JOIN catalog.scenicview sv ON u.ScenicViewId = sv.Id JOIN catalog.unitstatus us ON u.UnitStatus = us.Id ";
+        "SELECT u.Id ,u.IsActive, p.[Id] AS PropertyId ,p.[Name] AS PropertyName ,t.[Id] AS TowerId,t.[Name] AS TowerName ,u.UnitType AS UnitTypeId,ut.ShortCode AS UnitType,u.ScenicViewId AS ScenicViewId,sv.Name AS ScenicView,u.FloorId AS FloorId,f.[Name] AS FloorName,u.FloorArea+u.BalconyArea AS TotalArea,u.FloorArea,u.BalconyArea,u.Identifier,u.Price,u.UnitStatus AS UnitStatusId,us.[Name] AS UnitStatus FROM catalog.unit u JOIN catalog.floors f ON u.FloorId = f.Id JOIN catalog.tower t ON f.TowerId = t.Id JOIN catalog.property p ON t.PropertyId = p.Id JOIN catalog.unittype ut ON u.UnitType = ut.Id JOIN catalog.scenicview sv ON u.ScenicViewId = sv.Id JOIN catalog.unitstatus us ON u.UnitStatus = us.Id ";
 
     private readonly string _connectionString;
 
@@ -120,6 +121,7 @@ public class UnitQueries : IUnitQueries
     }
 
     public async Task<PaginatedAvailableUnitsQueryResult> GetAvailableUnitsAsync(
+        string? filter,
         int? unitTypeId,
         int? viewId,
         int? floorId,
@@ -145,6 +147,8 @@ public class UnitQueries : IUnitQueries
         if (floorId.HasValue) clauses.Add($"F.Id = {floorId.Value}");
 
         if (!string.IsNullOrEmpty(location)) clauses.Add($"U.Remarks LIKE '%{location}%'");
+
+        if (!string.IsNullOrEmpty(filter)) clauses.Add($"U.Identifier LIKE '%{filter}%'");
 
         clauses.Add($"(U.Price BETWEEN {min} AND {max})");
         clauses.Add("US.Id = 1");

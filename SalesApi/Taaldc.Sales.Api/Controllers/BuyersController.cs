@@ -25,6 +25,7 @@ namespace Taaldc.Sales.Api.Controllers
    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BuyersController : ControllerBase
     {
         private readonly IMediator _mediator;

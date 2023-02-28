@@ -210,10 +210,10 @@ public class SalesController : BaseController<SalesController>
             var unitStatus =
                new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
             
-            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+            await _catalogService.UpdateUnitStatus(unitStatus);
 
-            if (!unitStatusResult.IsSuccess)
-                return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
+            //if (!unitStatusResult.IsSuccess)
+            //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
             return Ok(result);
         }

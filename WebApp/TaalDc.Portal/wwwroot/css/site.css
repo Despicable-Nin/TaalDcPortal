@@ -609,7 +609,7 @@ li.order-item{
         position: fixed;
         font-family: serif;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     #ReceivedFrom {
@@ -663,7 +663,7 @@ li.order-item{
         position: fixed;
         font-family: serif;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .buyerinfo #LastName {

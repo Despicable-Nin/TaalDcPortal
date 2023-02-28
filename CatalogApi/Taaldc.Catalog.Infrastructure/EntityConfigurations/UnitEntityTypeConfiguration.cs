@@ -58,6 +58,10 @@ internal class UnitEntityTypeConfiguration : IEntityTypeConfiguration<Unit>
             .WithMany()
             .HasForeignKey("_unitTypeId");
 
+        builder.Property(i => i.Remarks).IsRequired(false);
+
+        builder.Property(i => i.BalconyArea).HasDefaultValue(0);
+
         builder.Property(i => i.Price).HasColumnType("decimal(18,4)").IsRequired();
     }
 }

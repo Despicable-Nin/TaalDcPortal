@@ -66,6 +66,10 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             {
                 order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense());
             }
+            else
+            {
+                order.AddBrokerDetail("In-house", "", "");
+            }
 
             //add order item in order object
             foreach (var item in request.OrderItems)

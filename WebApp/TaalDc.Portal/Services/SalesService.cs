@@ -368,7 +368,12 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Sale cannot be created.");
+        return new Response(
+            "Sales cannot be created. Please contact your system admin.",
+             false,
+            null);
+
+        //throw new Exception("Sale cannot be created.");
     }
 
     public async Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id)

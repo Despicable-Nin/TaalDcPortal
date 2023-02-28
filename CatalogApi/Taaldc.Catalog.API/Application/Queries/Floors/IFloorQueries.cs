@@ -33,7 +33,16 @@ public class FloorQueries : IFloorQueries
     public async Task<PaginationQueryResult<FloorQueryResult>> GetActiveFloors(string filter, string sortBy,
         SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
     {
-        var query = "SELECT f.Id," +
+        var unitCountCTE = $"WITH unitcount_CTE AS(SELECT " +
+            $"DISTINCT(f.Id) AS FloorId, " +
+            $"Count(*) AS UnitCount " +
+            $"FROM catalog.unit u " +
+            $"JOIN catalog.floors f  " +
+            $"ON u.FloorId = f.Id " +
+            $"WHERE u.IsActive = '1' " +
+            $"GROUP BY f.Id)";
+
+        var query = $"{unitCountCTE} SELECT f.Id," +
                     "t.Id AS TowerId" +
                     ",p.Id as PropertyId" +
                     ",p.[Name] AS PropertyName" +
@@ -41,20 +50,18 @@ public class FloorQueries : IFloorQueries
                     ",f.[Name] AS FloorName" +
                     ",f.[Description] AS FloorDescription" +
                     ",f.[FloorPlanFilePath]," +
-                    "COUNT(u.Id) AS Units " +
+                    "ISNULL(unitCount.UnitCount, 0) AS Units " +
                     "FROM catalog.floors f " +
                     "JOIN catalog.tower t " +
                     "ON f.TowerId = t.Id " +
                     "JOIN catalog.property p " +
                     "ON t.PropertyId = p.Id " +
-                    "LEFT JOIN catalog.unit u " +
-                    "ON u.FloorId = f.Id  " +
-                    "AND u.IsActive = '1' " +
+                    "LEFT JOIN unitcount_CTE unitCount ON unitCount.FloorId = f.Id " +
                     "WHERE f.IsActive = '1'  AND " +
                     "p.IsActive = '1' AND " +
                     $"(f.[Name] LIKE '%' + ISNULL('{filter}',f.[Name]) + '%' OR  " +
                     $"f.[Description] LIKE '%' + ISNULL('{filter}',f.[Description]) + '%') " +
-                    "GROUP BY f.Id, t.Id, p.Id, p.[Name], t.[Name], f.[Name], f.[Description], f.[FloorPlanFilePath]" +
+                    "GROUP BY f.Id, t.Id, p.Id, p.[Name], t.[Name], f.[Name], f.[Description], f.[FloorPlanFilePath], unitCount.UnitCount " +
                     $"ORDER BY {PropertyHelper.GetFloorSorterName(sortBy, sortOrder)} " +
                     $"OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
 

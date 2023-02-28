@@ -88,6 +88,10 @@ function saveInfo(event) {
 
     console.log('form data', value);
 
+    var redirectTo = $(event.target).attr('data-redirectTo');
+
+    console.log('redirect', redirectTo);
+
     var isCorpCheckbox = document.getElementsByName("IsCorporate");
 
     console.log('corp checkbox', isCorpCheckbox);
@@ -125,7 +129,12 @@ function saveInfo(event) {
 
                 event.target.classList.remove('was-validated');
 
-                window.location.reload();
+                if (redirectTo) {
+                    window.location.replace(redirectTo);
+                } else {
+                    window.location.reload();
+                }
+
                 $('.formLoader').hide();
             }, error: function (data) {
                 const response = data.responseJSON;

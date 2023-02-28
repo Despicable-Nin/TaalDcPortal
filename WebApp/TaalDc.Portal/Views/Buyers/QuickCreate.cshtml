@@ -25,7 +25,9 @@
             </ul>
         </div>
 
-        <form id="quickcreateForm" class="row mb-5 needs-validation" method="post" asp-action="Create" asp-controller="Buyers">
+        <form id="quickcreateForm" class="row mb-5 needs-validation" method="post" asp-action="Create" asp-controller="Buyers"
+            data-redirectTo="@Url.Action("Index","Buyers")"
+        >
             <div class="col-lg-12">
                 <label class="form-label">
                     <strong>Customer Name</strong>

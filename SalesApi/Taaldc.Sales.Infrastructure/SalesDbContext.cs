@@ -68,6 +68,9 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
         modelBuilder.HasSequence<int>("orderseq", DEFAULT_SCHEMA)
             .StartsAt(1).IncrementsBy(1);
+
+        modelBuilder.HasSequence<int>("buyerseq", DEFAULT_SCHEMA)
+            .StartsAt(1).IncrementsBy(1);
     }
 
     public IDbContextTransaction GetCurrentTransaction()

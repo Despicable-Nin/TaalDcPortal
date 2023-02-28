@@ -28,7 +28,7 @@
         </h4>
 
         <div class="mb-3" style="text-align: right;">
-            <a class="btn btn-primary" href="#" onclick="generateAcknowledgmentReceipt()">
+            <a class="btn btn-primary" target="_blank" asp-controller="Documents" asp-action="BuyerInformationSheet" asp-route-buyerId="@Model.Id" asp-route-type="@(Model.IsCorporate? "Corporate": "Individual")">
                <i class="fa-regular fa-file-pdf"></i> Buyer's Information Sheet
             </a>
         </div>

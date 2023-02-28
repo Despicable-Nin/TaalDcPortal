@@ -67,17 +67,14 @@
                     <strong class="primary-color">Unit No.</strong> <br/>
                     @Model.Unit
                 </p>
-                <p class="mb-5">
-                    <strong class="primary-color">Contract/Reference No.</strong> <br/>
-                    @Model.Code
-                </p>
+               
                 <p class="mb-5">
                     <strong class="primary-color">Acquisition Date</strong> <br/>
                     @(Model.TransactionDate.HasValue ? Model.TransactionDate.Value.ToString("MMMM dd, yyyy"): "-")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Broker/Sales Agent</strong> <br/>
-                    @Model.Broker
+                    @(!string.IsNullOrEmpty(Model.Broker) ? Model.Broker: "In-house")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Remarks</strong> <br/>
