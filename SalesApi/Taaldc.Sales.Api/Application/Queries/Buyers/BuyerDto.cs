@@ -2,14 +2,14 @@ using Microsoft.Build.ObjectModelRemoting;
 
 namespace Taaldc.Sales.Api.Application.Queries.Buyers;
 
-public record BuyerQueryDto : IQueryDto
+public record BuyerResultDto : IResultDto
 {
     public int BuyerId { get; init; }
     public string Salutation { get; init; }
     public string FirstName { get; init; }
     public string MiddleName { get; init; }
     public string LastName { get; init; }
-    public DateTime Dob { get; init; }
+    public DateTime Dob { get; init; }  
     public string CivilStatus { get; init; }
     public int CivilStatusId { get; init; }
     public string EmailAddress { get; init; }
@@ -52,4 +52,10 @@ public record BuyerQueryDto : IQueryDto
     public string? BillingAddress_Country { get; init; }
     public string? BillingAddress_ZipCode { get; init; }
 
+}
+
+public record BuyerDropdownResultDto : IResultDto
+{
+    public int BuyerId { get; init; }
+    public string FullName { get; init; }
 }

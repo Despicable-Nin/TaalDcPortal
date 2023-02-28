@@ -3,14 +3,14 @@ using Microsoft.Data.SqlClient;
 using Taaldc.Sales.Api.Application.Queries.Buyers;
 
 namespace Taaldc.Sales.Api.Application.Queries;
-public interface IQueryDto{}
+public interface IResultDto{}
 
-public record CountQuery : IQueryDto
+public record CountResult : IResultDto
 {
     public int Count { get; init; }    
 }
 
-public class QueryWrapper<T> where T : IQueryDto
+public class QueryWrapper<T> where T : IResultDto
 {
     private readonly string _connectionString;
     public static QueryWrapper<T> Create (string connectionString) => new (connectionString);

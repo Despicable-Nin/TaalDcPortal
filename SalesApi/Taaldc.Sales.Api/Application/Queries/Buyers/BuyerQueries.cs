@@ -13,9 +13,9 @@ public class BuyerQueries : IBuyerQueries
         _connectionString = connectionString;
     }
 
-    public async Task<BuyerQueryDto> GetBuyerByIdAsync(int id)
+    public async Task<BuyerResultDto> GetBuyerByIdAsync(int id)
     {
-        var result = await QueryWrapper<BuyerQueryDto>
+        var result = await QueryWrapper<BuyerResultDto>
             .Create(_connectionString)
             .Execute(@$"{BuyerSQL.SELECT_BUYER_QUERY} WHERE B.Id = {id}");
 
@@ -23,7 +23,7 @@ public class BuyerQueries : IBuyerQueries
 
     }
 
-    public async Task<PaginationQueryResult<BuyerQueryDto>> GetPaginatedAsync(int pageNumber, int pageSize, string name, string email, int? civilStatusId)
+    public async Task<PaginationQueryResult<BuyerResultDto>> GetPaginatedAsync(int pageNumber, int pageSize, string name, string email, int? civilStatusId)
     {
         var query = @$"{BuyerSQL.SELECT_BUYER_QUERY} ";
 
@@ -49,29 +49,39 @@ public class BuyerQueries : IBuyerQueries
         OFFSET {(pageNumber - 1) * pageSize} 
         ROWS FETCH NEXT {pageSize} ROWS ONLY";
 
-        var result = await QueryWrapper<BuyerQueryDto>
+        var result = await QueryWrapper<BuyerResultDto>
             .Create(_connectionString)
             .Execute(query);
 
         var countQuery = @"SELECT COUNT(*) [Count] 
                             FROM  [taaldb_sales].[sales].[buyer] ";
         
-        var countResult = await QueryWrapper<CountQuery>
+        var countResult = await QueryWrapper<CountResult>
             .Create(_connectionString)
             .Execute(countQuery);
 
-        return new PaginationQueryResult<BuyerQueryDto>(pageSize, pageNumber,  countResult.SingleOrDefault().Count, result);
-
+        return new PaginationQueryResult<BuyerResultDto>(pageSize, pageNumber,  countResult.SingleOrDefault().Count, result);
     }
 
     public async Task<bool> CheckIfBuyerExists(int id)
     {
+        
         var query = $"{BuyerSQL.SELECT_BUYER_COUNT} WHERE Id={id}";
-        var result = await QueryWrapper<CountQuery>
+        var result = await QueryWrapper<CountResult>
             .Create(_connectionString)
             .Execute(query);
 
         return result.SingleOrDefault()?.Count > 0;
+
+    }
+
+    public async Task<IEnumerable<BuyerDropdownResultDto>> GetBuyerDropdownDto()
+    {
+        var result = await QueryWrapper<BuyerDropdownResultDto>
+            .Create(_connectionString)
+            .Execute(BuyerSQL.SELECT_BUYER_FULLNAME_AND_ID);
+
+        return result;
 
     }
 }

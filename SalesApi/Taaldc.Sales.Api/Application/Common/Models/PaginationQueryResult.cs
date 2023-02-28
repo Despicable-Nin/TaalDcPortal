@@ -1,8 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Taaldc.Sales.Api.Application.Queries;
 
 namespace Taaldc.Sales.Api.Application.Common.Models;
 
-public class PaginationQueryResult<T>
+public class PaginationQueryResult<T> : IResultDto
 {
     public PaginationQueryResult(int pageSize, int pageNumber, int totalCount = 0, IEnumerable<T> data = default)
     {
