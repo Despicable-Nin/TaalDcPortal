@@ -62,14 +62,8 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.Remarks);
             
             //nevermind the overwrite
-            if (_currentUser.IsBroker())
-            {
-                order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense());
-            }
-            else
-            {
-                order.AddBrokerDetail("In-house", "", "");
-            }
+            order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name);
+           
 
             //add order item in order object
             foreach (var item in request.OrderItems)
