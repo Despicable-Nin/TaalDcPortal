@@ -58,9 +58,9 @@ public class Order : DomainEntity, IAggregateRoot
 
     public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc)
     {
-        Broker = brokerEmail;
-        Broker_Company = brokerCOmpany;
-        Broker_PrcLicense = brokerPrc;
+        Broker = brokerEmail ?? "in-house";
+        Broker_Company = brokerCOmpany ?? "n/a";
+        Broker_PrcLicense = brokerPrc ?? "n/a";
     }
     
     public string Remarks { get;private set; }
