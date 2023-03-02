@@ -62,7 +62,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.Remarks);
             
             //nevermind the overwrite
-            order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name);
+            order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name, _currentUser.IsBroker());
            
 
             //add order item in order object

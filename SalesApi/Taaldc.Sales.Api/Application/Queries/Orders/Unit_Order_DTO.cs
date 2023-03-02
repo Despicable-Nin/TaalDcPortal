@@ -35,6 +35,10 @@ public record Unit_Order_DTO
 
     [JsonPropertyName("broker")] public string? Broker { get; init; }
 
+    [JsonPropertyName("broker_email")] public string? Broker_Email { get; init; }
+    [JsonPropertyName("broker_company")] public string? Broker_Company { get; init; }
+    [JsonPropertyName("broker_prc_license")] public string? Broker_PrcLicense { get; init; }
+
     [JsonPropertyName("final_price")] public decimal FinalPrice { get; init; }
 
     [JsonPropertyName("refundable")] public bool IsRefundable { get; init; }

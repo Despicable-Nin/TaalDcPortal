@@ -33,6 +33,9 @@ public record GetSalesByIdResponse
     [JsonPropertyName("code")] public string? Code { get => this.OrderId.Value.ToString("00000"); }
 
 	[JsonPropertyName("broker")] public string? Broker { get; init; }
+    [JsonPropertyName("broker_email")] public string? Broker_Email { get; init; }
+    [JsonPropertyName("broker_company")] public string? Broker_Company { get; init; }
+    [JsonPropertyName("broker_prc_license")] public string? Broker_PrcLicense { get; init; }
 
     [JsonPropertyName("final_price")] public decimal? FinalPrice { get; init; }
 

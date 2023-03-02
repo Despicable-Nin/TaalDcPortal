@@ -5,7 +5,10 @@ internal static class OrderSQL
     public const string SELECT_ORDER_DETAILS = @"SELECT
     O.Id AS OrderId
     ,[Code]
-    ,[Broker]
+    ,[Broker_Name] AS Broker
+    ,[Broker_Email]
+    ,[Broker_Company]
+    ,[Broker_PrcLicense]
     ,[ReservationExpiresOn]
     ,[BuyerId]
     ,O.[StatusId]
@@ -61,7 +64,10 @@ internal static class OrderSQL
 
     public const string SELECT_UNITS_WITH_BUYER = @$"{WITH_PAYMENTCTE} SELECT  O.Id
         ,O.[Code] 
-        ,O.[Broker] 
+        ,O.[Broker_Name] AS Broker 
+        ,O.[Broker_Email]
+        ,O.[Broker_Company]
+        ,O.[Broker_PrcLicense]
         ,O.[Remarks] 
         ,O.[StatusId]
         ,OS.[Name] AS Status

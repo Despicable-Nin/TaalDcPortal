@@ -57,12 +57,12 @@ public class Order : DomainEntity, IAggregateRoot
     public string Broker_Company { get; private set; }
     public string Broker_PrcLicense { get; private set; }
 
-    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc,string brokerName)
+    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc,string brokerName, bool isBroker)
     {
-        Broker_Email = brokerEmail ?? "in-house";
+        Broker_Email = isBroker? brokerEmail ?? "in-house": "in-house";
         Broker_Company = brokerCOmpany ?? "n/a";
         Broker_PrcLicense = brokerPrc ?? "n/a";
-        Broker_Name = brokerName;
+        Broker_Name = isBroker? brokerName: "In-house";
     }
     
     public string Remarks { get;private set; }

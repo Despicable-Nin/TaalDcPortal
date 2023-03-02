@@ -81,7 +81,13 @@ public class BuyerQueries : IBuyerQueries
 
     }
 
-    public async Task<PaginationQueryResult<BuyerDto>> GetPaginatedAsync(int pageNumber, int pageSize, string name, string email, int? civilStatusId)
+    public async Task<PaginationQueryResult<BuyerDto>> GetPaginatedAsync(
+        int pageNumber, 
+        int pageSize, 
+        string name, 
+        string email, 
+        int? civilStatusId,
+        string createdBy)
     {
         var query = @$"{SELECT_BUYER_QUERY}";
 
@@ -100,6 +106,11 @@ public class BuyerQueries : IBuyerQueries
         if (civilStatusId.HasValue)
         {
             where += $"AND C.[Id] = {civilStatusId.HasValue} ";
+        }
+
+        if (!string.IsNullOrEmpty(createdBy))
+        {
+            where += $"AND (B.CreatedBy = '{createdBy}' OR B.ModifiedBy = '{createdBy}') ";
         }
 
         query += where;

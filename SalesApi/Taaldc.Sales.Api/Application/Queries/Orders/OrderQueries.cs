@@ -31,7 +31,7 @@ public class OrderQueries : IOrderQueries
         string? filter,
         string broker = "")
     {
-        var brokerString = string.IsNullOrEmpty(broker) ? "" : $" O.[Broker] = '{broker}' AND ";
+        var brokerString = string.IsNullOrEmpty(broker) ? "" : $" O.[Broker_Email] = '{broker}' AND ";
 
         var query =  @$"{OrderSQL.SELECT_UNITS_WITH_BUYER} WHERE {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) 
             AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
@@ -56,7 +56,8 @@ public class OrderQueries : IOrderQueries
             FROM 
                 [taaldb_sales].[sales].[unitreplica] U 
                 LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
-                LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId ";
+                LEFT Join [taaldb_sales].[sales].[order] O ON O.Id = OI.OrderId 
+                LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id";
 
         var countQuery =
             @$"{unitCountQuery} 
@@ -64,7 +65,8 @@ public class OrderQueries : IOrderQueries
                 {brokerString} U.UnitStatusId = ISNULL({(unitStatusId > 0 ? $"'{unitStatusId}'" : "NULL")}, U.UnitStatusId) 
                 AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
                 AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
-                AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)";
+                AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId) 
+                AND ISNULL(B.FirstName,'') + ' ' + ISNULL(B.LastName,'') LIKE '%{(!string.IsNullOrEmpty(filter) ? filter : "")}%'";
 
         var count = await connection.QueryAsync<int>(countQuery);
 
