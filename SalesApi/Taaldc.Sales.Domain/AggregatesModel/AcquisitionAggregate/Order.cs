@@ -15,7 +15,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public Order(
         int buyerId, 
-        string broker, 
+        string brokerEmail, 
         DateTime transactionDate,
         decimal discount,
         string remarks
@@ -23,7 +23,7 @@ public class Order : DomainEntity, IAggregateRoot
     {
         _buyerId = buyerId;
         Code = this.Id.ToString("00000");
-        Broker = broker;
+        Broker_Email = brokerEmail;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         Discount = discount;
@@ -39,7 +39,7 @@ public class Order : DomainEntity, IAggregateRoot
         
         if(_statusId == OrderStatus.GetIdByName(OrderStatus.New))
         {
-            Broker = broker;
+            Broker_Email = broker;
             Remarks = remarks;
             Discount = discount;
             
@@ -52,15 +52,17 @@ public class Order : DomainEntity, IAggregateRoot
 
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
-    public string Broker { get;private set; }
+    public string Broker_Email { get;private set; }
+    public string Broker_Name { get; private set; }
     public string Broker_Company { get; private set; }
     public string Broker_PrcLicense { get; private set; }
 
-    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc)
+    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc,string brokerName)
     {
-        Broker = brokerEmail;
-        Broker_Company = brokerCOmpany;
-        Broker_PrcLicense = brokerPrc;
+        Broker_Email = brokerEmail ?? "in-house";
+        Broker_Company = brokerCOmpany ?? "n/a";
+        Broker_PrcLicense = brokerPrc ?? "n/a";
+        Broker_Name = brokerName;
     }
     
     public string Remarks { get;private set; }
