@@ -74,16 +74,18 @@ async function onPropertyFormSubmit(modalBtn, redirectTo) {
     if (isFormValid) {
         var formAction = form.action
 
+        console.log('file', formBody.File)
 
-        if (value.File) {
-            delete formBody.File;
 
+        if (formBody.File && formBody.File.size > 0) {
             var filePath = await uploadFile();
 
             console.log("file path", filePath);
 
             formBody.FloorPlanFilePath = filePath;
         }
+
+        delete formBody.File;
 
         $.ajax({
             type: 'POST',

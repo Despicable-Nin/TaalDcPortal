@@ -59,7 +59,16 @@ namespace TaalDc.Portal.Controllers
                 try
                 {
                     var result = await _salesService.AddBuyer(buyer);
-                }catch(Exception err)
+
+                    return Ok(new 
+                    {
+                        result.Id,
+                        IsFormError = false,
+                        Message = ""
+                    });
+
+                }
+                catch(Exception err)
                 {
                     return BadRequest(new
                     {
@@ -69,7 +78,12 @@ namespace TaalDc.Portal.Controllers
                 }
             }
 
-            return Ok();
+            return BadRequest(new
+            {
+                IsFormError = true,
+                Message = "Please check your entry.",
+                ModelState = Json(ModelState)
+            });
         }
 
 

@@ -57,7 +57,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
         // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
         // performed through the DbContext will be committed
-        var result = await base.SaveChangesAsync(cancellationToken);
+        var result = await SaveChangesAsync(cancellationToken);
 
         return result;
     }
@@ -95,7 +95,8 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
         try
         {
-            await SaveChangesAsync();
+            //await SaveChangesAsync();
+            await SaveEntitiesAsync();
             transaction.Commit();
         }
         catch(Exception ex)

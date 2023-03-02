@@ -79,11 +79,9 @@ builder.Services.AddScoped<IDashboardQueries>(i =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Sales WebAPI"); });
-}
+
+app.UseSwagger();
+app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Sales WebAPI"); });
 
 
 using (var scope = app.Services.CreateScope())

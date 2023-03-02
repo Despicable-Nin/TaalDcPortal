@@ -130,7 +130,7 @@ function saveInfo(event) {
                 event.target.classList.remove('was-validated');
 
                 if (redirectTo) {
-                    window.location.replace(redirectTo);
+                    window.location.replace(redirectTo + '/' + data.id);
                 } else {
                     window.location.reload();
                 }
