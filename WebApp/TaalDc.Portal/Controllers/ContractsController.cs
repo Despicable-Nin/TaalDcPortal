@@ -44,18 +44,6 @@ namespace TaalDc.Portal.Controllers
 						result.Id
 					});
 
-				foreach (var orderItem in model.OrderItems)
-				{
-					//Update Unit Status in Catalog
-					var unitStatus =
-						new UnitStatusUpdate_ClientDto(orderItem.UnitId, 3, "Reserved");
-
-					var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
-
-					if (!unitStatusResult.IsSuccess)
-						return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
-				}
-
 				return Ok(result);
 			}
 
