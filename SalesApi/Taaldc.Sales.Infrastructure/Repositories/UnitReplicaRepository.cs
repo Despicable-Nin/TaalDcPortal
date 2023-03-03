@@ -37,6 +37,12 @@ public class UnitReplicaRepository : IUnitReplicaRepository
         return _context.Units.SingleOrDefault(i => i.Id == id);
     }
 
+    public async Task<int> SyncUnitStatusWithCatalog(int id)
+    {
+        var result = await _context.Database.ExecuteSqlRawAsync($"[sales].[spSyncUnitStatusWithCatalog] '{id}'");
+        return result;
+    }
+
     public UnitReplica Update(UnitReplica unitReplica)
     {
         return _context.Units.Update(unitReplica).Entity;

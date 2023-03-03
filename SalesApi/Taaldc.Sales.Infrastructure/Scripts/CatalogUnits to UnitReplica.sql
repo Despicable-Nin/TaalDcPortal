@@ -1,5 +1,4 @@
-USE
-taaldb_admin
+USE taaldb_admin
 GO
 
 DELETE
