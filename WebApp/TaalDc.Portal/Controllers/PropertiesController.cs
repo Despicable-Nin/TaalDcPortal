@@ -88,7 +88,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
-    [Authorize(Roles = "ADMIN,SALES,BROKER")]
+    [Authorize("LimitedCustodian")]
     public async Task<IActionResult> Towers(string filter,
         string sortBy,
         SortOrderEnum sortOrder,
@@ -265,7 +265,7 @@ public class PropertiesController : BaseController<PropertiesController>
 
     }
 
-    [Authorize(Roles = "ADMIN,SALES,BROKER")]
+    [Authorize("LimitedCustodian")]
     public async Task<IActionResult> Units(
         string filter,
         int? floorId,
@@ -282,8 +282,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return View(units);
     }
 
-
-    [Authorize(Roles = "ADMIN,SALES, BROKER")]
+    [Authorize("LimitedCustodian")]
     public async Task<IActionResult> GetUnits(
         string filter,
         int? floorId,
@@ -300,7 +299,7 @@ public class PropertiesController : BaseController<PropertiesController>
         return new JsonResult(units);
     }
 
-    [Authorize(Roles = "ADMIN,SALES, BROKER")]
+    [Authorize("LimitedCustodian")]
     public async Task<IActionResult> UnitTypes()
     {
         var unitTypes = await _catalogService.GetUnitTypes();
