@@ -60,8 +60,10 @@ public class UsersController : BaseController<UsersController>
             LastName = user.LastName,
             MiddleName = user.MiddleName,
             NameSuffix = user.NameSuffix,
+            Company = user.Company,
+            PRCLicense = user.PRCLicense,
             Role = user.Roles.FirstOrDefault() ?? string.Empty,
-            IsActive = user.Roles.Any()
+            IsActive = user.Roles.Any(),
         };
 
         return View(model);

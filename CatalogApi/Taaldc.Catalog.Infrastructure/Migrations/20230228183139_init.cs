@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -176,7 +176,7 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FloorPlanFilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FloorPlanFilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TowerId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -205,8 +205,8 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     Identifier = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     FloorArea = table.Column<double>(type: "float", nullable: false),
-                    BalconyArea = table.Column<double>(type: "float", nullable: false),
-                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BalconyArea = table.Column<double>(type: "float", nullable: false, defaultValue: 0.0),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FloorId = table.Column<int>(type: "int", nullable: false),
                     ScenicViewId = table.Column<int>(type: "int", nullable: false),
                     UnitStatus = table.Column<int>(type: "int", nullable: false),

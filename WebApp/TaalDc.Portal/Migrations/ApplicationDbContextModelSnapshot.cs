@@ -235,6 +235,9 @@ namespace TaalDc.Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("UserId"), "userseq", "dbo");
 
+                    b.Property<string>("Company")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -249,6 +252,9 @@ namespace TaalDc.Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameSuffix")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PRCLicense")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");

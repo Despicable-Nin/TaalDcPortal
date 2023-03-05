@@ -2,7 +2,7 @@ namespace Taaldc.Sales.Api.Application.Queries.Buyers;
 
 public class BuyerSQL
 {
-    public const string SELECT_BUYER_COUNT = " SELECT COUNT(*) AS Count FROM [taaldb_sales].[sales].[buyer] ";
+    public const string SELECT_BUYER_COUNT = " SELECT COUNT(*) AS Total FROM [taaldb_sales].[sales].[buyer] ";
 
     public const string SELECT_BUYER_FULLNAME_AND_ID =
         @"SELECT [Id] [BuyerId] ,[LastName] + ', ' + [FirstName] +  ' ' + [MiddleName] [Buyer]      

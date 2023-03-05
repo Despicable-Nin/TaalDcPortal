@@ -8,7 +8,7 @@ using WebApplication2.Controllers;
 
 namespace TaalDc.Portal.Controllers
 {
-    [Authorize]
+    [Authorize("Custodian")]
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
@@ -59,7 +59,16 @@ namespace TaalDc.Portal.Controllers
                 try
                 {
                     var result = await _salesService.AddBuyer(buyer);
-                }catch(Exception err)
+
+                    return Ok(new 
+                    {
+                        result.Id,
+                        IsFormError = false,
+                        Message = ""
+                    });
+
+                }
+                catch(Exception err)
                 {
                     return BadRequest(new
                     {
@@ -69,7 +78,12 @@ namespace TaalDc.Portal.Controllers
                 }
             }
 
-            return Ok();
+            return BadRequest(new
+            {
+                IsFormError = true,
+                Message = "Please check your entry.",
+                ModelState = Json(ModelState)
+            });
         }
 
 
@@ -147,9 +161,9 @@ namespace TaalDc.Portal.Controllers
         }
 
 
-        public IActionResult Contracts(int id) {
+        public async Task<IActionResult> Contracts(int id) {
 
-            var buyerContracts = new List<Contract_ClientDto>();
+            var buyerContracts = await _salesService.GetBuyerContracts(id);
 
             ViewData["BuyerId"] = id;
 

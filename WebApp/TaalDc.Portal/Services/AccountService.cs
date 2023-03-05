@@ -89,7 +89,7 @@ public class AccountService : IAccountService
             var profile =
                 _applicationDbContext.UserProfiles.FirstOrDefault(profile => profile.Identity == user.Id);
             vm.AddUser(new UserViewModel(user.Id, user.Email, profile?.FirstName, profile?.LastName,
-                profile?.NameSuffix, profile?.MiddleName, currentRoles.ToArray(), currentRoles.Any()));
+                profile?.NameSuffix, profile?.MiddleName, currentRoles.ToArray(), currentRoles.Any(), profile?.Company, profile?.PRCLicense));
         }
 
         return vm;
@@ -197,7 +197,7 @@ public class AccountService : IAccountService
 
             if (profile == default)
             {
-                profile = new UserProfile(vm.FirstName, vm.LastName, vm.MiddleName, vm.NameSuffix, user.Id);
+                profile = new UserProfile(vm.FirstName, vm.LastName, vm.MiddleName, vm.NameSuffix, user.Id, vm.Company, vm.PRCLicense);
                 _applicationDbContext.UserProfiles.Add(profile);
             }
             else
@@ -206,6 +206,8 @@ public class AccountService : IAccountService
                 profile.MiddleName = vm.MiddleName;
                 profile.LastName = vm.LastName;
                 profile.NameSuffix = vm.NameSuffix;
+                profile.Company = vm.Company;
+                profile.PRCLicense = vm.PRCLicense;
 
                 _applicationDbContext.UserProfiles.Update(profile);
             }
@@ -229,6 +231,6 @@ public class AccountService : IAccountService
             _applicationDbContext.UserProfiles.FirstOrDefault(profile => profile.Identity == user.Id);
 
         return new UserViewModel(user.Id, user.Email, profile?.FirstName, profile?.LastName, profile?.MiddleName,
-            profile?.NameSuffix, roles.ToArray(), roles.Any());
+            profile?.NameSuffix, roles.ToArray(), roles.Any(),profile?.Company, profile?.PRCLicense);
     }
 }

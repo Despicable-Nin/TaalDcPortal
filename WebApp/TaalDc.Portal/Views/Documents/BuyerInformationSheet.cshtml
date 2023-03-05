@@ -1,0 +1,62 @@
+﻿@using Newtonsoft.Json;
+@using TaalDc.Portal.DTO.Sales.Buyer;
+@model Buyer_ClientDto
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Title = "Buyer Information Sheet";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buyer Information Sheet</title>
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/e49025cb51.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="pdf-wrapper">
+        <div class="pdf-content buyerinfo">
+            <p id="LastName">
+                @Model.LastName
+            </p>
+
+            <p id="FirstName">
+                @Model.FirstName
+            </p>
+
+            <p id="MiddleName">
+                @Model.MiddleName
+            </p>
+
+            <p id="HomeAddress">
+                @if (Model.HomeAddress != null)
+                {
+                   <span>@Model.HomeAddress.Street @Model.HomeAddress.City @Model.HomeAddress.State @Model.HomeAddress.Country @Model.HomeAddress.ZipCode</span>
+                }
+            </p>
+
+            <p id="BusinessAddress">
+                @if (Model.BusinessAddress != null)
+                {
+                    <span>@Model.BusinessAddress.Street @Model.BusinessAddress.City @Model.BusinessAddress.State @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
+                }
+            </p>
+
+            
+            <img src="~/files/forms/BUYER'S INFO SHEET IND.jpg" />
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.print();
+    </script>
+</body>
+</html>

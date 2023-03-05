@@ -16,7 +16,19 @@ public class CurrentUser : IAmCurrentUser
         IdentityId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         Roles = httpContextAccessor.HttpContext?.User?.FindAll(ClaimTypes.Role)?.Select(i => i.Value).ToArray();
         _isAuthenticated = !string.IsNullOrEmpty(Email);
+        
+        var data = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.UserData);
+        if (data != default)
+        {
+            _company = data.Split("-")[0];
+            _prcLicense = data.Split("-")[1];
+        }
     }
+    
+    private readonly string _company;
+    private readonly string _prcLicense;
+    public string GetCompany() => _company;
+    public string GetPrcLicense() => _prcLicense;
     
     public string Name { get; }
     public string[] Roles { get; }
@@ -26,4 +38,5 @@ public class CurrentUser : IAmCurrentUser
     
     public bool IsAdmin() => Roles.Contains("ADMIN");
     public bool IsBroker() => Roles.Contains("BROKER");
+
 }

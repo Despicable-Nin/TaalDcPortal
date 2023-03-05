@@ -72,6 +72,18 @@
                     This is a required field.
                 </div>
             </div>
+            <div class="mb-3 col-lg-6">
+                <label asp-for="Company" class="form-label">
+                    <strong>Company</strong>
+                </label>
+                 <input asp-for="Company" class="form-control" placeholder="N/A"/>
+            </div>
+            <div class="mb-3 col-lg-6">
+                <label asp-for="PRCLicense" class="form-label">
+                    <strong>PRC License No.</strong>
+                </label>
+                 <input asp-for="PRCLicense" class="form-control" placeholder="N/A"/>
+            </div>
             <div class="mb-3 col-lg-12">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="true" asp-for="IsActive">

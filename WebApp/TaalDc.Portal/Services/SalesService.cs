@@ -187,13 +187,15 @@ public class SalesService : ISalesService
     }
 
     public async Task<PaginationQueryResult<GetSalesByIdResponse>> GetUnitAndOrdersAvailability(int unitStatusId,
-        int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string broker = "")
+        int pageNumber, int pageSize, int? floorId, int? unitTypeId, int? viewId, string? filter, string broker = "")
     {
         var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
 
         var brokerString = string.IsNullOrEmpty(broker) ? string.Empty : $"&broker={broker}";
+        var filterString = string.IsNullOrEmpty(filter) ? string.Empty : $"&filter={filter}";
+
         uri =
-            $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}{brokerString}";
+            $"{uri}?floorId={floorId}&unitTypeId={unitTypeId}&viewId={viewId}&unitStatus={unitStatusId}&pageNumber={pageNumber}&pageSize={pageSize}{brokerString}{filterString}";
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -366,7 +368,12 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Sale cannot be created.");
+        return new Response(
+            "Sales cannot be created. Please contact your system admin.",
+             false,
+            null);
+
+        //throw new Exception("Sale cannot be created.");
     }
 
     public async Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id)
@@ -377,6 +384,19 @@ public class SalesService : ISalesService
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<IEnumerable<ContractOrderItem_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id)
+    {
+        var uri = API.Sales.GetSales(_remoteServiceBaseUrl);
+        uri = $"{uri}/{id}/buyer-contract";
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<Contract_ClientDto>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;

@@ -12,8 +12,8 @@ using Taaldc.Catalog.Infrastructure;
 namespace Taaldc.Catalog.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogDbContext))]
-    [Migration("20230227034320_Initial")]
-    partial class Initial
+    [Migration("20230228183139_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,7 +69,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FloorPlanFilePath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -240,7 +239,9 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "unitseq", "catalog");
 
                     b.Property<double>("BalconyArea")
-                        .HasColumnType("float");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("float")
+                        .HasDefaultValue(0.0);
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -273,7 +274,6 @@ namespace Taaldc.Catalog.Infrastructure.Migrations
                         .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Remarks")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("_scenicViewId")

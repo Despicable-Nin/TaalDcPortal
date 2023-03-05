@@ -32,24 +32,23 @@ public class TowerQueries : ITowerQueries
     public async Task<PaginationQueryResult<TowerQueryResult>> GetActiveTowers(string filter, string sortBy,
         SortOrderEnum sortOrder, int pageNumber = 1, int pageSize = 10)
     {
-        var query = "SELECT DISTINCT(t.Id)" +
+        var unitCTE = $"WITH unitcount_CTE AS(SELECT DISTINCT(f.TowerId) AS TowerId,Count(*) AS UnitCount FROM catalog.unit u JOIN catalog.floors f ON u.FloorId = f.Id WHERE u.IsActive = '1'AND u.ScenicViewId > 1 GROUP BY f.TowerId)";
+
+        var query = $"{unitCTE} SELECT DISTINCT(t.Id)" +
                     ",p.[Id] AS PropertyId" +
                     ",p.[Name] AS PropertyName" +
                     ",t.[Name] AS TowerName" +
                     ",t.[Address]" +
-                    ",COUNT(u.[Id]) AS Units " +
+                    ",unitCount.UnitCount AS Units  " +
                     "FROM catalog.tower t " +
                     "JOIN catalog.property p " +
                     "ON t.PropertyId = p.Id " +
-                    "LEFT JOIN catalog.floors f " +
-                    "ON f.TowerId = t.Id " +
-                    "LEFT JOIN catalog.unit u " +
-                    "ON u.FloorId = f.Id AND u.IsActive = '1' " +
-                    "AND u.ScenicViewId > 1 " +
+                    "LEFT JOIN unitcount_CTE unitCount " +
+                    "ON unitCount.TowerId = t.Id " +
                     "WHERE t.IsActive = '1'  " +
                     $"AND (t.[Name] LIKE '%' + ISNULL('{filter}',t.[Name]) + '%'  OR " +
                     $"p.[Name] LIKE '%' + ISNULL('{filter}',t.[Name]) + '%' ) " +
-                    "GROUP BY t.Id, p.Id, p.[Name], t.[Name], t.[Address] " +
+                    "GROUP BY t.Id, p.Id, p.[Name], t.[Name], t.[Address], unitCount.UnitCount " +
                     $"ORDER BY {PropertyHelper.GetTowerSorterName(sortBy, sortOrder)} " +
                     $"OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY";
 

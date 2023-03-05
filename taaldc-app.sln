@@ -1,55 +1,55 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1704.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CatalogApi", "CatalogApi", "{E89957EF-466A-4188-8DCD-C3AC29A85B61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Catalog.Domain", "CatalogApi\Taaldc.Catalog.Domain\Taaldc.Catalog.Domain.csproj", "{F1B11443-321D-435E-8AFE-DD2895A0CF48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Catalog.Domain", "CatalogApi\Taaldc.Catalog.Domain\Taaldc.Catalog.Domain.csproj", "{F1B11443-321D-435E-8AFE-DD2895A0CF48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Catalog.Infrastructure", "CatalogApi\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj", "{B6A43278-C47D-4DBE-99CF-41506DFD4774}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Catalog.Infrastructure", "CatalogApi\Taaldc.Catalog.Infrastructure\Taaldc.Catalog.Infrastructure.csproj", "{B6A43278-C47D-4DBE-99CF-41506DFD4774}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.Domain.Tests", "CatalogApi\tests\Catalog.Domain.Tests\Catalog.Domain.Tests.csproj", "{F9D1D9C3-7F32-4C9E-A8B4-33EFCA8BE939}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain.Tests", "CatalogApi\tests\Catalog.Domain.Tests\Catalog.Domain.Tests.csproj", "{F9D1D9C3-7F32-4C9E-A8B4-33EFCA8BE939}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeedWork", "SeedWork\SeedWork.csproj", "{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeedWork", "SeedWork\SeedWork.csproj", "{4FA3B326-5A40-4EC1-A8D6-86E26985FD16}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Library.Common", "Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj", "{A4B9E868-4623-4747-BA89-EE71C349FC94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Library.Common", "Common\Taaldc.Library.Common\Taaldc.Library.Common.csproj", "{A4B9E868-4623-4747-BA89-EE71C349FC94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Catalog.API", "CatalogApi\Taaldc.Catalog.API\Taaldc.Catalog.API.csproj", "{EB1843DF-6053-451C-9374-C9A339EAD95F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Catalog.API", "CatalogApi\Taaldc.Catalog.API\Taaldc.Catalog.API.csproj", "{EB1843DF-6053-451C-9374-C9A339EAD95F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MarketingApi", "MarketingApi", "{64B0E492-5994-4A0F-9464-701A8B3A9136}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.Domain", "MarketingApi\Taaldc.Marketing.Domain\Taaldc.Marketing.Domain.csproj", "{5E2F9BC6-B568-4B78-A68D-203846C20B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Marketing.Domain", "MarketingApi\Taaldc.Marketing.Domain\Taaldc.Marketing.Domain.csproj", "{5E2F9BC6-B568-4B78-A68D-203846C20B1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.Infrastructure", "MarketingApi\Taaldc.Marketing.Infrastructure\Taaldc.Marketing.Infrastructure.csproj", "{286683B1-365D-481A-9A49-80CD06D81E49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Marketing.Infrastructure", "MarketingApi\Taaldc.Marketing.Infrastructure\Taaldc.Marketing.Infrastructure.csproj", "{286683B1-365D-481A-9A49-80CD06D81E49}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portal", "Portal", "{18228AA3-9609-4C01-9771-20B89A0FA358}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Marketing.API", "MarketingApi\Taaldc.Marketing.API\Taaldc.Marketing.API.csproj", "{85A62F45-1788-4366-B953-5E3757F6B89A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Marketing.API", "MarketingApi\Taaldc.Marketing.API\Taaldc.Marketing.API.csproj", "{85A62F45-1788-4366-B953-5E3757F6B89A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaalDc.Portal", "WebApp\TaalDc.Portal\TaalDc.Portal.csproj", "{7A878D5B-9C30-42EE-BF74-049799590BEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaalDc.Portal", "WebApp\TaalDc.Portal\TaalDc.Portal.csproj", "{7A878D5B-9C30-42EE-BF74-049799590BEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SalesApi", "SalesApi", "{95689C89-7AAE-48FF-938E-DDCFAD992A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Sales.Api", "SalesApi\Taaldc.Sales.Api\Taaldc.Sales.Api.csproj", "{8BF0AD86-5ED7-4D02-911D-AED11FED6FFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Sales.Api", "SalesApi\Taaldc.Sales.Api\Taaldc.Sales.Api.csproj", "{8BF0AD86-5ED7-4D02-911D-AED11FED6FFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Sales.Domain", "SalesApi\Taaldc.Sales.Domain\Taaldc.Sales.Domain.csproj", "{AD416334-9464-4052-9D2F-647581E4BE47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Sales.Domain", "SalesApi\Taaldc.Sales.Domain\Taaldc.Sales.Domain.csproj", "{AD416334-9464-4052-9D2F-647581E4BE47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Sales.Infrastructure", "SalesApi\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj", "{875BFAFC-3A2A-4D88-B5B5-40F0983FFDAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Sales.Infrastructure", "SalesApi\Taaldc.Sales.Infrastructure\Taaldc.Sales.Infrastructure.csproj", "{875BFAFC-3A2A-4D88-B5B5-40F0983FFDAE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Jobs", "Jobs", "{D4645387-2971-4218-B432-2506C695A77C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steve.Job", "Jobs\Steve.Job\Steve.Job.csproj", "{007117A2-B1C7-4A3E-84D3-E360B1558198}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steve.Job", "Jobs\Steve.Job\Steve.Job.csproj", "{007117A2-B1C7-4A3E-84D3-E360B1558198}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taaldc.Common.Persistence", "Common\Taaldc.Common.Persistence\Taaldc.Common.Persistence.csproj", "{9E879902-43F1-4CE6-8A45-E6CA65939B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Taaldc.Common.Persistence", "Common\Taaldc.Common.Persistence\Taaldc.Common.Persistence.csproj", "{9E879902-43F1-4CE6-8A45-E6CA65939B6F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{76995FB2-4A00-4D26-B4D0-5B8A976DC723}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus", "Common\EventBus\EventBus\EventBus.csproj", "{7EB44EFB-7C0B-4A2C-97C6-3B587E240A75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus", "Common\EventBus\EventBus\EventBus.csproj", "{7EB44EFB-7C0B-4A2C-97C6-3B587E240A75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBusRabbitMQ", "Common\EventBusRabbitMQ\EventBusRabbitMQ\EventBusRabbitMQ.csproj", "{DB57B6D0-E57A-42CE-AB4D-DBE149F47F93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusRabbitMQ", "Common\EventBusRabbitMQ\EventBusRabbitMQ\EventBusRabbitMQ.csproj", "{DB57B6D0-E57A-42CE-AB4D-DBE149F47F93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventLogEF", "Common\IntegrationEventLogEF\IntegrationEventLogEF\IntegrationEventLogEF.csproj", "{48793081-CD76-4454-B18B-7345892A80C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationEventLogEF", "Common\IntegrationEventLogEF\IntegrationEventLogEF\IntegrationEventLogEF.csproj", "{48793081-CD76-4454-B18B-7345892A80C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,13 +133,12 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C186E996-84FB-4D79-A809-32DD16EF16CD}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F1B11443-321D-435E-8AFE-DD2895A0CF48} = {E89957EF-466A-4188-8DCD-C3AC29A85B61}
 		{B6A43278-C47D-4DBE-99CF-41506DFD4774} = {E89957EF-466A-4188-8DCD-C3AC29A85B61}
 		{F9D1D9C3-7F32-4C9E-A8B4-33EFCA8BE939} = {E89957EF-466A-4188-8DCD-C3AC29A85B61}
+		{4FA3B326-5A40-4EC1-A8D6-86E26985FD16} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
+		{A4B9E868-4623-4747-BA89-EE71C349FC94} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
 		{EB1843DF-6053-451C-9374-C9A339EAD95F} = {E89957EF-466A-4188-8DCD-C3AC29A85B61}
 		{5E2F9BC6-B568-4B78-A68D-203846C20B1D} = {64B0E492-5994-4A0F-9464-701A8B3A9136}
 		{286683B1-365D-481A-9A49-80CD06D81E49} = {64B0E492-5994-4A0F-9464-701A8B3A9136}
@@ -149,11 +148,12 @@ Global
 		{AD416334-9464-4052-9D2F-647581E4BE47} = {95689C89-7AAE-48FF-938E-DDCFAD992A7B}
 		{875BFAFC-3A2A-4D88-B5B5-40F0983FFDAE} = {95689C89-7AAE-48FF-938E-DDCFAD992A7B}
 		{007117A2-B1C7-4A3E-84D3-E360B1558198} = {D4645387-2971-4218-B432-2506C695A77C}
-		{4FA3B326-5A40-4EC1-A8D6-86E26985FD16} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
 		{9E879902-43F1-4CE6-8A45-E6CA65939B6F} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
-		{A4B9E868-4623-4747-BA89-EE71C349FC94} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
 		{7EB44EFB-7C0B-4A2C-97C6-3B587E240A75} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
 		{DB57B6D0-E57A-42CE-AB4D-DBE149F47F93} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
 		{48793081-CD76-4454-B18B-7345892A80C2} = {76995FB2-4A00-4D26-B4D0-5B8A976DC723}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C186E996-84FB-4D79-A809-32DD16EF16CD}
 	EndGlobalSection
 EndGlobal

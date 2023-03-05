@@ -15,7 +15,19 @@ public class CurrentUser : IAmCurrentUser
         _isAuthenticated = !string.IsNullOrEmpty(Email);
 
         if (Roles == null) Roles = Array.Empty<string>();
+       
+        var data = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.UserData);
+        if (data != default)
+        {
+            _company = data.Split("-")[0];
+            _prcLicense = data.Split("-")[1];
+        }
     }
+    
+    private readonly string _company;
+    private readonly string _prcLicense;
+    public string GetCompany() => _company;
+    public string GetPrcLicense() => _prcLicense;
 
     public string Name { get; }
     public string[] Roles { get; }

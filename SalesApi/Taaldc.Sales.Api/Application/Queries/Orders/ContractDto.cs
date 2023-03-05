@@ -4,8 +4,10 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 public class ContractDto
 {
-    [JsonPropertyName(("code"))]
-    public string Code { get; init; }
+	[JsonPropertyName(("order_id"))]
+	public int OrderId { get; init; }
+	[JsonPropertyName(("code"))]
+    public string Code { get => this.OrderId.ToString("00000"); }
     [JsonPropertyName("buyer_id")] 
     public int BuyerId { get;  init; }
     [JsonPropertyName("transaction_date")] 

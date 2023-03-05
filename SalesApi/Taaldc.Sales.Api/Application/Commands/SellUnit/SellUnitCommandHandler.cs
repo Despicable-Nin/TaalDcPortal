@@ -60,14 +60,17 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.TransactionDate, 
                 request.Discount,
                 request.Remarks);
+            
+            //nevermind the overwrite
+            order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name, _currentUser.IsBroker());
+           
 
             //add order item in order object
             foreach (var item in request.OrderItems)
             {
-                order.AddOrUpdateOrderItem(item.UnitId, item.Price,null);
-                //order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
+                order.AddOrUpdateOrderItem(item.UnitId, item.Price, null);
             }
-            
+
             //if RF should had been paid
             if (request.ReservationFee > 0)
             {
@@ -108,8 +111,11 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
             //add order item in order object
             foreach (var item in request.OrderItems)
             {
-                await _mediator.Publish(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
+                order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.UnitId, 3, "RESERVED"));
             }
+
+      
+          
 
             return CommandResult.Success(order.Id);
         }
