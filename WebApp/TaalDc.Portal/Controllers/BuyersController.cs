@@ -8,7 +8,7 @@ using WebApplication2.Controllers;
 
 namespace TaalDc.Portal.Controllers
 {
-    [Authorize]
+    [Authorize("Custodian")]
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
