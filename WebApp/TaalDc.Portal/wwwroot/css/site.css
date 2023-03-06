@@ -122,6 +122,7 @@ strong {
     font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 
+
 .hide {
     display: none;
 }
@@ -422,6 +423,11 @@ tr.accepted td{
     height: 40px;
     position: absolute;
     left: 2%;
+}
+
+
+.modal-title {
+    font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 
 @media (max-width: 1240px) {

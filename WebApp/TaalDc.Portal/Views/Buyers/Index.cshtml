@@ -3,7 +3,22 @@
 
 @{
     ViewData["Title"] = "Buyers";
-    var filter = Context.Request.Query["filter"].FirstOrDefault();
+    var filter = Context.Request.Query["name"].FirstOrDefault();
+
+    var currentPageNo = Model.PageNumber;
+    var numberOfPagesToDisplay = 5;
+
+    var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
+
+    var pageGroups = new List<int>();
+
+    for (var i = 1; i <= totalPageGroups; i++)
+    {
+        pageGroups.Add(i * numberOfPagesToDisplay);
+    }
+
+    var nextPage = 0;
+    var prevPage = 0;
 }
 
 
@@ -23,7 +38,7 @@
 
         <div class="action-search">
             <form>
-                <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..." />
+                <input name="name" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..." />
             </form>
         </div>
     </div>
@@ -64,6 +79,49 @@
                 </tbody>
             </table>
         </div>
+
+            <div>
+                <ul class="pagination">
+
+                    @{
+                        var pageGroupIndex = pageGroups.Where(i => currentPageNo <= i).FirstOrDefault();
+                        var lastPageIndex = pageGroups.OrderByDescending(i => i).FirstOrDefault();
+                        var pageGroup = pageGroups.Count() > 0 && pageGroupIndex > 0 ? pageGroupIndex : Model.TotalPages;
+                        var pageGroupMinPage = Model.TotalPages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+                        //5 -> 0
+                        //10 -> 5
+
+                        nextPage = currentPageNo < Model.TotalPages ? currentPageNo + 1 : 0;
+                        prevPage = currentPageNo > 1 ? currentPageNo - 1 : 0;
+                    }
+
+                    <li class="page-item @(prevPage == 0 ? "disabled" : "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
+                    </li>
+
+                    @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
+                    {
+                        <li class="page-item">
+                            <a href="?pageNumber=@(Model.PageNumber)" class="noselect page-link alink active">@Model.PageNumber</a>
+                        </li>
+                    }
+
+                    @for (var i = pageGroupMinPage; i < pageGroup; i++)
+                    {
+                        var active = i + 1 == Model.PageNumber;
+                        var pageNo = i + 1;
+                        <li class="page-item">
+                            <a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(nextPage == 0 ? "disabled" : "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
+                    </li>
+
+                </ul>
+            </div>
 
                 
     </div>

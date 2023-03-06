@@ -180,11 +180,11 @@ public class SalesController : BaseController<SalesController>
 
 
     [HttpPost]
-    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId, int paymentTypeId)
+    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId, int paymentTypeId, string confirmationNumber)
     {
         if (orderId > 0 && paymentId > 0)
         {
-            var result = await _salesService.AcceptPayment(orderId, paymentId);
+            var result = await _salesService.AcceptPayment(orderId, paymentId, confirmationNumber);
 
             if (!result.IsSuccess)
                 return BadRequest(new

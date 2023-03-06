@@ -150,7 +150,7 @@ public class Order : DomainEntity, IAggregateRoot
     public Payment FindPayment(string confirmationNumber) =>
         _payments.SingleOrDefault(i => i.ConfirmationNumber == confirmationNumber);
 
-    public void AcceptPayment(int paymentId, string verifiedBy)
+    public void AcceptPayment(int paymentId, string verifiedBy, string confirmationNumber)
     {
         if (_payments.Any(i =>
                 i.Id == paymentId && i.GetPaymentStatusId() != PaymentStatus.GetStatusId(PaymentStatus.Pending)))
@@ -159,7 +159,8 @@ public class Order : DomainEntity, IAggregateRoot
         }
         
         var payment = _payments.SingleOrDefault(i => i.Id == paymentId);
-        payment.VerifyPayment(verifiedBy);
+
+        payment.VerifyPayment(verifiedBy, confirmationNumber);
 
         
         //TODO: This is candidate for pub-sub

@@ -107,9 +107,9 @@ public static class API
             return $"{baseUrl}/api/v1/sales";
         }
 
-        public static string AcceptPayment(string baseUrl, int orderId, int paymentId)
+        public static string AcceptPayment(string baseUrl, int orderId, int paymentId, string confirmationNumber)
         {
-            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve";
+            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve?confirmationNumber={confirmationNumber}";
         }
 
         public static string VoidPayment(string baseUrl, int orderId, int paymentId)
