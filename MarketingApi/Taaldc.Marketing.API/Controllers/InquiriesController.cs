@@ -1,9 +1,10 @@
-using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SeedWork;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 using Taaldc.Marketing.API.DTO;
 using Taaldc.Marketing.Domain.AggregatesModel.InquiryAggregate;
 using Taaldc.Marketing.Infrastructure;
@@ -113,14 +114,61 @@ public class InquiriesController : Controller
    [ProducesErrorResponseType(typeof(BadRequestResult))]
    public async Task<IActionResult> PostInquiries( AddInquiryDto dto )
    {
-      Inquiry entity = new(dto.InquiryType, dto.Message, dto.PropertyId, dto.Property, dto.Remarks,
-         new Customer(dto.Salutation, dto.FirstName, dto.LastName, dto.EmailAddress, dto.ContactNo, dto.Country,
-            dto.Province, dto.TownCity));
-      
-       _dbContext.Inquiries.Add(entity);
-       await _dbContext.SaveEntitiesAsync();
-      return Ok();
+        try
+        {
+            Inquiry entity = new(dto.InquiryType, dto.Message, dto.PropertyId, dto.Property, dto.Remarks,
+                new Customer(dto.Salutation, dto.FirstName, dto.LastName, dto.EmailAddress, dto.ContactNo, dto.Country,
+                dto.Province, dto.TownCity));
+
+            _dbContext.Inquiries.Add(entity);
+
+            await _dbContext.SaveEntitiesAsync();
+            await SendEmailToSales(dto, entity);
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
+
+
+        return Ok();
    }
-   
+
+    private static async Task SendEmailToSales(AddInquiryDto dto, Inquiry entity)
+    {
+        var salutationArray = dto.Salutation.Split(":");
+        var withOtherSalutation = salutationArray[0] == "Other";
+
+        var salutation = withOtherSalutation ? salutationArray[1] : salutationArray[0];
+
+        var address = $"{dto.TownCity}, {dto.Province}, {dto.Country}";
+
+        var body = $"<div dir=\"ltr\">\r\n<p><strong>Inquiry Date</strong><br />{entity.CreatedOn.ToString("MMMM dd, yyyy hh:mm tt")}</p>\r\n" +
+            $"<p><strong>Full Name</strong><br />{salutation} {dto.FirstName} {dto.LastName}</p>\r\n" +
+            $"<p><strong>Inquiry Type</strong><br />{dto.InquiryType}</p>\r\n" +
+            $"<p><strong>Email Address</strong><br /><a href=\"{dto.EmailAddress}\" target=\"_blank\">{dto.EmailAddress}</a>" +
+            $"</p>\r\n<p><strong>Contact No.</strong><br />{dto.ContactNo}</p>\r\n" +
+            $"<p><strong>Address</strong><br />{address}</p>\r\n" +
+            $"<p><strong>Property Inquired</strong><br />{dto.Property}</p>\r\n" +
+            $"<p><strong>Message</strong><br />{dto.Message}</p>\r\n</div>";
+
+        var apiKey = "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";
+        var client = new SendGridClient(apiKey);
+        var from = new EmailAddress("taaldcwebsite@gmail.com", "Taaldc Website");
+        var subject = $"New Inquiry Received - {dto.InquiryType}";
+
+        var recipients = new List<EmailAddress>();
+#if DEBUG
+
+        recipients.Add(new EmailAddress("chrisdanevalla@gmail.com", "Chrisdan Evalla"));
+#else
+            recipients.Add(new EmailAddress("sales@taaldc.com.ph", "Sales"));
+            recipients.Add(new EmailAddress("taalDC2010@gmail.com", "Taal DC"));
+#endif
+        var htmlContent = body;
+        var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, recipients, subject, "", htmlContent);
+        var response = await client.SendEmailAsync(msg);
+    }
 
 }
