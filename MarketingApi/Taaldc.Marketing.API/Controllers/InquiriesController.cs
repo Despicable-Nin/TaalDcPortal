@@ -165,6 +165,7 @@ public class InquiriesController : Controller
 #else
             recipients.Add(new EmailAddress("sales@taaldc.com.ph", "Sales"));
             recipients.Add(new EmailAddress("taalDC2010@gmail.com", "Taal DC"));
+            recipients.Add(new EmailAddress("taaldcwebsite@gmail.com", "Taal DC"));
 #endif
         var htmlContent = body;
         var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, recipients, subject, "", htmlContent);

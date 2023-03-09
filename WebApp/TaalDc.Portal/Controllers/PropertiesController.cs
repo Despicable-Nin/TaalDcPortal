@@ -9,7 +9,7 @@ using TaalDc.Portal.ViewModels.Catalog;
 
 namespace TaalDc.Portal.Controllers;
 
-[Authorize("Custodian")]
+[Authorize]
 public class PropertiesController : BaseController<PropertiesController>
 {
     private readonly ICatalogService _catalogService;
