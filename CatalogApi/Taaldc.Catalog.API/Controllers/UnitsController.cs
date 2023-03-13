@@ -34,7 +34,16 @@ public class UnitsController : ApiBaseController<UnitsController>
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetUnityId(int id)
     {
-        return Ok(await _unitQueries.GetUnitById(id));
+        return Ok(await _unitQueries.GetUnitByIdAsync(id));
+    }
+    
+    [AllowAnonymous]
+    [HttpGet("color-scheme/{floorId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetUnitColorSchemeByFloorIdAsync(int floorId)
+    {
+        return Ok(await _unitQueries.GetUnitColorSchemeByFloorIdAsync(floorId));
     }
 
     [HttpPost]
@@ -70,7 +79,7 @@ public class UnitsController : ApiBaseController<UnitsController>
         int pageNumber = 1,
         int pageSize = 10)
     {
-        return Ok(await _unitQueries.GetActiveUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder,
+        return Ok(await _unitQueries.GetActiveUnitsAsync(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder,
             pageNumber, pageSize));
     }
 

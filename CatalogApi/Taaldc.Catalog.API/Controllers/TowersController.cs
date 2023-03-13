@@ -51,7 +51,7 @@ public class TowersController : ApiBaseController<TowersController>
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetAvailabilityByUnitType(int id)
     {
-        return Ok(await _unitQueries.GetUnitTypeAvailabilityByTowerId(id));
+        return Ok(await _unitQueries.GetUnitTypeAvailabilityByTowerIdAsync(id));
     }
 
     [HttpGet("{id}")]
