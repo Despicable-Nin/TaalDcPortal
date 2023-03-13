@@ -1,5 +1,6 @@
-﻿@model PaginationQueryResult<TaalDc.Portal.DTO.Sales.GetSalesByIdResponse>
-
+﻿@using SeedWork;
+@model PaginationQueryResult<TaalDc.Portal.DTO.Sales.GetSalesByIdResponse>
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "Sales";
@@ -40,9 +41,11 @@
 
     <div class="tab-content">
         <div class="action-section">
-            <div class="action-btn text-end">
-                <a asp-controller="Sales" asp-action="Create" class="btn btn-primary">New Sales</a>
-            </div>
+            @if(Model.TotalCount > 0 && CurrentUser.IsAdmin()){
+                <div class="action-btn text-end">
+                    <a onclick="openExportReport()" class="btn btn-primary" href="#"><i class="fa-sharp fa-solid fa-file-excel"></i> Export</a>
+                </div>
+            }
 
             <div class="action-search">
                 <form>
@@ -143,3 +146,76 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="sales-report">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Sales Report</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="row needs-validation" id="salesReportForm" method="get" asp-action="Report" asp-controller="Sales">
+                    <div class="mb-3 col-lg-6">
+                        <label for="From" class="form-label">
+                            <strong>Date From</strong>
+                        </label>
+                        <input name="From" class="form-control" required type="date" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+                    <div class="mb-3 col-lg-6">
+                        <label for="To" class="form-label">
+                            <strong>Date To</strong>
+                        </label>
+                        <input name="To" class="form-control" required type="date" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary w-100" type="submit" value="Download" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function openExportReport() {
+            var reportModal = document.getElementById('sales-report');
+
+            var modal = new bootstrap.Modal(reportModal, {});
+
+            modal.show();
+        }
+
+
+        const salesReportForm = document.getElementById('salesReportForm');
+
+        salesReportForm.addEventListener('submit', getReport);
+
+        function getReport(event) {
+            $('.formLoader').show();
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            const value = Object.fromEntries(data.entries());
+
+            console.log(value);
+
+            var redirectTo = `${form.action}?from=${value.From}&to=${value.To}`;
+
+            window.open(redirectTo, '_blank');
+            //window.location.replace(redirectTo);
+
+            $('.formLoader').hide();
+        }
+    </script>
+}

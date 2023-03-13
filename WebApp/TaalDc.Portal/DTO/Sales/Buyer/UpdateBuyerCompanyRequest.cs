@@ -1,4 +1,6 @@
-﻿namespace TaalDc.Portal.DTO.Sales.Buyer
+﻿using System.Net.Mail;
+
+namespace TaalDc.Portal.DTO.Sales.Buyer
 {
     public class UpdateBuyerCompanyRequest
     {
@@ -6,17 +8,17 @@
         {
         }
 
-        public int BuyerId { get; init; }
-        public string Name { get; init; }
-        public string Address { get; init; }
-        public string Industry { get; init; }
-        public string PhoneNo { get; init; }
-        public string MobileNo { get; init; }
-        public string FaxNo { get; init; }
-        public string EmailAddress { get; init; }
-        public string Tin { get; init; }
-        public string SecRegNo { get; init; }
-        public string President { get; init; }
-        public string CorpSec { get; init; }
+        public int BuyerId { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Industry { get; set; }
+        public string PhoneNo { get; set; }
+        public string MobileNo { get; set; }
+        public string FaxNo { get; set; } 
+        public string EmailAddress { get; set; }
+        public string Tin { get; set; }
+        public string SecRegNo { get; set; } 
+        public string President { get; set; } 
+        public string CorpSec { get; set; }
     }
 }

@@ -3,6 +3,22 @@
 
 @{
     ViewData["Title"] = "Buyers";
+    var filter = Context.Request.Query["name"].FirstOrDefault();
+
+    var currentPageNo = Model.PageNumber;
+    var numberOfPagesToDisplay = 5;
+
+    var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
+
+    var pageGroups = new List<int>();
+
+    for (var i = 1; i <= totalPageGroups; i++)
+    {
+        pageGroups.Add(i * numberOfPagesToDisplay);
+    }
+
+    var nextPage = 0;
+    var prevPage = 0;
 }
 
 
@@ -15,49 +31,99 @@
 
 
     <div class="tab-content">
-       <div class="action-section">
-            <div class="action-btn text-end">
-                <a asp-controller="Buyers" asp-action="QuickCreate" class="btn btn-primary">New Buyer</a>
-            </div>
+    <div class="action-section">
+        <div class="action-btn text-end">
+            <a asp-controller="Buyers" asp-action="QuickCreate" class="btn btn-primary">New Buyer</a>
         </div>
-            <div class="data-section">
-                <div class="table-responsive w-100 mb-3">
-                    <table class="table table-striped sales-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Customer Name</th>
-                                <th>Email Address</th>
-                                <th>Phone No.</th>
-                                <th>Corporate Account?</th>
-                                <th>Company/Business</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach(var buyer in Model.Data)
-                            {
-                                 <tr>
-                                    <td>
-                                        <a asp-action="Details" asp-controller="Buyers" asp-route-id="@buyer.BuyerId">@buyer.BuyerId</a>
-                                    </td>
-                                    <td>
-                                        @buyer.FirstName @buyer.LastName
-                                    </td>
-                                    <td>@buyer.EmailAddress</td>
-                                    <td>@buyer.MobileNo</td>
-                                    <td>@(buyer.IsCorporate? "YES" : "NO")</td>
-                                    <td>@buyer.Company_Name</td>
-                                    <td>
-                                        @* <a class="action-edit" href="#">Edit</a>
+
+        <div class="action-search">
+            <form>
+                <input name="name" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..." />
+            </form>
+        </div>
+    </div>
+    <div class="data-section">
+        <div class="table-responsive w-100 mb-3">
+            <table class="table table-striped sales-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer Name</th>
+                    <th>Email Address</th>
+                    <th>Phone No.</th>
+                    <th>Corporate Account?</th>
+                    <th>Company/Business</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach(var buyer in Model.Data)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Details" asp-controller="Buyers" asp-route-id="@buyer.BuyerId">@buyer.BuyerId</a>
+                        </td>
+                        <td>
+                            @buyer.FirstName @buyer.LastName
+                        </td>
+                        <td>@buyer.EmailAddress</td>
+                        <td>@buyer.MobileNo</td>
+                        <td>@(buyer.IsCorporate? "YES" : "NO")</td>
+                        <td>@buyer.Company_Name</td>
+                        <td>
+                            @* <a class="action-edit" href="#">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>*@
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+            <div>
+                <ul class="pagination">
+
+                    @{
+                        var pageGroupIndex = pageGroups.Where(i => currentPageNo <= i).FirstOrDefault();
+                        var lastPageIndex = pageGroups.OrderByDescending(i => i).FirstOrDefault();
+                        var pageGroup = pageGroups.Count() > 0 && pageGroupIndex > 0 ? pageGroupIndex : Model.TotalPages;
+                        var pageGroupMinPage = Model.TotalPages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+                        //5 -> 0
+                        //10 -> 5
+
+                        nextPage = currentPageNo < Model.TotalPages ? currentPageNo + 1 : 0;
+                        prevPage = currentPageNo > 1 ? currentPageNo - 1 : 0;
+                    }
+
+                    <li class="page-item @(prevPage == 0 ? "disabled" : "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
+                    </li>
+
+                    @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
+                    {
+                        <li class="page-item">
+                            <a href="?pageNumber=@(Model.PageNumber)" class="noselect page-link alink active">@Model.PageNumber</a>
+                        </li>
+                    }
+
+                    @for (var i = pageGroupMinPage; i < pageGroup; i++)
+                    {
+                        var active = i + 1 == Model.PageNumber;
+                        var pageNo = i + 1;
+                        <li class="page-item">
+                            <a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                        </li>
+                    }
+
+                    <li class="page-item @(nextPage == 0 ? "disabled" : "")">
+                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
+                    </li>
+
+                </ul>
+            </div>
 
                 
-            </div>
+    </div>
+</div>
 </div>

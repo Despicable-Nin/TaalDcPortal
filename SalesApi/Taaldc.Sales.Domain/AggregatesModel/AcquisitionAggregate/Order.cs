@@ -15,7 +15,7 @@ public class Order : DomainEntity, IAggregateRoot
 
     public Order(
         int buyerId, 
-        string broker, 
+        string brokerEmail, 
         DateTime transactionDate,
         decimal discount,
         string remarks
@@ -23,7 +23,7 @@ public class Order : DomainEntity, IAggregateRoot
     {
         _buyerId = buyerId;
         Code = this.Id.ToString("00000");
-        Broker = broker;
+        Broker_Email = brokerEmail;
         Remarks = remarks;
         _statusId = OrderStatus.GetIdByName(OrderStatus.New);
         Discount = discount;
@@ -39,7 +39,7 @@ public class Order : DomainEntity, IAggregateRoot
         
         if(_statusId == OrderStatus.GetIdByName(OrderStatus.New))
         {
-            Broker = broker;
+            Broker_Email = broker;
             Remarks = remarks;
             Discount = discount;
             
@@ -52,7 +52,19 @@ public class Order : DomainEntity, IAggregateRoot
 
     public decimal Discount { get; private set; }
     public string Code { get;private set; }
-    public string Broker { get;private set; }
+    public string Broker_Email { get;private set; }
+    public string Broker_Name { get; private set; }
+    public string Broker_Company { get; private set; }
+    public string Broker_PrcLicense { get; private set; }
+
+    public void AddBrokerDetail(string brokerEmail, string brokerCOmpany, string brokerPrc,string brokerName, bool isBroker)
+    {
+        Broker_Email = isBroker? brokerEmail ?? "in-house": "in-house";
+        Broker_Company = brokerCOmpany ?? "n/a";
+        Broker_PrcLicense = brokerPrc ?? "n/a";
+        Broker_Name = isBroker? brokerName: "In-house";
+    }
+    
     public string Remarks { get;private set; }
     public DateTime TransactionDate { get; private set; } = DateTime.Now;
     public DateTime? ReservationExpiresOn { get; private set; } = default;
@@ -138,7 +150,7 @@ public class Order : DomainEntity, IAggregateRoot
     public Payment FindPayment(string confirmationNumber) =>
         _payments.SingleOrDefault(i => i.ConfirmationNumber == confirmationNumber);
 
-    public void AcceptPayment(int paymentId, string verifiedBy)
+    public void AcceptPayment(int paymentId, string verifiedBy, string confirmationNumber)
     {
         if (_payments.Any(i =>
                 i.Id == paymentId && i.GetPaymentStatusId() != PaymentStatus.GetStatusId(PaymentStatus.Pending)))
@@ -147,7 +159,8 @@ public class Order : DomainEntity, IAggregateRoot
         }
         
         var payment = _payments.SingleOrDefault(i => i.Id == paymentId);
-        payment.VerifyPayment(verifiedBy);
+
+        payment.VerifyPayment(verifiedBy, confirmationNumber);
 
         
         //TODO: This is candidate for pub-sub

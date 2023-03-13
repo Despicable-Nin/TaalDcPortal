@@ -71,7 +71,7 @@
             
            <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped align-middle stats-table">
+                    <table class="table table-striped align-middle stats-table table-hover">
                         <thead>
                             <tr>
                                 <th>UNIT TYPE</th>
@@ -83,7 +83,7 @@
                         <tbody>
                             @foreach(var unitType in Model.AvailabilityByUnitType)
                             {
-                                <tr>
+                                <tr class="cursor-pointer" onclick="openAvailableUnits('@unitType.UnitTypeId', null)">
                                     <td>@unitType.UnitTypeShortCode</td>
                                     <td>@unitType.FloorArea</td>
                                     <td>@unitType.UnitPriceRange</td>
@@ -119,7 +119,7 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped stats-table">
+                            <table class="table table-striped stats-table table-hover">
                                 <thead>
                                     <tr>
                                         <th>UNIT TYPE</th>
@@ -129,7 +129,7 @@
                                 <tbody>
                                     @foreach(var unitType in Model.AvailabilityByUnitType)
                                     {
-                                        <tr>
+                                        <tr class="cursor-pointer" onclick="openAvailableUnits('@unitType.UnitTypeId', null)">
                                             <td>@unitType.UnitTypeShortCode</td>
                                             <td>@unitType.Available</td>
                                         </tr>
@@ -159,7 +159,7 @@
 
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped stats-table">
+                            <table class="table table-striped stats-table table-hover">
                                 <thead>
                                     <tr>
                                         <th>VIEW</th>
@@ -169,7 +169,7 @@
                                 <tbody>
                                     @foreach (var unitType in Model.AvailabilityByViews)
                                     {
-                                        <tr>
+                                        <tr class="cursor-pointer" onclick="openAvailableUnits(null, @unitType.ViewId)">
                                             <td>@unitType.View</td>
                                             <td>@unitType.Available</td>
                                         </tr>
@@ -193,3 +193,200 @@
         
     </div>
 </div>
+
+<div class="modal fade" id="available-units">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Available Units</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="units-multiple-form" class="mb-3">
+                    <input name="unitFilter" placeholder="Search..." class="form-control" />
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Unit Type</th>
+                            <th>View</th>
+                            <th>Floor</th>
+                            <th>Tower</th>
+                            <th>Unit No.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="unit-body">
+                    </tbody>
+                </table>
+                <div id="unit-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        function openAvailableUnits(unitTypeId, viewId){
+            console.log('unit type id', unitTypeId)
+            var unitsModal = document.getElementById('available-units');
+
+            var modal = new bootstrap.Modal(unitsModal, {});
+
+            getAvailableUnits(unitTypeId, viewId, 1, 10);
+
+            modal.show();
+        }
+
+
+        function getAvailableUnits(unitTypeId, viewId, pageNumber = 1, pageSize = 10) {
+         
+            console.log(document.getElementsByName("unitFilter"));
+            var filter = document.getElementsByName("unitFilter")[0].value;
+
+            fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&viewId=${viewId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    //Process data into table
+                    var unitTableBody = document.getElementById("unit-body");
+                    var unitModalBody = document.getElementById("unit-modal-body");
+                    var unitPagination = document.getElementById("unit-pagination");
+                    unitPagination.innerHTML = "";
+                    var rows = "";
+
+                    data.data.map((u, i) => {
+                        var unit = {
+                            unit: u.identifier,
+                            id: u.unit_id,
+                            tower: u.tower_name,
+                            floor: u.floor_name,
+                            view: u.scenic_view,
+                            unitType: u.unit_type,
+                            price: u.price
+                        };
+
+                        var unitName = `${u.tower_name} | ${u.unit_type} ${u.scenic_view} | Unit ${u.identifier}`;
+
+                        let newRow = `<tr>
+                                        <td>
+                                           ${u.unit_type}
+                                        </td>
+                                        <td>
+                                           ${u.scenic_view}
+                                        </td>
+                                        <td>
+                                           ${u.floor_name}
+                                        </td>
+                                        <td>
+                                            ${u.tower_name}
+                                        </td>
+                                        <td>${u.identifier}</td>
+                                        <td>
+                                        </td>
+                                    </tr>`
+
+                        rows = rows + newRow;
+                    });
+
+                    unitTableBody.innerHTML = rows;
+
+
+                    //add a pagination
+                    var numberOfPagesToDisplay = 5;
+                    var totalPageGroups = data.total_pages / numberOfPagesToDisplay;
+                    var pageGroups = [];
+
+                    for (var i = 1; i <= totalPageGroups; i++) {
+                        pageGroups.push(i * numberOfPagesToDisplay);
+                    }
+
+
+                    var pageGroupIndex = pageGroups.find(i => data.page_number <= i);
+                    var lastPageIndex = pageGroups[pageGroups.length - 1];
+
+                    console.log('last index', lastPageIndex);
+
+                    var pageGroup = pageGroups.length > 0 && pageGroupIndex > 0 ? pageGroupIndex : data.total_pages;
+                    var pageGroupMinPage = data.total_pages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+                    ////5 -> 0
+                    ////10 -> 5
+
+                    var nextPage = data.page_number < data.total_pages ? data.page_number + 1 : 0;
+                    var prevPage = data.page_number > 1 ? data.page_number - 1 : 0;
+
+
+                    var ul = document.createElement("ul");
+
+
+                    ul.classList.add("pagination");
+
+                    if (data.page_number > 1) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${viewId},${prevPage}, 10)" class="page-link alink noselect">Prev</a>`;
+                        ul.appendChild(li);
+                    }
+
+
+                    if (prevPage == 0) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.classList.add("disabled");
+                        li.innerHTML = `<a class="page-link alink noselect">Prev</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (pageGroup == 0 || pageGroup == pageGroupMinPage) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${viewId},${data.page_number}, 10)" class="page-link alink noselect">${data.page_number}</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    for (var i = pageGroupMinPage; i < pageGroup; i++) {
+                        var isActive = data.page_number == i + 1;
+
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${viewId},${i + 1}, 10)" class="noselect page-link alink ${isActive ? "active" : ""}">${i + 1}</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (data.page_number < data.total_pages) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${viewId},${nextPage}, 10)" class="page-link alink noselect">Next</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (nextPage == 0) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.classList.add("disabled");
+                        li.innerHTML = `<a class="page-link alink noselect">Next</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    unitPagination.appendChild(ul)
+
+                    return data;
+                });
+        }
+
+
+
+        const unitsFormMultiple = document.getElementById('units-multiple-form');
+
+        if (unitsFormMultiple) {
+            unitsFormMultiple.addEventListener('submit', onUnitFormMutipleSubmit);
+        }
+
+        function onUnitFormMutipleSubmit(event) {
+            event.preventDefault();
+
+            getAvailableUnits(null,null,1, 10);
+        }
+    </script>
+}

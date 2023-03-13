@@ -559,7 +559,8 @@ function saveContractInfo(event) {
 
                 event.target.classList.remove('was-validated');
 
-                //window.location.reload();
+                
+                window.location.replace(`/Sales/${data.id}/Details`);
                 $('.formLoader').hide();
             }, error: function (data) {
                 const response = data.responseJSON;

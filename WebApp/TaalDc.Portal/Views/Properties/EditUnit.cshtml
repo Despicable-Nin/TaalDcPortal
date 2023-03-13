@@ -6,6 +6,14 @@
     Layout = "_Layout";
 
     List<Floor_ClientDto> floors = ViewBag.Floors;
+
+
+    var returnUrl = Context.Request.Query["returnUrl"].FirstOrDefault();
+
+    if (returnUrl == null)
+    {
+        returnUrl = Url.Action("Units", "Properties");
+    }
 }
 
 
@@ -110,7 +118,7 @@
 
             <div class="mb-3 col-lg-8">
                 <label asp-for="FloorArea" class="form-label">
-                    <strong>Floor Area</strong>
+                    <strong>Unit Area</strong>
                 </label>
                 <input id="floorArea" type="decimal" asp-for="FloorArea" class="form-control" required placeholder="0.00"/>
                 <div class="invalid-feedback">
@@ -196,7 +204,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button onclick="onPropertyFormSubmit(this, '/Properties/Units')" type="button" class="btn btn-primary">Yes</button>
+                <button onclick="onPropertyFormSubmit(this, '@returnUrl')" type="button" class="btn btn-primary">Yes</button>
             </div>
         </div>
     </div>
@@ -233,8 +241,7 @@
             });
         </script>
     }
-
-    <script src="~/js/common/PJMask.js"></script>
+    <script src="~/js/common/pjmask.js"></script>
     <script>
         applyPJMask("#floorArea");
         applyPJMask("#balconyArea");

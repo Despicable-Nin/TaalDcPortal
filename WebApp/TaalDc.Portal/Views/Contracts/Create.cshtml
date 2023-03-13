@@ -1,4 +1,6 @@
-﻿@model int
+﻿@using SeedWork;
+@model int
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "New Contract";
@@ -45,14 +47,27 @@
             <ul id="selected-units-list">
             </ul>
 
-             <div class="mb-3 col-lg-12">
-                <label for="Broker" class="form-label">
-                    <strong>Broker</strong>
-                </label>
-                <input name="Broker" class="form-control" required />
-                <div class="invalid-feedback">
-                    This is a required field.
-                </div>
+            <div class="mb-3 col-lg-12">
+                @if (CurrentUser.IsBroker())
+                {
+                    <label for="Broker" class="form-label">
+                        <strong>Broker <small>(Defaults to current user)</small></strong>
+                    </label>
+                    <input name="Broker" class="form-control" required value="@CurrentUser.Email" readonly="readonly"/>
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                }
+                else
+                {
+                    <label for="Broker" class="form-label">
+                        <strong>Broker</strong>
+                    </label>
+                    <input name="Broker" class="form-control" required disabled="disabled" value="" />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                }
             </div>
 
             <div class="mb-3 col-lg-6">

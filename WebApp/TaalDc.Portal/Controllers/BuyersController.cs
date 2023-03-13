@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
 using TaalDc.Portal.DTO.Sales.Contracts;
@@ -8,7 +9,7 @@ using WebApplication2.Controllers;
 
 namespace TaalDc.Portal.Controllers
 {
-    [Authorize]
+    [Authorize("LimitedCustodian")]
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
@@ -59,7 +60,16 @@ namespace TaalDc.Portal.Controllers
                 try
                 {
                     var result = await _salesService.AddBuyer(buyer);
-                }catch(Exception err)
+
+                    return Ok(new 
+                    {
+                        result.Id,
+                        IsFormError = false,
+                        Message = ""
+                    });
+
+                }
+                catch(Exception err)
                 {
                     return BadRequest(new
                     {
@@ -69,7 +79,12 @@ namespace TaalDc.Portal.Controllers
                 }
             }
 
-            return Ok();
+            return BadRequest(new
+            {
+                IsFormError = true,
+                Message = "Please check your entry.",
+                ModelState = Json(ModelState)
+            });
         }
 
 
@@ -147,9 +162,9 @@ namespace TaalDc.Portal.Controllers
         }
 
 
-        public IActionResult Contracts(int id) {
+        public async Task<IActionResult> Contracts(int id) {
 
-            var buyerContracts = new List<Contract_ClientDto>();
+            var buyerContracts = await _salesService.GetBuyerContracts(id);
 
             ViewData["BuyerId"] = id;
 
@@ -193,11 +208,14 @@ namespace TaalDc.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCompanyInformation(UpdateBuyerCompanyRequest model)
         {
-            
+            model.MobileNo = !string.IsNullOrEmpty(model.MobileNo) ? model.MobileNo : "";
+            model.FaxNo = !string.IsNullOrEmpty(model.FaxNo) ? model.FaxNo : "";
+           
             await _salesService.UpdateBuyerCompany(model);
 
             return Ok();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> EditSpouse(UpsertBuyerSpouseRequest model)

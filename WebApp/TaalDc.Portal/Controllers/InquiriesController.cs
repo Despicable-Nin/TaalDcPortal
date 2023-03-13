@@ -16,9 +16,15 @@ public class InquiriesController : BaseController<InquiriesController>
         _marketingService = marketingService;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 10, int status = 1)
     {
-        var result = await _marketingService.GetInquiries(10, 1);
+        var result = await _marketingService.GetInquiries(pageSize, pageNumber, status);
+        return View(result);
+    }
+
+    public async Task<IActionResult> Closed(int pageNumber = 1, int pageSize = 10, int status = 3)
+    {
+        var result = await _marketingService.GetInquiries(pageSize, pageNumber, status);
         return View(result);
     }
 
@@ -28,5 +34,13 @@ public class InquiriesController : BaseController<InquiriesController>
         var inquiry = await _marketingService.GetInquiryById(id);
 
         return View(inquiry);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateInquiryStatus(UpdateInquiryStatusDto dto)
+    {
+        await _marketingService.UpdateInquiryStatus(dto);
+
+        return Ok();
     }
 }

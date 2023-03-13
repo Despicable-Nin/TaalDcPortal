@@ -4,9 +4,9 @@ public static class API
 {
     public static class Marketing
     {
-        public static string GetInquiries(string baseUri, int pageSize, int pageNumber)
+        public static string GetInquiries(string baseUri, int pageSize, int pageNumber, int status)
         {
-            return $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}";
+            return $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}&status={status}";
         }
 
         public static string GetInquiry(string baseUri, int id)
@@ -18,6 +18,11 @@ public static class API
         public static string PostInquiry(string baseUri)
         {
             return $"{baseUri}/api/mkt/inquiries";
+        }
+
+        public static string UpdateInquiryStatus(string baseUri)
+        {
+            return $"{baseUri}/api/mkt/inquiries/status";
         }
     }
 
@@ -107,9 +112,9 @@ public static class API
             return $"{baseUrl}/api/v1/sales";
         }
 
-        public static string AcceptPayment(string baseUrl, int orderId, int paymentId)
+        public static string AcceptPayment(string baseUrl, int orderId, int paymentId, string confirmationNumber)
         {
-            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve";
+            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}/approve?confirmationNumber={confirmationNumber}";
         }
 
         public static string VoidPayment(string baseUrl, int orderId, int paymentId)
@@ -238,5 +243,11 @@ public static class API
         }
 
         #endregion
+
+        public static string GetOrdersByDate(string baseUrl, DateTime from, DateTime to)
+        {
+            return $"{baseUrl}/api/v1/reports/orders?from={from}&to={to}";
+        }
+
     }
 }

@@ -13,12 +13,20 @@ public class UserProfile
         Identity = identity;
     }
 
+    public UserProfile(string firstName, string lastName, string middleName, string nameSuffix, string company, string prcLicense, string identity) : this(firstName,lastName,middleName,nameSuffix,identity)
+    {
+        Company = company;
+        PRCLicense = prcLicense;
+    }
+
     [Key] public virtual int UserId { get; protected set; }
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string MiddleName { get; set; }
     public string NameSuffix { get; set; }
+    public string Company { get; set; } = "N/A";
+    public string PRCLicense { get; set; } = "N/A";
 
     public string Identity { get; set; }
 

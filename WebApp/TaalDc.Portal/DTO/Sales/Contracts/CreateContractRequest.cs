@@ -2,6 +2,11 @@
 {
     public record CreateContractRequest
     {
+        public CreateContractRequest()
+        {
+            Broker = String.Empty;
+        }
+
         public int BuyerId { get; set; }
         public DateTime TransactionDate { get; set; }
         public string Broker { get; set; }

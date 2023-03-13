@@ -122,6 +122,7 @@ strong {
     font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 
+
 .hide {
     display: none;
 }
@@ -424,6 +425,11 @@ tr.accepted td{
     left: 2%;
 }
 
+
+.modal-title {
+    font-family: 'Inter Extrabold', Arial, sans-serif;
+}
+
 @media (max-width: 1240px) {
     .hamburger-icon{
         left: 6%;
@@ -537,4 +543,171 @@ tr.accepted td{
 
 li.order-item{
     cursor: pointer;
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.pdf-wrapper {
+    text-align: center;
+    position: relative;
+}
+
+.pdf-content{
+    width: 100%;
+    position: absolute;
+}
+
+
+.pdf-wrapper img{
+    height: 100vh;
+    width: auto;
+}
+
+#ReceivedFrom,
+#UnitType,
+#ScenicView,
+#FloorUnitNo,
+#UnitArea,
+#ParkingSlot,
+#ParkingArea,
+#ReservationConfirmationNo {
+    display: none;
+}
+
+.buyerinfo #LastName,
+.buyerinfo #MiddleName,
+.buyerinfo #FirstName,
+.buyerinfo #HomeAddress,
+.buyerinfo #BusinessAddress,
+.buyerinfo #Single,
+.buyerinfo #Married {
+    display: none;
+}
+
+
+@media print {
+    /* All your print styles go here */
+    nav, main {
+        display: none !important;
+    }
+
+
+    .pdf-wrapper {
+        text-align: center;
+        position: relative;
+    }
+
+
+        .pdf-wrapper img {
+            height: 100vh;
+            width: auto;
+        }
+
+    #ReceivedFrom,
+    #UnitType,
+    #ScenicView,
+    #FloorUnitNo,
+    #UnitArea,
+    #ParkingSlot,
+    #ParkingArea,
+    #ReservationConfirmationNo {
+        display: block;
+        position: fixed;
+        font-family: serif;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    #ReceivedFrom {
+        left: 280px;
+        top: 210px;
+    }
+
+    #UnitType {
+        right: 260px;
+        top: 310px;
+    }
+
+    #ScenicView {
+        right: 260px;
+        top: 333px;
+    }
+
+    #FloorUnitNo {
+        right: 260px;
+        top: 355px;
+    }
+
+    #UnitArea {
+        right: 260px;
+        top: 375px;
+    }
+
+    #ParkingSlot {
+        right: 260px;
+        top: 395px;
+    }
+
+    #ParkingArea {
+        right: 260px;
+        top: 415px;
+    }
+
+    #ReservationConfirmationNo {
+        right: 260px;
+        top: 605px;
+    }
+
+
+
+    .buyerinfo #LastName,
+    .buyerinfo #MiddleName,
+    .buyerinfo #FirstName,
+    .buyerinfo #HomeAddress,
+    .buyerinfo #BusinessAddress,
+    .buyerinfo #Single,
+    .buyerinfo #Married {
+        display: block;
+        position: fixed;
+        font-family: serif;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    .buyerinfo #LastName {
+        left: 200px;
+        top: 240px;
+    }
+
+    .buyerinfo #MiddleName {
+        right: 160px;
+        top: 240px;
+    }
+
+    .buyerinfo #FirstName {
+        left: 370px;
+        top: 240px;
+    }
+
+    .buyerinfo #HomeAddress {
+        left: 210px;
+        top: 290px;
+    }
+
+    .buyerinfo #BusinessAddress {
+        left: 210px;
+        top: 320px;
+    }
+
+    .buyerinfo #Single {
+        left: 220px;
+        top: 495px;
+    }
+
+    .buyerinfo #Married {
+        left: 340px;
+        top: 495px;
+    }
 }

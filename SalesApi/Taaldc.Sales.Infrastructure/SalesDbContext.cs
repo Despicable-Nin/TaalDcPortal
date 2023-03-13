@@ -57,7 +57,7 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
         // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
         // performed through the DbContext will be committed
-        var result = await base.SaveChangesAsync(cancellationToken);
+        var result = await SaveChangesAsync(cancellationToken);
 
         return result;
     }
@@ -67,6 +67,9 @@ public class SalesDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SalesDbContext).Assembly);
 
         modelBuilder.HasSequence<int>("orderseq", DEFAULT_SCHEMA)
+            .StartsAt(1).IncrementsBy(1);
+
+        modelBuilder.HasSequence<int>("buyerseq", DEFAULT_SCHEMA)
             .StartsAt(1).IncrementsBy(1);
     }
 
@@ -92,7 +95,8 @@ public class SalesDbContext : DbContext, IUnitOfWork
 
         try
         {
-            await SaveChangesAsync();
+            //await SaveChangesAsync();
+            await SaveEntitiesAsync();
             transaction.Commit();
         }
         catch(Exception ex)

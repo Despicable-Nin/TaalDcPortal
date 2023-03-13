@@ -14,6 +14,7 @@ public interface ISalesService
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         string broker = "");
 
     Task<AddBuyerOrderResponse> AddBuyerOrder(AddBuyerOrderRequest model);
@@ -22,7 +23,7 @@ public interface ISalesService
 
     Task<IEnumerable<GetSalesPaymentResponse>> GetSalesPayments(int id);
 
-    Task<Response> AcceptPayment(int orderId, int paymentId);
+    Task<Response> AcceptPayment(int orderId, int paymentId, string confirmationNumber);
     Task<Response> VoidPayment(int orderId, int paymentId);
 
     Task<Response> AddPayment(AddPaymentRequest model);
@@ -58,4 +59,7 @@ public interface ISalesService
     Task<Response> CreateContract(CreateContractRequest model);
     Task<IEnumerable<ContractOrderItem_ClientDto>> GetContractOrderItems(int id);
     #endregion
+
+    Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id);
+    Task<IEnumerable<OrderReportResponse>> GetOrdersByDate(DateTime from, DateTime to);
 }

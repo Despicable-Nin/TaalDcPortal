@@ -48,6 +48,8 @@ public static class IServiceCollectionExtensions
         {
             o.AddPolicy("RequiredRolesAtLeastOne", policy => policy.RequireRole( Seed.Seed.ROLES ));
             o.AddPolicy("AdminOnly", p => p.RequireRole(Seed.Seed.ADMIN));
+            o.AddPolicy("Custodian",p => p.RequireRole(new []{Seed.Seed.ADMIN, Seed.Seed.SALES}));
+            o.AddPolicy("LimitedCustodian", p => p.RequireRole("ADMIN","SALES","BROKER"));
         });
         
         return services;

@@ -11,11 +11,7 @@
 
 
 <div class="container-fluid">
-    <div class="mb-3" style="text-align: right;">
-        <a class="btn btn-primary" href="#" onclick="generateAcknowledgmentReceipt()">
-            Buyer's Information Sheet
-        </a>
-    </div>
+   
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
@@ -30,6 +26,12 @@
         <h4 class="primary-color mb-5 mt-3">
             <strong>Buyer Profile</strong>
         </h4>
+
+        <div class="mb-3" style="text-align: right;">
+            <a class="btn btn-primary" target="_blank" asp-controller="Documents" asp-action="BuyerInformationSheet" asp-route-buyerId="@Model.Id" asp-route-type="@(Model.IsCorporate? "Corporate": "Individual")">
+               <i class="fa-regular fa-file-pdf"></i> Buyer's Information Sheet
+            </a>
+        </div>
 
         <div class="row">
             <div class="col-lg-4">
@@ -167,6 +169,51 @@
                     <p class="mb-5">
                         <strong class="primary-color">Industry</strong> <br />
                         @Model.Company.Industry
+                    </p>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">President</strong> <br />
+                        @Model.Company.President
+                    </p>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">Corp. Secretary</strong> <br />
+                        @Model.Company.CorpSec
+                    </p>
+
+
+                    <hr/>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">Phone No.</strong> <br />
+                        @Model.Company.PhoneNo
+                    </p>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">Mobile No. </strong> <br />
+                        @Model.Company.MobileNo
+                    </p>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">Fax No. </strong> <br />
+                        @Model.Company.FaxNo
+                    </p>
+
+                     <p class="mb-5">
+                        <strong class="primary-color">Email Address</strong> <br />
+                        @Model.Company.EmailAddress
+                    </p>
+
+                    <hr/>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">TIN</strong> <br />
+                        @Model.Company.TIN
+                    </p>
+
+                    <p class="mb-5">
+                        <strong class="primary-color">SEC Reg. No.</strong> <br />
+                        @Model.Company.SECRegNo
                     </p>
                 }
             </div>

@@ -63,9 +63,166 @@
             <div class="col-lg-4">
                 <p class="mb-5">
                     <strong class="primary-color">Status</strong> <br/>
-                    @Model.Status
+                    @Model.Status  <a onclick="openUpdateInqStatus()" href="#">Update</a>
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="update-status">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Update Inquiry Status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row needs-validation" id="inquiryStatusForm" method="post" asp-action="UpdateInquiryStatus" asp-controller="Inquiries" data-redirectTo="@Url.Action("Index","Inquiries")">
+                    <input name="Id" value="@Model.Id" hidden />
+                    <div class="mb-3 col-lg-12">
+                        <label for="Status" class="form-label">
+                            <strong>Status</strong>
+                        </label>
+                        <select name="Status" class="form-control form-select" required>
+                           @* <option value="2">
+                                Open
+                            </option>*@
+                            <option value="3">
+                                Closed
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary w-100" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        function openUpdateInqStatus() {
+            var reportModal = document.getElementById('update-status');
+
+            var modal = new bootstrap.Modal(reportModal, {});
+
+            modal.show();
+        }
+
+
+        const inquiryStatusForm = document.getElementById('inquiryStatusForm');
+
+        inquiryStatusForm.addEventListener('submit', saveInfo);
+
+
+        function saveInfo(event) {
+            $('.formLoader').show();
+            event.preventDefault();
+            const form = event.target;
+            const data = new FormData(form);
+            const value = Object.fromEntries(data.entries());
+
+            console.log('form data', value);
+
+            var redirectTo = $(event.target).attr('data-redirectTo');
+
+            console.log('redirect', redirectTo);
+
+            var isFormValid = event.target.checkValidity();
+
+            event.target.classList.add('was-validated');
+
+            if (isFormValid) {
+                var formAction = form.action;
+
+                $.ajax({
+                    type: 'POST',
+                    url: formAction,
+                    data: value,
+                    success: function (data, status, xhr) {
+                        console.log('inquiry post', data);
+                        Toastify({
+                            text: "Submitted successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#6AB0F8",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+
+                        event.target.classList.remove('was-validated');
+
+                        if (redirectTo) {
+                            window.location.replace(redirectTo);
+                        } else {
+                            window.location.reload();
+                        }
+
+                        $('.formLoader').hide();
+                    }, error: function (data) {
+                        const response = data.responseJSON;
+
+                        if (response.isFormError) {
+                            var errors = response.modelState.value;
+                            console.log("Error", response);
+
+                            // Iterate through the errors and render them next to the appropriate form fields
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    var inputElement = $('input[name="' + key + '"]');
+
+                                    if (errors[key].errors.length > 0) {
+                                        errors[key].errors.forEach(function (error) {
+                                            var errorElement = $('<div class="invalid-feedback" style="display: block;">' + error.errorMessage + '</div>');
+                                            inputElement.after(errorElement);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        Toastify({
+                            text: response.message ? response.message : "Something went wrong. Please try again later.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "center", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#D01818",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+
+                        $('.formLoader').hide();
+                    }
+                });
+            }
+
+            return false;
+        }
+    </script>
+}

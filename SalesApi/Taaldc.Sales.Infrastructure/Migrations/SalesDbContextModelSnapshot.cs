@@ -25,8 +25,7 @@ namespace Taaldc.Sales.Infrastructure.Migrations
             modelBuilder.HasSequence("addressseq", "sales")
                 .IncrementsBy(10);
 
-            modelBuilder.HasSequence("buyerseq", "sales")
-                .IncrementsBy(10);
+            modelBuilder.HasSequence<int>("buyerseq", "sales");
 
             modelBuilder.HasSequence("civilstatusseq", "sales")
                 .IncrementsBy(10);
@@ -217,7 +216,19 @@ namespace Taaldc.Sales.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "orderseq", "sales");
 
-                    b.Property<string>("Broker")
+                    b.Property<string>("Broker_Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Broker_Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Broker_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Broker_PrcLicense")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

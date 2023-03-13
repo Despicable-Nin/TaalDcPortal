@@ -62,14 +62,14 @@ public class SalesController : ControllerBase
     [HttpPost("{id}/payments/{paymentId}/approve")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]
-    public async Task<IActionResult> AcceptPayment(int id, int paymentId)
+    public async Task<IActionResult> AcceptPayment(int id, int paymentId, string confirmationNumber)
     {
         //this is for verification purposes --- only admin can do this
         //for now manually check role of user.. 
 
         if (_currentUser.Roles.Any() && _currentUser.Roles.Contains("ADMIN"))
         {
-            var command = new AcceptPaymentCommand(id, paymentId);
+            var command = new AcceptPaymentCommand(id, paymentId, confirmationNumber);
             return Ok(await _mediator.Send(command));
         }
 
@@ -133,6 +133,7 @@ public class SalesController : ControllerBase
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int unitStatus = 1,
         int pageNumber = 1,
         int pageSize = 20,
@@ -145,7 +146,7 @@ public class SalesController : ControllerBase
         if (unitStatus > 4) return BadRequest("Invalid unit status");
 
         return Ok(await _orderQueries.GetUnitAndOrdersByAvailability(unitStatus, pageNumber, pageSize, floorId,
-            unitTypeId, viewId, broker));
+            unitTypeId, viewId, filter, broker));
     }
 
     [AllowAnonymous]

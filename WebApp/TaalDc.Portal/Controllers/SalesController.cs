@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using SeedWork;
+using System;
+using System.Reflection;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -46,6 +49,7 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Index(int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int pageNumber = 1,
         int pageSize = 10)
     {
@@ -56,7 +60,7 @@ public class SalesController : BaseController<SalesController>
         //
 
         var sales = await _salesService.GetUnitAndOrdersAvailability(SOLD, pageNumber, pageSize, floorId, unitTypeId,
-            viewId);
+            viewId, filter, "");
         return View(sales);
     }
 
@@ -64,6 +68,7 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Available(int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int pageNumber = 1,
         int pageSize = 10)
     {
@@ -75,7 +80,7 @@ public class SalesController : BaseController<SalesController>
 
 
         var sales = await _salesService.GetUnitAndOrdersAvailability(AVAILABLE, pageNumber, pageSize, floorId,
-            unitTypeId, viewId);
+            unitTypeId, viewId, filter, "");
         return View(sales);
     }
 
@@ -84,6 +89,7 @@ public class SalesController : BaseController<SalesController>
         int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int pageNumber = 1,
         int pageSize = 10
     )
@@ -94,7 +100,7 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(RESERVED, pageNumber, pageSize, floorId,
-            unitTypeId, viewId, broker);
+            unitTypeId, viewId,filter, broker);
 
 
         return View(sales);
@@ -103,6 +109,7 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Blocked(int? floorId,
         int? unitTypeId,
         int? viewId,
+        string? filter,
         int pageNumber = 1,
         int pageSize = 10)
     {
@@ -113,7 +120,7 @@ public class SalesController : BaseController<SalesController>
         //
 
         var sales = await _salesService.GetUnitAndOrdersAvailability(BLOCKED, pageNumber, pageSize, floorId, unitTypeId,
-            viewId);
+            viewId, filter, "");
 
 
         return View(sales);
@@ -136,6 +143,54 @@ public class SalesController : BaseController<SalesController>
         var salesCreateDTO = new AddBuyerOrderRequest();
         return View(salesCreateDTO);
     }
+
+    public async Task<IActionResult> Report(DateTime from, DateTime to)
+    {
+        var result = await _salesService.GetOrdersByDate(from, to);
+
+        byte[] excelBytes = CreateExcelFile(result.ToList());
+        return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Sales.xlsx");
+    }
+
+
+    public byte[] CreateExcelFile(List<OrderReportResponse> orders)
+    {
+        // Create a new Excel package
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        using (ExcelPackage excelPackage = new ExcelPackage())
+        {
+            // Add a new worksheet to the Excel package
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Sales");
+
+            // Write the header row
+            int headerRow = 1;
+            PropertyInfo[] properties = typeof(OrderReportResponse).GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                worksheet.Cells[headerRow, i + 1].Value = properties[i].Name;
+            }
+
+            // Write the data rows
+            int dataRow = 2;
+            foreach (var obj in orders)
+            {
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    object value = properties[i].GetValue(obj);
+                    worksheet.Cells[dataRow, i + 1].Value = value;
+                }
+                dataRow++;
+            }
+
+
+            // Convert the Excel package to a byte array
+            byte[] excelBytes = excelPackage.GetAsByteArray();
+            return excelBytes;
+        }
+    }
+
+
 
     [HttpPost]
     public async Task<IActionResult> Create(AddBuyerOrderRequest model)
@@ -176,11 +231,11 @@ public class SalesController : BaseController<SalesController>
 
 
     [HttpPost]
-    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId, int paymentTypeId)
+    public async Task<IActionResult> AcceptPayment(int orderId, int paymentId, int paymentTypeId, string confirmationNumber)
     {
         if (orderId > 0 && paymentId > 0)
         {
-            var result = await _salesService.AcceptPayment(orderId, paymentId);
+            var result = await _salesService.AcceptPayment(orderId, paymentId, confirmationNumber);
 
             if (!result.IsSuccess)
                 return BadRequest(new
@@ -206,10 +261,10 @@ public class SalesController : BaseController<SalesController>
             var unitStatus =
                new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
             
-            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+            await _catalogService.UpdateUnitStatus(unitStatus);
 
-            if (!unitStatusResult.IsSuccess)
-                return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
+            //if (!unitStatusResult.IsSuccess)
+            //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
             return Ok(result);
         }

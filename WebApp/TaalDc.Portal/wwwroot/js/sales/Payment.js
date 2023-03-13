@@ -5,6 +5,8 @@
 function processPaymentVerification(paymentVerificationType) {
     console.log(paymentVerificationType);
 
+    $('.formLoader').show();
+
     var modal = document.getElementById("paymentVerifyModal");
     var endPointAction = "";
     if (paymentVerificationType === "accept") {
@@ -19,10 +21,12 @@ function processPaymentVerification(paymentVerificationType) {
     var paymentId = modal.getAttribute('data-payment-id');
     var paymentTypeId = modal.getAttribute('data-payment-type-id');
 
+    var confirmationNumber = document.getElementById('paymentConfirmationNumber').value;
+
     var uri = `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
 
     if (paymentVerificationType === "accept") {
-        uri = uri + `&paymentTypeId=${paymentTypeId}`;
+        uri = uri + `&paymentTypeId=${paymentTypeId}&confirmationNumber=${confirmationNumber}`;
     }
 
     console.log('sales uri', uri);
@@ -74,6 +78,8 @@ function processPaymentVerification(paymentVerificationType) {
                 onClick: function () {
                 } // Callback after click
             }).showToast();
+
+            $('.formLoader').hide();
         }
     });
 }

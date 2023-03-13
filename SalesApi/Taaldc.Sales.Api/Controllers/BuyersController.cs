@@ -22,9 +22,10 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 
 namespace Taaldc.Sales.Api.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+   // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class BuyersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -45,9 +46,19 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
-        public async Task<IActionResult> GetPaginatedBuyersAsync(string name,string email, int? civilStatusId, int pageSize = 10, int pageNumber =1)
+        public async Task<IActionResult> GetPaginatedBuyersAsync(
+            string name,
+            string email, 
+            string createdBy,
+            int? civilStatusId, 
+            int pageSize = 10, 
+            int pageNumber =1)
         {
-            return Ok(await _buyerQueries.GetPaginatedAsync(pageNumber, pageSize, name, email, civilStatusId));
+            if (string.IsNullOrEmpty(createdBy)) { 
+             createdBy = _currentUser.IsBroker()? _currentUser.Email: string.Empty;
+            }
+
+            return Ok(await _buyerQueries.GetPaginatedAsync(pageNumber, pageSize, name, email, civilStatusId, createdBy));
         }
         
         [HttpGet("{id}")]
@@ -109,7 +120,7 @@ namespace Taaldc.Sales.Api.Controllers
         }
         
         
-        [HttpPost("{id}/spouse")]
+        [HttpPut("{id}/spouse")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(BadRequestResult))]
         public async Task<IActionResult> UpserBuyerSpouse(int id,[FromBody] UpsertSpouseCommand model, CancellationToken ct = default)

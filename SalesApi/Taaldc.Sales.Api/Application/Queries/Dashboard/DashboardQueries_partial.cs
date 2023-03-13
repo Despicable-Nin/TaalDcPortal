@@ -29,7 +29,8 @@ public partial class DashboardQueries
     public async Task<IEnumerable<ResidentialUnitCountPerViewDTO>> GetResidentaialUnitAvailabilityPerView()
     {
         var query = @"SELECT DISTINCT 
-                        U.[ScenicView] [View] 
+                        U.[ScenicViewId] [ViewId]
+                        ,U.[ScenicView] [View] 
                         ,(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.ScenicViewId = ScenicViewId AND UnitStatusId = 1 GROUP BY ScenicViewId) [Available] 
                     FROM [taaldb_sales].[sales].[unitreplica] U 
                         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
@@ -72,7 +73,8 @@ public partial class DashboardQueries
     public async Task<IEnumerable<ResidentialUnitAvailabilityPerUnitTypeDTO>> GetAvailabilityPerResidentialUnitType()
     {
         var query = @"SELECT DISTINCT 
-                        U.[UnitTypeShortCode]
+                        U.[UnitTypeId]
+                        ,U.[UnitTypeShortCode]
                         ,(SELECT TOP 1 UnitArea + BalconyArea FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [MinArea] 
                         ,(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [MaxArea] 
                         ,(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] 

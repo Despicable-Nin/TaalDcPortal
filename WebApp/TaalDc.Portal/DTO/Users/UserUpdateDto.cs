@@ -16,6 +16,9 @@ public class UserUpdateDto
     [DisplayName("Name Suffix")] public string NameSuffix { get; set; }
 
     [DisplayName("Email Address")] public string Emailaddress { get; set; }
+    public string Company { get; set; }
+    public string PRCLicense { get; set; }
+
 
     public string Role { get; set; }
     public bool IsActive { get; set; }

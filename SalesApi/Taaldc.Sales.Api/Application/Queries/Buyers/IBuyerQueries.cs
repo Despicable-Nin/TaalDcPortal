@@ -5,6 +5,6 @@ namespace Taaldc.Sales.Api.Application.Queries.Buyers;
 public interface IBuyerQueries
 {
     Task<BuyerDto> GetBuyerByIdAsync(int id);
-    Task<PaginationQueryResult<BuyerDto>> GetPaginatedAsync(int pageNumber,int pageSize, string name,string email, int? civilStatusId);
+    Task<PaginationQueryResult<BuyerDto>> GetPaginatedAsync(int pageNumber,int pageSize, string name,string email, int? civilStatusId, string createdBy);
     Task<bool> CheckIfBuyerExists(int id);
 }

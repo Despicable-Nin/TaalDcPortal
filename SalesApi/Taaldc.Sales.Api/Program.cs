@@ -15,6 +15,7 @@ using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Infrastructure;
 using Taaldc.Sales.Infrastructure.Repositories;
 using Taaldc.Sales.Api.Application.Queries.UnitReplicas;
+using Taaldc.Sales.Api.Application.Queries.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,17 +74,19 @@ builder.Services.AddScoped<IBuyerQueries>(i =>
 builder.Services.AddScoped<IUnitQueries>(i =>
     new UnitQueries(connectionString));
 
+
+builder.Services.AddScoped<IReportQueries>(i =>
+    new ReportQueries(connectionString));
+
 builder.Services.AddScoped<IDashboardQueries>(i =>
     new DashboardQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Sales WebAPI"); });
-}
+
+app.UseSwagger();
+app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/V1/swagger.json", "Sales WebAPI"); });
 
 
 using (var scope = app.Services.CreateScope())

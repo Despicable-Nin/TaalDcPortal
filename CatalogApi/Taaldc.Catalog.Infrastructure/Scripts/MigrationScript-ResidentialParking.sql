@@ -1677,6 +1677,7 @@ VALUES ('1116', '3-P88', '1050000', '12.5', '1', '1', '6', '7', '', '', '', '', 
 
 UPDATE catalog.unit
 SET CreatedOn = GETDATE()
+, IsActive = 1
 WHERE CreatedOn = ''
 
 --
