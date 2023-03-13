@@ -4,9 +4,9 @@ public static class API
 {
     public static class Marketing
     {
-        public static string GetInquiries(string baseUri, int pageSize, int pageNumber)
+        public static string GetInquiries(string baseUri, int pageSize, int pageNumber, int status)
         {
-            return $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}";
+            return $"{baseUri}/api/mkt/inquiries?pageSize={pageSize}&pageNumber={pageNumber}&status={status}";
         }
 
         public static string GetInquiry(string baseUri, int id)
@@ -18,6 +18,11 @@ public static class API
         public static string PostInquiry(string baseUri)
         {
             return $"{baseUri}/api/mkt/inquiries";
+        }
+
+        public static string UpdateInquiryStatus(string baseUri)
+        {
+            return $"{baseUri}/api/mkt/inquiries/status";
         }
     }
 
@@ -238,5 +243,11 @@ public static class API
         }
 
         #endregion
+
+        public static string GetOrdersByDate(string baseUrl, DateTime from, DateTime to)
+        {
+            return $"{baseUrl}/api/v1/reports/orders?from={from}&to={to}";
+        }
+
     }
 }

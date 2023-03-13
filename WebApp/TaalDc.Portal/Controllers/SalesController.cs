@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using SeedWork;
+using System;
+using System.Reflection;
 using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -140,6 +143,54 @@ public class SalesController : BaseController<SalesController>
         var salesCreateDTO = new AddBuyerOrderRequest();
         return View(salesCreateDTO);
     }
+
+    public async Task<IActionResult> Report(DateTime from, DateTime to)
+    {
+        var result = await _salesService.GetOrdersByDate(from, to);
+
+        byte[] excelBytes = CreateExcelFile(result.ToList());
+        return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Sales.xlsx");
+    }
+
+
+    public byte[] CreateExcelFile(List<OrderReportResponse> orders)
+    {
+        // Create a new Excel package
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        using (ExcelPackage excelPackage = new ExcelPackage())
+        {
+            // Add a new worksheet to the Excel package
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Sales");
+
+            // Write the header row
+            int headerRow = 1;
+            PropertyInfo[] properties = typeof(OrderReportResponse).GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                worksheet.Cells[headerRow, i + 1].Value = properties[i].Name;
+            }
+
+            // Write the data rows
+            int dataRow = 2;
+            foreach (var obj in orders)
+            {
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    object value = properties[i].GetValue(obj);
+                    worksheet.Cells[dataRow, i + 1].Value = value;
+                }
+                dataRow++;
+            }
+
+
+            // Convert the Excel package to a byte array
+            byte[] excelBytes = excelPackage.GetAsByteArray();
+            return excelBytes;
+        }
+    }
+
+
 
     [HttpPost]
     public async Task<IActionResult> Create(AddBuyerOrderRequest model)

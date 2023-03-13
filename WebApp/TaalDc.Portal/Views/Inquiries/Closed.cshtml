@@ -1,7 +1,7 @@
 @model TaalDc.Portal.DTO.Marketing.InquriesResult
 
 @{
-    ViewBag.Title = "Inquiries - Active";
+    ViewBag.Title = "Inquiries - Closed";
     Layout = "_Layout";
 
      var currentPageNo = Model.PageNumber;
@@ -25,10 +25,10 @@
 <div class="container-fluid">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" asp-controller="Inquiries" asp-action="Index">Active</a>
+            <a class="nav-link" aria-current="page" asp-controller="Inquiries" asp-action="Index">Active</a>
         </li>
-         <li class="nav-item">
-            <a class="nav-link" aria-current="page" asp-controller="Inquiries" asp-action="Closed">Closed</a>
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" asp-controller="Inquiries" asp-action="Closed">Closed</a>
         </li>
     </ul>
 

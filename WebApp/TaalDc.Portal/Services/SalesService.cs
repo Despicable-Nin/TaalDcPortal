@@ -401,4 +401,16 @@ public class SalesService : ISalesService
 
         return result;
     }
+
+    public async Task<IEnumerable<OrderReportResponse>> GetOrdersByDate(DateTime from, DateTime to)
+    {
+        var uri = API.Sales.GetOrdersByDate(_remoteServiceBaseUrl, from, to);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<OrderReportResponse>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
 }

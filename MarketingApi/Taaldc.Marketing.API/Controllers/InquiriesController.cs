@@ -69,18 +69,19 @@ public class InquiriesController : Controller
    [HttpGet]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesErrorResponseType(typeof(BadRequestResult))]
-   public async Task<IActionResult> GetInquiries(int pageSize = 10, int pageNumber = 1)
+   public async Task<IActionResult> GetInquiries(int pageSize = 10, int pageNumber = 1, int status = 1)
    {
-      var result = await _dbContext.Inquiries
-         .Include(i => i.Customer)
-         .Include(i => i.Status)
-         .AsNoTracking()
-         .Skip(pageSize * (pageNumber -1))
-         .Take(pageSize)
-         .OrderBy(i => i.Id)
-         .ToListAsync();
+        var result = await _dbContext.Inquiries
+            .Include(i => i.Customer)
+            .Include(i => i.Status)
+            .AsNoTracking()
+            .Where(i => i.Status.Id == status)
+            .Skip(pageSize * (pageNumber -1))
+            .Take(pageSize)
+            .OrderByDescending(i => i.CreatedOn)
+            .ToListAsync();
 
-      var total = await _dbContext.Inquiries.AsNoTracking().CountAsync();
+      var total = await _dbContext.Inquiries.Where(i => i.Status.Id == status).AsNoTracking().CountAsync();
 
       var records =  result.Select(i => new InquiryDto
       {
@@ -134,6 +135,35 @@ public class InquiriesController : Controller
 
         return Ok();
    }
+
+
+    [HttpPut("status")]
+    public async Task<IActionResult> UpdateStatus(UpdateInquiryStatusDto model)
+    {
+        try
+        {
+            var inquiry = await _dbContext.Inquiries.FirstOrDefaultAsync(i => i.Id == model.Id);
+
+            if (inquiry == null) return NotFound(new { Message = $"Inquiry with Id: {model.Id} not found" });
+
+            inquiry.SetStatus(model.Status);
+            inquiry.Attend(_currentUser.Name);
+
+            await _dbContext.SaveEntitiesAsync();
+
+            return Accepted();
+            
+        }catch(Exception ex)
+        {
+            _logger.LogError(ex.Message);
+
+            return BadRequest(new
+            {
+                Success = false,
+                Message = "Error occured while saving the data."
+            });
+        }
+    }
 
     private static async Task SendEmailToSales(AddInquiryDto dto, Inquiry entity)
     {

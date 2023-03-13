@@ -580,7 +580,9 @@ li.order-item{
 .buyerinfo #MiddleName,
 .buyerinfo #FirstName,
 .buyerinfo #HomeAddress,
-.buyerinfo #BusinessAddress{
+.buyerinfo #BusinessAddress,
+.buyerinfo #Single,
+.buyerinfo #Married {
     display: none;
 }
 
@@ -664,7 +666,9 @@ li.order-item{
     .buyerinfo #MiddleName,
     .buyerinfo #FirstName,
     .buyerinfo #HomeAddress,
-    .buyerinfo #BusinessAddress{
+    .buyerinfo #BusinessAddress,
+    .buyerinfo #Single,
+    .buyerinfo #Married {
         display: block;
         position: fixed;
         font-family: serif;
@@ -695,5 +699,15 @@ li.order-item{
     .buyerinfo #BusinessAddress {
         left: 210px;
         top: 320px;
+    }
+
+    .buyerinfo #Single {
+        left: 220px;
+        top: 495px;
+    }
+
+    .buyerinfo #Married {
+        left: 340px;
+        top: 495px;
     }
 }

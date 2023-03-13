@@ -61,4 +61,5 @@ public interface ISalesService
     #endregion
 
     Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id);
+    Task<IEnumerable<OrderReportResponse>> GetOrdersByDate(DateTime from, DateTime to);
 }
