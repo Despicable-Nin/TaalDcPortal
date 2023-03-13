@@ -2,6 +2,7 @@ using MediatR;
 using SeedWork;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Domain.Events;
 
 namespace Taaldc.Sales.API.Application.Commands.AcceptPayment;
 
@@ -32,7 +33,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
 
         var order = await _repository.FindOrderByIdAsync(request.OrderId);
 
-        order.AcceptPayment(request.PaymentId, _currentUser?.Email);
+        order.AcceptPayment(request.PaymentId, _currentUser?.Email, request.ConfirmationNumber);
 
         _repository.Update(order);
 
@@ -53,6 +54,12 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
         {
             unitStatusId = 3;
             unitStatus = "RESERVED";
+        }
+
+        //Update unit status
+        foreach (var item in order.OrderItems)
+        {
+            order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), unitStatusId, unitStatus));
         }
 
         //await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));

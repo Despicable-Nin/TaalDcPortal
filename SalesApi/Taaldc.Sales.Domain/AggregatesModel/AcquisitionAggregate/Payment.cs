@@ -42,9 +42,10 @@ public class Payment : Entity
 
     public string CorrelationId { get;private set; } = string.Empty;
 
-    public void VerifyPayment(string verifiedBy)
+    public void VerifyPayment(string verifiedBy, string confirmationNumber)
     {
         VerifiedBy = verifiedBy;
+        ConfirmationNumber = confirmationNumber;
         _statusId = PaymentStatus.GetStatusId(PaymentStatus.Accepted);
     }
 

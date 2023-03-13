@@ -23,7 +23,7 @@ public interface ISalesService
 
     Task<IEnumerable<GetSalesPaymentResponse>> GetSalesPayments(int id);
 
-    Task<Response> AcceptPayment(int orderId, int paymentId);
+    Task<Response> AcceptPayment(int orderId, int paymentId, string confirmationNumber);
     Task<Response> VoidPayment(int orderId, int paymentId);
 
     Task<Response> AddPayment(AddPaymentRequest model);
@@ -61,4 +61,5 @@ public interface ISalesService
     #endregion
 
     Task<IEnumerable<Contract_ClientDto>> GetBuyerContracts(int id);
+    Task<IEnumerable<OrderReportResponse>> GetOrdersByDate(DateTime from, DateTime to);
 }

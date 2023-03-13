@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
 using TaalDc.Portal.DTO.Sales.Contracts;
@@ -8,7 +9,7 @@ using WebApplication2.Controllers;
 
 namespace TaalDc.Portal.Controllers
 {
-    [Authorize("Custodian")]
+    [Authorize("LimitedCustodian")]
     public class BuyersController : Controller
     {
         private readonly ILogger<BuyersController> _logger;
@@ -207,11 +208,14 @@ namespace TaalDc.Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCompanyInformation(UpdateBuyerCompanyRequest model)
         {
-            
+            model.MobileNo = !string.IsNullOrEmpty(model.MobileNo) ? model.MobileNo : "";
+            model.FaxNo = !string.IsNullOrEmpty(model.FaxNo) ? model.FaxNo : "";
+           
             await _salesService.UpdateBuyerCompany(model);
 
             return Ok();
         }
+
 
         [HttpPost]
         public async Task<IActionResult> EditSpouse(UpsertBuyerSpouseRequest model)

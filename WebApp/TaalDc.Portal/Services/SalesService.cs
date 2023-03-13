@@ -113,9 +113,9 @@ public class SalesService : ISalesService
 
 
 
-    public async Task<Response> AcceptPayment(int orderId, int paymentId)
+    public async Task<Response> AcceptPayment(int orderId, int paymentId, string confirmationNumber)
     {
-        var uri = API.Sales.AcceptPayment(_remoteServiceBaseUrl, orderId, paymentId);
+        var uri = API.Sales.AcceptPayment(_remoteServiceBaseUrl, orderId, paymentId, confirmationNumber);
 
         var response = await _httpClient.PostAsync(uri, null);
 
@@ -125,7 +125,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Payment cannot be updated.");
+        return new Response("Error in updating a payment.", false, null);
     }
 
     public async Task<Response> VoidPayment(int orderId, int paymentId)
@@ -140,7 +140,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Payment cannot be updated.");
+        return new Response("Error in updating a payment.", false, null);
     }
 
     public async Task<Response> AddPayment(AddPaymentRequest model)
@@ -155,7 +155,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Sale cannot be created.");
+        return new Response("Error in adding a payment.", false, null);
     }
 
   
@@ -217,7 +217,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<AddBuyerOrderResponse>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Sale cannot be created.");
+        return new AddBuyerOrderResponse("Error in adding a contract.", false, null);
     }
 
     public async Task<Response> AddBuyer(AddBuyerRequest model)
@@ -232,7 +232,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be created.");
+        return new Response("Error in updating buyer.", false, null);
     }
 
     public async Task<Response> UpdateBuyerInfo(UpdateBuyerInfoRquest model)
@@ -247,7 +247,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return new Response("Error in updating buyer.", false, null);
     }
 
     public async Task<bool> UpdateBuyerContact(UpdateBuyerContactRequest model)
@@ -262,7 +262,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<bool>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return false;
     }
 
     public async Task<Response> UpdateBuyerMisc(UpdateBuyerMiscRequest model)
@@ -277,7 +277,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return new Response("Error in updating buyer.", false, null);
     }
 
     public async Task<Response> PatchBuyerAddress(PatchBuyerAddressRequest model)
@@ -296,7 +296,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return new Response("Error in updating buyer.", false, null);
     }
 
     public async Task<Response> UpdateBuyerCompany(UpdateBuyerCompanyRequest model)
@@ -311,7 +311,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return new Response("Error in updating buyer.", false, null);
     }
     
     public async Task<Response> UpsertSpouse(UpsertBuyerSpouseRequest model)
@@ -326,7 +326,7 @@ public class SalesService : ISalesService
             return JsonSerializer.Deserialize<Response>(content,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-        throw new Exception("Buyer cannot be updated.");
+        return new Response("Error in updating buyer.", false, null);
     }
 
     public async Task<PaginationQueryResult<GetBuyerResponse>> GetBuyers(int pageNumber, int pageSize, string name, string email)
@@ -334,7 +334,7 @@ public class SalesService : ISalesService
         var uri = API.Sales.GetBuyers(_remoteServiceBaseUrl);
 
         uri =
-            $"{uri}?pageNumber={pageNumber}&pageSize={pageSize}";
+            $"{uri}?pageNumber={pageNumber}&pageSize={pageSize}&name={name}";
 
         var responseString = await _httpClient.GetStringAsync(uri);
 
@@ -397,6 +397,18 @@ public class SalesService : ISalesService
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<IEnumerable<Contract_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<OrderReportResponse>> GetOrdersByDate(DateTime from, DateTime to)
+    {
+        var uri = API.Sales.GetOrdersByDate(_remoteServiceBaseUrl, from, to);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<OrderReportResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;

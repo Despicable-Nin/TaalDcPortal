@@ -29,9 +29,9 @@ public class MarketingService : IMarketingService
         throw new NotImplementedException();
     }
 
-    public async Task<InquriesResult> GetInquiries(int pageSize, int pageNumber)
+    public async Task<InquriesResult> GetInquiries(int pageSize, int pageNumber, int status)
     {
-        var uri = API.Marketing.GetInquiries(_removeServiceBaseUrl, pageSize, pageNumber);
+        var uri = API.Marketing.GetInquiries(_removeServiceBaseUrl, pageSize, pageNumber, status);
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<InquriesResult>(responseString,
@@ -49,5 +49,14 @@ public class MarketingService : IMarketingService
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
+    }
+
+    public async Task UpdateInquiryStatus(UpdateInquiryStatusDto dto)
+    {
+        var uri = API.Marketing.UpdateInquiryStatus(_removeServiceBaseUrl);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, dto, CancellationToken.None);
+
+        await response.Content.ReadAsStringAsync();
     }
 }
