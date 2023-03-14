@@ -43,7 +43,19 @@ public class UnitsController : ApiBaseController<UnitsController>
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetUnitColorSchemeByFloorIdAsync(int floorId)
     {
-        return Ok(await _unitQueries.GetUnitColorSchemeByFloorIdAsync(floorId));
+        var result = await _unitQueries.GetUnitColorSchemeByFloorIdAsync(floorId);
+        return Ok(new
+        {
+            result.FirstOrDefault().Floor,
+            result.FirstOrDefault().FilePath,
+            Units = result.Select(u => new
+            {
+                u.UnitId,
+                u.Unit,
+                u.Color,
+                u.UnitStatus
+            })
+        });
     }
 
     [HttpPost]
