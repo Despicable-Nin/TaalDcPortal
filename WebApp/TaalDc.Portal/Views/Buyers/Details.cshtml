@@ -43,16 +43,17 @@
                     @Model.Salutation @Model.FirstName @Model.LastName
                 </p>
 
-                <p class="mb-5">
-                    <strong class="primary-color">Date of Birth</strong> <br />
-                    @Model.DoB.ToLongDateString()
-                </p>
+                @if(!Model.IsCorporate){
+                    <p class="mb-5">
+                        <strong class="primary-color">Date of Birth</strong> <br />
+                        @Model.DoB.ToLongDateString()
+                    </p>
 
-                <p class="mb-5">
-                    <strong class="primary-color">Civil Status</strong> <br />
-                    @Model.CivilStatus.ToString()
-                </p>
-
+                    <p class="mb-5">
+                        <strong class="primary-color">Civil Status</strong> <br />
+                        @Model.CivilStatus.ToString()
+                    </p>
+                }
                 <h5><strong>Contact  Information</strong></h5>
                 <a onclick="openEditContactInformation()" href="#">Edit</a>
                 <hr />
@@ -212,7 +213,7 @@
                     </p>
 
                     <p class="mb-5">
-                        <strong class="primary-color">SEC Reg. No.</strong> <br />
+                        <strong class="primary-color">SEC Reg. No./DTI Reg. No.</strong> <br />
                         @Model.Company.SECRegNo
                     </p>
                 }

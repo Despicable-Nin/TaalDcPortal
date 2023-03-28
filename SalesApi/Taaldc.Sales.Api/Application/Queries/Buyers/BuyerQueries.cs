@@ -114,7 +114,7 @@ public class BuyerQueries : IBuyerQueries
         }
 
         query += where;
-        query += @$" ORDER BY B.[LastName]  
+        query += @$" ORDER BY B.[Id]  
         OFFSET {(pageNumber - 1) * pageSize} 
         ROWS FETCH NEXT {pageSize} ROWS ONLY";
 

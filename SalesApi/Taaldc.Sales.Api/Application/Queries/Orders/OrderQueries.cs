@@ -134,7 +134,7 @@ public class OrderQueries : IOrderQueries
 
     public async Task<IEnumerable<ContractDto>> GetBuyerContractDetails(int buyerId)
     {
-        var query = $"{OrderSQL.SELECT_ORDER_DETAILS} WHERE BuyerId = '{buyerId}'";
+        var query = $"{OrderSQL.SELECT_ORDER_DETAILS} WHERE BuyerId = '{buyerId}' ORDER by O.Id";
 
         await using var connection = new SqlConnection(_connectionString);
 

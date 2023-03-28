@@ -178,6 +178,11 @@ public class SalesController : BaseController<SalesController>
                 for (int i = 0; i < properties.Length; i++)
                 {
                     object value = properties[i].GetValue(obj);
+
+                    if (properties[i].PropertyType == typeof(DateTime) || properties[i].PropertyType == typeof(DateTimeOffset)) { 
+                        worksheet.Cells[dataRow, i + 1].Style.Numberformat.Format = "yyyy-mm-dd";
+                    }
+
                     worksheet.Cells[dataRow, i + 1].Value = value;
                 }
                 dataRow++;
