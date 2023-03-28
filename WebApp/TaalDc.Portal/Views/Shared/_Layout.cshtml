@@ -24,6 +24,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <script src="https://kit.fontawesome.com/e49025cb51.js" crossorigin="anonymous"></script>
+
+    @await RenderSectionAsync("HeaderScripts", false)
 </head>
 <body>
 

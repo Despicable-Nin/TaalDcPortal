@@ -14,7 +14,7 @@
         public double ReservationFee { get; set; }
         public string ReservationConfirmation { get; set; }
         public double DownPayment { get; set; }
-        public string DownPaymentConfirmationNo { get; set; }
+        public string DownpaymentConfirmation { get; set; }
 
         public string PaymentMethod { get; set; }
         public string Remarks { get; set; }

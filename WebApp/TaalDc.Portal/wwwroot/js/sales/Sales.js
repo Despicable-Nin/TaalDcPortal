@@ -194,6 +194,8 @@ function openAvailableUnitsModal() {
 function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
     console.log(selectedUnits)
 
+    $('.formLoader').show();
+
     console.log(document.getElementsByName("unitFilter"));
     var filter = document.getElementsByName("unitFilter")[0].value;
 
@@ -235,6 +237,7 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
 
             unitTableBody.innerHTML = rows;
 
+            $('.formLoader').hide();
 
             //add a pagination
             var numberOfPagesToDisplay = 5;
@@ -315,7 +318,7 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
 
             unitPagination.appendChild(ul)
 
-            return data;
+            return data;  
         });
 }
 

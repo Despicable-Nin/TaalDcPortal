@@ -69,9 +69,17 @@
 
             @if (!string.IsNullOrEmpty(Model.FloorPlanFilePath))
             {
-                <div class="col-lg-8 my-5">
-                    <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
-                </div>
+                if (Model.FloorPlanFilePath.Contains("svg")){
+                    <div class="col-lg-8 my-5" id="floor-plan">
+                        <img  class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-8 my-5" id="floor-plan">
+                        <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
+                    </div>
+                }
             }
 
             
@@ -103,6 +111,37 @@
     </div>
 </div>
 
+@section HeaderScripts{
+    <script src="~/js/common/svg-inject.js"></script>
+    <script>
+        SVGInject.setOptions({
+            useCache: false, // no caching
+            copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
+            makeIdsUnique: false, // do not make ids used within the SVG unique
+            afterLoad: function (svg, svgString) {
+                // add a class to the svg
+                console.log('svg', svg);
+
+                var paths = svg.getElementsByTagName('path');
+
+                console.log('paths', paths);
+
+                Array.from(paths).forEach((path) => {
+                    console.log(path.id);
+                    path.style.fill = "#0080008c"
+                })
+            },
+            beforeInject: function (img, svg) {
+                // wrap SVG in a div element
+            },
+            afterInject: function (img, svg) {
+            },
+            onFail: function (img) {
+            }
+        });
+    </script>
+}
+
 
 @section Scripts
 {
@@ -111,5 +150,4 @@
     }
 
     <script src="~/js/catalog/Property.js"></script>
-
 }

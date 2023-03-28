@@ -9,6 +9,7 @@ using Taaldc.Sales.Api.Application.Queries.UnitReplicas;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
 using Taaldc.Sales.Domain.Events;
 using Taaldc.Sales.Domain.Exceptions;
+using Taaldc.Sales.Api.Application.Queries.Brokers;
 
 namespace Taaldc.Sales.Api.Application.Commands.SellUnit;
 
@@ -24,13 +25,16 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
 
     private readonly IOrderRepository _salesRepository;
 
+    private readonly IBrokerQueries _brokerQueries;
+
     public SellUnitCommandHandler(IBuyerQueries buyerQueries, 
         IOrderRepository orderRepository, 
         IUnitQueries unitQueries, 
         IAmCurrentUser currentUser, 
         ILogger<SellUnitCommandHandler> logger, 
         IMediator mediator, 
-        IOrderRepository salesRepository)
+        IOrderRepository salesRepository,
+        IBrokerQueries brokerQueries)
     {
         _buyerQueries = buyerQueries;
         _orderRepository = orderRepository;
@@ -39,6 +43,7 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
         _logger = logger;
         _mediator = mediator;
         _salesRepository = salesRepository;
+        _brokerQueries = brokerQueries; 
     }
 
     public async Task<CommandResult> Handle(SellUnitCommand request, CancellationToken cancellationToken)
@@ -60,10 +65,22 @@ public class SellUnitCommandHandler : IRequestHandler<SellUnitCommand, CommandRe
                 request.TransactionDate, 
                 request.Discount,
                 request.Remarks);
-            
+
             //nevermind the overwrite
-            order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name, _currentUser.IsBroker());
-           
+            if (!string.IsNullOrEmpty(request.Broker))
+            {
+                var broker = await _brokerQueries.GetBrokerInfoByEmail(request.Broker);
+
+                if(broker == null)
+                {
+                    broker = new BrokerDto(request.Broker);
+                }
+
+                order.AddBrokerDetail(broker.Email, broker.Company, broker.PRCLicense, broker.FullName, true);
+
+            }else {
+                order.AddBrokerDetail(_currentUser.Email, _currentUser.GetCompany(), _currentUser.GetPrcLicense(), _currentUser.Name, _currentUser.IsBroker());
+            }
 
             //add order item in order object
             foreach (var item in request.OrderItems)

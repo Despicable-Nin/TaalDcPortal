@@ -75,7 +75,7 @@
                                 <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id, @payment.PaymentTypeId)" class="action-edit" href="#">Verify</a>
                             }
 
-                            @if(payment.PaymentStatus != "Void" || CurrentUser.IsAdmin()){
+                            @if(payment.PaymentStatus != "Void" && CurrentUser.IsAdmin()){
                                 <a onclick="openVoidPaymentModal(@payment.OrderId, @payment.Id)" class="action-delete" href="#">Void</a>
                             }
                         </td>
