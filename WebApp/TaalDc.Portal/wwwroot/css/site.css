@@ -87,6 +87,12 @@ form.row, form.row .row {
     margin-bottom: 1rem;
 }
 
+
+#floor-plan svg{
+    width: 100%;
+    height: auto;
+}
+
 /*X-Small devices (portrait phones, less than 576px)*/
 @media (max-width: 575.98px) {
     h1 {

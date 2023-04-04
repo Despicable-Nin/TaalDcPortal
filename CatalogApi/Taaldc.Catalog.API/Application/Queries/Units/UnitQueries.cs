@@ -97,13 +97,13 @@ public class UnitQueries : IUnitQueries
 	                F.[Name] [Floor]
 	                ,F.[FloorPlanFilePath] [FilePath]
 	                ,U.Id [UnitId]
-                    ,[Identifier] [Unit]
+                    ,PARSENAME(REPLACE([Identifier] , '-' , '.'),1) [Unit]
                     ,[UnitStatus]
                     ,(CASE
-		                WHEN [UnitStatus] = 1 THEN '#D0FF0'
-		                WHEN [UnitStatus] = 2 THEN '#BC0116'
-		                WHEN [UnitStatus] = 3 THEN '#0EAEEE'
-		                ELSE '#D4E5F6' 
+		                WHEN [UnitStatus] = 1 THEN '#00FF01'
+		                WHEN [UnitStatus] = 2 THEN '#FE0000'
+		                WHEN [UnitStatus] = 3 THEN '#FEA500'
+		                ELSE '#808080' 
                     END) [Color]
                   FROM [taaldb_admin].[catalog].[unit] U
                   JOIN [taaldb_admin].[catalog].[floors] F ON F.Id = U.FloorId

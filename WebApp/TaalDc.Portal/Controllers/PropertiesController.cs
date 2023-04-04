@@ -189,6 +189,14 @@ public class PropertiesController : BaseController<PropertiesController>
         }
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> GetFloorUnitsStatus(int id)
+    {
+        var result = await _catalogService.GetFloorUnitsStatus(id);
+        return Ok(result);
+    }
+
     public async Task<IActionResult> Floors(string filter,
         string sortBy,
         SortOrderEnum sortOrder,

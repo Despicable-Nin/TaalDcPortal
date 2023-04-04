@@ -84,6 +84,11 @@ public static class API
             return $"{baseUri}/api/adm/units";
         }
 
+        public static string GetUnitsColorScheme(string baseUri, int floorId)
+        {
+            return $"{baseUri}/api/adm/units/color-scheme/{floorId}";
+        }
+
         public static string GetUnitTypes(string baseUri)
         {
             return $"{baseUri}/api/adm/unitTypes";
