@@ -4,7 +4,7 @@
 @{
     List<Tower_ClientDto> towers = ViewBag.Towers;
 
-    ViewBag.Title = "Create Floor";
+    ViewBag.Title = "Edit Floor";
     Layout = "_Layout";
 }
 
@@ -24,6 +24,13 @@
                 if (Model.FloorPlanFilePath.Contains("svg"))
                 {
                     <div class="col-lg-8 mb-3" id="floor-plan">
+                         <div class="formLoader">
+                            <ul class="formLoading">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </div>
                         <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
                     </div>
                 }
@@ -148,6 +155,8 @@
 
                 path.style.fill = unit.color;
             })
+
+            $('.formLoader').hide();
         }
 
         SVGInject.setOptions({
@@ -155,6 +164,7 @@
             copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
             makeIdsUnique: false, // do not make ids used within the SVG unique
             afterLoad: function (svg, svgString) {
+                $('.formLoader').show();
                  generateSVG(svg);                
             },
             beforeInject: function (img, svg) {

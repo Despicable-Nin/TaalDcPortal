@@ -43,6 +43,11 @@ public class HomeController : Controller
         return View(parkingStatus);
     }
 
+    public async Task<IActionResult> FloorPlans()
+    {
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         return View();

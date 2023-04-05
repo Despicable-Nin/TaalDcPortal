@@ -93,6 +93,27 @@ form.row, form.row .row {
     height: auto;
 }
 
+.floor-area-wrapper{
+    display: flex;
+}
+
+.floor-selection-area {
+    width: 15%;
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+.floor-selection-area .list-group-item{
+    text-align: center;
+    cursor: pointer;
+}
+
+.floor-viewing-area{
+    background-color: #dcdcdc;
+    width: 85%;
+    min-height: 100vh;
+}
+
 /*X-Small devices (portrait phones, less than 576px)*/
 @media (max-width: 575.98px) {
     h1 {

@@ -57,4 +57,13 @@ public class FloorsController : ApiBaseController<FloorsController>
     {
         return Ok(await _floorQueries.GetAvailableFloorsByUnitType(unitTypeId));
     }
+
+    [AllowAnonymous]
+    [HttpGet("active")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> GetActiveFloorsByTowerId(int towerId)
+    {
+        return Ok(await _floorQueries.GetActiveFloorsByTowerId(towerId));
+    }
 }

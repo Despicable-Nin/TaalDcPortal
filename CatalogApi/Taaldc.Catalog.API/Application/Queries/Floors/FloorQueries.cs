@@ -120,4 +120,29 @@ public class FloorQueries : IFloorQueries
 
         return result;
     }
+
+    public async Task<IEnumerable<ActiveFloorQueryResult>> GetActiveFloorsByTowerId(int towerId)
+    {
+        towerId = towerId == 0? 1: towerId;
+
+        var activeFloorsQuery = @$"SELECT 
+	                                f.[Id]
+	                                ,f.[TowerId]
+	                                ,f.[Name] AS FloorName
+	                                ,f.[Description] AS FloorDescription
+	                                ,f.[FloorPlanFilePath]
+                                FROM [taaldb_admin].[catalog].[floors] f
+                                WHERE f.IsActive = 1 
+                                AND f.FloorPlanFilePath <> '' 
+                                AND f.FloorPlanFilePath IS NOT NULL
+                                AND f.[TowerId] = {towerId}";
+
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync(CancellationToken.None);
+
+        var result = await connection.QueryAsync<ActiveFloorQueryResult>(activeFloorsQuery);
+
+        return result;
+    }
 }
