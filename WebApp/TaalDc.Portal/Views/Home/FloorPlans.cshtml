@@ -1,4 +1,7 @@
-﻿@using TaalDc.Portal.DTO.Catalog.Floors;
+﻿@using SeedWork;
+@using TaalDc.Portal.DTO.Catalog.Floors;
+@inject IAmCurrentUser CurrentUser
+
 @{
     ViewData["Title"] = "Floors Realtime Status";
 
@@ -10,6 +13,9 @@
 
     var activeFloor = activeFloors.Any() ? activeFloors.LastOrDefault(i => i.Id.ToString() == activeFloorId): new ActiveFloor_ClientDto();
 
+    if(activeFloor != null){
+        ViewData["Title"] = activeFloor.FloorDescription + " - " + ViewBag.Title;
+    }
 }
 
 <div class="container-fluid">
@@ -34,7 +40,7 @@
                     <div class="floor-selection-area">
                         <h4 class="primary-color ">
                             <strong>
-                                Active Floors
+                                Select a floor
                             </strong>
                         </h4>
 
@@ -59,30 +65,58 @@
                         </ul>
                     </div>
                     <div class="floor-viewing-area">
-                        <div class="button-area">
-                            <button class="btn btn-primary">
-                                Print
-                            </button>
-                        </div>
+                        @if(activeFloor != null && !string.IsNullOrEmpty(activeFloor.FloorPlanFilePath)){
+                            <div class="button-area">
+                                @if(CurrentUser.IsAdmin()){
+                                <a target="_blank" href="@Url.Action("EditFloor", "Properties", new { Id = activeFloor.Id })" class="btn btn-secondary">
+                                    Edit
+                                </a>
+                                }
 
-                        @if(activeFloor.FloorPlanFilePath.Contains("svg"))
-                        {
-                            <div id="floor-plan">
-                                    <div class="formLoader">
-                                    <ul class="formLoading">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
+                                <a target="_blank" href="@Url.Action("FloorPlan", "Properties", new { Id = activeFloor.Id } )" class="btn btn-primary">
+                                    Print
+                                </a>
+                            </div>
+
+                           
+
+                            @if(activeFloor != null && activeFloor.FloorPlanFilePath.Contains("svg"))
+                            {
+                                <div id="legends">
+                                    <h5><strong>LEGEND:</strong></h5>
+                                    <ul>
+                                        <li>
+                                            <div class="leg available"></div>AVAILABLE
+                                        </li>
+                                        <li><div class="leg reserved"></div>RESERVED</li>
+                                        <li><div class="leg sold"></div>SOLD</li>
+                                        <li><div class="leg blocked"></div>BLOCKED</li>
                                     </ul>
                                 </div>
-                                <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
-                            </div>
+
+                                <div id="floor-plan">
+                                        <div class="formLoader">
+                                        <ul class="formLoading">
+                                            <li></li>
+                                            <li></li>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                    <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="floor-plan">
+                                    <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" />
+                                </div>
+                            }
                         }
                         else
                         {
-                            <div id="floor-plan">
-                                <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" />
-                            </div>
+                            <p>
+                                No floor plan found.
+                            </p>
                         }
                     </div>
                 </div>
@@ -95,64 +129,65 @@
 @section HeaderScripts{
      <script src="~/js/common/svg-inject.js"></script>
 
-    <script>
-        var floorUnits;
+     @if(activeFloor != null){
+        <script>
+            var floorUnits;
 
-        async function getFloorUnitStatus() {
-            console.log('getting floor units');
-            var uri = '@Url.Action("GetFloorUnitsStatus","Properties", new { id = activeFloor.Id })';
+            async function getFloorUnitStatus() {
+                console.log('getting floor units');
+                var uri = '@Url.Action("GetFloorUnitsStatus","Properties", new { id = activeFloor.Id })';
 
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: 'GET',
-                    url: uri,
-                    success: function (data, status) {
-                        resolve(data);
-                    },
-                    error: function (data) {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'GET',
+                        url: uri,
+                        success: function (data, status) {
+                            resolve(data);
+                        },
+                        error: function (data) {
 
+                        }
+                    })
+                })
+            }
+
+            async function generateSVG(svg) {
+                var paths = svg.getElementsByTagName('path');
+
+                var floorUnits = await getFloorUnitStatus();
+
+                Array.from(paths).forEach((path) => {
+                    var unit = floorUnits.units.find(u => u.unit === path.id.toString());
+
+
+                    if(unit){
+                        path.style.fillOpacity = "0.50";
+                        path.style.fill = unit.color;
                     }
                 })
-            })
-        }
 
-        async function generateSVG(svg) {
-            var paths = svg.getElementsByTagName('path');
-
-            var floorUnits = await getFloorUnitStatus();
-
-            Array.from(paths).forEach((path) => {
-                var unit = floorUnits.units.find(u => u.unit === path.id.toString());
-
-
-                if(unit){
-                    console.log(path.style);
-                    path.style.fillOpacity = "0.65";
-                    path.style.fill = unit.color;
-                }
-            })
-
-            $('.formLoader').hide();
-        }
-
-        SVGInject.setOptions({
-            useCache: false, // no caching
-            copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
-            makeIdsUnique: false, // do not make ids used within the SVG unique
-            afterLoad: function (svg, svgString) {
-                $('.formLoader').show();
-                generateSVG(svg);
-            },
-            beforeInject: function (img, svg) {
-                // wrap SVG in a div element
-            },
-            afterInject: function (img, svg) {
-
-            },
-            onFail: function (img) {
+                $('.formLoader').hide();
             }
-        });
-    </script>
+
+            SVGInject.setOptions({
+                useCache: false, // no caching
+                copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
+                makeIdsUnique: false, // do not make ids used within the SVG unique
+                afterLoad: function (svg, svgString) {
+                    $('.formLoader').show();
+                    generateSVG(svg);
+                },
+                beforeInject: function (img, svg) {
+                    // wrap SVG in a div element
+                },
+                afterInject: function (img, svg) {
+
+                },
+                onFail: function (img) {
+                }
+            });
+        </script>
+    }
 }
 
 

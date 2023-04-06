@@ -166,6 +166,15 @@ public class PropertiesController : BaseController<PropertiesController>
         return Ok(result);
     }
 
+    [AllowAnonymous]
+    public async Task<IActionResult> FloorPlan(int id)
+    {
+        var result = await _catalogService.GetFloorById(id);
+        var floorCreateDTO = _mapper.Map<FloorCreate_ClientDto>(
+              result);
+        return View(floorCreateDTO);
+    }
+
     public async Task<IActionResult> EditFloor(int id)
     {
         try

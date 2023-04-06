@@ -18,6 +18,7 @@ public class FloorsController : ApiBaseController<FloorsController>
         _floorQueries = floorQueries;
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesErrorResponseType(typeof(BadRequestResult))]

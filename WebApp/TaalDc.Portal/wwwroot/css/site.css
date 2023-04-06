@@ -29,7 +29,7 @@
 
 body {
     font-family: 'Inter Regular', Arial, sans-serif;
-    font-size: 1rem;
+    font-size: 0.8rem;
     overflow: hidden;
 }
 
@@ -58,7 +58,7 @@ h6 {
 }
 
 p {
-    font-size: 1rem;
+    font-size: .9rem;
 }
 
 .alink {
@@ -87,6 +87,9 @@ form.row, form.row .row {
     margin-bottom: 1rem;
 }
 
+#floor-plan{
+    margin-top: 4rem;
+}
 
 #floor-plan svg,
 #floor-plan img {
@@ -108,28 +111,81 @@ form.row, form.row .row {
 .floor-selection-area .list-group-item{
     text-align: center;
     cursor: pointer;
+    font-size: .8rem;
 }
 
-    .floor-selection-area .list-group-item.active {
-        background-color: #516C5B;
-        border-color: #516C5B;
-    }
+.floor-selection-area .list-group-item:hover,
+.floor-selection-area .list-group-item:hover a{
+    background-color: #6AB0F8;
+    border-color: #6AB0F8;
+    color: white;
+ }
 
-    .floor-selection-area .list-group-item a {
-        color: #516C5B;
-    }
+
+.floor-selection-area .list-group-item.active {
+    background-color: #516C5B;
+    border-color: #516C5B;
+}
+
+.floor-selection-area .list-group-item a {
+    color: #516C5B;
+}
 
 .floor-selection-area .list-group-item.active a{
     color: white;
 }
 
-.floor-viewing-area{
+.floor-viewing-area {
+    position: relative;
     width: 85%;
     min-height: 80vh;
 }
 
 .floor-viewing-area .button-area{
     float: right;
+}
+
+#legends {
+    position: absolute;
+    right: 5%;
+    top: 8%;
+}
+
+#legends ul{
+    padding-left: 0;
+}
+
+#legends h5{
+    font-size: 1rem;
+}
+
+#legends ul li {
+    display: flex;
+    font-size: .75rem;
+    margin-bottom: 0.75rem;
+    font-family: 'Inter Extrabold', Arial, sans-serif;
+}
+
+.leg {
+    height: 25px;
+    width: 70px;
+    margin-right: 0.5rem;
+}
+
+.leg.available {
+    background-color: #00FF01;
+}
+
+.leg.sold {
+    background-color: #FE0000;
+}
+
+.leg.reserved{
+    background-color: #FEA500;
+}
+
+.leg.blocked{
+    background-color: rgba(87,87,87,1);
 }
 
 /*X-Small devices (portrait phones, less than 576px)*/
@@ -191,6 +247,9 @@ ul.noliststyle > li {
     margin-bottom: .5rem;
 }
 
+.btn{
+    font-size: 0.9rem;
+}
 
 /*Button Styles*/
 .btn-primary {
@@ -444,7 +503,7 @@ tr.accepted td{
 .icon-1, .icon-2, .icon-3 {
     position: absolute;
     top: 50%;
-    width: 32px;
+    width: 28px;
     height: 3px;
     background-color: black;
     transition: all 400ms cubic-bezier(.84,.06,.52,1.8);
@@ -755,7 +814,19 @@ li.order-item{
         top: 495px;
     }
 
-    #floor-plan{
-        display: block !important;
+    .floor-plan-print-block svg,
+    .floor-plan-print-block img {
+        margin-top: 5%;
+        display: block;
+    }
+
+    #legends {
+        position: absolute;
+        right: 5%;
+        top: 5%;
+    }
+
+    #legends ul li {
+        font-size: 0.7rem;
     }
 }
