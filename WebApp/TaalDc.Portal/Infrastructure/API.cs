@@ -94,6 +94,11 @@ public static class API
             return $"{baseUri}/api/adm/unitTypes";
         }
 
+        public static string GetActiveFloorByTowerId(string baseUri, int towerId)
+        {
+            return $"{baseUri}/api/adm/floors/active?towerId={towerId}";
+        }
+
         public static string GetFloorById(string baserUri, int id)
         {
             return $"{baserUri}/api/adm/floors/{id}";

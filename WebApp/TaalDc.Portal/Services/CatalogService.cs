@@ -73,6 +73,18 @@ public class CatalogService : ICatalogService
         return result;
     }
 
+    public async Task<IEnumerable<ActiveFloor_ClientDto>> GetActiveFloorsByTowerId(int towerId)
+    {
+        var uri = API.Catalog.GetActiveFloorByTowerId(_remoteServiceUrl, towerId);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ActiveFloor_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
     public async Task<Floor_ClientDto> GetFloorById(int id)
     {
         var uri = API.Catalog.GetFloorById(_remoteServiceUrl, id);

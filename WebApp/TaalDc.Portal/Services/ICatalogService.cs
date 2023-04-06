@@ -30,6 +30,8 @@ public interface ICatalogService
         int pageNumber = 1,
         int pageSize = 10);
 
+    Task<IEnumerable<ActiveFloor_ClientDto>> GetActiveFloorsByTowerId(int towerId);
+
     Task<Floor_ClientDto> GetFloorById(int id);
 
     Task<FloorUnitAvailability_ClientDto> GetFloorUnitsStatus(int id);

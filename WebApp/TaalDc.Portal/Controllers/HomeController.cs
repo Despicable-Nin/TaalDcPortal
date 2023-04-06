@@ -12,11 +12,15 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ISalesService _salesService;
+    private readonly ICatalogService _catalogService;
 
-    public HomeController(ILogger<HomeController> logger, ISalesService salesService)
+    public HomeController(ILogger<HomeController> logger
+        ,ISalesService salesService
+        ,ICatalogService catalogService)
     {
         _logger = logger;
         _salesService = salesService;
+        _catalogService = catalogService;
     }
 
     public async Task<IActionResult> Index()
@@ -45,6 +49,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> FloorPlans()
     {
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors;
+
         return View();
     }
 

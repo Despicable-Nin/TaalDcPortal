@@ -88,9 +88,11 @@ form.row, form.row .row {
 }
 
 
-#floor-plan svg{
+#floor-plan svg,
+#floor-plan img {
     width: 100%;
     height: auto;
+    padding: 0.75rem;
 }
 
 .floor-area-wrapper{
@@ -99,7 +101,7 @@ form.row, form.row .row {
 
 .floor-selection-area {
     width: 15%;
-    min-height: 100vh;
+    min-height: 80vh;
     padding: 1rem;
 }
 
@@ -108,10 +110,26 @@ form.row, form.row .row {
     cursor: pointer;
 }
 
+    .floor-selection-area .list-group-item.active {
+        background-color: #516C5B;
+        border-color: #516C5B;
+    }
+
+    .floor-selection-area .list-group-item a {
+        color: #516C5B;
+    }
+
+.floor-selection-area .list-group-item.active a{
+    color: white;
+}
+
 .floor-viewing-area{
-    background-color: #dcdcdc;
     width: 85%;
-    min-height: 100vh;
+    min-height: 80vh;
+}
+
+.floor-viewing-area .button-area{
+    float: right;
 }
 
 /*X-Small devices (portrait phones, less than 576px)*/
@@ -567,7 +585,6 @@ tr.accepted td{
     margin-bottom: 1rem !important;
 }
 
-
 li.order-item{
     cursor: pointer;
 }
@@ -736,5 +753,9 @@ li.order-item{
     .buyerinfo #Married {
         left: 340px;
         top: 495px;
+    }
+
+    #floor-plan{
+        display: block !important;
     }
 }

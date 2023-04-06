@@ -1,5 +1,15 @@
-﻿@{
+﻿@using TaalDc.Portal.DTO.Catalog.Floors;
+@{
     ViewData["Title"] = "Floors Realtime Status";
+
+    var activeFloors = ViewBag.ActiveFloors as IEnumerable<ActiveFloor_ClientDto>;
+
+    var activeFloorId = Context.Request.Query["ActiveFloor"].FirstOrDefault();
+
+    activeFloorId = activeFloorId == null ? activeFloors.First().Id.ToString() : activeFloorId;
+
+    var activeFloor = activeFloors.Any() ? activeFloors.LastOrDefault(i => i.Id.ToString() == activeFloorId): new ActiveFloor_ClientDto();
+
 }
 
 <div class="container-fluid">
@@ -29,22 +39,51 @@
                         </h4>
 
                         <ul class="list-group">
-                          <li class="list-group-item active" aria-current="true">4th Floor</li>
-                          <li class="list-group-item">5th Floor</li>
+                            @foreach(var floor in activeFloors)
+                            {
+                                bool isActive = activeFloorId == floor.Id.ToString() ? true : false;
+
+                                <li class="list-group-item @(isActive? "active": "")" aria-current="true">
+                                    <a href="@Url.Action("FloorPlans", "Home", new { ActiveFloor = floor.Id })">@floor.FloorDescription</a>
+                                </li>
+                            }
+                            
+                        @*  <li class="list-group-item">5th Floor</li>
                           <li class="list-group-item">6th Floor</li>
                           <li class="list-group-item">7th Floor</li>
                           <li class="list-group-item">8th Floor</li>
                           <li class="list-group-item">9th Floor</li>
                           <li class="list-group-item">10th Floor</li>
                           <li class="list-group-item">11th Floor</li>
-                          <li class="list-group-item">12th Floor</li>
+                          <li class="list-group-item">12th Floor</li>*@
                         </ul>
                     </div>
                     <div class="floor-viewing-area">
-                        <button class="btn btn-primary">
-                            Print
-                        </button>
-                        
+                        <div class="button-area">
+                            <button class="btn btn-primary">
+                                Print
+                            </button>
+                        </div>
+
+                        @if(activeFloor.FloorPlanFilePath.Contains("svg"))
+                        {
+                            <div id="floor-plan">
+                                    <div class="formLoader">
+                                    <ul class="formLoading">
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                                <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="floor-plan">
+                                <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -52,3 +91,74 @@
     </div>
 </div>
 
+
+@section HeaderScripts{
+     <script src="~/js/common/svg-inject.js"></script>
+
+    <script>
+        var floorUnits;
+
+        async function getFloorUnitStatus() {
+            console.log('getting floor units');
+            var uri = '@Url.Action("GetFloorUnitsStatus","Properties", new { id = activeFloor.Id })';
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: 'GET',
+                    url: uri,
+                    success: function (data, status) {
+                        resolve(data);
+                    },
+                    error: function (data) {
+
+                    }
+                })
+            })
+        }
+
+        async function generateSVG(svg) {
+            var paths = svg.getElementsByTagName('path');
+
+            var floorUnits = await getFloorUnitStatus();
+
+            Array.from(paths).forEach((path) => {
+                var unit = floorUnits.units.find(u => u.unit === path.id.toString());
+
+
+                if(unit){
+                    console.log(path.style);
+                    path.style.fillOpacity = "0.65";
+                    path.style.fill = unit.color;
+                }
+            })
+
+            $('.formLoader').hide();
+        }
+
+        SVGInject.setOptions({
+            useCache: false, // no caching
+            copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
+            makeIdsUnique: false, // do not make ids used within the SVG unique
+            afterLoad: function (svg, svgString) {
+                $('.formLoader').show();
+                generateSVG(svg);
+            },
+            beforeInject: function (img, svg) {
+                // wrap SVG in a div element
+            },
+            afterInject: function (img, svg) {
+
+            },
+            onFail: function (img) {
+            }
+        });
+    </script>
+}
+
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -135,7 +135,8 @@ public class FloorQueries : IFloorQueries
                                 WHERE f.IsActive = 1 
                                 AND f.FloorPlanFilePath <> '' 
                                 AND f.FloorPlanFilePath IS NOT NULL
-                                AND f.[TowerId] = {towerId}";
+                                AND f.[TowerId] = {towerId}
+                                ORDER BY f.[Id] DESC";
 
 
         await using var connection = new SqlConnection(_connectionString);

@@ -153,7 +153,9 @@
             Array.from(paths).forEach((path) => {
                 var unit = floorUnits.units.find(u => u.unit === path.id.toString());
 
-                path.style.fill = unit.color;
+                if(unit){
+                    path.style.fill = unit.color;
+                }
             })
 
             $('.formLoader').hide();

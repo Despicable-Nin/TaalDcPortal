@@ -103,7 +103,7 @@ public class UnitQueries : IUnitQueries
 		                WHEN [UnitStatus] = 1 THEN '#00FF01'
 		                WHEN [UnitStatus] = 2 THEN '#FE0000'
 		                WHEN [UnitStatus] = 3 THEN '#FEA500'
-		                ELSE '#808080' 
+		                ELSE 'rgba(87,87,87,1)' 
                     END) [Color]
                   FROM [taaldb_admin].[catalog].[unit] U
                   JOIN [taaldb_admin].[catalog].[floors] F ON F.Id = U.FloorId
