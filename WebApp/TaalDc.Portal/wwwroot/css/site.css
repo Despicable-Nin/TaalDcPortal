@@ -685,9 +685,11 @@ li.order-item{
 .buyerinfo #HomeAddress,
 .buyerinfo #BusinessAddress,
 .buyerinfo #Single,
-.buyerinfo #Married {
+.buyerinfo #Married,
+.buyerinfo #Widowed {
     display: none;
 }
+
 
 
 @media print {
@@ -771,7 +773,8 @@ li.order-item{
     .buyerinfo #HomeAddress,
     .buyerinfo #BusinessAddress,
     .buyerinfo #Single,
-    .buyerinfo #Married {
+    .buyerinfo #Married,
+    .buyerinfo #Widowed{
         display: block;
         position: fixed;
         font-family: serif;

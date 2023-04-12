@@ -17,49 +17,346 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Buyer Information Sheet</title>
 
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
     <script src="https://kit.fontawesome.com/e49025cb51.js" crossorigin="anonymous"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            font-family: "Times New Roman", Times, serif;
+        }
+
+        .pdfdoc-wrapper {
+            width: 792.96px;
+            padding-top: 48px;
+            padding-bottom: 48px;
+            padding-left: 96px;
+            padding-right: 96px;
+        }
+
+        .pdfdoc-header {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .pdfdoc-subheader {
+            text-align: center;
+        }
+
+
+        p{
+            font-size: 14px;
+            margin-bottom: 1rem;
+        }
+
+        .primary-color{
+            color: #516C5B;
+        }
+
+        .pdfdoc-footer{
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #516C5B;
+            border-top: 5px solid #516C5B;
+            padding-top: 28px;
+            padding-bottom: 28px;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="pdf-wrapper">
-        <div class="pdf-content buyerinfo">
-            <p id="LastName">
-                @Model.LastName
+    <div class="pdfdoc-wrapper">
+        <div class="pdfdoc-header">
+            <img src="~/taaldc-logo.png" alt="TAALDC Logo" height="90"/>
+            <p class="primary-color">
+                <strong>TAGAYTAY ALL ALPHA LANDHOLDINGS <br />AND DEVELOPMENT CORPORATION</strong>
             </p>
+        </div>
 
-            <p id="FirstName">
-                @Model.FirstName
+        <div class="pdfdoc-subheader">
+            <p style="text-decoration: underline; font-size: 1.5rem;margin-bottom:0.75rem;"><strong>BUYER'S INFORMATION SHEET</strong></p>
+            <p style="font-size: 18px;">
+                <strong>
+                    INDIVIDUAL BUYER
+                </strong>
             </p>
+        </div>
 
-            <p id="MiddleName">
-                @Model.MiddleName
-            </p>
+        <p style="text-align: right;">
+            Date: <span style="border-bottom: 1px solid black; padding-left: 10px; padding-right: 10px; width: 100px;">
+                
+            </span>
+        </p>
 
-            <p id="HomeAddress">
+        <p style="font-weight: 700; text-align: left;margin-bottom: 1rem;"> 
+            Personal Information:
+        </p>
+
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%">Buyer's Name: </span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.LastName,</span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.FirstName</span> <span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.MiddleName</span>
+        </p>
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%"></span><span style="width: 25%; text-align: center; padding-bottom:3px;">(Surname)</span><span style="width: 25%; text-align: center; padding-bottom:3px;">(First Name)</span> <span style="width: 25%; text-align: center; padding-bottom:3px;">(Middle Name)</span>
+        </p>
+
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%">Home Address:</span>
+            <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
                 @if (Model.HomeAddress != null)
                 {
-                   <span>@Model.HomeAddress.Street @Model.HomeAddress.City @Model.HomeAddress.State @Model.HomeAddress.Country @Model.HomeAddress.ZipCode</span>
+                   <span>@Model.HomeAddress.Street,@Model.HomeAddress.City, @Model.HomeAddress.State, @Model.HomeAddress.Country @Model.HomeAddress.ZipCode</span>
                 }
-            </p>
+            </span>
+        </p>
 
-            <p id="BusinessAddress">
+         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%">Business Address:</span>
+            <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
                 @if (Model.BusinessAddress != null)
                 {
-                    <span>@Model.BusinessAddress.Street @Model.BusinessAddress.City @Model.BusinessAddress.State @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
+                   <span>@Model.BusinessAddress.Street, @Model.BusinessAddress.City, @Model.BusinessAddress.State, @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
                 }
-            </p>
+            </span>
+        </p>
+
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%">Billing Address:</span>
+           @* <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                @if (Model.BillingAddress != null)
+                {
+                    <span>@Model.BillingAddress.Street, @Model.BillingAddress.City, @Model.BillingAddress.State, @Model.BillingAddress.Country @Model.BillingAddress.ZipCode</span>
+                }
+            </span>*@
+        </p>
+        <p style="padding-left: 15px;">
+            <input type="checkbox" /> Home
+            <br/>
+            <input type="checkbox" /> Business
+        </p>
+        <p style="font-style: italic">
+            (If different from Home/Business Address)
+        </p>
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 100%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                @if (Model.BillingAddress != null)
+                {
+                <span>@Model.BillingAddress.Street, @Model.BillingAddress.City, @Model.BillingAddress.State, @Model.BillingAddress.Country @Model.BillingAddress.ZipCode</span>
+                }
+            </span>
+        </p>
+
+        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+            <span style="width: 20%">Civil Status: </span>
+            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Single")"/> Single</span>
+            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Married")" /> Married</span>
+            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Widowed")" /> Widow</span>
+            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" 
+                checked="@(Model.CivilStatus != "Single" && Model.CivilStatus != "Married" && Model.CivilStatus != "Widowed")"/> Others</span>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Date of Birth: 
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @Model.DoB.ToString("MM/dd/yyyy")
+            </span>
+            <span style="width: 15%">
+                Occupation: 
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @Model.Occupation
+            </span>
+        </p>
+        <p style="display: flex;">
+            <span style="width: 15%">
+               Telephone No.:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @Model.PhoneNo
+            </span>
+            <span style="width: 15%">
+                TIN:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @Model.TIN
+            </span>
+        </p>
+
+         <p style="display: flex;">
+            <span style="width: 15%">
+                Mobile No.:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @Model.MobileNo
+            </span>
+            <span style="width: 15%">
+                Email Address:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @Model.EmailAddress
+            </span>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Govt Issued ID:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @Model.GovIssuedID
+            </span>
+            <span style="width: 15%">
+                ID Valid Until:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @(Model.GovIssuedIDValidUntil.HasValue? Model.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy"): "")
+            </span>
+        </p>
+
+        <p>
+            <strong>
+                If Married:
+            </strong>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 20%">Spouse Name:</span>
+            <span style="width: 80%;text-align: center; border-bottom: 1px solid black;">
+                @if(Model.CivilStatus == "Married" && Model.Spouse != null)
+                {
+                    @($"{Model.Spouse.LastName}, {Model.Spouse.FirstName} {Model.Spouse.MiddleName}")
+                }    
+            </span>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Date of Birth:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.DoB.Year > 1 ? Model.Spouse.DoB.ToString("MM/dd/yyyy"): "")
+                }
+            </span>
+            <span style="width: 15%">
+                Occupation:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.Occupation)
+                }
+            </span>
+        </p>
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Telephone No.:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                 @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.PhoneNo)
+                }
+            </span>
+            <span style="width: 15%">
+                TIN:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.TIN)
+                }
+            </span>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Mobile No.:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.MobileNo)
+                }
+            </span>
+            <span style="width: 15%">
+                Email Address:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.EmailAddress)
+                }
+            </span>
+        </p>
+
+        <p style="display: flex;">
+            <span style="width: 15%">
+                Govt Issued ID:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.GovIssuedID)
+                }
+            </span>
+            <span style="width: 15%">
+                ID Valid Until:
+            </span>
+            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                @if (Model.Spouse != null)
+                {
+                    @(Model.Spouse.GovIssuedIDValidUntil.HasValue ? Model.Spouse.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy") : "")
+                }
+            </span>
+        </p>
+
+        <br/>
+
+        <p style="margin-bottom: 3rem;">
+            <strong>
+                I certify that the foregoing information is true and correct.
+            </strong>
+        </p>
+
+        <p style="display: flex;">
+            <span style="border-top: 1px solid black;width: 60%;text-align: center;padding-top: 0.5rem;">
+                BUYER<br/>SIGNATURE OVER PRINTED NAME
+            </span>
+        </p>
 
 
-            <p id="@Model.CivilStatus">
-               <i class="fa-solid fa-check"></i>
-            </p>
-            
-            <img src="~/files/forms/BUYER'S INFO SHEET IND.jpg" />
-        </div>
+        <br/>
+        <br/>
+        <br/>
+
+        <p style="display: flex;">
+            <span style="width: 15%">Name of Broker</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+        </p>
+        <p style="display: flex;">
+            <span style="width: 15%;">PRC License No.</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+        </p>
+        <p style="display: flex;">
+            <span style="width: 15%">Company Name</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+        </p>
     </div>
-
-    <script type="text/javascript">
+    <div class="pdfdoc-footer">
+        Penthouse Plaza San Nicholas de Tolentino, Brgy. San Jose, Aguinaldo Highway, Tagaytay City | 0956-475-4203 | 0928-973-9269 | taalDC2010@gmail.com
+    </div>
+    
+    <script>
         window.print();
     </script>
 </body>
