@@ -174,7 +174,15 @@ public class InquiriesController : Controller
 
         var address = $"{dto.TownCity}, {dto.Province}, {dto.Country}";
 
-        var body = $"<div dir=\"ltr\">\r\n<p><strong>Inquiry Date</strong><br />{entity.CreatedOn.ToString("MMMM dd, yyyy hh:mm tt")}</p>\r\n" +
+
+
+		//Convert date to +8
+		TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
+
+		DateTimeOffset inquiryLocalDate = TimeZoneInfo.ConvertTime(entity.CreatedOn, targetTimeZone);
+
+
+		var body = $"<div dir=\"ltr\">\r\n<p><strong>Inquiry Date</strong><br />{inquiryLocalDate.ToString("MMMM dd, yyyy hh:mm tt")}</p>\r\n" +
             $"<p><strong>Full Name</strong><br />{salutation} {dto.FirstName} {dto.LastName}</p>\r\n" +
             $"<p><strong>Inquiry Type</strong><br />{dto.InquiryType}</p>\r\n" +
             $"<p><strong>Email Address</strong><br /><a href=\"{dto.EmailAddress}\" target=\"_blank\">{dto.EmailAddress}</a>" +
