@@ -199,6 +199,7 @@ public class PropertiesController : BaseController<PropertiesController>
     }
 
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetFloorUnitsStatus(int id)
     {
