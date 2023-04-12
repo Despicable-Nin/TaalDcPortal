@@ -219,7 +219,7 @@ form.row, form.row .row {
     }
 }
 
-strong {
+strong, label {
     font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 

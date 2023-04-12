@@ -24,8 +24,12 @@ namespace TaalDc.Portal.Controllers
 			_currentUser = currentUser;
 		}
 
-		public IActionResult Create(int id)
+		public async Task<IActionResult> Create(int id)
         {
+            var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+            ViewData["ActiveFloors"] = activeFloors.OrderBy(a => a.Id);
+
             return View(id);
         }
 

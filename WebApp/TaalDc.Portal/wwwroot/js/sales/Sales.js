@@ -33,10 +33,17 @@ function onUnitFormMutipleSubmit(event) {
 }
 
 function getAvailableUnits(pageNumber = 1, pageSize = 10) {
-    console.log(document.getElementsByName("unitFilter"));
+    //console.log(document.getElementsByName("unitFilter"));
+
     var filter = document.getElementsByName("unitFilter")[0].value;
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}`)
+    var unitTypeId = document.getElementsByName("unitTypeId")[0].value;
+
+    var floorId = document.getElementsByName("floorId")[0].value;
+
+    console.log('unittypeid', unitTypeId, "floorid", floorId);
+
+    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -197,9 +204,16 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
     $('.formLoader').show();
 
     console.log(document.getElementsByName("unitFilter"));
+
     var filter = document.getElementsByName("unitFilter")[0].value;
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}`)
+    var unitTypeId = document.getElementsByName("unitTypeId")[0].value;
+
+    var floorId = document.getElementsByName("floorId")[0].value;
+
+    console.log('unittypeid', unitTypeId, "floorid", floorId);
+
+    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -234,6 +248,12 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
 
                 rows = rows + newRow;
             });
+
+            if (data.data.length === 0) {
+                rows = `<tr>
+                            <td colSpan="2">No results found.</td>
+                        </tr>`;
+            }
 
             unitTableBody.innerHTML = rows;
 
