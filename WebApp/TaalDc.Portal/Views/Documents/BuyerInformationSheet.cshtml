@@ -76,7 +76,7 @@
     <div class="pdfdoc-wrapper">
         <div class="pdfdoc-header">
             <img src="~/taaldc-logo.png" alt="TAALDC Logo" height="90"/>
-            <p class="primary-color">
+            <p class="primary-color" style="font-size: 16px;">
                 <strong>TAGAYTAY ALL ALPHA LANDHOLDINGS <br />AND DEVELOPMENT CORPORATION</strong>
             </p>
         </div>
@@ -91,8 +91,9 @@
         </div>
 
         <p style="text-align: right;">
-            Date: <span style="border-bottom: 1px solid black; padding-left: 10px; padding-right: 10px; width: 100px;">
-                
+            Date: 
+            <span style="padding-left: 10px; padding-right: 10px;">
+                ________________________
             </span>
         </p>
 
@@ -217,7 +218,7 @@
                 ID Valid Until:
             </span>
             <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @(Model.GovIssuedIDValidUntil.HasValue? Model.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy"): "")
+                @(Model.GovIssuedIDValidUntil.HasValue && Model.GovIssuedIDValidUntil.Value.Year > 1 ? Model.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy") : "")
             </span>
         </p>
 
