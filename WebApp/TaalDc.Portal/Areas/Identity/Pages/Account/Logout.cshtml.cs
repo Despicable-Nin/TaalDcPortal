@@ -13,11 +13,13 @@ public class LogoutModel : PageModel
 {
     private readonly ILogger<LogoutModel> _logger;
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly IConfiguration _configuration;
 
-    public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+    public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger, IConfiguration configuration)
     {
         _signInManager = signInManager;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task<IActionResult> OnPost(string returnUrl = null)
@@ -25,6 +27,6 @@ public class LogoutModel : PageModel
         await _signInManager.SignOutAsync();
         _logger.LogInformation("User logged out.");
 
-        return LocalRedirect("/Identity/Account/Login");
+        return LocalRedirect(_configuration["SubURL"] + "/Identity/Account/Login");
     }
 }
