@@ -1,11 +1,14 @@
 @using TaalDc.Portal.DTO.Catalog;
 @model TaalDc.Portal.ViewModels.Catalog.FloorCreate_ClientDto
+@inject IConfiguration configuration
 
 @{
     List<Tower_ClientDto> towers = ViewBag.Towers;
 
     ViewBag.Title = "Edit Floor";
     Layout = "_Layout";
+
+    var portalSubURL = configuration["SubURL"];
 }
 
 
@@ -31,13 +34,13 @@
                                 <li></li>
                             </ul>
                         </div>
-                        <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                        <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" onload="SVGInject(this)" />
                     </div>
                 }
                 else
                 {
                     <div class="col-lg-8 mb-3" id="floor-plan">
-                        <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
+                        <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" />
                     </div>
                 }
             }
@@ -116,7 +119,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button onclick="onPropertyFormSubmit(this, '/Properties/EditFloor/@Model.FloorId')" type="button" class="btn btn-primary">Yes</button>
+                <button onclick="onPropertyFormSubmit(this, '@Url.Action("EditFloor", "Properties", new { Id = Model.FloorId })')" type="button" class="btn btn-primary">Yes</button>
             </div>
         </div>
     </div>

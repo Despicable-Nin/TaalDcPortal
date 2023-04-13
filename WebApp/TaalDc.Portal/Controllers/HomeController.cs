@@ -13,14 +13,17 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly ISalesService _salesService;
     private readonly ICatalogService _catalogService;
+    private readonly IConfiguration _configuration;
 
     public HomeController(ILogger<HomeController> logger
         ,ISalesService salesService
-        ,ICatalogService catalogService)
+        , ICatalogService catalogService
+        ,IConfiguration configuration)
     {
         _logger = logger;
         _salesService = salesService;
         _catalogService = catalogService;
+        _configuration = configuration; 
     }
 
     public async Task<IActionResult> Index()

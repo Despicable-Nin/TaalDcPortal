@@ -1,4 +1,6 @@
-﻿applyMask();
+﻿const portalSubURL = "";
+
+applyMask();
 
 function applyMask() {
     $("#SellingPrice").mask("#,##0.00", {reverse: true});
@@ -43,7 +45,7 @@ function getAvailableUnits(pageNumber = 1, pageSize = 10) {
 
     console.log('unittypeid', unitTypeId, "floorid", floorId);
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
+    fetch(portalSubURL + `/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -213,7 +215,7 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
 
     console.log('unittypeid', unitTypeId, "floorid", floorId);
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
+    fetch(portalSubURL + `/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -459,7 +461,7 @@ function onSalesFormSubmit(form, btn) {
 
                 btn.disabled = false;
 
-                window.location.replace("/Sales/Reserved");
+                window.location.replace(portalSubURL + "/Sales/Reserved");
 
             }, error: function (data) {
                 const response = data.responseJSON;

@@ -14,12 +14,14 @@ public class PropertiesController : BaseController<PropertiesController>
 {
     private readonly ICatalogService _catalogService;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
 
     public PropertiesController(ICatalogService catalogService, IMapper mapper,
-        ILogger<PropertiesController> loggerInstance) : base(loggerInstance)
+        ILogger<PropertiesController> loggerInstance, IConfiguration configuration) : base(loggerInstance)
     {
         _catalogService = catalogService;
         _mapper = mapper;
+        _configuration = configuration;
     }
 
     public async Task<IActionResult> Index(string filter,

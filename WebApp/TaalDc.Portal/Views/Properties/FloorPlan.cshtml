@@ -1,9 +1,12 @@
 ﻿@using TaalDc.Portal.DTO.Catalog.Floors;
 @model TaalDc.Portal.ViewModels.Catalog.FloorCreate_ClientDto
+@inject IConfiguration configuration
 
 @{
     ViewData["Title"] = "Floor Plan";
     Layout = null;
+
+    var portalSubURL = configuration["SubURL"];
 }
 
 <!DOCTYPE html>
@@ -128,13 +131,13 @@
                             <li></li>
                         </ul>
                     </div>
-                    <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                    <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" onload="SVGInject(this)" />
                 </div>
             }
             else
             {
                 <div class="floor-plan-print-block">
-                    <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
+                    <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" />
                 </div>
             }
         }

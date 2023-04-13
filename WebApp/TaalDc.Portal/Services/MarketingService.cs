@@ -1,6 +1,7 @@
 using System.Drawing.Printing;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
+using SeedWork;
 using TaalDc.Portal.DTO.Marketing;
 using TaalDc.Portal.Infrastructure;
 

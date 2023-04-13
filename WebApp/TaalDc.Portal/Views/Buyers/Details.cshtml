@@ -113,16 +113,17 @@
 
 
             <div class="col-lg-4">
-                <h5><strong>Spouse</strong></h5>
-                <a onclick="openEditSpouseInformation()" href="#">Edit</a>
-                <hr />
+                @if(!Model.IsCorporate){
+                    <h5><strong>Spouse</strong></h5>
+                    <a onclick="openEditSpouseInformation()" href="#">Edit</a>
+                    <hr />
 
-                @if(Model.Spouse != null){
-                    <p class="mb-5">
-                        @Model.Spouse.Salutation @Model.Spouse.FirstName @Model.Spouse.MiddleName @Model.Spouse.LastName
-                    </p>
+                    @if(Model.Spouse != null){
+                        <p class="mb-5">
+                            @Model.Spouse.Salutation @Model.Spouse.FirstName @Model.Spouse.MiddleName @Model.Spouse.LastName
+                        </p>
+                    }
                 }
-
                 <h5><strong>ID Information</strong></h5>
                 <a onclick="openEditIDInformation()" href="#">Edit</a>
                 <hr />
@@ -261,7 +262,7 @@
     <script>
         async function generateAcknowledgmentReceipt(){
             $.ajax({
-                url: "/Documents/AcknowledgmentReceipt",
+                url: "@Url.Action("AcknowledgmentReceipt", "Documents")",
                 type: "POST",
                 success: function (result) {
                     console.log('response', result);

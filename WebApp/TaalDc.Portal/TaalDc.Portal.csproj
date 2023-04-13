@@ -46,8 +46,4 @@
         <ProjectReference Include="..\..\SeedWork\SeedWork.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <AdditionalFiles Include="Views\Catalogs\Index.cshtml" />
-    </ItemGroup>
-
 </Project>

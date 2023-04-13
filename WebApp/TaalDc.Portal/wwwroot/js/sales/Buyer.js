@@ -1,5 +1,7 @@
 ﻿var isCorporate = document.getElementById("IsCorporate");
 
+const portalSubURL = "";
+
 if (isCorporate) { 
     isCorporate.addEventListener('change', function () {
         var corpFields = document.getElementsByClassName('corpFields');

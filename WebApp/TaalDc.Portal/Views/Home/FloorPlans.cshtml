@@ -1,9 +1,12 @@
 ﻿@using SeedWork;
 @using TaalDc.Portal.DTO.Catalog.Floors;
 @inject IAmCurrentUser CurrentUser
+@inject IConfiguration configuration
 
 @{
     ViewData["Title"] = "Floors Realtime Status";
+
+    var portalSubURL = configuration["SubURL"];
 
     var activeFloors = ViewBag.ActiveFloors as IEnumerable<ActiveFloor_ClientDto>;
 
@@ -102,13 +105,13 @@
                                             <li></li>
                                         </ul>
                                     </div>
-                                    <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" onload="SVGInject(this)" />
+                                    <img class="img-fluid" src="@(portalSubURL + activeFloor.FloorPlanFilePath)" alt="Floor Plan" onload="SVGInject(this)" />
                                 </div>
                             }
                             else
                             {
                                 <div id="floor-plan">
-                                    <img class="img-fluid" src="@activeFloor.FloorPlanFilePath" alt="Floor Plan" />
+                                    <img class="img-fluid" src="@(portalSubURL + activeFloor.FloorPlanFilePath)" alt="Floor Plan" />
                                 </div>
                             }
                         }

@@ -167,8 +167,8 @@
                     <div class="col-lg-4 mb-3">
                         <label class="form-label" for="unitTypeId">Unit Type</label>
                         <select onchange="getAvailableUnits_Multiple(1,10)" class="form-control form-select" name="unitTypeId">
-                            <option value="1">Not Applicable</option>
-                            <option value="2" selected>One Bedroom</option>
+                            <option value="" selected>Not Applicable</option>
+                            <option value="2">One Bedroom</option>
                             <option value="3">Two Bedroom</option>
                             <option value="4">Three Bedroom</option>
                             <option value="5">Penthouse</option>
@@ -180,6 +180,7 @@
                     <div class="col-lg-4 mb-3">
                         <label class="form-label" for="floorId">Floor</label>
                         <select onchange="getAvailableUnits_Multiple(1,10)" class="form-control form-select" name="floorId">
+                            <option value="">All Floors</option>
                             @foreach(var floor in activeFloors)
                             {
                                 <option value="@floor.Id">@floor.FloorName</option>    

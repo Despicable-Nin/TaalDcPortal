@@ -1,4 +1,7 @@
-﻿function applyMask() {
+﻿const portalSubURL = "";
+
+
+function applyMask() {
     $("#AmountPaid").mask("#,##0.00", {reverse: true});
 }
 
@@ -23,7 +26,7 @@ function processPaymentVerification(paymentVerificationType) {
 
     var confirmationNumber = document.getElementById('paymentConfirmationNumber').value;
 
-    var uri = `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
+    var uri = portalSubURL + `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
 
     if (paymentVerificationType === "accept") {
         uri = uri + `&paymentTypeId=${paymentTypeId}&confirmationNumber=${confirmationNumber}`;

@@ -248,7 +248,7 @@
             console.log(document.getElementsByName("unitFilter"));
             var filter = document.getElementsByName("unitFilter")[0].value;
 
-            fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&viewId=${viewId}`)
+            fetch(`@Url.Action("GetUnits","Properties")?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&viewId=${viewId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     //Process data into table
