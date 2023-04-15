@@ -67,7 +67,7 @@
             color: #516C5B;
             border-top: 5px solid #516C5B;
             padding-top: 28px;
-            padding-bottom: 28px;
+            padding-bottom: 18px;
         }
     </style>
 </head>
@@ -85,7 +85,7 @@
             <p style="text-decoration: underline; font-size: 1.5rem;margin-bottom:0.75rem;"><strong>BUYER'S INFORMATION SHEET</strong></p>
             <p style="font-size: 18px;">
                 <strong>
-                    INDIVIDUAL BUYER
+                    @(Model.IsCorporate? "CORPORATE BUYER": "INDIVIDUAL BUYER")
                 </strong>
             </p>
         </div>
@@ -97,16 +97,119 @@
             </span>
         </p>
 
+
+        @if (Model.IsCorporate)
+        {
+            <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 20%">Corporate Name:</span>
+                <span style="width: 80%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                    @Model.Company.Name
+                </span>
+            </p>
+
+            <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 20%">Corporate Address:</span>
+                <span style="width: 80%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                    @Model.Company.Address
+                </span>
+            </p>
+
+            <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 25%">Nature of Business/Industry:</span>
+                <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                    @Model.Company.Industry
+                </span>
+            </p>
+
+
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Telephone No.:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @Model.Company.PhoneNo
+                </span>
+                <span style="width: 15%">
+                    Fax No:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Company.FaxNo
+                </span>
+            </p>
+
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Mobile No.:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @Model.Company.MobileNo
+                </span>
+                <span style="width: 15%">
+                    Email Address:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Company.EmailAddress
+                </span>
+            </p>
+
+
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    BIR/TIN:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @Model.Company.TIN
+                </span>
+                <span style="width: 15%">
+                    SEC Reg. No.:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Company.SECRegNo
+                </span>
+            </p>
+
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    President:
+                </span>
+                <span style="width: 85%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Company.President
+                </span>
+            </p>
+
+
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Corp. Sec.:
+                </span>
+                <span style="width: 85%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Company.CorpSec
+                </span>
+            </p>
+        }
+
+        <br/>
+
         <p style="font-weight: 700; text-align: left;margin-bottom: 1rem;"> 
-            Personal Information:
+            @(!Model.IsCorporate ? "Personal Information:" : "Corporate Representative")
         </p>
 
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
-            <span style="width: 20%">Buyer's Name: </span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.LastName,</span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.FirstName</span> <span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.MiddleName</span>
+            <span style="width: 20%">@(!Model.IsCorporate? "Buyer's Name:" : "Name:") </span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.LastName,</span><span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.FirstName</span> <span style="width: 25%; text-align: center; padding-bottom:3px;border-bottom: 1px solid black;">@Model.MiddleName</span>
         </p>
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
             <span style="width: 20%"></span><span style="width: 25%; text-align: center; padding-bottom:3px;">(Surname)</span><span style="width: 25%; text-align: center; padding-bottom:3px;">(First Name)</span> <span style="width: 25%; text-align: center; padding-bottom:3px;">(Middle Name)</span>
         </p>
+
+        @if (Model.IsCorporate)
+        {
+            <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 20%">Official Designation:</span>
+                <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                    @Model.Occupation
+                </span>
+            </p>
+        }
 
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
             <span style="width: 20%">Home Address:</span>
@@ -118,15 +221,17 @@
             </span>
         </p>
 
-         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
-            <span style="width: 20%">Business Address:</span>
-            <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
-                @if (Model.BusinessAddress != null)
-                {
-                   <span>@Model.BusinessAddress.Street, @Model.BusinessAddress.City, @Model.BusinessAddress.State, @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
-                }
-            </span>
-        </p>
+        @if(!Model.IsCorporate){
+             <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 20%">Business Address:</span>
+                <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
+                    @if (Model.BusinessAddress != null)
+                    {
+                       <span>@Model.BusinessAddress.Street, @Model.BusinessAddress.City, @Model.BusinessAddress.State, @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
+                    }
+                </span>
+            </p>
+        }
 
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
             <span style="width: 20%">Billing Address:</span>
@@ -154,29 +259,33 @@
             </span>
         </p>
 
-        <p style="display: flex;width: 100%;margin-bottom: 1rem;">
-            <span style="width: 20%">Civil Status: </span>
-            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Single")"/> Single</span>
-            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Married")" /> Married</span>
-            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Widowed")" /> Widow</span>
-            <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" 
-                checked="@(Model.CivilStatus != "Single" && Model.CivilStatus != "Married" && Model.CivilStatus != "Widowed")"/> Others</span>
-        </p>
+        @if(!Model.IsCorporate){
+            <p style="display: flex;width: 100%;margin-bottom: 1rem;">
+                <span style="width: 20%">Civil Status: </span>
+                <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Single")"/> Single</span>
+                <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Married")" /> Married</span>
+                <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" checked="@(Model.CivilStatus == "Widowed")" /> Widow</span>
+                <span style="width: 20%; text-align: center; padding-bottom:3px;"><input type="checkbox" 
+                    checked="@(Model.CivilStatus != "Single" && Model.CivilStatus != "Married" && Model.CivilStatus != "Widowed")"/> Others</span>
+            </p>
 
-        <p style="display: flex;">
-            <span style="width: 15%">
-                Date of Birth: 
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                @Model.DoB.ToString("MM/dd/yyyy")
-            </span>
-            <span style="width: 15%">
-                Occupation: 
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @Model.Occupation
-            </span>
-        </p>
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Date of Birth:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @Model.DoB.ToString("MM/dd/yyyy")
+                </span>
+                <span style="width: 15%">
+                    Occupation:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @Model.Occupation
+                </span>
+            </p>
+        }
+
+        
         <p style="display: flex;">
             <span style="width: 15%">
                Telephone No.:
@@ -184,12 +293,17 @@
             <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
                 @Model.PhoneNo
             </span>
+            
+            
+            
+            @if(!Model.IsCorporate){
             <span style="width: 15%">
                 TIN:
             </span>
             <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
                 @Model.TIN
             </span>
+            }
         </p>
 
          <p style="display: flex;">
@@ -222,104 +336,106 @@
             </span>
         </p>
 
-        <p>
-            <strong>
-                If Married:
-            </strong>
-        </p>
+        @if(!Model.IsCorporate){
+            <p>
+                <strong>
+                    If Married:
+                </strong>
+            </p>
 
-        <p style="display: flex;">
-            <span style="width: 20%">Spouse Name:</span>
-            <span style="width: 80%;text-align: center; border-bottom: 1px solid black;">
-                @if(Model.CivilStatus == "Married" && Model.Spouse != null)
-                {
-                    @($"{Model.Spouse.LastName}, {Model.Spouse.FirstName} {Model.Spouse.MiddleName}")
-                }    
-            </span>
-        </p>
+            <p style="display: flex;">
+                <span style="width: 20%">Spouse Name:</span>
+                <span style="width: 80%;text-align: center; border-bottom: 1px solid black;">
+                    @if(Model.CivilStatus == "Married" && Model.Spouse != null)
+                    {
+                        @($"{Model.Spouse.LastName}, {Model.Spouse.FirstName} {Model.Spouse.MiddleName}")
+                    }    
+                </span>
+            </p>
 
-        <p style="display: flex;">
-            <span style="width: 15%">
-                Date of Birth:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.DoB.Year > 1 ? Model.Spouse.DoB.ToString("MM/dd/yyyy"): "")
-                }
-            </span>
-            <span style="width: 15%">
-                Occupation:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.Occupation)
-                }
-            </span>
-        </p>
-        <p style="display: flex;">
-            <span style="width: 15%">
-                Telephone No.:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                 @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.PhoneNo)
-                }
-            </span>
-            <span style="width: 15%">
-                TIN:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.TIN)
-                }
-            </span>
-        </p>
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Date of Birth:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.DoB.Year > 1 ? Model.Spouse.DoB.ToString("MM/dd/yyyy"): "")
+                    }
+                </span>
+                <span style="width: 15%">
+                    Occupation:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.Occupation)
+                    }
+                </span>
+            </p>
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Telephone No.:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                     @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.PhoneNo)
+                    }
+                </span>
+                <span style="width: 15%">
+                    TIN:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.TIN)
+                    }
+                </span>
+            </p>
 
-        <p style="display: flex;">
-            <span style="width: 15%">
-                Mobile No.:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.MobileNo)
-                }
-            </span>
-            <span style="width: 15%">
-                Email Address:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.EmailAddress)
-                }
-            </span>
-        </p>
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Mobile No.:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.MobileNo)
+                    }
+                </span>
+                <span style="width: 15%">
+                    Email Address:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.EmailAddress)
+                    }
+                </span>
+            </p>
 
-        <p style="display: flex;">
-            <span style="width: 15%">
-                Govt Issued ID:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.GovIssuedID)
-                }
-            </span>
-            <span style="width: 15%">
-                ID Valid Until:
-            </span>
-            <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
-                @if (Model.Spouse != null)
-                {
-                    @(Model.Spouse.GovIssuedIDValidUntil.HasValue ? Model.Spouse.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy") : "")
-                }
-            </span>
-        </p>
+            <p style="display: flex;">
+                <span style="width: 15%">
+                    Govt Issued ID:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.GovIssuedID)
+                    }
+                </span>
+                <span style="width: 15%">
+                    ID Valid Until:
+                </span>
+                <span style="width: 35%; text-align: center; border-bottom: 1px solid black;">
+                    @if (Model.Spouse != null)
+                    {
+                        @(Model.Spouse.GovIssuedIDValidUntil.HasValue ? Model.Spouse.GovIssuedIDValidUntil.Value.ToString("MMM dd, yyyy") : "")
+                    }
+                </span>
+            </p>
+        }
 
         <br/>
 
