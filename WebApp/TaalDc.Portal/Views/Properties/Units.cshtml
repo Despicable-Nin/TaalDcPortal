@@ -111,8 +111,10 @@
                                 }
                                 else
                                 {
-                                        <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id" asp-route-returnUrl="@Url.Action("Units", "Properties", new {
-                                            pageNumber = Model.PageNumber
+                                        <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id" 
+                                        asp-route-returnUrl="@Url.Action("Units", "Properties", new {
+                                            pageNumber = Model.PageNumber,
+                                            filter = filter
                                         })">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>
                                 }

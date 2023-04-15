@@ -226,6 +226,10 @@ public class PropertiesController : BaseController<PropertiesController>
 
         ViewData["Floors"] = floors.Data;
 
+        var unitTypes = await _catalogService.GetUnitTypes();
+
+        ViewData["UnitTypes"] = unitTypes;
+
         return View();
     }
 
@@ -254,6 +258,10 @@ public class PropertiesController : BaseController<PropertiesController>
         var floors = await _catalogService.GetFloors(null, null, 0, 1, 1000);
 
         ViewData["Floors"] = floors.Data;
+
+        var unitTypes = await _catalogService.GetUnitTypes();
+
+        ViewData["UnitTypes"] = unitTypes;
 
         return View(unitUpdateDto);
     }
