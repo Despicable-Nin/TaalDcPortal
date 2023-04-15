@@ -6,7 +6,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewBag.Title = "Buyer Information Sheet";
+    ViewBag.Title = Model.FirstName.ToUpper() + " " + Model.LastName.ToUpper() + " - Information Sheet";
     Layout = null;
 }
 
@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buyer Information Sheet</title>
+    <title>@ViewBag.Title</title>
 
    @* <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />*@
     <script src="https://kit.fontawesome.com/e49025cb51.js" crossorigin="anonymous"></script>
