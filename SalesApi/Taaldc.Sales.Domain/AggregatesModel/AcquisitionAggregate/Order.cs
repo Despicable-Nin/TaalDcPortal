@@ -163,7 +163,7 @@ public class Order : DomainEntity, IAggregateRoot
         payment.VerifyPayment(verifiedBy, confirmationNumber);
 
         
-        //TODO: This is candidate for pub-sub
+        //This updates the statusId from SOLD< AVAILABLE, RSERVED etc
         ChangeOrderStatus();
 
         //TODO: Pub-sub
@@ -231,8 +231,9 @@ public class Order : DomainEntity, IAggregateRoot
             i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted)) : false;
 
     public bool HasFullyPaid() => _payments.Any()
-        ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >=  _orderItems.Sum(o => o.Price)
+        ? _payments
+            .Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
+            .Sum(i => i.AmountPaid) >=  (_orderItems.Sum(o => o.Price) * 0.10M)
             : false;
 
 }
