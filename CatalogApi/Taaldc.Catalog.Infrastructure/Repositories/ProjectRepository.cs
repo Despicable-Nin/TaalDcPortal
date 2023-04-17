@@ -179,4 +179,10 @@ public class ProjectRepository : IProjectRepository
 
         _context.Properties.Remove(property);
     }
+
+    public async Task<int> SyncUnitWithSales(int id)
+    {
+        var result = await _context.Database.ExecuteSqlRawAsync($"[catalog].[spSyncUnitWithSales]  '{id}'");
+        return result;
+    }
 }
