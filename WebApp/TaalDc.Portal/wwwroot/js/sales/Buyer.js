@@ -139,6 +139,7 @@ function saveInfo(event) {
 
                 $('.formLoader').hide();
             }, error: function (data) {
+                console.log('error', data);
                 const response = data.responseJSON;
 
                 if (response.isFormError) {

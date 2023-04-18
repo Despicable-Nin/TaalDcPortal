@@ -47,6 +47,11 @@ namespace TaalDc.Portal.DTO.Sales.Buyer
         public bool IsCorporate { get; set; }
 
 
+        public string? BrokerName { get; set; }
+        public string? BrokerEmail { get; set; }
+        public string? BrokerCompany { get; set; }
+        public string? BrokerPRCLicense { get; set; }
+
         public void SetContactDetails(string emailAddress, string mobileNo, string phoneNo)
         {
             EmailAddress = emailAddress;

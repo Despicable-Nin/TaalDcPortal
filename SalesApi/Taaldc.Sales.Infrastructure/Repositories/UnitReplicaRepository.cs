@@ -40,6 +40,7 @@ public class UnitReplicaRepository : IUnitReplicaRepository
     public async Task<int> SyncUnitStatusWithCatalog(int id, int unitStatusId)
     {
         var result = await _context.Database.ExecuteSqlRawAsync($"[sales].[spSyncUnitStatusWithCatalog] '{id}', '{unitStatusId}'");
+        await _context.SaveChangesAsync();
         return result;
     }
 

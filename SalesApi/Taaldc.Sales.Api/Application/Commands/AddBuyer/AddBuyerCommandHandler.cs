@@ -53,7 +53,7 @@ public class AddBuyerCommandHandler : IRequestHandler<AddBuyerCommand, CommandRe
         catch (Exception ex)
         {
             _logger.LogError(ex,nameof(AddBuyerCommandHandler.Handle), new object[]{request,ex.InnerException});
-            return CommandResult.Failed(null, ex.Message);
+            return CommandResult.Failed(null, ex.InnerException.Message != null? ex.InnerException.Message: ex.Message);
         }
     }
 }

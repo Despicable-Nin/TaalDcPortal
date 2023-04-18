@@ -58,8 +58,7 @@ public class UpsertSpouseCommandHandler : IRequestHandler<UpsertSpouseCommand, C
 
                         partnerOrSpouse.UpdateMiscInformation(request.Occupation, request.TIN, request.GovIssuedID,
                                 request.GovIssuedIDValidUntil);
-
-                    
+                                      
                 }
                 else
                 {
@@ -68,9 +67,10 @@ public class UpsertSpouseCommandHandler : IRequestHandler<UpsertSpouseCommand, C
                                 request.LastName, request.EmailAddress, request.PhoneNo, request.MobileNo, request.DoB,
                                 principal.GetCivilStatusId(),
                                 principal.Addresses.FirstOrDefault(i => i.Type == AddressTypeEnum.Home),
-                                principal.IsCorporate, principal.Company);
+                                principal.IsCorporate, null);
                 }
 
+                 //partnerOrSpouse.AddPartnerOrSpouse(principal.Id);     
                  _buyerRepository.Upsert(partnerOrSpouse);
 
                 principal.AddPartnerOrSpouse(partnerOrSpouse.Id);

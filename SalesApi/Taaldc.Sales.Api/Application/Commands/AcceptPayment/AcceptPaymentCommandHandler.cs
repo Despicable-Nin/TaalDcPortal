@@ -66,7 +66,7 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
         {
             order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), unitStatusId, unitStatus));
             
-            //await _unitRepository.SyncUnitStatusWithCatalog(item.GetUnitId(), unitStatusId); 
+             //await _unitRepository.SyncUnitStatusWithCatalog(item.GetUnitId(), unitStatusId); 
             //await _unitRepository.UnitOfWork.SaveChangesAsync();
             //await _mediator.Publish(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), unitStatusId, unitStatus));
         }

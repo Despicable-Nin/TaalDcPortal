@@ -28,7 +28,7 @@ public class UnitReplicaStatusChangeToReservedDomainEventHandler : INotification
             _repository.Update(unit);
         }
 
-        await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
         await _repository.SyncUnitStatusWithCatalog(notification.UnitId, notification.UnitStatusId);
 
