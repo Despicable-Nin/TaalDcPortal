@@ -1,14 +1,18 @@
-﻿@using TaalDc.Portal.ViewModels.Catalog
+﻿@using TaalDc.Portal.DTO.Catalog;
+@using TaalDc.Portal.ViewModels.Catalog
 @model PaginationQueryResult<TaalDc.Portal.DTO.Catalog.Unit_ClientDto>
 
 @{
     ViewBag.Title = "Units";
     Layout = "_Layout";
 
+
+    List<UnitType_ClientDto> unitTypes = ViewBag.UnitTypes;
+
     var filter = Context.Request.Query["filter"].FirstOrDefault();
     var sortBy = Context.Request.Query["sortBy"].FirstOrDefault();
     var sortOrder = Context.Request.Query["sortOrder "].FirstOrDefault();
-
+    var unitTypeId = Context.Request.Query["unitTypeId"].FirstOrDefault();
 
     var currentPageNo = Model.PageNumber;
     var numberOfPagesToDisplay = 5;
@@ -56,8 +60,29 @@
             </div>
 
             <div class="action-search">
-                <form>
-                    <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
+                <form id="unitSearchForm">
+                    <div class="me-3">
+                        <label for="filter" class="form-label">
+                            Unit No.
+                        </label>
+                        <input name="filter" value="@(!string.IsNullOrEmpty(filter) ? filter : "")" class="form-control" placeholder="Search..."/>
+                    </div>
+                    <div>
+                        <label for="unitTypeId" class="form-label">Unit Type</label>
+                        <select name="unitTypeId" class="form-control form-select" onchange="submitUnitSearchForm()">
+                            <option value="">Show All</option>
+                            @foreach(var unitType in unitTypes)
+                            {
+                                var selected = false;
+                                @if (unitType.Id.ToString() == unitTypeId)
+                                {
+                                    selected = true;
+                                }
+
+                                <option value="@unitType.Id" selected="@selected">@unitType.Name</option>
+                            }
+                        </select>
+                    </div>
                 </form>
             </div>
         </div>
@@ -98,9 +123,9 @@
                             <td>@(propertyInitials + " - " + prop.TowerName)</td>
                             <td>@prop.UnitType @prop.ScenicView</td>
                             <td>@prop.FloorName</td>
-                            <td>@prop.TotalArea</td>
-                            <td>@prop.FloorArea</td>
-                            <td>@prop.BalconyArea</td>
+                            <td>@prop.TotalArea.ToString("#0.#0")</td>
+                            <td>@prop.FloorArea.ToString("#0.#0")</td>
+                            <td>@prop.BalconyArea.ToString("#0.#0")</td>
                             <td>@prop.Identifier</td>
                             <td>@prop.Price.ToString("#,##0.00")</td>
                             <td>@prop.UnitStatus</td>
@@ -114,7 +139,8 @@
                                         <a class="action-edit" asp-controller="Properties" asp-action="EditUnit" asp-route-id="@prop.Id" 
                                         asp-route-returnUrl="@Url.Action("Units", "Properties", new {
                                             pageNumber = Model.PageNumber,
-                                            filter = filter
+                                            filter = filter,
+                                            unitTypeId = unitTypeId
                                         })">Edit</a>
                                     <a class="action-delete" href="#">Delete</a>
                                 }
@@ -142,13 +168,13 @@
                     }
 
                     <li class="page-item @(prevPage == 0 ? "disabled" : "")">
-                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)">Prev</a>
+                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)&filter=@(filter)&unitTypeId=@(unitTypeId)">Prev</a>
                     </li>
 
                     @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
                     {
                         <li class="page-item">
-                            <a href="?pageNumber=@(Model.PageNumber)" class="noselect page-link alink active">@Model.PageNumber</a>
+                            <a href="?pageNumber=@(Model.PageNumber)&filter=@(filter)&unitTypeId=@(unitTypeId)" class="noselect page-link alink active">@Model.PageNumber</a>
                         </li>
                     }
 
@@ -157,12 +183,12 @@
                         var active = i + 1 == Model.PageNumber;
                         var pageNo = i + 1;
                         <li class="page-item">
-                            <a href="?pageNumber=@(pageNo)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                            <a href="?pageNumber=@(pageNo)&filter=@(filter)&unitTypeId=@(unitTypeId)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
                         </li>
                     }
 
                     <li class="page-item @(nextPage == 0 ? "disabled" : "")">
-                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)">Next</a>
+                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)&filter=@(filter)&unitTypeId=@(unitTypeId)">Next</a>
                     </li>
 
                 </ul>
@@ -171,3 +197,13 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        function submitUnitSearchForm(){
+            var form = document.getElementById("unitSearchForm");
+
+            form.submit();
+        }
+    </script>
+}

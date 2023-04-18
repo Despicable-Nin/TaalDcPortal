@@ -307,6 +307,11 @@ public class PropertiesController : BaseController<PropertiesController>
     {
         var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, sortBy, sortOrder,
             pageNumber, pageSize);
+
+        var unitTypes = await _catalogService.GetUnitTypes();
+
+        ViewData["UnitTypes"] = unitTypes;
+
         return View(units);
     }
 

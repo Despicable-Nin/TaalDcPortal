@@ -392,10 +392,13 @@ main {
 }
 
 .action-search {
-    float: right;
+    float: left;
     margin-bottom: 1rem;
 }
 
+.action-search form{
+    display: flex;
+}
 
 /* Form Styles */
 label {
@@ -404,6 +407,7 @@ label {
 
 .form-control {
     border-radius: 0px;
+    font-size: 0.9rem;
 }
 
 .form-control:focus {
