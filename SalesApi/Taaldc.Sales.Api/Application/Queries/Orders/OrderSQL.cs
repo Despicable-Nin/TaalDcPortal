@@ -61,8 +61,8 @@ internal static class OrderSQL
         ,O.[Code] 
         ,O.[Broker_Name] AS Broker 
         ,O.[Broker_Email]
-        ,O.[Broker_Company]
-        ,O.[Broker_PrcLicense]
+        ,usrprof.Company AS [Broker_Company]
+        ,usrprof.PRCLicense AS [Broker_PrcLicense]
         ,O.[Remarks] 
         ,O.[StatusId]
         ,OS.[Name] AS Status
@@ -106,7 +106,11 @@ internal static class OrderSQL
         LEFT JOIN [taaldb_sales].[sales].[orderstatus] OS ON O.[StatusId] = OS.Id  
         LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id 
         LEFT JOIN [taaldb_sales].[sales].[address] A ON A.BuyerId = B.Id AND A.[Type] = 1
-        LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
+        LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1 
+        LEFT JOIN taaldb_identity.dbo.AspNetUsers aspu
+	    ON aspu.Email = O.[Broker_Email]
+	    LEFT JOIN taaldb_identity.dbo.UserProfiles usrprof
+	    ON aspu.Id = usrprof.[Identity] ";
    
 
 

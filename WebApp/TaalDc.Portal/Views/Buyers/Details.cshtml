@@ -111,7 +111,7 @@
 
 
             <div class="col-lg-4">
-                @if(!Model.IsCorporate){
+                @if(!Model.IsCorporate && Model.CivilStatus == "Married"){
                     <h5><strong>Spouse</strong></h5>
                     <a onclick="openEditSpouseInformation()" href="#">Edit</a>
                     <hr />
@@ -127,7 +127,7 @@
                 <hr />
 
                 <p class="mb-5">
-                    <strong class="primary-color">Occupation</strong> <br />
+                    <strong class="primary-color">@(Model.IsCorporate? "Official Designation": "Occupation")</strong> <br />
                     @Model.Occupation
                 </p>
 

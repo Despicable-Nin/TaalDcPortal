@@ -216,12 +216,12 @@ public class SalesController : BaseController<SalesController>
                 });
 
             //Update Unit Status in Catalog
-            var unitStatus =
-                new UnitStatusUpdate_ClientDto(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
-            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+            //var unitStatus =
+            //    new UnitStatusUpdate_ClientDto(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
+            //var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 
-            if (!unitStatusResult.IsSuccess)
-                return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
+            //if (!unitStatusResult.IsSuccess)
+            //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
             return Ok(result);
         }
@@ -249,24 +249,24 @@ public class SalesController : BaseController<SalesController>
                     Message = result.ErrorMessage
                 });
 
-            var order = await _salesService.GetSalesById(orderId);
+            //var order = await _salesService.GetSalesById(orderId);
 
             //update Units On Catalog --> Catalog then Replies to update UnitReplica
-            int unitStatusId = 3;
+            //int unitStatusId = 3;
 
-            if(paymentTypeId == 3)
-            {
-                unitStatusId = 2;
-            }
-            else if (paymentTypeId <= 2)
-            {
-                unitStatusId = 3;
-            }
+            //if(paymentTypeId == 3)
+            //{
+            //    unitStatusId = 2;
+            //}
+            //else if (paymentTypeId <= 2)
+            //{
+            //    unitStatusId = 3;
+            //}
 
-            var unitStatus =
-               new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
+            //var unitStatus =
+            //   new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
             
-            await _catalogService.UpdateUnitStatus(unitStatus);
+            //await _catalogService.UpdateUnitStatus(unitStatus);
 
             //if (!unitStatusResult.IsSuccess)
             //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });

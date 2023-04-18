@@ -53,6 +53,11 @@ public class UpdateBuyerBasicInfoCommandHandler : IRequestHandler<UpdateBuyerBas
                 request.DoB, 
                 request.CivilStatusId, 
                 request.IsCorporate);
+
+            if(request.CivilStatusId != (int)CivilStatus.CivilStatusIs.Married)
+            {
+                buyer.AddPartnerOrSpouse(0);
+            }
             
             _buyerRepository.Upsert(buyer);
 

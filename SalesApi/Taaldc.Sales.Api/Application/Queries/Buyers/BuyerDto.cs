@@ -52,4 +52,9 @@ public record BuyerDto
     public string? BillingAddress_Country { get; init; }
     public string? BillingAddress_ZipCode { get; init; }
 
+
+    public string? BrokerName { get; init; }
+    public string? BrokerEmail { get; init; }
+    public string? BrokerCompany { get; init; }
+    public string? BrokerPRCLicense { get; init; }
 }

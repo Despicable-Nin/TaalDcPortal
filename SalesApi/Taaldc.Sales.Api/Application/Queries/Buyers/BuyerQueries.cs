@@ -51,12 +51,20 @@ public class BuyerQueries : IBuyerQueries
           ,BA.[State] [BillingAddress_State]
           ,BA.[Country] [BillingAddress_Country]
           ,BA.ZipCode [BillingAddress_ZipCode]
+          ,usrprof.FirstName + ' ' + usrprof.LastName AS BrokerName
+	      ,aspu.Email AS BrokerEmail
+	      ,usrprof.Company AS BrokerCompany
+	      ,usrprof.PRCLicense AS BrokerPRCLicense
         FROM [taaldb_sales].[sales].[buyer] B
           LEFT JOIN taaldb_sales.sales.civilStatus C ON C.Id = B.CivilStatusId
           LEFT JOIN taaldb_sales.sales.company CO ON CO.BuyerId = B.Id
           LEFT JOIN taaldb_sales.sales.address HA ON HA.BuyerId = B.Id AND HA.[Type] = 1
           LEFT JOIN taaldb_sales.sales.address BuA ON BuA.BuyerId = B.Id AND BuA.[Type] = 2
-          LEFT JOIN taaldb_sales.sales.address BA ON BA.BuyerId = B.Id AND BA.[Type] = 3";
+          LEFT JOIN taaldb_sales.sales.address BA ON BA.BuyerId = B.Id AND BA.[Type] = 3 
+          LEFT JOIN taaldb_identity.dbo.AspNetUsers aspu
+	      ON aspu.Email = B.[CreatedBy]
+	      LEFT JOIN taaldb_identity.dbo.UserProfiles usrprof
+	      ON aspu.Id = usrprof.[Identity] ";
     
     
     private readonly string SELECT_BUYER_COUNT = " SELECT COUNT(*) AS Total FROM [taaldb_sales].[sales].[buyer] ";
@@ -91,7 +99,7 @@ public class BuyerQueries : IBuyerQueries
     {
         var query = @$"{SELECT_BUYER_QUERY}";
 
-        var where = "WHERE B.IsActive = 1 ";
+        var where = "WHERE B.IsActive = 1 AND B.Id NOT IN (SELECT PartnerId FROM [taaldb_sales].[sales].[buyer] WHERE PartnerId IS NOT NULL AND PartnerId = B.Id) ";
 
         if (!string.IsNullOrEmpty(name))
         {
@@ -125,7 +133,9 @@ public class BuyerQueries : IBuyerQueries
         var result = await connection.QueryAsync<BuyerDto>(query);
 
         var countQuery = @"SELECT COUNT(*) [Count] 
-                            FROM  [taaldb_sales].[sales].[buyer] ";
+                            FROM  [taaldb_sales].[sales].[buyer] B ";
+
+        countQuery += where;
         
         var count = await connection.QueryAsync<int>(countQuery);
 

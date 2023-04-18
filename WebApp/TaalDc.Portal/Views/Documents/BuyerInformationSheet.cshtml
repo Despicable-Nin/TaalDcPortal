@@ -164,7 +164,7 @@
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
             <span style="width: 20%">Home Address:</span>
             <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
-                @if (Model.HomeAddress != null)
+                @if (Model.HomeAddress != null && !string.IsNullOrEmpty(Model.HomeAddress.Street))
                 {
                    <span>@Model.HomeAddress.Street,@Model.HomeAddress.City, @Model.HomeAddress.State, @Model.HomeAddress.Country @Model.HomeAddress.ZipCode</span>
                 }
@@ -175,7 +175,7 @@
              <p style="display: flex;width: 100%;margin-bottom: 1rem;">
                 <span style="width: 20%">Business Address:</span>
                 <span style="width: 75%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
-                    @if (Model.BusinessAddress != null)
+                    @if (Model.BusinessAddress != null && !string.IsNullOrEmpty(Model.BusinessAddress.Street))
                     {
                        <span>@Model.BusinessAddress.Street, @Model.BusinessAddress.City, @Model.BusinessAddress.State, @Model.BusinessAddress.Country @Model.BusinessAddress.ZipCode</span>
                     }
@@ -202,7 +202,7 @@
         </p>
         <p style="display: flex;width: 100%;margin-bottom: 1rem;">
             <span style="width: 100%; text-align: center; padding-bottom:3px; border-bottom: 1px solid black;">
-                @if (Model.BillingAddress != null)
+                @if (Model.BillingAddress != null && !string.IsNullOrEmpty(Model.BillingAddress.Street))
                 {
                 <span>@Model.BillingAddress.Street, @Model.BillingAddress.City, @Model.BillingAddress.State, @Model.BillingAddress.Country @Model.BillingAddress.ZipCode</span>
                 }
@@ -224,7 +224,7 @@
                     Date of Birth:
                 </span>
                 <span style="width: 35%; text-align: center; border-bottom: 1px solid black;margin-right: 15px;">
-                    @Model.DoB.ToString("MM/dd/yyyy")
+                    @(Model.DoB.Year > 1? Model.DoB.ToString("MM/dd/yyyy"): "")
                 </span>
                 <span style="width: 15%">
                     Occupation:
@@ -294,8 +294,8 @@
             </p>
 
             <p style="display: flex;">
-                <span style="width: 20%">Spouse Name:</span>
-                <span style="width: 80%;text-align: center; border-bottom: 1px solid black;">
+                <span style="width: 15%">Spouse Name:</span>
+                <span style="width: 85%;text-align: left; border-bottom: 1px solid black;padding-left:1rem;">
                     @if(Model.CivilStatus == "Married" && Model.Spouse != null)
                     {
                         @($"{Model.Spouse.LastName}, {Model.Spouse.FirstName} {Model.Spouse.MiddleName}")
@@ -408,15 +408,30 @@
 
         <p style="display: flex;">
             <span style="width: 15%">Name of Broker</span>
-            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:
+                @if (!string.IsNullOrEmpty(Model.BrokerName) && !string.IsNullOrEmpty(Model.BrokerPRCLicense) && Model.BrokerPRCLicense != "N/A")
+                {
+                    @Model.BrokerName
+                }
+            </span>
         </p>
         <p style="display: flex;">
             <span style="width: 15%;">PRC License No.</span>
-            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:
+                @if (!string.IsNullOrEmpty(Model.BrokerPRCLicense) && !string.IsNullOrEmpty(Model.BrokerPRCLicense) && Model.BrokerPRCLicense != "N/A")
+                {
+                    @Model.BrokerPRCLicense
+                }
+            </span>
         </p>
         <p style="display: flex;">
             <span style="width: 15%">Company Name</span>
-            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:</span>
+            <span style="width: 20%;border-bottom: 1px solid black;width: 60%;">:
+                @if (!string.IsNullOrEmpty(Model.BrokerCompany) && !string.IsNullOrEmpty(Model.BrokerPRCLicense) && Model.BrokerPRCLicense != "N/A")
+                {
+                    @Model.BrokerCompany
+                }
+            </span>
         </p>
     </div>
     <div class="pdfdoc-footer">

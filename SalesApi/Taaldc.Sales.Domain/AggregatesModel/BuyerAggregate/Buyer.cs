@@ -108,7 +108,7 @@ public class Buyer : Entity, IAggregateRoot
     #region Behavior(s)
     public void AddPartnerOrSpouse(int buyerIdOfPartnerOrSpouse)
     {
-        PartnerId = buyerIdOfPartnerOrSpouse;
+        PartnerId = buyerIdOfPartnerOrSpouse > 0? buyerIdOfPartnerOrSpouse: null;
     }
 
     public void RemovePartnerOrSpouse() => PartnerId = default;
