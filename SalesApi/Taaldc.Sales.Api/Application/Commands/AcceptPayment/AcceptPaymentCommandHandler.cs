@@ -12,17 +12,20 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
     private readonly IMediator _mediator;
     private readonly IOrderRepository _repository;
     private readonly IOrderQueries _orderQueries;
+    private readonly IUnitReplicaRepository _unitRepository;
 
     public AcceptPaymentCommandHandler(
         IOrderQueries orderQueries,
         IOrderRepository repository, 
         IAmCurrentUser currentUser, 
-        IMediator mediator)
+        IMediator mediator,
+        IUnitReplicaRepository unitRepository)
     {
         _orderQueries = orderQueries;
         _repository = repository;
         _currentUser = currentUser;
         _mediator = mediator;
+        _unitRepository = unitRepository;
     }
 
 
@@ -45,7 +48,9 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
 
         var paymnent = order.Payments.FirstOrDefault(i => i.Id == request.PaymentId);
 
-        if (paymnent.GetPaymentTypeId() == 3)
+        var markUnitAsSold = order.Payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted)).Sum(i => i.AmountPaid) >= (order.OrderItems.Sum(i => i.Price) * 0.10M);
+
+        if (paymnent.GetPaymentTypeId() == 3 || markUnitAsSold)
         {
             unitStatusId = 2;
             unitStatus = "SOLD";
@@ -60,9 +65,14 @@ public class AcceptPaymentCommandHandler : IRequestHandler<AcceptPaymentCommand,
         foreach (var item in order.OrderItems)
         {
             order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), unitStatusId, unitStatus));
+            
+            //await _unitRepository.SyncUnitStatusWithCatalog(item.GetUnitId(), unitStatusId); 
+            //await _unitRepository.UnitOfWork.SaveChangesAsync();
+            //await _mediator.Publish(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), unitStatusId, unitStatus));
         }
 
-        //await _mediator.Publish(new UpdateUnitReplicaStatusNotif(order.GetUnitId(), unitStatusId, unitStatus));
+
+        
 
         return CommandResult.Success(request.PaymentId);
     }

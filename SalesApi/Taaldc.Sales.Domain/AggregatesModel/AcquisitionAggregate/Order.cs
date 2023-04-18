@@ -233,7 +233,7 @@ public class Order : DomainEntity, IAggregateRoot
     public bool HasFullyPaid() => _payments.Any()
         ? _payments
             .Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >=  (_orderItems.Sum(o => o.Price) * 0.10M)
+            .Sum(i => i.AmountPaid) >=  (_orderItems.Sum(o => o.Price))
             : false;
 
 }
