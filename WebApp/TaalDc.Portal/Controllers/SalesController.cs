@@ -58,9 +58,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(SOLD, pageNumber, pageSize, floorId, unitTypeId,
-            viewId, filter, "");
+            viewId, filter, broker);
         return View(sales);
     }
 
@@ -78,9 +78,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(AVAILABLE, pageNumber, pageSize, floorId,
-            unitTypeId, viewId, filter, "");
+            unitTypeId, viewId, filter, broker);
         return View(sales);
     }
 
@@ -118,9 +118,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(BLOCKED, pageNumber, pageSize, floorId, unitTypeId,
-            viewId, filter, "");
+            viewId, filter, broker);
 
 
         return View(sales);
