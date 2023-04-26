@@ -136,4 +136,6 @@ public class DashboardController : ControllerBase
     {
         return Ok(await _dashboardQueries.GetAvailabilityPerResidentialUnitType());
     }
+    
+    
 }
