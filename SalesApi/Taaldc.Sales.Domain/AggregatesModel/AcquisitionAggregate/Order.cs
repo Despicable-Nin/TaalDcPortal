@@ -29,6 +29,13 @@ public class Order : DomainEntity, IAggregateRoot
         Discount = discount;
         TransactionDate = transactionDate;
     }
+
+    public Order CancelOrder()
+    {
+        _statusId = OrderStatus.GetIdByName(OrderStatus.Cancelled);
+
+        return this;
+    }
     
     public Order Update(
         string broker,

@@ -4,27 +4,27 @@ using Taaldc.Sales.Domain.Exceptions;
 
 namespace Taaldc.Sales.API.Application.Commands.UpdateOrder;
 
-public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, CommandResult>
+public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, CommandResult>
 {
     private readonly IOrderRepository _orderRepository;
-    private readonly ILogger<UpdateOrderCommandHandler> _logger;
+    private readonly ILogger<CancelOrderCommandHandler> _logger;
 
 
-    public UpdateOrderCommandHandler(IOrderRepository orderRepository, ILogger<UpdateOrderCommandHandler> logger)
+    public CancelOrderCommandHandler(IOrderRepository orderRepository, ILogger<CancelOrderCommandHandler> logger)
     {
         _orderRepository = orderRepository;
         _logger = logger;
     }
 
-    public async Task<CommandResult> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
     {
         var order = await _orderRepository.FindOrderByIdAsync(request.OrderId);
 
         if (order == null)
-            throw new SalesDomainException(nameof(UpdateOrderCommandHandler),
+            throw new SalesDomainException(nameof(CancelOrderCommandHandler),
                 new ArgumentNullException("Order not found."));
 
-        order.Update(request.Broker, request.Discount, request.Remarks);
+        order.CancelOrder();
 
         return CommandResult.Success(order.Id);
     }
