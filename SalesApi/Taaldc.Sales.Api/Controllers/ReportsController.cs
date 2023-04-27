@@ -23,14 +23,14 @@ namespace Taaldc.Sales.Api.Controllers
         [HttpGet("reserved-without-downpayment")]
         public async Task<IActionResult> GetReservationsWithoutDownPayments()
         {
-            return Ok();
+            return Ok(await _reportQueries.GetReservationsWithNoDP());
             
         }
 
         [HttpGet("expired-reservation-count")]
         public async Task<IActionResult> GetExpiredReservationsCount()
         {
-            return Ok();
+            return Ok(await  _reportQueries.GetExpiringReservationCount());
         }
     }
 }

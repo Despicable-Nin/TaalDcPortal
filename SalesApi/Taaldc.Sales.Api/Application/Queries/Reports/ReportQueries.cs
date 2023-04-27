@@ -44,9 +44,12 @@ namespace Taaldc.Sales.Api.Application.Queries.Reports
             WHERE
                 payment.StatusId = 1 
                 AND payment.OrderId NOT IN (SELECT OrderId FROM [taaldb_sales].[dbo].[payment] WHERE PaymentTypeId > 1 AND OrderId = payment.OrderId)
-                AND DATEDIFF(DAY, GETDATE(), o.ReservationExpiresOn) = 0;
+                AND DATEDIFF(DAY, GETDATE(), o.ReservationExpiresOn) <= 0;
 
-        WITH firstOrderItemCTE AS (
+    ";
+
+        private const string EXPIRING_RESERVATION_COUNT_QUERY = 
+            @"    WITH firstOrderItemCTE AS (
             SELECT DISTINCT(oi.OrderId) AS OrderId,
             oi.UnitId,
             u.Unit,
@@ -57,10 +60,7 @@ namespace Taaldc.Sales.Api.Application.Queries.Reports
                 FROM [sales].[orderitem] oi
                 LEFT JOIN [sales].[unitreplica] u
                 ON oi.UnitId = u.Id
-            )";
-
-        private const string EXPIRING_RESERVATION_COUNT_QUERY = 
-            @"SELECT 
+            ) SELECT 
                 COUNT(o.Id) As NoOfExpired
             FROM [taaldb_sales].[dbo].[payment] payment 
                 JOIN [taaldb_sales].[sales].[order] o ON payment.OrderId = o.Id
