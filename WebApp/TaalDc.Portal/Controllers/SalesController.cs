@@ -365,6 +365,15 @@ public class SalesController : BaseController<SalesController>
     }
 
 
+
+
+    public async Task<IActionResult> ExpiredReservations()
+    {
+        var expiredReservations = await _salesService.GetExpiredReservations();
+
+        return View(expiredReservations);
+    }
+
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?
     //we can throw it in Hangfire here..
@@ -411,4 +420,5 @@ public class SalesController : BaseController<SalesController>
                 ModelState.AddModelError(nameof(AddBuyerOrderRequest.DownpaymentConfirmNo),
                     "Downpayment Confirmation number is required.");
     }
+
 }

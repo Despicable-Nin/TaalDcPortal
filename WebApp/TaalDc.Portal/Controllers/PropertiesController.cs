@@ -1,8 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using System.Drawing.Printing;
+using System.Globalization;
+using System.Reflection;
 using System.Text.Encodings.Web;
+using TaalDc.Portal.DTO.Catalog;
+using TaalDc.Portal.DTO.Sales;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Services;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -331,6 +338,65 @@ public class PropertiesController : BaseController<PropertiesController>
             pageNumber, pageSize);
         return new JsonResult(units);
     }
+
+
+    public async Task<IActionResult> UnitsReport(string filter,
+        int? floorId,
+    int? unitTypeId,
+    int? viewId,
+    int? statusId)
+    {
+        var units = await _catalogService.GetUnits(filter, floorId, unitTypeId, viewId, statusId, "", SortOrderEnum.ASC,
+            1, 99999);
+
+        byte[] excelBytes = CreateUnitExcelFile(units.Data.ToList());
+        return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Units Report.xlsx");
+    }
+
+
+    public byte[] CreateUnitExcelFile(List<Unit_ClientDto> orders)
+    {
+        // Create a new Excel package
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        using (ExcelPackage excelPackage = new ExcelPackage())
+        {
+            // Add a new worksheet to the Excel package
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Units");
+
+            // Write the header row
+            int headerRow = 1;
+            PropertyInfo[] properties = typeof(Unit_ClientDto).GetProperties();
+            for (int i = 0; i < properties.Length; i++)
+            {
+                worksheet.Cells[headerRow, i + 1].Value = properties[i].Name;
+            }
+
+            // Write the data rows
+            int dataRow = 2;
+            foreach (var obj in orders)
+            {
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    object value = properties[i].GetValue(obj);
+
+                    if (properties[i].PropertyType == typeof(DateTime) || properties[i].PropertyType == typeof(DateTimeOffset))
+                    {
+                        worksheet.Cells[dataRow, i + 1].Style.Numberformat.Format = "yyyy-mm-dd";
+                    }
+
+                    worksheet.Cells[dataRow, i + 1].Value = value;
+                }
+                dataRow++;
+            }
+
+
+            // Convert the Excel package to a byte array
+            byte[] excelBytes = excelPackage.GetAsByteArray();
+            return excelBytes;
+        }
+    }
+
 
     [Authorize("LimitedCustodian")]
     public async Task<IActionResult> UnitTypes()

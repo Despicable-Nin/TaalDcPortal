@@ -259,5 +259,17 @@ public static class API
             return $"{baseUrl}/api/v1/reports/orders?from={from}&to={to}";
         }
 
+
+
+        public static string GetExpiredReservationCount(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/reports/expired-reservation-count";
+        }
+
+        public static string GetExpiredReservations(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/reports/reserved-without-downpayment";
+        }
+
     }
 }

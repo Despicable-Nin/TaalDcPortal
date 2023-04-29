@@ -37,7 +37,8 @@ public class OrderQueries : IOrderQueries
             AND U.FloorId = ISNULL({(floorId > 0 ? $"'{floorId}'" : "NULL")}, U.FloorId) 
             AND U.UnitTypeId = ISNULL({(unitTypeId > 0 ? $"'{unitTypeId}'" : "NULL")}, U.UnitTypeId) 
             AND U.ScenicViewId = ISNULL({(viewId > 0 ? $"'{viewId}'" : "NULL")},U.ScenicViewId)
-            AND ISNULL(B.FirstName,'') + ' ' + ISNULL(B.LastName,'') LIKE '%{(!string.IsNullOrEmpty(filter)? filter: "")}%'
+            AND (ISNULL(B.FirstName,'') + ' ' + ISNULL(B.LastName,'') LIKE '%{(!string.IsNullOrEmpty(filter)? filter: "")}%' 
+                OR U.Unit LIKE '%{(!string.IsNullOrEmpty(filter) ? filter : "")}%')
         ORDER BY U.[UnitId] 
         OFFSET {(pageNumber - 1) * pageSize} 
         ROWS FETCH NEXT {pageSize} ROWS ONLY";

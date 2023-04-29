@@ -33,7 +33,15 @@ public class HomeController : Controller
         var unitPerType = await _salesService.GetResidentialAvailabilityByType();
         var unitPerView = await _salesService.GetResidentialAvailabilityByView();
 
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors.OrderBy(a => a.Id);
+
         var unitStatus = new UnitStats_ClientDto(unitCountSummary, unitPerType, unitPerView);
+
+        var expiredReservationCount = await _salesService.GetExpiredReservationCount();
+
+        ViewData["ExpiredReservationCount"] = expiredReservationCount;
 
         return View(unitStatus);
     }
@@ -46,6 +54,12 @@ public class HomeController : Controller
         var unitPerType = await _salesService.GetAvailabilityPerParkingUnitType();
 
         var parkingStatus = new ParkingStats_ClientDto(unitCountSummary, unitPerFloor, unitPerType);
+
+
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors.OrderBy(a => a.Id);
+
 
         return View(parkingStatus);
     }

@@ -77,6 +77,10 @@ p {
                                      supported by Chrome, Edge, Opera and Firefox */
 }
 
+.unlink{
+    color: black;
+}
+
 form.row, form.row .row {
     margin-left: 0px;
     margin-right: 0px;
@@ -453,6 +457,10 @@ label {
 
 .stats-card{
     margin-bottom: 1rem;
+}
+
+.stats-card:hover{
+    background-color: #dcdcdc;
 }
 
 .status {

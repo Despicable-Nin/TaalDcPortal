@@ -59,7 +59,7 @@ public class SalesService : ISalesService
     public async Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetResidentialUnitsCountByStatus()
     {
         var uri = API.Sales.GetUnitCountSummaryByStatus(_remoteServiceBaseUrl);
-        
+
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<IEnumerable<GetResidentialUnitsCountByStatusResponse>>(responseString,
@@ -97,14 +97,17 @@ public class SalesService : ISalesService
     {
         var parkings = new List<GetParkingUnitTypeAvailabilityPerFloorResponse>();
 
-        try { 
+        try
+        {
             var uri = API.Sales.GetParkingUnitTypeAvailabilityPerFloor(_remoteServiceBaseUrl);
 
             var responseString = await _httpClient.GetStringAsync(uri);
 
             parkings = JsonSerializer.Deserialize<List<GetParkingUnitTypeAvailabilityPerFloorResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }catch{
+        }
+        catch
+        {
             throw;
         }
 
@@ -158,7 +161,7 @@ public class SalesService : ISalesService
         return new Response("Error in adding a payment.", false, null);
     }
 
-  
+
 
     public async Task<GetSalesByIdResponse> GetSalesById(int id)
     {
@@ -313,7 +316,7 @@ public class SalesService : ISalesService
 
         return new Response("Error in updating buyer.", false, null);
     }
-    
+
     public async Task<Response> UpsertSpouse(UpsertBuyerSpouseRequest model)
     {
         var uri = API.Sales.UpsertSpouse(_remoteServiceBaseUrl, model.BuyerId);
@@ -347,7 +350,7 @@ public class SalesService : ISalesService
     public async Task<GetBuyerResponse> GetBuyer(int buyerId)
     {
         var uri = API.Sales.GetBuyerByID(_remoteServiceBaseUrl, buyerId);
-       
+
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<GetBuyerResponse>(responseString,
@@ -409,6 +412,30 @@ public class SalesService : ISalesService
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<IEnumerable<OrderReportResponse>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<int> GetExpiredReservationCount()
+    {
+        var uri = API.Sales.GetExpiredReservationCount(_remoteServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<int>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<IEnumerable<ExpiredReservationResponse>> GetExpiredReservations()
+    {
+        var uri = API.Sales.GetExpiredReservations(_remoteServiceBaseUrl);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ExpiredReservationResponse>>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;

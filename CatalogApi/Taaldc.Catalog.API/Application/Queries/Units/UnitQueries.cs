@@ -128,7 +128,7 @@ public class UnitQueries : IUnitQueries
         int pageSize = 20, int pageNumber = 1)
     {
         var query =
-            " SELECT U.[Id], U.[Identifier], U.[Price], U.[FloorArea], F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode], U.Remarks [Remarks]";
+            " SELECT U.[Id], U.[Identifier], U.[Price], CONVERT(DECIMAL(10,2),U.[FloorArea] + ISNULL(U.[BalconyArea],0)) AS FloorArea, F.Name [Floor], F.[Description] [FloorDesc], S.Name [View], US.Name [Status], UT.Name [Type], UT.ShortCode [TypeCode], U.Remarks [Remarks]";
         query += " FROM [taaldb_admin].[catalog].[unit] U JOIN [taaldb_admin].[catalog].floors F ON U.FloorId = F.Id ";
         query += " JOIN [taaldb_admin].[catalog].scenicview S ON U.ScenicViewId = S.Id ";
         query += " JOIN [taaldb_admin].[catalog].unitstatus US ON U.UnitStatus = US.Id ";
@@ -156,7 +156,7 @@ public class UnitQueries : IUnitQueries
         if (!string.IsNullOrWhiteSpace(where)) query += where;
 
         query +=
-            $" ORDER BY F.Id, U.Identifier, U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
+            $" ORDER BY F.Id, TRY_CAST(REPLACE(REPLACE(U.Identifier, 'P', ''),F.[Name] + '-','') AS INT), U.Id OFFSET {(pageNumber - 1) * pageSize} ROWS FETCH NEXT {pageSize} ROWS ONLY ";
 
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);
@@ -182,8 +182,8 @@ public class UnitQueries : IUnitQueries
                     "ut.Id AS UnitTypeId," +
                     "ut.ShortCode AS UnitTypeCode," +
                     "ut.[Name] AS UnitType," +
-                    "ISNULL(MIN(CONVERT(DECIMAL(10,2),u.FloorArea)),0) AS MinFloorArea," +
-                    "ISNULL(MAX(CONVERT(DECIMAL(10,2),u.FloorArea,2)),0) AS MaxFloorArea," +
+                    "ISNULL(MIN(CONVERT(DECIMAL(10,2),u.FloorArea + u.BalconyArea)),0) AS MinFloorArea," +
+                    "ISNULL(MAX(CONVERT(DECIMAL(10,2),u.FloorArea + u.BalconyArea,2)),0) AS MaxFloorArea," +
                     "ISNULL(MIN(CONVERT(DECIMAL(10,2),u.Price)),0) AS MinPrice," +
                     "ISNULL(MAX(CONVERT(DECIMAL(10,2),u.Price,2)),0) AS MaxPrice," +
                     "COUNT(u.UnitType) AS Available " +

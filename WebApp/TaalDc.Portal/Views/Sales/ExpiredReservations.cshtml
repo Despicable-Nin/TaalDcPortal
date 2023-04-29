@@ -1,0 +1,47 @@
+﻿@using TaalDc.Portal.DTO.Sales;
+@model IEnumerable<ExpiredReservationResponse>
+
+@{
+    ViewBag.Title = "Expired Reservations";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <div class="data-section">
+            <div class="table-responsive w-100 mb-3">
+                <table class="table table-striped sales-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Buyer</th>
+                            <th>Email Address</th>
+                            <th>Expired Last</th>
+                            <th>Property</th>
+                            <th>Tower</th>
+                            <th>Floor</th>
+                            <th>Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var order in Model.ToList())
+                        {
+                            <tr>
+                                <td>
+                                     <a asp-action="Details" asp-controller="Sales" asp-route-id="@order.Id" target="_blank">@order.Id</a>
+                                </td>
+                                <td>@order.FullName</td>
+                                <td>@order.EmailAddress</td>
+                                <td>@order.ReservationExpiresOn.ToString("MMMM dd, yyyy")</td>
+                                <td>@order.Property</td>
+                                <td>@order.Tower</td>
+                                <td>@order.Floor</td>
+                                <td>@order.Unit</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

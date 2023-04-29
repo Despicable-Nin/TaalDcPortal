@@ -111,7 +111,8 @@ public class FloorQueries : IFloorQueries
                                    "ON u.FloorId = f.Id " +
                                    "AND u.UnitStatus = 1 " +
                                    $"AND u.UnitType = {(unitTypeId == null ? "u.UnitType" : unitTypeId)} " +
-                                   "WHERE u.Id IS NOT NULL";
+                                   "WHERE u.Id IS NOT NULL " +
+                                   "ORDER BY f.Id";
 
         await using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync(CancellationToken.None);

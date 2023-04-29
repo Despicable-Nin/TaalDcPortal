@@ -1,12 +1,28 @@
-﻿@using TaalDc.Portal.DTO.Sales;
+﻿@using SeedWork;
+@using TaalDc.Portal.DTO.Catalog.Floors;
+@using TaalDc.Portal.DTO.Sales;
 @model UnitStats_ClientDto
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewData["Title"] = "Dashboard";
+
+    var expireReservationCount = (int)ViewBag.ExpiredReservationCount;
+
+    var activeFloors = ViewBag.ActiveFloors as IEnumerable<ActiveFloor_ClientDto>;
 }
 
+
+
 <div class="container-fluid">
-    
+    @if (CurrentUser.IsAdmin())
+    {
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+            <div>
+                You have <b>@expireReservationCount</b> expired @(expireReservationCount > 1 ? "reservations" : "reservation"). <a href="@Url.Action("ExpiredReservations","Sales")"><strong>View List</strong></a>
+            </div>
+        </div>
+    }
     <ul class="nav nav-pills">
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Index">Units</a>
@@ -22,49 +38,57 @@
 
     <div class="mt-3 mb-3">
         <div class="unit-summary">
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status available">
-                        <strong>Available</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "AVAILABLE").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Available" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status available">
+                            <strong>Available</strong>
+                        </p>
+                            <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "AVAILABLE").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status reserved">
-                        <strong>Reserved</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "RESERVED").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Reserved" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status reserved">
+                            <strong>Reserved</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "RESERVED").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-          <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status sold">
-                        <strong>Sold</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "SOLD").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Index" asp-controller="Sales">
+              <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status sold">
+                            <strong>Sold</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "SOLD").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-             <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status blocked">
-                        <strong>Blocked</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "BLOCKED").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Blocked" asp-controller="Sales">
+                 <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status blocked">
+                            <strong>Blocked</strong>
+                        </p>
+                            <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "BLOCKED").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="card availability-per-unittype mb-3">
@@ -114,7 +138,7 @@
 
 
         <div class="row">
-            <div class="col-lg-6">
+           @* <div class="col-lg-6">
                 <div class="card availability-per-unittype">
                     <div class="card-header bg-white">
                         <h5 class="text-center mt-2 mb-2"><strong>RESIDENTIAL AVAILABILITY PER UNIT</strong></h5>
@@ -152,7 +176,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>*@
 
             <div class="col-lg-6">
                 <div class="card availability-per-unittype">
@@ -172,7 +196,7 @@
                                 <tbody>
                                     @foreach (var unitType in Model.AvailabilityByViews)
                                     {
-                                        <tr class="cursor-pointer" onclick="openAvailableUnits(null, @unitType.ViewId)">
+                                        <tr class="cursor-pointer" onclick="openAvailableUnits('0', @unitType.ViewId)">
                                             <td>@unitType.View</td>
                                             <td>@unitType.Available</td>
                                         </tr>
@@ -205,9 +229,50 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="units-multiple-form" class="mb-3">
-                    <input name="unitFilter" placeholder="Search..." class="form-control" />
+                <form id="units-multiple-form" class="row mb-3">
+                    <input type="hidden" id="viewId" name="viewId" />
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitFilter">Unit No.</label>
+                        <input name="unitFilter" placeholder="Search..." class="form-control" />
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitTypeId">Unit Type</label>
+                        <select onchange="getAvailableUnits(null,null,1,10)" class="form-control form-select" name="unitTypeId" id="unitTypeId">
+                            <option value="" selected>Not Applicable</option>
+                            <option value="2">One Bedroom</option>
+                            <option value="3">Two Bedroom</option>
+                            <option value="4">Three Bedroom</option>
+                            <option value="5">Penthouse</option>
+                            <option value="6">Residential Parking</option>
+                            <option value="7">Motorcycle Parking</option>
+                            <option value="8">Commercial Space</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="floorId">Floor</label>
+                        <select onchange="getAvailableUnits(null,null,1,10)" class="form-control form-select" name="floorId">
+                            <option value="">All Floors</option>
+                            @foreach (var floor in activeFloors)
+                            {
+                                <option value="@floor.Id">@floor.FloorName</option>
+                            }
+                        </select>
+                    </div>
                 </form>
+
+                <div class="action-btn text-end">
+                    <a target="_blank" id="reportLink" class="btn btn-primary">
+                        <i class="fa-sharp fa-solid fa-file-excel"></i> Export
+                    </a>
+                </div>
+
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -237,6 +302,12 @@
 
             var modal = new bootstrap.Modal(unitsModal, {});
 
+            let unitType = document.getElementById('unitTypeId');
+            unitType.value = unitTypeId;
+
+            let view = document.getElementById('viewId');
+            view.value = viewId;
+
             getAvailableUnits(unitTypeId, viewId, 1, 10);
 
             modal.show();
@@ -244,11 +315,20 @@
 
 
         function getAvailableUnits(unitTypeId, viewId, pageNumber = 1, pageSize = 10) {
-         
+            $('.formLoader').show();
             console.log(document.getElementsByName("unitFilter"));
             var filter = document.getElementsByName("unitFilter")[0].value;
 
-            fetch(`@Url.Action("GetUnits","Properties")?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&viewId=${viewId}`)
+            var unitType = document.getElementsByName("unitTypeId")[0].value;
+
+            var floorId = document.getElementsByName("floorId")[0].value;
+
+            var view = document.getElementsByName("viewId")[0].value;
+
+
+            $('#reportLink').attr("href",`@Url.Action("UnitsReport","Properties")?statusId=1&filter=${filter}&unitTypeId=${unitType}&viewId=${view}&floorId=${floorId}`);
+
+            fetch(`@Url.Action("GetUnits","Properties")?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitType}&viewId=${view}&floorId=${floorId}`)
                 .then((response) => response.json())
                 .then((data) => {
                     //Process data into table
@@ -294,7 +374,7 @@
 
                     unitTableBody.innerHTML = rows;
 
-
+                    $('.formLoader').hide();
                     //add a pagination
                     var numberOfPagesToDisplay = 5;
                     var totalPageGroups = data.total_pages / numberOfPagesToDisplay;

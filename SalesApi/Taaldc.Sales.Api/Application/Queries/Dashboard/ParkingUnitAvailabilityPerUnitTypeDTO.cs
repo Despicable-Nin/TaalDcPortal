@@ -2,9 +2,10 @@ namespace Taaldc.Sales.Api.Application.Queries.Dashboard;
 
 public record ParkingUnitAvailabilityPerUnitTypeDTO
 {
-    public ParkingUnitAvailabilityPerUnitTypeDTO(string unitType, double floorArea, decimal min, decimal max,
+    public ParkingUnitAvailabilityPerUnitTypeDTO(int unitTypeId, string unitType, double floorArea, decimal min, decimal max,
         int available)
     {
+        UnitTypeId = unitTypeId;
         UnitType = unitType;
         FloorArea = floorArea;
         Min = min;
@@ -12,7 +13,7 @@ public record ParkingUnitAvailabilityPerUnitTypeDTO
         Available = available;
     }
 
-
+    public int UnitTypeId { get; }
     public string UnitType { get; }
     public double FloorArea { get; }
     public decimal Min { get; }

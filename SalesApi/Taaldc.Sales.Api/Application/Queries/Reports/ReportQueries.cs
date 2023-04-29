@@ -69,7 +69,7 @@ namespace Taaldc.Sales.Api.Application.Queries.Reports
             WHERE 
                 payment.StatusId = 1  
                 AND payment.OrderId NOT IN (SELECT OrderId FROM [taaldb_sales].[dbo].[payment] WHERE PaymentTypeId > 1 AND OrderId = payment.OrderId)
-                AND DATEDIFF(DAY, GETDATE(), o.ReservationExpiresOn) = 0";
+                AND DATEDIFF(DAY, GETDATE(), o.ReservationExpiresOn) <= 0";
 
         public ReportQueries(string connectionString)
         {
