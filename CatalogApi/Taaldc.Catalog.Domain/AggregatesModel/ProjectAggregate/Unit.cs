@@ -14,7 +14,7 @@ public sealed class Unit : Entity
 
 
     public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea,
-        double balconyArea, string tower)
+        double balconyArea, string tower = "N/A")
     {
         _scenicViewId = scenicViewId;
         _unitStatusId = (int)UnitStatus.UnitIs.AVAILABLE;
