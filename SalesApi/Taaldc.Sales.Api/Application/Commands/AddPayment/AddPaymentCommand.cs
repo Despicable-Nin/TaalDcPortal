@@ -4,10 +4,10 @@ namespace Taaldc.Sales.API.Application.Commands.AddPayment;
 
 public class AddPaymentCommand : IRequest<CommandResult>
 {
-    public AddPaymentCommand(int transactionId, string paymentMethod, decimal amountPaid, string remarks,
+    public AddPaymentCommand(int orderId, string paymentMethod, decimal amountPaid, string remarks,
         string confirmationNumber, int transactionTypeId, int paymentTypeId, DateTime paymentDate, string correlationId)
     {
-        TransactionId = transactionId;
+        OrderId = orderId;
         PaymentMethod = paymentMethod;
         AmountPaid = amountPaid;
         Remarks = remarks;
@@ -18,7 +18,7 @@ public class AddPaymentCommand : IRequest<CommandResult>
         CorrelationId = correlationId;
     }
 
-    public int TransactionId { get; init; }
+    public int OrderId { get; init; }
     public string PaymentMethod { get; init; }
     public decimal AmountPaid { get; init; }
     public string Remarks { get; init; }
