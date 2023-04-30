@@ -14,7 +14,7 @@ public sealed class Unit : Entity
 
 
     public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea,
-        double balconyArea)
+        double balconyArea, string tower)
     {
         _scenicViewId = scenicViewId;
         _unitStatusId = (int)UnitStatus.UnitIs.AVAILABLE;
@@ -23,6 +23,7 @@ public sealed class Unit : Entity
         Price = price;
         FloorArea = floorArea;
         BalconyArea = balconyArea;
+        Tower = tower ?? "N/A";
     }
 
     public string Identifier { get; set; }
@@ -31,7 +32,7 @@ public sealed class Unit : Entity
 
     public double BalconyArea { get; private set; }
 
-    //public UnitType UnitType { get; private set; }
+    public string Tower { get; private set; }
     public string Remarks { get; private set; }
 
     public int GetUnitStatusId()
