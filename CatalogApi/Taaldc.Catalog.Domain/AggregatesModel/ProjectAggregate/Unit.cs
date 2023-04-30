@@ -6,10 +6,7 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 public sealed class Unit : Entity
 {
     private int _scenicViewId;
-    //public ScenicView ScenicView { get; private set; }
-
     private int _unitStatusId;
-
     private int _unitTypeId;
 
 
