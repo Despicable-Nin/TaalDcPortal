@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddPayment;
@@ -28,4 +29,20 @@ public class AddPaymentCommand : IRequest<CommandResult>
     public DateTime PaymentDate { get; init; }
 
     public string CorrelationId { get; init; }
+}
+
+public class AddPaymentCommandValidator : AbstractValidator<AddPaymentCommand>
+{
+    public AddPaymentCommandValidator()
+    {
+        RuleFor(i => i.OrderId).NotEmpty();
+        RuleFor(i => i.PaymentMethod).NotEmpty();
+        RuleFor(i => i.AmountPaid).NotEmpty();
+        RuleFor(i => i.Remarks).NotEmpty();
+        RuleFor(i => i.ConfirmationNumber).NotEmpty();
+        RuleFor(i => i.TransactionTypeId).NotEmpty();
+        RuleFor(i => i.PaymentTypeId).NotEmpty();
+        RuleFor(i => i.PaymentDate).NotEmpty();
+
+    }
 }

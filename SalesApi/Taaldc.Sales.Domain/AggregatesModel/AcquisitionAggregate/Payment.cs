@@ -42,6 +42,22 @@ public class Payment : Entity
 
     public string CorrelationId { get;private set; } = string.Empty;
 
+    public void OverridePayment(int paymentTypeId, int transactionTypeId, DateTime actualPaymentDate, string confirmationNumber,
+        string paymentMethod, decimal amountPaid, string remarks, string correlationId, string verifiedBy)    
+    {
+        _paymentTypeId = paymentTypeId;
+        _transactionTypeId = transactionTypeId;
+        _statusId = PaymentStatus.GetStatusId(PaymentStatus.Pending);
+        ActualPaymentDate = actualPaymentDate;
+        ConfirmationNumber = confirmationNumber;
+        PaymentMethod = paymentMethod;
+        AmountPaid = amountPaid;
+        Remarks = remarks;
+        CorrelationId = correlationId;
+
+        VerifiedBy = verifiedBy;
+    }
+
     public void VerifyPayment(string verifiedBy, string confirmationNumber)
     {
         VerifiedBy = verifiedBy;
