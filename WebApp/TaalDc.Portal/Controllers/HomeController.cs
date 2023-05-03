@@ -12,11 +12,18 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ISalesService _salesService;
+    private readonly ICatalogService _catalogService;
+    private readonly IConfiguration _configuration;
 
-    public HomeController(ILogger<HomeController> logger, ISalesService salesService)
+    public HomeController(ILogger<HomeController> logger
+        ,ISalesService salesService
+        , ICatalogService catalogService
+        ,IConfiguration configuration)
     {
         _logger = logger;
         _salesService = salesService;
+        _catalogService = catalogService;
+        _configuration = configuration; 
     }
 
     public async Task<IActionResult> Index()
@@ -26,7 +33,15 @@ public class HomeController : Controller
         var unitPerType = await _salesService.GetResidentialAvailabilityByType();
         var unitPerView = await _salesService.GetResidentialAvailabilityByView();
 
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors.OrderBy(a => a.Id);
+
         var unitStatus = new UnitStats_ClientDto(unitCountSummary, unitPerType, unitPerView);
+
+        var expiredReservationCount = await _salesService.GetExpiredReservationCount();
+
+        ViewData["ExpiredReservationCount"] = expiredReservationCount;
 
         return View(unitStatus);
     }
@@ -40,7 +55,22 @@ public class HomeController : Controller
 
         var parkingStatus = new ParkingStats_ClientDto(unitCountSummary, unitPerFloor, unitPerType);
 
+
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors.OrderBy(a => a.Id);
+
+
         return View(parkingStatus);
+    }
+
+    public async Task<IActionResult> FloorPlans()
+    {
+        var activeFloors = await _catalogService.GetActiveFloorsByTowerId(0);
+
+        ViewData["ActiveFloors"] = activeFloors;
+
+        return View();
     }
 
     public IActionResult Privacy()

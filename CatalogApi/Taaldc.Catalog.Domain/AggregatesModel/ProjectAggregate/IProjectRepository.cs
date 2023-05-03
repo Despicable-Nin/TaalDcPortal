@@ -31,4 +31,6 @@ public interface IProjectRepository : IRepository<Project>
 
     void RemoveUnit(int floorId, int roomId);
     Unit UpdateUnit(Unit unit);
+
+    Task<int> SyncUnitWithSales(int id);
 }

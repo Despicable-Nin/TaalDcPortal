@@ -11,6 +11,8 @@ using Taaldc.Sales.Api.Application.Commands.SellUnit;
 using Taaldc.Sales.Api.Application.Commands.VoidPayment;
 using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
+using Taaldc.Sales.Api.Application.Commands.ForfeitReservation;
+using Taaldc.Sales.Api.Application.Commands.ExtendReservationExpiry;
 
 namespace Taaldc.Sales.Api.Controllers;
 
@@ -172,5 +174,23 @@ public class SalesController : ControllerBase
     )
     {
         return Ok(await _orderQueries.GetBuyerContractDetails(id));
+    }
+
+    [HttpPost("{id}/reservation/extend")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> ExtendReservation(int id, ExtendReservationExpiryCommand command)
+    {
+        if (id != command.OrderId) throw new Exception("Id on path and request body does not match.");
+        return Ok(await _mediator.Send(command));
+    }
+
+    [HttpPost("{id}/reservation/forfeit")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> ForfeitReservation(int id,ForfeitReservationCommand command)
+    {
+        if (id != command.OrderId) throw new Exception("Id on path and request body does not match.");
+        return Ok(await _mediator.Send(command));
     }
 }

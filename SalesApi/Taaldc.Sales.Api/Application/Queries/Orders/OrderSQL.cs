@@ -2,39 +2,34 @@ namespace Taaldc.Sales.Api.Application.Queries.Orders;
 
 internal static class OrderSQL
 {
-    public const string SELECT_ORDER_DETAILS = @"SELECT
-    O.Id AS OrderId
-    ,[Code]
-    ,[Broker_Name] AS Broker
-    ,[Broker_Email]
-    ,[Broker_Company]
-    ,[Broker_PrcLicense]
-    ,[ReservationExpiresOn]
-    ,[BuyerId]
-    ,O.[StatusId]
-    ,S.Name [Status]
-    ,[Price]
-    ,[UnitId]
-    ,O.Discount [Discount]    
-    ,(SELECT TOP 1 ActualPaymentDate FROM Payment WHERE OrderId = O.Id ORDER BY ActualPaymentDate ASC) [TransactionDate]
-    ,ConfirmationNumber
-    ,ActualPaymentDate
-    ,P.StatusId [PaymentStatusId]
-    ,PS.Name [PaymentStatus]
-    ,PaymentMethod
-    ,PaymentTypeId
-    ,PT.Name [PaymentType]
-    ,TransactionTypeId
-    ,T.Name [TransactionType]
-    ,VerifiedBy
-    ,AmountPaid
-        FROM [taaldb_sales].[sales].[order] O
-        LEFT JOIN [taaldb_sales].[sales].[orderitem] I ON I.OrderId = O.Id
-        LEFT JOIN [taaldb_sales].[sales].[orderstatus] S ON O.StatusId = S.Id
-        LEFT JOIN [taaldb_sales].[dbo].payment P ON P.OrderId = O.Id 
-        LEFT JOIN [taaldb_sales].[dbo].paymentstatus PS ON PS.Id = P.StatusId
-        LEFT JOIN [taaldb_sales].[dbo].paymenttype PT ON PT.Id = P.PaymentTypeId
-        LEFT JOIN [taaldb_sales].[dbo].transactiontype T ON T.Id = P.TransactionTypeId ";
+    public const string SELECT_ORDER_DETAILS = @"WITH paymentCTE AS(
+	                        SELECT 
+		                        p.OrderId,
+		                        SUM(p.AmountPaid) AS AmountPaid
+	                        FROM [taaldb_sales].[dbo].[payment] p
+	                        WHERE p.StatusId = 1
+	                        GROUP BY p.OrderId
+                        )
+
+                        SELECT
+                            O.Id AS OrderId
+                            ,[Code]
+                            ,[Broker_Name] AS Broker
+                            ,[Broker_Email]
+                            ,[Broker_Company]
+                            ,[Broker_PrcLicense]
+                            ,[ReservationExpiresOn]
+                            ,[BuyerId]
+	                        ,(SELECT TOP 1 ActualPaymentDate FROM Payment WHERE OrderId = O.Id ORDER BY ActualPaymentDate ASC) [TransactionDate]
+                            ,O.[StatusId]
+                            ,OS.[Name] [Status]
+                            ,O.Discount [Discount]
+	                        ,P.AmountPaid
+                        FROM [taaldb_sales].[sales].[order] O
+                        LEFT JOIN paymentCTE P
+                        ON O.Id = p.OrderId
+                        JOIN [taaldb_sales].[sales].orderstatus OS
+                        ON O.StatusId = OS.Id ";
     
     public static string SELECT_PAYMENTS(int id) => @$"SELECT P.Id,
                                           P.ActualPaymentDate, 
@@ -66,8 +61,8 @@ internal static class OrderSQL
         ,O.[Code] 
         ,O.[Broker_Name] AS Broker 
         ,O.[Broker_Email]
-        ,O.[Broker_Company]
-        ,O.[Broker_PrcLicense]
+        ,usrprof.Company AS [Broker_Company]
+        ,usrprof.PRCLicense AS [Broker_PrcLicense]
         ,O.[Remarks] 
         ,O.[StatusId]
         ,OS.[Name] AS Status
@@ -111,7 +106,11 @@ internal static class OrderSQL
         LEFT JOIN [taaldb_sales].[sales].[orderstatus] OS ON O.[StatusId] = OS.Id  
         LEFT JOIN [taaldb_sales].[sales].[buyer] B ON O.BuyerId = B.Id 
         LEFT JOIN [taaldb_sales].[sales].[address] A ON A.BuyerId = B.Id AND A.[Type] = 1
-        LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1";
+        LEFT JOIN  PaymentCTE P ON P.OrderId = O.Id AND P.RowNum = 1 
+        LEFT JOIN taaldb_identity.dbo.AspNetUsers aspu
+	    ON aspu.Email = O.[Broker_Email]
+	    LEFT JOIN taaldb_identity.dbo.UserProfiles usrprof
+	    ON aspu.Id = usrprof.[Identity] ";
    
 
 

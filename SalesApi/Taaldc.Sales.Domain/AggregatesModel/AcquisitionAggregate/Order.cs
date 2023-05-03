@@ -29,6 +29,13 @@ public class Order : DomainEntity, IAggregateRoot
         Discount = discount;
         TransactionDate = transactionDate;
     }
+
+    public Order CancelOrder()
+    {
+        _statusId = OrderStatus.GetIdByName(OrderStatus.Cancelled);
+
+        return this;
+    }
     
     public Order Update(
         string broker,
@@ -144,6 +151,27 @@ public class Order : DomainEntity, IAggregateRoot
         return payment;
     }
 
+    public void Forfeit()
+    {
+        ReservationExpiresOn = default;
+        Remarks += $"{DateTime.Now} - Removed reservation as it is forfeited.";
+        
+        //mark for deletion (soft delete only)
+        //we don't want to lose any transaction(s)
+        _orderItems.ForEach(o => o.Nullify());
+
+        //for now we don't care if payments for reservations are forfeited
+        //since we have no return
+
+        //update status as cancelled
+        ChangeOrderStatus();
+    }
+
+    public void ExtendReservation(int days) {
+        ReservationExpiresOn = ReservationExpiresOn.HasValue ? ReservationExpiresOn.Value.AddDays(days) : DateTime.Today.AddDays(days); ;
+
+    }
+
     public void MarkAsFullyPaid() => _statusId = OrderStatus.GetIdByName(OrderStatus.FullyPaid);
     public void MarkAsCancelled() => _statusId = OrderStatus.GetIdByName(OrderStatus.Cancelled);
 
@@ -163,7 +191,7 @@ public class Order : DomainEntity, IAggregateRoot
         payment.VerifyPayment(verifiedBy, confirmationNumber);
 
         
-        //TODO: This is candidate for pub-sub
+        //This updates the statusId from SOLD< AVAILABLE, RSERVED etc
         ChangeOrderStatus();
 
         //TODO: Pub-sub
@@ -180,6 +208,13 @@ public class Order : DomainEntity, IAggregateRoot
 
     private void ChangeOrderStatus()
     {
+        if(_orderItems.All(i => i.IsDeleted))
+        {
+            _statusId = OrderStatus.GetIdByName(OrderStatus.Cancelled);
+            return;
+        }
+
+
         if (!HasReservation())
         {
             throw new SalesDomainException(nameof(ChangeOrderStatus),
@@ -231,8 +266,9 @@ public class Order : DomainEntity, IAggregateRoot
             i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted)) : false;
 
     public bool HasFullyPaid() => _payments.Any()
-        ? _payments.Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
-            .Sum(i => i.AmountPaid) >=  _orderItems.Sum(o => o.Price)
+        ? _payments
+            .Where(i => i.GetPaymentStatusId() == PaymentStatus.GetStatusId(PaymentStatus.Accepted))
+            .Sum(i => i.AmountPaid) >=  (_orderItems.Sum(o => o.Price))
             : false;
 
 }

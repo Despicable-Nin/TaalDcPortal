@@ -18,7 +18,7 @@ public class AddPaymentCommandHandler : IRequestHandler<AddPaymentCommand, Comma
 
     public async Task<CommandResult> Handle(AddPaymentCommand request, CancellationToken cancellationToken)
     {
-        var order = await _repository.FindOrderByIdAsync(request.TransactionId);
+        var order = await _repository.FindOrderByIdAsync(request.OrderId);
 
         if (order == default)
             throw new SalesDomainException(nameof(AddPaymentCommandHandler),

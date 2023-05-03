@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Engineering;
 using System.Net.Mail;
 using TaalDc.Portal.DTO.Enums;
 using TaalDc.Portal.DTO.Sales.Buyer;
@@ -61,12 +62,22 @@ namespace TaalDc.Portal.Controllers
                 {
                     var result = await _salesService.AddBuyer(buyer);
 
-                    return Ok(new 
+                    if (result.IsSuccess) { 
+                        return Ok(new 
+                        {
+                            result.Id,
+                            IsFormError = false,
+                            Message = ""
+                        });
+                    }
+                    else
                     {
-                        result.Id,
-                        IsFormError = false,
-                        Message = ""
-                    });
+                        return BadRequest(new
+                        {
+                            IsFormError = false,
+                            Message = result.ErrorMessage
+                        });
+                    }
 
                 }
                 catch(Exception err)
@@ -101,6 +112,11 @@ namespace TaalDc.Portal.Controllers
                 ,buyerQueryResult.CivilStatusId
                 ,buyerQueryResult.CivilStatus
                 );
+
+            buyer.BrokerName = buyerQueryResult.BrokerName;
+            buyer.BrokerEmail = buyerQueryResult.BrokerEmail;
+            buyer.BrokerCompany = buyerQueryResult.BrokerCompany;
+            buyer.BrokerPRCLicense = buyerQueryResult.BrokerPRCLicense;
 
             buyer.Id = id;
 

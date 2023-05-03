@@ -23,7 +23,7 @@
                     
                     <div class="mb-3 col-lg-12">
                         <label for="Occupation" class="form-label">
-                            <strong>Occupation</strong>
+                            <strong>@(Model.IsCorporate? "Official Designation": "Occupation")</strong>
                         </label>
                         <input name="Occupation" class="form-control"  />
                         <div class="invalid-feedback">

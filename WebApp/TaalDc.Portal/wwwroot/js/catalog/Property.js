@@ -1,6 +1,7 @@
 ﻿const form = document.getElementById('propertyForm');
 form.addEventListener('submit', openFormConfirmation);
 
+const portalSubURL = "";
 
 function openFormConfirmation(event) {
     event.preventDefault();
@@ -37,7 +38,7 @@ async function uploadFile() {
    
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "/Upload/SaveFile?folder=floor-plans",
+            url: portalSubURL + "/Upload/SaveFile?folder=floor-plans",
             type: "POST",
             data: file,
             processData: false,

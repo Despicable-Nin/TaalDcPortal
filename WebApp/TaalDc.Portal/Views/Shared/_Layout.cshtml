@@ -1,8 +1,13 @@
 ﻿@using SeedWork
 @inject IAmCurrentUser CurrentUser;
+@inject IConfiguration configuration;
+
 @{
     var controller = "";
     var action = "";
+    
+    var portalSubURL = configuration["SubURL"];
+    
     try
     {
         controller = ViewContext.RouteData.Values["controller"]?.ToString();
@@ -24,6 +29,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <script src="https://kit.fontawesome.com/e49025cb51.js" crossorigin="anonymous"></script>
+
+    @await RenderSectionAsync("HeaderScripts", false)
 </head>
 <body>
 
@@ -34,7 +41,7 @@
         <div class="row flex-nowrap">
             <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 taaldc-sidenav" id="taaldc-sidenav" style="display: none;">
                 <div class="d-flex flex-column px-3 pt-3 text-white min-vh-100">
-                    <a href="/" class="d-flex pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <a href="@Url.Action("Index","Home")" class="d-flex pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span class="fs-5 d-sm-inline">
                             <strong>TAALDC Portal</strong>
                         </span>
@@ -63,7 +70,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                                 <li>
-                                    <a class="dropdown-item" href="/Identity/Account/Manage/Email">Profile</a>
+                                    <a class="dropdown-item" href="@portalSubURL/Identity/Account/Manage/Email">Profile</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider">

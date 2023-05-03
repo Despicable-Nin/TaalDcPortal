@@ -1,9 +1,11 @@
-﻿@using TaalDc.Portal.DTO.Sales;
+﻿@using TaalDc.Portal.DTO.Catalog.Floors;
+@using TaalDc.Portal.DTO.Sales;
 @model ParkingStats_ClientDto
 
 @{
     ViewData["Title"] = "Dashboard";
-
+    
+    var activeFloors = ViewBag.ActiveFloors as IEnumerable<ActiveFloor_ClientDto>;
 }
 
 <div class="container-fluid">
@@ -15,54 +17,65 @@
         <li class="nav-item">
             <a class="nav-link active" aria-current="page" asp-controller="Home" asp-action="Parking">Parking</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" aria-current="page" asp-controller="Home" asp-action="FloorPlans">Floor Plans</a>
+        </li>
     </ul>
 
 
     <div class="mt-3 mb-3">
         <div class="unit-summary">
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status available">
-                        <strong>Available</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "AVAILABLE").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Available" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status available">
+                            <strong>Available</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "AVAILABLE").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status reserved">
-                        <strong>Reserved</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "RESERVED").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Reserved" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status reserved">
+                            <strong>Reserved</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "RESERVED").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status sold">
-                        <strong>Sold</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "SOLD").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Index" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status sold">
+                            <strong>Sold</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "SOLD").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
-                <div class="card-body">
-                    <p class="status blocked">
-                        <strong>Blocked</strong>
-                    </p>
-                    <p class="unit">
-                        @Model.UnitCountByStatus.Where(i => i.UnitStatus == "BLOCKED").Sum(i => i.Count)
-                    </p>
+            <a asp-action="Blocked" asp-controller="Sales">
+                <div class="card stats-card" style="width: 15rem;margin-right: 1rem;">
+                    <div class="card-body">
+                        <p class="status blocked">
+                            <strong>Blocked</strong>
+                        </p>
+                        <p class="unit unlink">
+                            @Model.UnitCountByStatus.Where(i => i.UnitStatus == "BLOCKED").Sum(i => i.Count)
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="card availability-per-unittype mb-3">
@@ -84,7 +97,7 @@
                         <tbody>
                             @foreach(var unitType in Model.UnitsPerType)
                             {
-                                    <tr>
+                                    <tr class="cursor-pointer" onclick="openAvailableUnits('@unitType.UnitTypeId', null)">
                                         <td>@unitType.UnitType</td>
                                         <td>@unitType.FloorArea</td>
                                         <td>@unitType.UnitPriceRange</td>
@@ -124,7 +137,7 @@
 
                                         @foreach (var floor in unitTypesFloors)
                                         {
-                                            <tr>
+                                            <tr class="cursor-pointer" onclick="openAvailableUnits('@unitType.UnitTypeId', '@floor.FloorId')">
                                                 <td>@(unitType.UnitType != currentUnitType? unitType.UnitType: "")</td>
                                                 <td>
                                                     @floor.Floor
@@ -147,3 +160,249 @@
         
     </div>
 </div>
+
+
+
+<div class="modal fade" id="available-units">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Available Units</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 <form id="units-multiple-form" class="row mb-3">
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitFilter">Unit No.</label>
+                        <input name="unitFilter" placeholder="Search..." class="form-control" />
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitTypeId">Unit Type</label>
+                        <select onchange="getAvailableUnits(null,null,1,10)" class="form-control form-select" name="unitTypeId" id="unitTypeId">
+                            <option value="6">Residential Parking</option>
+                            <option value="7">Motorcycle Parking</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="floorId">Floor</label>
+                        <select onchange="getAvailableUnits(null,null,1,10)" class="form-control form-select" name="floorId" id="floorId">
+                            <option value="">All Floors</option>
+                            @foreach (var floor in activeFloors)
+                            {
+                                <option value="@floor.Id">@floor.FloorName</option>
+                            }
+                        </select>
+                    </div>
+                </form>
+
+                <div class="action-btn text-end">
+                    <a target="_blank" id="reportLink" class="btn btn-primary">
+                        <i class="fa-sharp fa-solid fa-file-excel"></i> Export
+                    </a>
+                </div>
+
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Unit Type</th>
+                            <th>View</th>
+                            <th>Floor</th>
+                            <th>Tower</th>
+                            <th>Unit No.</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="unit-body">
+                    </tbody>
+                </table>
+                <div id="unit-pagination"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        function openAvailableUnits(unitTypeId, floorId) {
+            console.log('unit type id', unitTypeId)
+            var unitsModal = document.getElementById('available-units');
+
+            var modal = new bootstrap.Modal(unitsModal, {});
+
+            let unitType = document.getElementById('unitTypeId');
+            unitType.value = unitTypeId;
+
+            let floor = document.getElementById('floorId');
+            floor.value = floorId;
+
+            getAvailableUnits(unitTypeId, floorId, 1, 10);
+
+            modal.show();
+        }
+
+
+        function getAvailableUnits(unitTypeId, floorId, pageNumber = 1, pageSize = 10) {
+            $('.formLoader').show();
+
+            var filter = document.getElementsByName("unitFilter")[0].value;
+
+            var unitType = document.getElementsByName("unitTypeId")[0].value;
+
+            var floor = document.getElementsByName("floorId")[0].value;
+
+            $('#reportLink').attr("href", `@Url.Action("UnitsReport","Properties")?statusId=1&filter=${filter}&unitTypeId=${unitType}&floorId=${floor}`);
+
+            fetch(`@Url.Action("GetUnits","Properties")?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitType}&floorId=${floor}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    //Process data into table
+                    var unitTableBody = document.getElementById("unit-body");
+                    var unitModalBody = document.getElementById("unit-modal-body");
+                    var unitPagination = document.getElementById("unit-pagination");
+                    unitPagination.innerHTML = "";
+                    var rows = "";
+
+                    data.data.map((u, i) => {
+                        var unit = {
+                            unit: u.identifier,
+                            id: u.unit_id,
+                            tower: u.tower_name,
+                            floor: u.floor_name,
+                            view: u.scenic_view,
+                            unitType: u.unit_type,
+                            price: u.price
+                        };
+
+                        var unitName = `${u.tower_name} | ${u.unit_type} ${u.scenic_view} | Unit ${u.identifier}`;
+
+                        let newRow = `<tr>
+                                                <td>
+                                                   ${u.unit_type}
+                                                </td>
+                                                <td>
+                                                   ${u.scenic_view}
+                                                </td>
+                                                <td>
+                                                   ${u.floor_name}
+                                                </td>
+                                                <td>
+                                                    ${u.tower_name}
+                                                </td>
+                                                <td>${u.identifier}</td>
+                                                <td>
+                                                </td>
+                                            </tr>`
+
+                        rows = rows + newRow;
+                    });
+
+                    unitTableBody.innerHTML = rows;
+
+                    $('.formLoader').hide();
+
+                    //add a pagination
+                    var numberOfPagesToDisplay = 5;
+                    var totalPageGroups = data.total_pages / numberOfPagesToDisplay;
+                    var pageGroups = [];
+
+                    for (var i = 1; i <= totalPageGroups; i++) {
+                        pageGroups.push(i * numberOfPagesToDisplay);
+                    }
+
+
+                    var pageGroupIndex = pageGroups.find(i => data.page_number <= i);
+                    var lastPageIndex = pageGroups[pageGroups.length - 1];
+
+                    console.log('last index', lastPageIndex);
+
+                    var pageGroup = pageGroups.length > 0 && pageGroupIndex > 0 ? pageGroupIndex : data.total_pages;
+                    var pageGroupMinPage = data.total_pages <= 5 ? 0 : pageGroupIndex > 0 ? pageGroup - numberOfPagesToDisplay : lastPageIndex;
+
+                    ////5 -> 0
+                    ////10 -> 5
+
+                    var nextPage = data.page_number < data.total_pages ? data.page_number + 1 : 0;
+                    var prevPage = data.page_number > 1 ? data.page_number - 1 : 0;
+
+
+                    var ul = document.createElement("ul");
+
+
+                    ul.classList.add("pagination");
+
+                    if (data.page_number > 1) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${floorId},${prevPage}, 10)" class="page-link alink noselect">Prev</a>`;
+                        ul.appendChild(li);
+                    }
+
+
+                    if (prevPage == 0) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.classList.add("disabled");
+                        li.innerHTML = `<a class="page-link alink noselect">Prev</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (pageGroup == 0 || pageGroup == pageGroupMinPage) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${floorId},${data.page_number}, 10)" class="page-link alink noselect">${data.page_number}</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    for (var i = pageGroupMinPage; i < pageGroup; i++) {
+                        var isActive = data.page_number == i + 1;
+
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${floorId},${i + 1}, 10)" class="noselect page-link alink ${isActive ? "active" : ""}">${i + 1}</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (data.page_number < data.total_pages) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.innerHTML = `<a onclick="getAvailableUnits(${unitTypeId},${floorId},${nextPage}, 10)" class="page-link alink noselect">Next</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    if (nextPage == 0) {
+                        var li = document.createElement("li");
+                        li.classList.add("page-item");
+                        li.classList.add("disabled");
+                        li.innerHTML = `<a class="page-link alink noselect">Next</a>`;
+                        ul.appendChild(li);
+                    }
+
+                    unitPagination.appendChild(ul)
+
+                    return data;
+                });
+        }
+
+
+
+        const unitsFormMultiple = document.getElementById('units-multiple-form');
+
+        if (unitsFormMultiple) {
+            unitsFormMultiple.addEventListener('submit', onUnitFormMutipleSubmit);
+        }
+
+        function onUnitFormMutipleSubmit(event) {
+            event.preventDefault();
+
+            getAvailableUnits(null, null, 1, 10);
+        }
+    </script>
+}

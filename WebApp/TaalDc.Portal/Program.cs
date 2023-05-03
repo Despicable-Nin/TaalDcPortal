@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,11 @@ using TaalDc.Portal.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = int.MaxValue; // set the maximum request body size to the maximum integer value
+});
 
 var configuration = builder.Configuration;
 
@@ -44,6 +50,7 @@ builder.Services.AddPolicies();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddOptions();
 builder.Services.Configure<AppSettings>(configuration);
+
 
 var app = builder.Build();
 

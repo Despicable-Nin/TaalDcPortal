@@ -1,13 +1,17 @@
 ﻿@page
 @model LoginModel
+@inject IConfiguration configuration
 
 @{
     ViewData["Title"] = "Log in";
+
+
+
 }
 
 <div class="container-fluid" style="position: relative;width: 100%;">
     <div class="row">
-        <div class="col-xl-7 login-banner" style="background: linear-gradient(rgba(81, 108, 91, 0.8), rgba(81, 108, 91, 0.8)), url('/login-background.jpg');min-height: 100vh;background-repeat: no-repeat; background-size:cover;">
+        <div class="col-xl-7 login-banner" style="background: linear-gradient(rgba(81, 108, 91, 0.8), rgba(81, 108, 91, 0.8)), url('@configuration["SubURL"]/login-background.jpg');min-height: 100vh;background-repeat: no-repeat; background-size:cover;">
 
         </div>
         <div class="col-xl-5 col-lg-12 col-md-12 form-wrapper">

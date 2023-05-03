@@ -84,9 +84,19 @@ public static class API
             return $"{baseUri}/api/adm/units";
         }
 
+        public static string GetUnitsColorScheme(string baseUri, int floorId)
+        {
+            return $"{baseUri}/api/adm/units/color-scheme/{floorId}";
+        }
+
         public static string GetUnitTypes(string baseUri)
         {
             return $"{baseUri}/api/adm/unitTypes";
+        }
+
+        public static string GetActiveFloorByTowerId(string baseUri, int towerId)
+        {
+            return $"{baseUri}/api/adm/floors/active?towerId={towerId}";
         }
 
         public static string GetFloorById(string baserUri, int id)
@@ -247,6 +257,18 @@ public static class API
         public static string GetOrdersByDate(string baseUrl, DateTime from, DateTime to)
         {
             return $"{baseUrl}/api/v1/reports/orders?from={from}&to={to}";
+        }
+
+
+
+        public static string GetExpiredReservationCount(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/reports/expired-reservation-count";
+        }
+
+        public static string GetExpiredReservations(string baseUrl)
+        {
+            return $"{baseUrl}/api/v1/reports/reserved-without-downpayment";
         }
 
     }

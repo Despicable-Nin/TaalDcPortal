@@ -1,13 +1,14 @@
+using FluentValidation;
 using MediatR;
 
 namespace Taaldc.Sales.API.Application.Commands.AddPayment;
 
 public class AddPaymentCommand : IRequest<CommandResult>
 {
-    public AddPaymentCommand(int transactionId, string paymentMethod, decimal amountPaid, string remarks,
+    public AddPaymentCommand(int orderId, string paymentMethod, decimal amountPaid, string remarks,
         string confirmationNumber, int transactionTypeId, int paymentTypeId, DateTime paymentDate, string correlationId)
     {
-        TransactionId = transactionId;
+        OrderId = orderId;
         PaymentMethod = paymentMethod;
         AmountPaid = amountPaid;
         Remarks = remarks;
@@ -18,7 +19,7 @@ public class AddPaymentCommand : IRequest<CommandResult>
         CorrelationId = correlationId;
     }
 
-    public int TransactionId { get; init; }
+    public int OrderId { get; init; }
     public string PaymentMethod { get; init; }
     public decimal AmountPaid { get; init; }
     public string Remarks { get; init; }
@@ -28,4 +29,20 @@ public class AddPaymentCommand : IRequest<CommandResult>
     public DateTime PaymentDate { get; init; }
 
     public string CorrelationId { get; init; }
+}
+
+public class AddPaymentCommandValidator : AbstractValidator<AddPaymentCommand>
+{
+    public AddPaymentCommandValidator()
+    {
+        RuleFor(i => i.OrderId).NotEmpty();
+        RuleFor(i => i.PaymentMethod).NotEmpty();
+        RuleFor(i => i.AmountPaid).NotEmpty();
+        RuleFor(i => i.Remarks).NotEmpty();
+        RuleFor(i => i.ConfirmationNumber).NotEmpty();
+        RuleFor(i => i.TransactionTypeId).NotEmpty();
+        RuleFor(i => i.PaymentTypeId).NotEmpty();
+        RuleFor(i => i.PaymentDate).NotEmpty();
+
+    }
 }

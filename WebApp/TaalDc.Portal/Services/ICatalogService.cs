@@ -1,4 +1,5 @@
 ﻿using TaalDc.Portal.DTO.Catalog;
+using TaalDc.Portal.DTO.Catalog.Floors;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Models;
 using TaalDc.Portal.ViewModels.Catalog;
@@ -29,8 +30,11 @@ public interface ICatalogService
         int pageNumber = 1,
         int pageSize = 10);
 
+    Task<IEnumerable<ActiveFloor_ClientDto>> GetActiveFloorsByTowerId(int towerId);
+
     Task<Floor_ClientDto> GetFloorById(int id);
 
+    Task<FloorUnitAvailability_ClientDto> GetFloorUnitsStatus(int id);
     Task<PaginationQueryResult<Unit_ClientDto>> GetUnits(string filter,
         int? floorId,
         int? unitTypeId,
@@ -45,7 +49,7 @@ public interface ICatalogService
 
 
     Task<IEnumerable<UnitType_ClientDto>> GetUnitTypes();
-
+    
 
     Task<Response> CreateProperty(PropertyCreate_ClientDto model);
     Task<Response> CreateTower(TowerCreate_ClientDto model);

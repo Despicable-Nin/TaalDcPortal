@@ -58,9 +58,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(SOLD, pageNumber, pageSize, floorId, unitTypeId,
-            viewId, filter, "");
+            viewId, filter, broker);
         return View(sales);
     }
 
@@ -78,9 +78,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
 
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(AVAILABLE, pageNumber, pageSize, floorId,
-            unitTypeId, viewId, filter, "");
+            unitTypeId, viewId, filter, broker);
         return View(sales);
     }
 
@@ -118,9 +118,9 @@ public class SalesController : BaseController<SalesController>
         //w/c has been Reserved w/o payment, Reserved w/ payment,
         //w/c has paid for Downpayment also it can tell us Cancelled (in history -- for future use case)
         //
-
+        var broker = _currentUser.IsBroker() ? _currentUser.Email : string.Empty;
         var sales = await _salesService.GetUnitAndOrdersAvailability(BLOCKED, pageNumber, pageSize, floorId, unitTypeId,
-            viewId, filter, "");
+            viewId, filter, broker);
 
 
         return View(sales);
@@ -178,6 +178,11 @@ public class SalesController : BaseController<SalesController>
                 for (int i = 0; i < properties.Length; i++)
                 {
                     object value = properties[i].GetValue(obj);
+
+                    if (properties[i].PropertyType == typeof(DateTime) || properties[i].PropertyType == typeof(DateTimeOffset)) { 
+                        worksheet.Cells[dataRow, i + 1].Style.Numberformat.Format = "yyyy-mm-dd";
+                    }
+
                     worksheet.Cells[dataRow, i + 1].Value = value;
                 }
                 dataRow++;
@@ -211,12 +216,12 @@ public class SalesController : BaseController<SalesController>
                 });
 
             //Update Unit Status in Catalog
-            var unitStatus =
-                new UnitStatusUpdate_ClientDto(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
-            var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
+            //var unitStatus =
+            //    new UnitStatusUpdate_ClientDto(model.UnitId, 3, $"Reserved to {model.FirstName} {model.LastName}");
+            //var unitStatusResult = await _catalogService.UpdateUnitStatus(unitStatus);
 
-            if (!unitStatusResult.IsSuccess)
-                return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
+            //if (!unitStatusResult.IsSuccess)
+            //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
 
             return Ok(result);
         }
@@ -244,24 +249,24 @@ public class SalesController : BaseController<SalesController>
                     Message = result.ErrorMessage
                 });
 
-            var order = await _salesService.GetSalesById(orderId);
+            //var order = await _salesService.GetSalesById(orderId);
 
             //update Units On Catalog --> Catalog then Replies to update UnitReplica
-            int unitStatusId = 3;
+            //int unitStatusId = 3;
 
-            if(paymentTypeId == 3)
-            {
-                unitStatusId = 2;
-            }
-            else if (paymentTypeId <= 2)
-            {
-                unitStatusId = 3;
-            }
+            //if(paymentTypeId == 3)
+            //{
+            //    unitStatusId = 2;
+            //}
+            //else if (paymentTypeId <= 2)
+            //{
+            //    unitStatusId = 3;
+            //}
 
-            var unitStatus =
-               new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
+            //var unitStatus =
+            //   new UnitStatusUpdate_ClientDto(order.UnitId.Value, unitStatusId, "");
             
-            await _catalogService.UpdateUnitStatus(unitStatus);
+            //await _catalogService.UpdateUnitStatus(unitStatus);
 
             //if (!unitStatusResult.IsSuccess)
             //    return BadRequest(new { IsFormError = false, Message = unitStatusResult.ErrorMessage });
@@ -360,6 +365,15 @@ public class SalesController : BaseController<SalesController>
     }
 
 
+
+
+    public async Task<IActionResult> ExpiredReservations()
+    {
+        var expiredReservations = await _salesService.GetExpiredReservations();
+
+        return View(expiredReservations);
+    }
+
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?
     //we can throw it in Hangfire here..
@@ -406,4 +420,5 @@ public class SalesController : BaseController<SalesController>
                 ModelState.AddModelError(nameof(AddBuyerOrderRequest.DownpaymentConfirmNo),
                     "Downpayment Confirmation number is required.");
     }
+
 }

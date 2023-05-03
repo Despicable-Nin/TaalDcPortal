@@ -29,7 +29,7 @@
             <div class="col-lg-4">
                 <p class="mb-5">
                     <strong class="primary-color">Inquiry Date</strong> <br />
-                    @Model.DateOfInquiry.ToString("MMMM dd, yyyy hh:mm tt")
+                    @Model.DateOfInquiry.ToLocalTime().ToString("MMMM dd, yyyy hh:mm tt")
                 </p>
                 <p class="mb-5">
                     <strong class="primary-color">Full Name</strong> <br/>

@@ -65,40 +65,77 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="mb-3 col-lg-12">
                         <label for="DoB" class="form-label">
                             <strong>Date of Birth</strong>
                         </label>
-                        <input name="DoB" class="form-control" required type="date" />
-                        <div class="invalid-feedback">
-                            This is a required field.
-                        </div>
+                        
+                        @if (Model.IsCorporate)
+                        {
+                            <input name="DoB" class="form-control" type="date" />
+                        }else{
+                            <input name="DoB" class="form-control" required type="date" />
+
+                            <div class="invalid-feedback">
+                                This is a required field.
+                            </div>
+                        }
+
                     </div>
 
                     <div class="mb-3 col-lg-12">
                         <label for="CivilStatusId" class="form-label">
                             <strong>Civil Status</strong>
                         </label>
-                        <select name="CivilStatusId" class="form-control form-select" required>
-                            <option value="1">
-                                Single
-                            </option>
-                            <option value="2">
-                                Married
-                            </option>
-                            <option value="3">
-                                Widowed
-                            </option>
-                            <option value="4">
-                                Divorced
-                            </option>
-                            <option value="5">
-                                Separated
-                            </option>
-                            <option value="6">
-                                Others
-                            </option>
-                        </select>
+                         @if (Model.IsCorporate)
+                        {
+                            <select name="CivilStatusId" class="form-control form-select">
+                                <option value="1">
+                                    Single
+                                </option>
+                                <option value="2">
+                                    Married
+                                </option>
+                                <option value="3">
+                                    Widowed
+                                </option>
+                                <option value="4">
+                                    Divorced
+                                </option>
+                                <option value="5">
+                                    Separated
+                                </option>
+                                <option value="6">
+                                    Others
+                                </option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select name="CivilStatusId" class="form-control form-select" required>
+                                <option value="1">
+                                    Single
+                                </option>
+                                <option value="2">
+                                    Married
+                                </option>
+                                <option value="3">
+                                    Widowed
+                                </option>
+                                <option value="4">
+                                    Divorced
+                                </option>
+                                <option value="5">
+                                    Separated
+                                </option>
+                                <option value="6">
+                                    Others
+                                </option>
+                            </select>
+                        }
+
+                        
                         <div class="invalid-feedback">
                             This is a required field.
                         </div>

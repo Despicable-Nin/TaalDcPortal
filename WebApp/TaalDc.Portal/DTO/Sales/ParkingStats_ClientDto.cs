@@ -19,13 +19,17 @@
 
     public class GetParkingUnitTypeAvailabilityPerFloorResponse
     {
+        public int UnitTypeId { get; set; }
         public string UnitType { get; set; }
+
+        public int FloorId { get; set; }
         public string Floor { get; set; }
         public int Available { get; set; }
     }
 
     public record GetAvailabilityPerParkingUnitTypeResponse
     {
+        public int UnitTypeId { get; set; }
         public string UnitType { get; set; }
         public double FloorArea { get; set; }
         public decimal Min { get; set; }

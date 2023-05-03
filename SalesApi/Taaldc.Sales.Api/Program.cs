@@ -16,6 +16,7 @@ using Taaldc.Sales.Infrastructure;
 using Taaldc.Sales.Infrastructure.Repositories;
 using Taaldc.Sales.Api.Application.Queries.UnitReplicas;
 using Taaldc.Sales.Api.Application.Queries.Reports;
+using Taaldc.Sales.Api.Application.Queries.Brokers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,10 @@ builder.Services.AddScoped<IUnitQueries>(i =>
 
 builder.Services.AddScoped<IReportQueries>(i =>
     new ReportQueries(connectionString));
+
+builder.Services.AddScoped<IBrokerQueries>(i =>
+    new BrokerQueries(connectionString));
+
 
 builder.Services.AddScoped<IDashboardQueries>(i =>
     new DashboardQueries(connectionString, new SalesDbContextDesignFactory(connectionString).CreateDbContext(null)));

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Options;
 using TaalDc.Portal.DTO.Catalog;
+using TaalDc.Portal.DTO.Catalog.Floors;
 using TaalDc.Portal.Enums;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
@@ -72,6 +73,18 @@ public class CatalogService : ICatalogService
         return result;
     }
 
+    public async Task<IEnumerable<ActiveFloor_ClientDto>> GetActiveFloorsByTowerId(int towerId)
+    {
+        var uri = API.Catalog.GetActiveFloorByTowerId(_remoteServiceUrl, towerId);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<IEnumerable<ActiveFloor_ClientDto>>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
     public async Task<Floor_ClientDto> GetFloorById(int id)
     {
         var uri = API.Catalog.GetFloorById(_remoteServiceUrl, id);
@@ -110,6 +123,18 @@ public class CatalogService : ICatalogService
         var responseString = await _httpClient.GetStringAsync(uri);
 
         var result = JsonSerializer.Deserialize<Tower_ClientDto>(responseString,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return result;
+    }
+
+    public async Task<FloorUnitAvailability_ClientDto> GetFloorUnitsStatus(int id)
+    {
+        var uri = API.Catalog.GetUnitsColorScheme(_remoteServiceUrl, id);
+
+        var responseString = await _httpClient.GetStringAsync(uri);
+
+        var result = JsonSerializer.Deserialize<FloorUnitAvailability_ClientDto>(responseString,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
@@ -261,4 +286,6 @@ public class CatalogService : ICatalogService
 
         return new Response("Unit status cannot be updated", false, model.UnitId);
     }
+
+    
 }

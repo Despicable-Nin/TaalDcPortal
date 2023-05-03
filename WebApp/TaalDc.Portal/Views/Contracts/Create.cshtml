@@ -1,9 +1,12 @@
 ﻿@using SeedWork;
+@using TaalDc.Portal.DTO.Catalog.Floors;
 @model int
 @inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "New Contract";
+
+    var activeFloors = ViewBag.ActiveFloors as IEnumerable<ActiveFloor_ClientDto>;
 }
 
 
@@ -61,9 +64,9 @@
                 else
                 {
                     <label for="Broker" class="form-label">
-                        <strong>Broker</strong>
+                        <strong>Broker's Email Address</strong>
                     </label>
-                    <input name="Broker" class="form-control" required disabled="disabled" value="" />
+                    <input name="Broker" class="form-control" required value="" type="email"/>
                     <div class="invalid-feedback">
                         This is a required field.
                     </div>
@@ -101,10 +104,10 @@
             </div>
 
             <div class="mb-3 col-lg-6">
-                <label for="DownPaymentConfirmationNo" class="form-label">
+                <label for="DownpaymentConfirmation" class="form-label">
                     <strong>Downpayment Confirmation No</strong>
                 </label>
-                <input name="DownPaymentConfirmationNo" class="form-control" required />
+                <input name="DownpaymentConfirmation" class="form-control" required />
                 <div class="invalid-feedback">
                     This is a required field.
                 </div>
@@ -156,9 +159,42 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="units-multiple-form" class="mb-3">
-                    <input name="unitFilter" placeholder="Search..." class="form-control"/>
+                <form id="units-multiple-form" class="row mb-3">
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitFilter">Unit No.</label>
+                        <input name="unitFilter" placeholder="Search..." class="form-control"/>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="unitTypeId">Unit Type</label>
+                        <select onchange="getAvailableUnits_Multiple(1,10)" class="form-control form-select" name="unitTypeId">
+                            <option value="" selected>Not Applicable</option>
+                            <option value="2">One Bedroom</option>
+                            <option value="3">Two Bedroom</option>
+                            <option value="4">Three Bedroom</option>
+                            <option value="5">Penthouse</option>
+                            <option value="6">Residential Parking</option>
+                            <option value="7">Motorcycle Parking</option>
+                            <option value="8">Commercial Space</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <label class="form-label" for="floorId">Floor</label>
+                        <select onchange="getAvailableUnits_Multiple(1,10)" class="form-control form-select" name="floorId">
+                            <option value="">All Floors</option>
+                            @foreach(var floor in activeFloors)
+                            {
+                                <option value="@floor.Id">@floor.FloorName</option>    
+                            }
+                        </select>
+                    </div>
                 </form>
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
                 <table class="table">
                     <thead>
                     <tr>

@@ -51,6 +51,11 @@ namespace TaalDc.Portal.Controllers
               , buyerQueryResult.CivilStatus
               );
 
+            buyer.BrokerName = buyerQueryResult.BrokerName;
+            buyer.BrokerEmail = buyerQueryResult.BrokerEmail;
+            buyer.BrokerCompany = buyerQueryResult.BrokerCompany;
+            buyer.BrokerPRCLicense = buyerQueryResult.BrokerPRCLicense;
+
             buyer.Id = buyerId;
 
             buyer.SetContactDetails(buyerQueryResult.EmailAddress, buyerQueryResult.MobileNo, buyerQueryResult.PhoneNo);

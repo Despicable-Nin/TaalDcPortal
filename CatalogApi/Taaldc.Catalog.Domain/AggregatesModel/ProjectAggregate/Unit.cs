@@ -6,15 +6,12 @@ namespace Taaldc.Catalog.Domain.AggregatesModel.ProjectAggregate;
 public sealed class Unit : Entity
 {
     private int _scenicViewId;
-    //public ScenicView ScenicView { get; private set; }
-
     private int _unitStatusId;
-
     private int _unitTypeId;
 
 
     public Unit(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea,
-        double balconyArea)
+        double balconyArea, string tower = "N/A")
     {
         _scenicViewId = scenicViewId;
         _unitStatusId = (int)UnitStatus.UnitIs.AVAILABLE;
@@ -23,6 +20,7 @@ public sealed class Unit : Entity
         Price = price;
         FloorArea = floorArea;
         BalconyArea = balconyArea;
+        Tower = tower ?? "N/A";
     }
 
     public string Identifier { get; set; }
@@ -31,7 +29,7 @@ public sealed class Unit : Entity
 
     public double BalconyArea { get; private set; }
 
-    //public UnitType UnitType { get; private set; }
+    public string Tower { get; private set; }
     public string Remarks { get; private set; }
 
     public int GetUnitStatusId()

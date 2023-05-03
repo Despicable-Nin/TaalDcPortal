@@ -11,12 +11,20 @@ namespace TaalDc.Portal.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveFile(IFormFile file, string folder, [FromServices] IWebHostEnvironment env)
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> SaveFile(string folder, [FromServices] IWebHostEnvironment env)
         {
+            var file = Request.Form.Files.GetFile("file");
+            
             if (file == null || file.Length == 0)
             {
                 return BadRequest("Invalid file.");
             }
+
+            //if (file == null || file.Length == 0)
+            //{
+            //    return BadRequest("Invalid file.");
+            //}
 
             // Get the path to the wwwroot folder
             var wwwrootPath = env.WebRootPath;

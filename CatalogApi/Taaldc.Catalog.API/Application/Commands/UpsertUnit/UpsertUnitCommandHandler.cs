@@ -69,6 +69,8 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
         {
             await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
+            await _repository.SyncUnitWithSales(unit.Id);
+
             return CommandResult.Success(unit.Id);
         }
         catch (Exception err)

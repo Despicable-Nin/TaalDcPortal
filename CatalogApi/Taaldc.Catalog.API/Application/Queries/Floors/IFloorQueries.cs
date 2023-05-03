@@ -15,6 +15,7 @@ public interface IFloorQueries
     );
 
     Task<FloorQueryResult> GetFloorById(int id);
-    
+
+    Task<IEnumerable<ActiveFloorQueryResult>> GetActiveFloorsByTowerId(int towerId);
 
 }

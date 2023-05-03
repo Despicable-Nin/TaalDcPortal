@@ -6,7 +6,7 @@
     Layout = "_Layout";
 
     List<Floor_ClientDto> floors = ViewBag.Floors;
-
+     List<UnitType_ClientDto> unitTypes = ViewBag.UnitTypes;
 
     var returnUrl = Context.Request.Query["returnUrl"].FirstOrDefault();
 
@@ -32,27 +32,12 @@
                     <strong>Unit Type</strong>
                 </label>
                 <select asp-for="UnitTypeId" class="form-control form-select" required>
-                    <option value="1">
-                        Not Applicable
-                    </option>
-                    <option value="2">
-                        One Bedroom
-                    </option>
-                    <option value="3">
-                        Two Bedroom
-                    </option>
-                    <option value="4">
-                        Penthouse
-                    </option>
-                    <option value="5">
-                        Residential Parking
-                    </option>
-                    <option value="6">
-                        Motorcycle Parking
-                    </option>
-                    <option value="7">
-                        Commercial Space
-                    </option>
+                    @foreach(var unitType in unitTypes)
+                    {
+                        <option value="@unitType.Id">
+                            @unitType.Name
+                        </option>
+                    }
                 </select>
                 <div class="invalid-feedback">
                     This is a required field.

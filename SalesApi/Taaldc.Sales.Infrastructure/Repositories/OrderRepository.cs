@@ -19,12 +19,12 @@ public class OrderRepository : IOrderRepository
     public IUnitOfWork UnitOfWork => _context;
 
 
-    public async Task<Order> FindOrderByIdAsync(int transactionId)
+    public async Task<Order> FindOrderByIdAsync(int orderId)
     {
         return await _context.Orders
             .Include(i => i.Payments)
             .Include(i => i.OrderItems)
-            .FirstOrDefaultAsync(i => i.Id == transactionId);
+            .FirstOrDefaultAsync(i => i.Id == orderId);
     }
 
     public Order CreateOrder(int buyerId, string broker, DateTime transactionDate, decimal discount, string remarks)

@@ -1,4 +1,6 @@
-﻿applyMask();
+﻿const portalSubURL = "";
+
+applyMask();
 
 function applyMask() {
     $("#SellingPrice").mask("#,##0.00", {reverse: true});
@@ -33,10 +35,17 @@ function onUnitFormMutipleSubmit(event) {
 }
 
 function getAvailableUnits(pageNumber = 1, pageSize = 10) {
-    console.log(document.getElementsByName("unitFilter"));
+    //console.log(document.getElementsByName("unitFilter"));
+
     var filter = document.getElementsByName("unitFilter")[0].value;
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}`)
+    var unitTypeId = document.getElementsByName("unitTypeId")[0].value;
+
+    var floorId = document.getElementsByName("floorId")[0].value;
+
+    console.log('unittypeid', unitTypeId, "floorid", floorId);
+
+    fetch(portalSubURL + `/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -194,10 +203,19 @@ function openAvailableUnitsModal() {
 function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
     console.log(selectedUnits)
 
+    $('.formLoader').show();
+
     console.log(document.getElementsByName("unitFilter"));
+
     var filter = document.getElementsByName("unitFilter")[0].value;
 
-    fetch(`/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}`)
+    var unitTypeId = document.getElementsByName("unitTypeId")[0].value;
+
+    var floorId = document.getElementsByName("floorId")[0].value;
+
+    console.log('unittypeid', unitTypeId, "floorid", floorId);
+
+    fetch(portalSubURL + `/Properties/GetUnits?pageNumber=${pageNumber}&statusId=1&filter=${filter}&unitTypeId=${unitTypeId}&floorId=${floorId}`)
         .then((response) => response.json())
         .then((data) => {
             //Process data into table
@@ -233,8 +251,15 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
                 rows = rows + newRow;
             });
 
+            if (data.data.length === 0) {
+                rows = `<tr>
+                            <td colSpan="2">No results found.</td>
+                        </tr>`;
+            }
+
             unitTableBody.innerHTML = rows;
 
+            $('.formLoader').hide();
 
             //add a pagination
             var numberOfPagesToDisplay = 5;
@@ -315,7 +340,7 @@ function getAvailableUnits_Multiple(pageNumber = 1, pageSize = 10) {
 
             unitPagination.appendChild(ul)
 
-            return data;
+            return data;  
         });
 }
 
@@ -436,7 +461,7 @@ function onSalesFormSubmit(form, btn) {
 
                 btn.disabled = false;
 
-                window.location.replace("/Sales/Reserved");
+                window.location.replace(portalSubURL + "/Sales/Reserved");
 
             }, error: function (data) {
                 const response = data.responseJSON;
@@ -559,8 +584,8 @@ function saveContractInfo(event) {
 
                 event.target.classList.remove('was-validated');
 
-                
-                window.location.replace(`/Sales/${data.id}/Details`);
+
+                window.location.replace(`/${portalSubURL}/Sales/${data.id}/Details`);
                 $('.formLoader').hide();
             }, error: function (data) {
                 const response = data.responseJSON;

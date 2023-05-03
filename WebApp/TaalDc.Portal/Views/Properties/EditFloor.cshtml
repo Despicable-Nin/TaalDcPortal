@@ -1,11 +1,14 @@
 @using TaalDc.Portal.DTO.Catalog;
 @model TaalDc.Portal.ViewModels.Catalog.FloorCreate_ClientDto
+@inject IConfiguration configuration
 
 @{
     List<Tower_ClientDto> towers = ViewBag.Towers;
 
-    ViewBag.Title = "Create Floor";
+    ViewBag.Title = "Edit Floor";
     Layout = "_Layout";
+
+    var portalSubURL = configuration["SubURL"];
 }
 
 
@@ -18,67 +21,86 @@
 
     <div>
         <form id="propertyForm" method="post" class="row mb-5 needs-validation" asp-action="CreateFloor" asp-controller="Properties">
-            <input type="hidden" asp-for="FloorId"></input>
-            <div class="mb-3 col-lg-8">
-                <label asp-for="TowerId" class="form-label">
-                    <strong>Tower</strong>
-                </label>
-                <select asp-for="TowerId" class="form-control form-select" required>
-                    @foreach(var tower in towers)
-                    {
-                        <option value="@tower.Id">
-                            @tower.PropertyName - @tower.TowerName
-                        </option>
-                    }
-                </select>
-                <div class="invalid-feedback">
-                    This is a required field.
-                </div>
-            </div>
-
-            <div class="mb-3 col-lg-8">
-                <label asp-for="Name" class="form-label">
-                    <strong>Name</strong>
-                </label>
-                <input asp-for="Name" class="form-control" required/>
-                <div class="invalid-feedback">
-                    This is a required field.
-                </div>
-            </div>
-
-            <div class="mb-3 col-lg-8">
-                <label asp-for="Description" class="form-label">
-                    <strong>Floor Description</strong>
-                </label>
-                <input asp-for="Description" class="form-control" required/>
-                <div class="invalid-feedback">
-                    This is a required field.
-                </div>
-            </div>
-
-            <div class="col-lg-8">
-                <label asp-for="FloorPlanFilePath" class="form-label">
-                    <strong>Floor Plan File Path</strong>
-                </label>
-                <input asp-for="FloorPlanFilePath" class="form-control" hidden/>
-            </div>
-
-            <div class="mb-3 col-lg-8">
-                <input id="File" name="File" type="file" class="form-control" />
-            </div>
 
             @if (!string.IsNullOrEmpty(Model.FloorPlanFilePath))
             {
-                <div class="col-lg-8 my-5">
-                    <img class="img-fluid" src="@Model.FloorPlanFilePath" alt="Floor Plan" />
-                </div>
+                if (Model.FloorPlanFilePath.Contains("svg"))
+                {
+                    <div class="col-lg-8 mb-3" id="floor-plan">
+                         <div class="formLoader">
+                            <ul class="formLoading">
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </div>
+                        <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" onload="SVGInject(this)" />
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-8 mb-3" id="floor-plan">
+                        <img class="img-fluid" src="@(portalSubURL + Model.FloorPlanFilePath)" alt="Floor Plan" />
+                    </div>
+                }
             }
 
-            
 
-            <div class="col-lg-12">
-                <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save"/>
+            <div class="col-lg-4">
+                <input type="hidden" asp-for="FloorId"></input>
+                <div class="mb-3">
+                    <label asp-for="TowerId" class="form-label">
+                        <strong>Tower</strong>
+                    </label>
+                    <select asp-for="TowerId" class="form-control form-select" required>
+                        @foreach (var tower in towers)
+                        {
+                            <option value="@tower.Id">
+                                @tower.PropertyName - @tower.TowerName
+                            </option>
+                        }
+                    </select>
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">
+                        <strong>Name</strong>
+                    </label>
+                    <input asp-for="Name" class="form-control" required />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">
+                        <strong>Floor Description</strong>
+                    </label>
+                    <input asp-for="Description" class="form-control" required />
+                    <div class="invalid-feedback">
+                        This is a required field.
+                    </div>
+                </div>
+
+                <div>
+                    <label asp-for="FloorPlanFilePath" class="form-label">
+                        <strong>Floor Plan File Path</strong>
+                    </label>
+                    <input asp-for="FloorPlanFilePath" class="form-control" hidden />
+                </div>
+
+                <div class="mb-3">
+                    <input id="File" name="File" type="file" class="form-control" />
+                </div>
+
+                <div>
+                    <input id="property-form-submit" class="btn btn-primary" type="submit" value="Save" />
+                </div>
             </div>
+            
         </form>
     </div>
 
@@ -97,11 +119,70 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                <button onclick="onPropertyFormSubmit(this, '/Properties/EditFloor/@Model.FloorId')" type="button" class="btn btn-primary">Yes</button>
+                <button onclick="onPropertyFormSubmit(this, '@Url.Action("EditFloor", "Properties", new { Id = Model.FloorId })')" type="button" class="btn btn-primary">Yes</button>
             </div>
         </div>
     </div>
 </div>
+
+@section HeaderScripts{
+    <script src="~/js/common/svg-inject.js"></script>
+    <script>
+        var floorUnits;
+
+        async function getFloorUnitStatus(){
+            console.log('getting floor units');
+            var uri = '@Url.Action("GetFloorUnitsStatus","Properties", new { id = Model.FloorId })';
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type:'GET',
+                    url: uri,
+                    success: function(data, status){
+                       resolve(data);
+                    },
+                    error: function(data){
+
+                    }
+                })
+            })
+        }
+
+        async function generateSVG(svg){
+            var paths = svg.getElementsByTagName('path');
+
+            var floorUnits = await getFloorUnitStatus();
+
+            Array.from(paths).forEach((path) => {
+                var unit = floorUnits.units.find(u => u.unit === path.id.toString());
+
+                if(unit){
+                    path.style.fill = unit.color;
+                }
+            })
+
+            $('.formLoader').hide();
+        }
+
+        SVGInject.setOptions({
+            useCache: false, // no caching
+            copyAttributes: false, // do not copy attributes from `<img>` to `<svg>`
+            makeIdsUnique: false, // do not make ids used within the SVG unique
+            afterLoad: function (svg, svgString) {
+                $('.formLoader').show();
+                 generateSVG(svg);                
+            },
+            beforeInject: function (img, svg) {
+                // wrap SVG in a div element
+            },
+            afterInject: function (img, svg) {
+               
+            },
+            onFail: function (img) {
+            }
+        });
+    </script>
+}
 
 
 @section Scripts
@@ -111,5 +192,4 @@
     }
 
     <script src="~/js/catalog/Property.js"></script>
-
 }
