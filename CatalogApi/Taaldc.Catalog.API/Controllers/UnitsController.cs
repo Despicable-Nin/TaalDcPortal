@@ -43,10 +43,12 @@ public class UnitsController : ApiBaseController<UnitsController>
     [ProducesErrorResponseType(typeof(BadRequestResult))]
     public async Task<IActionResult> GetUnitColorSchemeByFloorIdAsync(int floorId)
     {
+
         var result =await _unitQueries.GetUnitColorSchemeByFloorIdAsync(floorId);
 
         if (result == default || result.Any() == false) return NoContent();
         
+
         return Ok(new
         {
             result.FirstOrDefault().Floor,
