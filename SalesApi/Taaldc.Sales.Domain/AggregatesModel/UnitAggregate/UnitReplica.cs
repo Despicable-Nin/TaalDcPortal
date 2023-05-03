@@ -7,7 +7,7 @@ public class UnitReplica : DomainEntity, IAggregateRoot
     public UnitReplica(int propertyId, int towerId, int floorId, int unitId, int scenicViewId, int unitTypeId,
         string property, string tower, string floor,
         string unit, string scenicView, string unitType, double unitArea, double balconyArea, string unitStatus,
-        int unitStatusId, decimal originalPrice, string unitTypeShortCode)
+        int unitStatusId, decimal originalPrice, string unitTypeShortCode, string towerName= "N/A")
     {
         PropertyId = propertyId;
         TowerId = towerId;
@@ -28,9 +28,11 @@ public class UnitReplica : DomainEntity, IAggregateRoot
         OriginalPrice = originalPrice;
         SellingPrice = originalPrice;
         UnitTypeShortCode = unitTypeShortCode;
+        TowerName = towerName;
     }
 
 
+    public string TowerName { get; private set; }
     public int PropertyId { get;private set; }
     public int TowerId { get;private set; }
     public int FloorId { get;private set; }
