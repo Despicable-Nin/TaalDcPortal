@@ -10,6 +10,6 @@ public class MyProfile : Profile
     {
         CreateMap<UnitUpsert_HostDto, UpsertUnitCommand>()
             .ConstructUsing(o => new UpsertUnitCommand(o.UnitId, o.UnitStatusId, o.UnitTypeId, o.ScenicViewId, o.UnitNo,
-                o.FloorId, o.FloorArea, o.BalconyArea, o.Price, o.Remarks, o.IsActive));
+                o.FloorId, o.FloorArea, o.BalconyArea, o.Price, o.Tower, o.Remarks, o.IsActive));
     }
 }

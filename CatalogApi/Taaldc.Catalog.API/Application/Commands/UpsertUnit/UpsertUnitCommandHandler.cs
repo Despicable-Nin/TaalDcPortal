@@ -45,7 +45,8 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
                     request.SellingPrice,
                     request.FloorArea,
                     request.BalconyArea,
-                    request.Remarks);
+                    request.Remarks,
+                    request.Tower);
 
                 //update status and active flag (if active or not)
                 unit.SetUnitStatus(request.UnitStatusId.Value);
@@ -60,7 +61,7 @@ public class UpsertUnitCommandHandler : IRequestHandler<UpsertUnitCommand, Comma
         else
         {
             unit = floor.AddUnit(request.ScenicViewId, request.UnitTypeId, request.UnitNo, request.SellingPrice,
-                request.FloorArea, request.BalconyArea, request.Remarks);
+                request.FloorArea, request.BalconyArea, request.Remarks, request.Tower);
         }
 
         _repository.UpdateFloor(floor);

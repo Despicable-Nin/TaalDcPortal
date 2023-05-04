@@ -15,6 +15,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         double floorArea,
         double balconyArea,
         decimal sellingPrice,
+        string tower,
         string remarks,
         bool isActive)
     {
@@ -27,6 +28,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
         FloorArea = floorArea;
         BalconyArea = balconyArea;
         SellingPrice = sellingPrice;
+        Tower = tower;
         Remarks = !string.IsNullOrEmpty(remarks) ? remarks : "";
         IsActive = isActive;
     }
@@ -39,6 +41,7 @@ public class UpsertUnitCommand : IRequest<CommandResult>
     public double FloorArea { get; }
     public double BalconyArea { get; }
     public decimal SellingPrice { get; }
+    public string Tower { get; }
     public string Remarks { get; }
     public int? UnitStatusId { get; }
     public bool IsActive { get; }
@@ -55,6 +58,7 @@ public class UpsertUnitCommandValidator : AbstractValidator<UpsertUnitCommand>
         RuleFor(i => i.FloorArea).NotEmpty();
         RuleFor(i => i.BalconyArea).NotEmpty();
         RuleFor(i => i.SellingPrice).NotEmpty();
+        RuleFor(i => i.Tower).NotEmpty();
         RuleFor(i => i.UnitStatusId).NotEmpty().When(i => i.UnitId.HasValue);
     }
 }

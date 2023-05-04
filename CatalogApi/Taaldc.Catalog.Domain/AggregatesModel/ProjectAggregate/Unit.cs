@@ -58,7 +58,7 @@ public sealed class Unit : Entity
     }
 
     public void Update(int scenicViewId, int unitTypeId, string identifier, decimal price, double floorArea,
-        double balconyArea, string remarks)
+        double balconyArea, string remarks, string tower)
     {
         _scenicViewId = scenicViewId;
         _unitTypeId = unitTypeId;
@@ -67,6 +67,7 @@ public sealed class Unit : Entity
         FloorArea = floorArea;
         BalconyArea = balconyArea;
         Remarks = remarks;
+        Tower = tower;
     }
 
     public void AddRemarks(string remarks)

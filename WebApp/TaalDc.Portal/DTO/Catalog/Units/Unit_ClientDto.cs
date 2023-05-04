@@ -13,7 +13,7 @@ public class Unit_ClientDto
     [JsonPropertyName("tower_id")] public int TowerId { get; set; }
 
     [JsonPropertyName("tower_name")] public string TowerName { get; set; }
-
+    [JsonPropertyName("tower_no")] public string Tower { get; set; }
     [JsonPropertyName("unit_type_id")] public int UnitTypeId { get; set; }
 
     [JsonPropertyName("unit_type")] public string UnitType { get; set; }
