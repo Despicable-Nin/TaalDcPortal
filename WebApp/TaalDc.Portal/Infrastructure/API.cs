@@ -271,5 +271,15 @@ public static class API
             return $"{baseUrl}/api/v1/reports/reserved-without-downpayment";
         }
 
+        public static string ExtendReservation(string baseUrl, int orderId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/reservation/extend";
+        }
+
+        public static string ForfeitReservation(string baseUrl, int orderId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/reservation/forfeit";
+        }
+
     }
 }

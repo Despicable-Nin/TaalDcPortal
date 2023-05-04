@@ -2,6 +2,7 @@
 using MediatR;
 using Taaldc.Sales.API.Application.Commands;
 using Taaldc.Sales.Domain.AggregatesModel.BuyerAggregate;
+using Taaldc.Sales.Domain.Events;
 
 namespace Taaldc.Sales.Api.Application.Commands.ForfeitReservation
 {
@@ -23,6 +24,12 @@ namespace Taaldc.Sales.Api.Application.Commands.ForfeitReservation
                 throw new ValidationException($"Order with Id:{request.OrderId} cannot be found.");
 
             order.Forfeit();
+            
+            //Release units
+            foreach (var item in order.OrderItems)
+            {
+                order.AddDomainEvent(new UnitReplicaStatusChangedToReservedDomainEvent(item.GetUnitId(), 1, "AVAILABLE"));
+            }
 
             return CommandResult.Success(request.OrderId);
         }

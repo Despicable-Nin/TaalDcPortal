@@ -374,6 +374,60 @@ public class SalesController : BaseController<SalesController>
         return View(expiredReservations);
     }
 
+
+    [HttpPost]
+    public async Task<IActionResult> ExtendReservation(ExtendReservationRequest model)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _salesService.ExtendReservation(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = true,
+            Message = "Please check your data entry.",
+            ModelState = Json(ModelState)
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CancelReservation(ForfeitReservationRequest model)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _salesService.ForfeitReservation(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = true,
+            Message = "Please check your data entry.",
+            ModelState = Json(ModelState)
+        });
+    }
+
+
+
+
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?
     //we can throw it in Hangfire here..

@@ -94,6 +94,7 @@ paymentForm.addEventListener('submit', onPaymentSubmit);
 
 function onPaymentSubmit(event) {
     event.preventDefault();
+    $('.formLoader').show();
 
     const data = new FormData(event.target);
 
@@ -179,6 +180,8 @@ function onPaymentSubmit(event) {
                     onClick: function () {
                     } // Callback after click
                 }).showToast();
+
+                $('.formLoader').hide();
             }
         });
     }

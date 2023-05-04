@@ -65,4 +65,8 @@ public interface ISalesService
 
     Task<int> GetExpiredReservationCount();
     Task<IEnumerable<ExpiredReservationResponse>> GetExpiredReservations();
+
+    Task<Response> ExtendReservation(ExtendReservationRequest model);
+
+    Task<Response> ForfeitReservation(ForfeitReservationRequest model);
 }

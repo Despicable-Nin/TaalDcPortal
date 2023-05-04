@@ -1,4 +1,6 @@
-﻿@model TaalDc.Portal.DTO.Sales.GetSalesByIdResponse
+﻿@using SeedWork;
+@model TaalDc.Portal.DTO.Sales.GetSalesByIdResponse
+@inject IAmCurrentUser CurrentUser
 
 @{
     ViewBag.Title = "Sale Details - " + Model.Code;
@@ -22,7 +24,24 @@
     <div class="tab-content">
         <h4 class="primary-color mb-5 mt-3">
             <strong>Unit Acquisition Details</strong>
+
+            @if(Model.StatusId != 3 && CurrentUser.IsAdmin()){
+                <div class="header dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quick Actions
+                    </button>
+                    <ul class="dropdown-menu">
+                        @if(Model.StatusId == 4){
+                            <li><a onclick="openExtendModal()" class="dropdown-item" href="#">Extend Reservation</a></li>
+                        }
+
+                        <li><a onclick="openForfeitModal()" class="dropdown-item" href="#">Cancel</a></li>
+                    </ul>
+                </div>
+            }
         </h4>
+
+       
 
         <div class="row">
             <div class="col-lg-4">
@@ -88,3 +107,271 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="extendModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Extend Reservation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form id="extendReservationForm" method="post" asp-action="ExtendReservation" asp-controller="Sales">
+                    <input type="hidden" name="orderId" value="@Model.OrderId" />
+                    <div class="mb-3">
+                        <label for="days" class="form-label">
+                            <strong>Extend for how many days?</strong>
+                        </label>
+                        <select name="days" class="form-control form-select" required>
+                            <option value="15">
+                                15 Days
+                            </option>
+                            <option value="30">
+                                30 Days
+                            </option>
+                            <option value="60">
+                                60 Days
+                            </option>
+                        </select>
+                    </div>
+
+                     <input class="btn btn-primary" type="submit" value="Submit" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="forfeitModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Reservation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <p>Are you sure you want to cancel this reservation?</p>
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button onclick="forfeitReservation('@Model.OrderId')" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        function openExtendModal(){
+            var extendModal = document.getElementById('extendModal');
+
+            var modal = new bootstrap.Modal(extendModal, {});
+
+            modal.show();
+        }
+
+        function openForfeitModal() {
+            var forfeitModal = document.getElementById('forfeitModal');
+
+            var modal = new bootstrap.Modal(forfeitModal, {});
+
+            modal.show();
+        }
+
+        const extendReservationForm = document.getElementById('extendReservationForm');
+        extendReservationForm.addEventListener('submit', onExtendReservationFormSubmit);
+
+        function onExtendReservationFormSubmit(event){
+            event.preventDefault();
+
+            $('.formLoader').show();
+
+            const data = new FormData(event.target);
+
+            const value = Object.fromEntries(data.entries());
+
+            var isFormValid = event.target.checkValidity();
+
+            event.target.classList.add("was-validated");
+
+            var modal = document.getElementById("extendModal");
+            const modalBackdrop = document.getElementsByClassName("modal-backdrop");
+
+            if (isFormValid) {
+                var formAction = event.target.action
+
+                $.ajax({
+                    type: 'POST',
+                    url: formAction,
+                    data: value,
+                    success: function (data, status, xhr) {
+                        console.log('extend reservation post', data);
+                        Toastify({
+                            text: "Submitted successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#6AB0F8",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+
+                        modal.classList.remove("show");
+                        modal.style.display = "none";
+                        document.body.classList.remove("modal-open");
+                        document.body.removeAttribute("style");
+
+                        while (modalBackdrop.length > 0) {
+                            modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+                        }
+
+                        window.location.reload();
+
+                    }, error: function (data) {
+                        const response = data.responseJSON;
+
+                        if (response.isFormError) {
+                            var errors = response.modelState.value;
+                            console.log("Error", response);
+
+                            // Iterate through the errors and render them next to the appropriate form fields
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    var inputElement = $('input[name="' + key + '"]');
+
+                                    if (errors[key].errors.length > 0) {
+                                        errors[key].errors.forEach(function (error) {
+                                            var errorElement = $('<div class="invalid-feedback" style="display: block;">' + error.errorMessage + '</div>');
+                                            inputElement.after(errorElement);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        Toastify({
+                            text: response.message ? response.message : "Something went wrong. Please try again later.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "center", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#D01818",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+                    }
+                });
+            }
+
+            return false;
+
+        }
+
+
+        function forfeitReservation(orderId){
+            $('.formLoader').show();
+
+
+            var modal = document.getElementById("forfeitModal");
+            const modalBackdrop = document.getElementsByClassName("modal-backdrop");
+
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CancelReservation","Sales")',
+                    data: {
+                        orderId
+                        ,remarks: ""
+                    },
+                    success: function (data, status, xhr) {
+                        console.log('forfeit reservation post', data);
+                        Toastify({
+                            text: "Submitted successfully!",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "right", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#6AB0F8",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+
+                        modal.classList.remove("show");
+                        modal.style.display = "none";
+                        document.body.classList.remove("modal-open");
+                        document.body.removeAttribute("style");
+
+                        while (modalBackdrop.length > 0) {
+                            modalBackdrop[0].parentNode.removeChild(modalBackdrop[0]);
+                        }
+
+                        window.location.reload();
+
+                    }, error: function (data) {
+                        console.log('error', data);
+                        const response = data.responseJSON;
+
+                        if (response.isFormError) {
+                            var errors = response.modelState.value;
+                            console.log("Error", response);
+
+                            // Iterate through the errors and render them next to the appropriate form fields
+                            for (var key in errors) {
+                                if (errors.hasOwnProperty(key)) {
+                                    var inputElement = $('input[name="' + key + '"]');
+
+                                    if (errors[key].errors.length > 0) {
+                                        errors[key].errors.forEach(function (error) {
+                                            var errorElement = $('<div class="invalid-feedback" style="display: block;">' + error.errorMessage + '</div>');
+                                            inputElement.after(errorElement);
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        Toastify({
+                            text: response.message ? response.message : "Something went wrong. Please try again later.",
+                            duration: 3000,
+                            close: true,
+                            gravity: "top", // `top` or `bottom`
+                            position: "center", // `left`, `center` or `right`
+                            stopOnFocus: true, // Prevents dismissing of toast on hover
+                            style: {
+                                background: "#D01818",
+                            },
+                            onClick: function () {
+                            } // Callback after click
+                        }).showToast();
+
+                         $('.formLoader').hide();
+                    }
+                });
+        }
+    </script>
+}
