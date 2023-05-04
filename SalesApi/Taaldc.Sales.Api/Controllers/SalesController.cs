@@ -13,6 +13,7 @@ using Taaldc.Sales.Api.Application.Queries.Orders;
 using Taaldc.Sales.Api.DTO;
 using Taaldc.Sales.Api.Application.Commands.ForfeitReservation;
 using Taaldc.Sales.Api.Application.Commands.ExtendReservationExpiry;
+using Taaldc.Sales.Api.Application.Commands.UpdatePayment;
 
 namespace Taaldc.Sales.Api.Controllers;
 
@@ -106,6 +107,19 @@ public class SalesController : ControllerBase
 
         var command = _mapper.Map<AddPaymentCommand>(dto);
         var result = await _mediator.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpPut("{id}/payments/{paymentId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesErrorResponseType(typeof(BadRequestResult))]
+    public async Task<IActionResult> UpdatePayment(int id, int paymentId, [FromBody] UpdatePaymentCommand dto)
+    {
+        //TODO: Remove this.. this should be on the outermost layer (Portal)
+        if (id != dto.OrderId || paymentId != dto.PaymentId) return BadRequest("Invalid request path.");
+
+        var result = await _mediator.Send(dto);
 
         return Ok(result);
     }

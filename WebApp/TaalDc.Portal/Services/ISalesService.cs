@@ -27,7 +27,7 @@ public interface ISalesService
     Task<Response> VoidPayment(int orderId, int paymentId);
 
     Task<Response> AddPayment(AddPaymentRequest model);
-
+    Task<Response> UpdatePayment(EditPaymentRequest model);
 
     Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetResidentialUnitsCountByStatus();
 

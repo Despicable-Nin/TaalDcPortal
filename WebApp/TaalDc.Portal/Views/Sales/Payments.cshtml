@@ -1,4 +1,5 @@
-﻿@using SeedWork
+﻿@using Newtonsoft.Json;
+@using SeedWork
 @model TaalDc.Portal.ViewModels.Sales.SalesViewModel
 @inject IAmCurrentUser CurrentUser
 
@@ -15,6 +16,7 @@
         { 4, "Penalty" }
     };
 
+    var serializedModel = JsonConvert.SerializeObject(Model);
 }
 
 <div class="container-fluid">
@@ -75,8 +77,12 @@
                                 <a onclick="openAcceptPaymentModal(@payment.OrderId, @payment.Id, @payment.PaymentTypeId)" class="action-edit" href="#">Verify</a>
                             }
 
-                            @if(payment.PaymentStatus != "Void" && CurrentUser.IsAdmin()){
+                            @if((payment.PaymentStatus != "Void" && payment.PaymentStatus != "Accepted") && CurrentUser.IsAdmin()){
                                 <a onclick="openVoidPaymentModal(@payment.OrderId, @payment.Id)" class="action-delete" href="#">Void</a>
+                            }
+
+                            @if((payment.PaymentStatus == "Accepted" || payment.PaymentStatus == "Pending") && CurrentUser.IsAdmin()){
+                                <a onclick="editPayment(@payment.OrderId, @payment.Id)" class="action-edit" href="#">Edit</a>
                             }
                         </td>
                     </tr>
@@ -265,15 +271,173 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="editPaymentModal" tabindex="-1" aria-labelledby="editPaymentModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Payment</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Editing an approved payment will revert it back to pending status. Please be mindful in using this form.</p>
+                <div class="formLoader">
+                    <ul class="formLoading">
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+                <form class="row" id="editPaymentform" method="post" asp-action="EditPayment" asp-controller="Sales">
+                    <input type="hidden" name="PaymentId" />
+                    <input type="hidden" name="OrderId" />
+                    <div class="mb-3 col-lg-12">
+                        <label for="PaymentMethod" class="form-label">
+                            <strong>Payment Method</strong>
+                        </label>
+                        <select name="PaymentMethod" class="form-control form-select" required>
+                            <option value="Cash">
+                                Cash
+                            </option>
+                            <option value="Check">
+                                Check
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="PaymentDate" class="form-label">
+                            <strong>Payment Date</strong>
+                        </label>
+                        <input name="PaymentDate" class="form-control" required type="date" />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="AmountPaid" class="form-label">
+                            <strong>Amount</strong>
+                        </label>
+                        <input id="AmountPaid" name="AmountPaid" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mb-3">
+                        <label for="ConfirmationNumber" class="form-label">
+                            <strong>Confirmation No.</strong>
+                        </label>
+                        <input name="ConfirmationNumber" class="form-control" required />
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="PaymentTypeId" class="form-label">
+                            <strong>Payment Type</strong>
+                        </label>
+                        <select name="PaymentTypeId" class="form-control form-select" required>
+                            @foreach (var pType in PaymentTypes)
+                            {
+                                <option value="@pType.Key">
+                                    @pType.Value
+                                </option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="mb-3 col-lg-12">
+                        <label for="Remarks" class="form-label">
+                            <strong>Note/Remarks</strong>
+                        </label>
+                        <textarea name="Remarks" class="form-control" rows="5"></textarea>
+                        <div class="invalid-feedback">
+                            This is a required field.
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <input class="btn btn-primary" type="submit" value="Save" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
     <script src="~/js/sales/payment.js"></script>
     <script>
+        var modelData = JSON.parse('@Html.Raw(serializedModel)');
+
+        console.log('model', modelData);
+
         function addNewPayment(){
             var newPaymentModal = document.getElementById('newPaymentModal');
             applyMask();
             var modal = new bootstrap.Modal(newPaymentModal, {});
 
+
+            var inputFields = newPaymentModal.getElementsByClassName('form-control');
+
+            for (var i = 0; i < inputFields.length; i++) {
+                inputFields[i].value = "";
+            }
+
             modal.show();
+        }
+
+
+        function editPayment(orderId, paymentId){
+            var editPaymentModal = document.getElementById('editPaymentModal');
+            
+            applyMask();
+
+            var modal = new bootstrap.Modal(editPaymentModal, {});
+
+            modal.show();
+
+
+            if(modelData && modelData.Payments){
+                var selectedPayment = modelData.Payments.find(p => p.Id === paymentId);
+                console.log('selected payment', selectedPayment);
+
+                var orderInput = document.getElementsByName('OrderId');
+                var paymentInput = document.getElementsByName('PaymentId');
+
+                console.log('order', orderInput, paymentInput);
+
+                orderInput[0].value = orderId;
+                paymentInput[0].value = paymentId;
+
+                var inputFields = editPaymentModal.getElementsByClassName('form-control');
+
+                for (var i = 0; i < inputFields.length; i++) {
+                    if (inputFields[i].name === 'PaymentDate') {
+                        const dateString = selectedPayment['ActualPaymentDate'];
+                        const date = new Date(dateString);
+                        const year = date.getFullYear();
+                        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                        const day = date.getDate().toString().padStart(2, '0');
+                        const formattedDate = `${year}-${month}-${day}`;
+
+                        inputFields[i].value = formattedDate
+                    } else {
+                        inputFields[i].value = selectedPayment[inputFields[i].name]
+                    }
+                }
+            }
         }
 
 

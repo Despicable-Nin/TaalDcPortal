@@ -336,6 +336,33 @@ public class SalesController : BaseController<SalesController>
         });
     }
 
+    [HttpPost]
+    public async Task<IActionResult> EditPayment(EditPaymentRequest model)
+    {
+        if (model.OrderId > 0)
+        {
+            model.TransactionTypeId =
+                model.PaymentTypeId != 1 ? GetTypeId("ForAcquisition") : GetTypeId("ForReservation");
+
+            var result = await _salesService.UpdatePayment(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = false,
+            ErrorMessage = "Invalid payment id"
+        });
+    }
+
 
     [Route("Sales/{id}/Details")]
     public async Task<IActionResult> Details(int id)
@@ -349,7 +376,7 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Payments(int id)
     {
         var payments = await _salesService.GetSalesPayments(id);
-        var salesViewModel = new SalesViewModel(payments, null, id);
+        var salesViewModel = new SalesViewModel(payments.OrderBy(i => i.ActualPaymentDate), null, id);
 
         return View(salesViewModel);
     }

@@ -162,6 +162,21 @@ public class SalesService : ISalesService
         return new Response("Error in adding a payment.", false, null);
     }
 
+    public async Task<Response> UpdatePayment(EditPaymentRequest model)
+    {
+        var uri = API.Sales.UpdatePayment(_remoteServiceBaseUrl, model.OrderId, model.PaymentId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<Response>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return new Response($"Error in updating payment with Id: {model.PaymentId}.", false, null);
+    }
+
 
 
     public async Task<GetSalesByIdResponse> GetSalesById(int id)
