@@ -154,7 +154,7 @@ public class Order : DomainEntity, IAggregateRoot
     public void Forfeit()
     {
         ReservationExpiresOn = default;
-        Remarks += $"{DateTime.Now} - Removed reservation as it is forfeited.";
+        Remarks += $"{DateTime.Now} - Removed reservation as it is forfeited.\r\n";
         
         //mark for deletion (soft delete only)
         //we don't want to lose any transaction(s)
@@ -168,7 +168,7 @@ public class Order : DomainEntity, IAggregateRoot
     }
 
     public void ExtendReservation(int days) {
-        ReservationExpiresOn = ReservationExpiresOn.HasValue ? ReservationExpiresOn.Value.AddDays(days) : DateTime.Today.AddDays(days); ;
+        ReservationExpiresOn = ReservationExpiresOn.HasValue ? ReservationExpiresOn.Value.AddDays(days) : DateTime.Today.AddDays(days);
 
     }
 
@@ -191,7 +191,7 @@ public class Order : DomainEntity, IAggregateRoot
         payment.VerifyPayment(verifiedBy, confirmationNumber);
 
         
-        //This updates the statusId from SOLD< AVAILABLE, RSERVED etc
+        //This updates the statusId from SOLD, AVAILABLE, RSERVED etc
         ChangeOrderStatus();
 
         //TODO: Pub-sub

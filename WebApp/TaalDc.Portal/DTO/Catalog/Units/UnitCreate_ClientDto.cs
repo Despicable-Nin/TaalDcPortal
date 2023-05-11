@@ -19,4 +19,5 @@ public class UnitCreate_ClientDto
     [JsonPropertyName("balcony_area")] public double BalconyArea { get; set; }
 
     [JsonPropertyName("price")] public decimal SellingPrice { get; set; }
+    [JsonPropertyName("tower")] public string Tower { get; set; }
 }

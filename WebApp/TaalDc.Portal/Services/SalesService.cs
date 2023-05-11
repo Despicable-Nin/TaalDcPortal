@@ -8,6 +8,7 @@ using TaalDc.Portal.DTO.Sales.Buyer;
 using TaalDc.Portal.DTO.Sales.Contracts;
 using TaalDc.Portal.Infrastructure;
 using TaalDc.Portal.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TaalDc.Portal.Services;
 
@@ -159,6 +160,21 @@ public class SalesService : ISalesService
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return new Response("Error in adding a payment.", false, null);
+    }
+
+    public async Task<Response> UpdatePayment(EditPaymentRequest model)
+    {
+        var uri = API.Sales.UpdatePayment(_remoteServiceBaseUrl, model.OrderId, model.PaymentId);
+
+        var response = await _httpClient.PutAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<Response>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return new Response($"Error in updating payment with Id: {model.PaymentId}.", false, null);
     }
 
 
@@ -439,5 +455,35 @@ public class SalesService : ISalesService
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
         return result;
+    }
+
+    public async Task<Response> ExtendReservation(ExtendReservationRequest model)
+    {
+        var uri = API.Sales.ExtendReservation(_remoteServiceBaseUrl, model.OrderId);
+
+        var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<Response>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return new Response("Error in extending the reservation.", false, null);
+    }
+
+    public async Task<Response> ForfeitReservation(ForfeitReservationRequest model)
+    {
+        var uri = API.Sales.ForfeitReservation(_remoteServiceBaseUrl, model.OrderId);
+
+        var response = await _httpClient.PostAsJsonAsync(uri, model, CancellationToken.None);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+            return JsonSerializer.Deserialize<Response>(content,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+        return new Response("Error in cancelling the reservation.", false, null);
     }
 }

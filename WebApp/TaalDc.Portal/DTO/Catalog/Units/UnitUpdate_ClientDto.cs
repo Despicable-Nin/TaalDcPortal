@@ -36,6 +36,6 @@ public class UnitUpdate_ClientDto
     [JsonPropertyName("is_active")]
     [JsonProperty(Required = Required.Always)]
     public bool IsActive { get; set; }
-
+    [JsonPropertyName("tower")] public string Tower { get; set; }
     [JsonPropertyName("remarks")] public string Remarks { get; set; }
 }

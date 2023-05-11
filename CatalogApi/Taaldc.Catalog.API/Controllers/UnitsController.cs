@@ -69,7 +69,7 @@ public class UnitsController : ApiBaseController<UnitsController>
     public async Task<IActionResult> UpsertUnit(UnitUpsert_HostDto dto)
     {
         var command = new UpsertUnitCommand(dto.UnitId, dto.UnitStatusId, dto.UnitTypeId, dto.ScenicViewId, dto.UnitNo,
-            dto.FloorId, dto.FloorArea, dto.BalconyArea, dto.Price, dto.Remarks, dto.IsActive);
+            dto.FloorId, dto.FloorArea, dto.BalconyArea, dto.Price, dto.Tower, dto.Remarks, dto.IsActive);
 
         return Ok(await _mediator.Send(command));
     }

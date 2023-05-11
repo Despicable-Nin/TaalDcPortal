@@ -92,8 +92,13 @@ const paymentForm = document.getElementById('paymentform');
 paymentForm.addEventListener('submit', onPaymentSubmit);
 
 
+const editPaymentForm = document.getElementById('editPaymentform');
+editPaymentForm.addEventListener('submit', onPaymentSubmit);
+
+
 function onPaymentSubmit(event) {
     event.preventDefault();
+    $('.formLoader').show();
 
     const data = new FormData(event.target);
 
@@ -107,12 +112,18 @@ function onPaymentSubmit(event) {
 
     event.target.classList.add("was-validated");
 
+    var formAction = event.target.action
+
+   
     var modal = document.getElementById("newPaymentModal");
+        
+    if (formAction.includes('EditPayment')) {
+        modal = document.getElementById("editPaymentModal");
+    }
+
     const modalBackdrop = document.getElementsByClassName("modal-backdrop");
 
     if (isFormValid) {
-        var formAction = event.target.action
-
         $.ajax({
             type: 'POST',
             url: formAction,
@@ -179,6 +190,8 @@ function onPaymentSubmit(event) {
                     onClick: function () {
                     } // Callback after click
                 }).showToast();
+
+                $('.formLoader').hide();
             }
         });
     }

@@ -41,6 +41,7 @@ public class UnitUpsert_HostDto
 
     [JsonPropertyName("is_active")] public bool IsActive { get; set; }
 
+    [JsonPropertyName("tower")] public string Tower { get; set; }
 
     [JsonPropertyName("remarks")] public string Remarks { get; set; }
 }

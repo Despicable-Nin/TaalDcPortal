@@ -42,9 +42,11 @@ public sealed class Floor : Entity
         decimal price,
         double floorArea,
         double balconyArea,
-        string remarks)
+        string remarks,
+        string tower = "N/A"
+        )
     {
-        var unit = new Unit(scenicViewId, unitTypeId, identifier, price, floorArea, balconyArea);
+        var unit = new Unit(scenicViewId, unitTypeId, identifier, price, floorArea, balconyArea,tower);
         unit.AddRemarks(remarks);
         _units.Add(unit);
 

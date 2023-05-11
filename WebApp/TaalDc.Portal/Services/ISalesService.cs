@@ -27,7 +27,7 @@ public interface ISalesService
     Task<Response> VoidPayment(int orderId, int paymentId);
 
     Task<Response> AddPayment(AddPaymentRequest model);
-
+    Task<Response> UpdatePayment(EditPaymentRequest model);
 
     Task<IEnumerable<GetResidentialUnitsCountByStatusResponse>> GetResidentialUnitsCountByStatus();
 
@@ -65,4 +65,8 @@ public interface ISalesService
 
     Task<int> GetExpiredReservationCount();
     Task<IEnumerable<ExpiredReservationResponse>> GetExpiredReservations();
+
+    Task<Response> ExtendReservation(ExtendReservationRequest model);
+
+    Task<Response> ForfeitReservation(ForfeitReservationRequest model);
 }

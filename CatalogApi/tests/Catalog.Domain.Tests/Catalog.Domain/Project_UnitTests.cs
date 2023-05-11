@@ -71,6 +71,22 @@ public class UnitTest1
         project.Properties.Any(x => x.Id == remove.Id);
     }
 
+    [Fact]
+    public void TowerPropertyFromUnitShouldBeSet()
+    {
+        Unit unit = new(1, 1, "X-XXX", 20M, 0, 0, "Tower One");
+        unit.Tower.ShouldBe("Tower One");
+        unit.Tower.ShouldNotBeNullOrEmpty();
+    }
+    
+    [Fact]
+    public void TowerPropertyFromUnitShouldBeSetByDefault()
+    {
+        Unit unit = new(1, 1, "X-XXX", 20M, 0, 0);
+        unit.Tower.ShouldBe("N/A");
+        unit.Tower.ShouldNotBeNullOrEmpty();
+    }
+
     private Project CreateProjectWithOneProperty()
     {
         var project = new Project(name, developer);

@@ -336,6 +336,33 @@ public class SalesController : BaseController<SalesController>
         });
     }
 
+    [HttpPost]
+    public async Task<IActionResult> EditPayment(EditPaymentRequest model)
+    {
+        if (model.OrderId > 0)
+        {
+            model.TransactionTypeId =
+                model.PaymentTypeId != 1 ? GetTypeId("ForAcquisition") : GetTypeId("ForReservation");
+
+            var result = await _salesService.UpdatePayment(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = false,
+            ErrorMessage = "Invalid payment id"
+        });
+    }
+
 
     [Route("Sales/{id}/Details")]
     public async Task<IActionResult> Details(int id)
@@ -349,7 +376,7 @@ public class SalesController : BaseController<SalesController>
     public async Task<IActionResult> Payments(int id)
     {
         var payments = await _salesService.GetSalesPayments(id);
-        var salesViewModel = new SalesViewModel(payments, null, id);
+        var salesViewModel = new SalesViewModel(payments.OrderBy(i => i.ActualPaymentDate), null, id);
 
         return View(salesViewModel);
     }
@@ -373,6 +400,60 @@ public class SalesController : BaseController<SalesController>
 
         return View(expiredReservations);
     }
+
+
+    [HttpPost]
+    public async Task<IActionResult> ExtendReservation(ExtendReservationRequest model)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _salesService.ExtendReservation(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = true,
+            Message = "Please check your data entry.",
+            ModelState = Json(ModelState)
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CancelReservation(ForfeitReservationRequest model)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _salesService.ForfeitReservation(model);
+
+            if (!result.IsSuccess)
+                return BadRequest(new
+                {
+                    IsFormError = false,
+                    Message = result.ErrorMessage
+                });
+
+            return Ok(result);
+        }
+
+        return BadRequest(new
+        {
+            IsFormError = true,
+            Message = "Please check your data entry.",
+            ModelState = Json(ModelState)
+        });
+    }
+
+
+
 
     //we need to be able to call sales/sel/sales POST (SellUnit)
     //what to do with the result?

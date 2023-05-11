@@ -55,7 +55,7 @@ public class Payment : Entity
         Remarks = remarks;
         CorrelationId = correlationId;
 
-        VerifiedBy = verifiedBy;
+        //VerifiedBy = verifiedBy;
     }
 
     public void VerifyPayment(string verifiedBy, string confirmationNumber)

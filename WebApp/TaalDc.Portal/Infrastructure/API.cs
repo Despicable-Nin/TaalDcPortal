@@ -137,6 +137,11 @@ public static class API
             return $"{baseUrl}/api/v1/sales/{orderId}/payments";
         }
 
+        public static string UpdatePayment(string baseUrl, int orderId, int paymentId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/payments/{paymentId}";
+        }
+
 
         public static string GetUnitCountSummaryByStatus(string baseUri)
         {
@@ -269,6 +274,16 @@ public static class API
         public static string GetExpiredReservations(string baseUrl)
         {
             return $"{baseUrl}/api/v1/reports/reserved-without-downpayment";
+        }
+
+        public static string ExtendReservation(string baseUrl, int orderId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/reservation/extend";
+        }
+
+        public static string ForfeitReservation(string baseUrl, int orderId)
+        {
+            return $"{baseUrl}/api/v1/sales/{orderId}/reservation/forfeit";
         }
 
     }

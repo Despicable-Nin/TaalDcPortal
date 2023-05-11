@@ -15,7 +15,7 @@
 
 
 <div class="container-fluid">
-    @if (CurrentUser.IsAdmin())
+    @if (CurrentUser.IsAdmin() && expireReservationCount > 0)
     {
         <div class="alert alert-warning d-flex align-items-center" role="alert">
             <div>
@@ -342,7 +342,7 @@
                         var unit = {
                             unit: u.identifier,
                             id: u.unit_id,
-                            tower: u.tower_name,
+                            tower: u.tower_name + ' - ' + u.tower_no,
                             floor: u.floor_name,
                             view: u.scenic_view,
                             unitType: u.unit_type,
@@ -362,7 +362,7 @@
                                            ${u.floor_name}
                                         </td>
                                         <td>
-                                            ${u.tower_name}
+                                            ${u.tower_name} ${u.tower_no}
                                         </td>
                                         <td>${u.identifier}</td>
                                         <td>

@@ -546,6 +546,11 @@ tr.accepted td{
     font-family: 'Inter Extrabold', Arial, sans-serif;
 }
 
+.header.dropdown{
+    float: right;
+}
+
+
 @media (max-width: 1240px) {
     .hamburger-icon{
         left: 6%;
