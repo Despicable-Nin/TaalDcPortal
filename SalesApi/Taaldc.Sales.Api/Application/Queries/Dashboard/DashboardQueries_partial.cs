@@ -54,8 +54,8 @@ public partial class DashboardQueries
                           U.[UnitTypeId]
                         , U.[UnitType] 
                         , U.[UnitArea] + U.[BalconyArea] [FloorArea] 
-                        ,(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] 
-                        ,(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] 
+                        ,(SELECT TOP 1 SellingPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice ASC) [Min] 
+                        ,(SELECT TOP 1 SellingPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice DESC) [Max] 
                         ,(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId AND UnitStatusId = 1 GROUP BY UnitTypeId) [Available] 
                     FROM [taaldb_sales].[sales].[unitreplica] U 
                         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 
@@ -77,10 +77,10 @@ public partial class DashboardQueries
         var query = @"SELECT DISTINCT 
                         U.[UnitTypeId]
                         ,U.[UnitTypeShortCode]
-                        ,(SELECT TOP 1 UnitArea + BalconyArea FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [MinArea] 
-                        ,(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [MaxArea] 
-                        ,(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice ASC) [Min] 
-                        ,(SELECT TOP 1 OriginalPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY OriginalPrice DESC) [Max] 
+                        ,(SELECT TOP 1 UnitArea + BalconyArea FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice ASC) [MinArea] 
+                        ,(SELECT TOP 1 UnitArea + BalconyArea  FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice DESC) [MaxArea] 
+                        ,(SELECT TOP 1 SellingPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice ASC) [Min] 
+                        ,(SELECT TOP 1 SellingPrice FROM [taaldb_sales].sales.unitreplica WHERE UnitTypeId = U.UnitTypeId ORDER BY SellingPrice DESC) [Max] 
                         ,(SELECT COUNT(*) FROM [taaldb_sales].sales.unitreplica WHERE U.UnitTypeId = UnitTypeId AND UnitStatusId = 1 GROUP BY UnitTypeId) [Available] 
                     FROM [taaldb_sales].[sales].[unitreplica] U 
                         LEFT JOIN [taaldb_sales].[sales].[orderitem] OI ON OI.UnitId = U.UnitId 

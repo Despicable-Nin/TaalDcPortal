@@ -26,7 +26,7 @@ function processPaymentVerification(paymentVerificationType) {
 
     var confirmationNumber = document.getElementById('paymentConfirmationNumber').value;
 
-    var uri = portalSubURL + `/portal/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
+    var uri = portalSubURL + `/Sales/${endPointAction}?orderId=${orderId}&paymentId=${paymentId}`;
 
     if (paymentVerificationType === "accept") {
         uri = uri + `&paymentTypeId=${paymentTypeId}&confirmationNumber=${confirmationNumber}`;
@@ -68,9 +68,6 @@ function processPaymentVerification(paymentVerificationType) {
         }, error: function (data) {
             const response = data.responseJSON;
             
-            debugger;
-            console.log(response);
-
             Toastify({
                 text: response.isFormError ? "Please check your entry." : response.message,
                 duration: 3000,
