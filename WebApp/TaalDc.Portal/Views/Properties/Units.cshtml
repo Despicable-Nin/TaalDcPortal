@@ -13,9 +13,16 @@
     var sortBy = Context.Request.Query["sortBy"].FirstOrDefault();
     var sortOrder = Context.Request.Query["sortOrder "].FirstOrDefault();
     var unitTypeId = Context.Request.Query["unitTypeId"].FirstOrDefault();
+    var pageSize = Context.Request.Query["pageSize"].FirstOrDefault();
 
     var currentPageNo = Model.PageNumber;
-    var numberOfPagesToDisplay = 5;
+
+    int pageSizeValue = 0;
+    int numberOfPagesToDisplay = 10;
+
+    Int32.TryParse(pageSize, out pageSizeValue);
+
+    pageSizeValue = pageSizeValue > 0 ? pageSizeValue : 10;
 
     var totalPageGroups = Model.TotalPages / numberOfPagesToDisplay;
 
@@ -28,7 +35,6 @@
 
     var nextPage = 0;
     var prevPage = 0;
-
 }
 
 <div class="container-fluid">
@@ -85,7 +91,7 @@
                     </div>
                 </form>
 
-                <a target="_blank" class="btn btn-primary" href="@Url.Action("UnitsReport","Properties")?statusId=1&filter=@filter&unitTypeId=@unitTypeId">
+                <a target="_blank" class="btn btn-primary" href="@Url.Action("UnitsReport","Properties")?filter=@filter&unitTypeId=@unitTypeId">
                     <i class="fa-sharp fa-solid fa-file-excel"></i> Export
                 </a>
             </div>
@@ -174,13 +180,13 @@
                     }
 
                     <li class="page-item @(prevPage == 0 ? "disabled" : "")">
-                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)&filter=@(filter)&unitTypeId=@(unitTypeId)">Prev</a>
+                        <a class="page-link alink noselect" href="?pageNumber=@(prevPage)&filter=@(filter)&unitTypeId=@(unitTypeId)&pageSize=@pageSizeValue">Prev</a>
                     </li>
 
                     @if (pageGroup == 0 || pageGroup == pageGroupMinPage)
                     {
                         <li class="page-item">
-                            <a href="?pageNumber=@(Model.PageNumber)&filter=@(filter)&unitTypeId=@(unitTypeId)" class="noselect page-link alink active">@Model.PageNumber</a>
+                            <a href="?pageNumber=@(Model.PageNumber)&filter=@(filter)&unitTypeId=@(unitTypeId)&pageSize=@pageSizeValue" class="noselect page-link alink active">@Model.PageNumber</a>
                         </li>
                     }
 
@@ -189,15 +195,23 @@
                         var active = i + 1 == Model.PageNumber;
                         var pageNo = i + 1;
                         <li class="page-item">
-                            <a href="?pageNumber=@(pageNo)&filter=@(filter)&unitTypeId=@(unitTypeId)" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
+                            <a href="?pageNumber=@(pageNo)&filter=@(filter)&unitTypeId=@(unitTypeId)&pageSize=@pageSizeValue" class="noselect page-link alink @(active ? "active" : "")">@(pageNo)</a>
                         </li>
                     }
 
                     <li class="page-item @(nextPage == 0 ? "disabled" : "")">
-                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)&filter=@(filter)&unitTypeId=@(unitTypeId)">Next</a>
+                        <a class="page-link alink noselect" href="?pageNumber=@(nextPage)&filter=@(filter)&unitTypeId=@(unitTypeId)&pageSize=@pageSizeValue">Next</a>
                     </li>
 
                 </ul>
+
+                <label>Show</label>
+                <select id="pageSizeValue" onChange="onPageLimitChange()">
+                    <option value="10" selected="@(pageSizeValue == 10)">10</option>
+                    <option value="15" selected="@(pageSizeValue == 15)">15</option>
+                    <option value="20" selected="@(pageSizeValue == 20)">20</option>
+                    <option value="50" selected="@(pageSizeValue == 50)">50</option>
+                </select>
             </div>
 
         </div>
@@ -210,6 +224,41 @@
             var form = document.getElementById("unitSearchForm");
 
             form.submit();
+        }
+
+        function onPageLimitChange(){
+            var pageLimitValue = document.getElementById("pageSizeValue");
+            
+            insertParam("pageSize", pageLimitValue.options[pageLimitValue.selectedIndex].value);
+
+        }
+
+        function insertParam(key, value) {
+            key = encodeURIComponent(key);
+            value = encodeURIComponent(value);
+
+            // kvp looks like ['key1=value1', 'key2=value2', ...]
+            var kvp = document.location.search.substr(1).split('&');
+            let i=0;
+
+            for(; i<kvp.length; i++){
+                if (kvp[i].startsWith(key + '=')) {
+                    let pair = kvp[i].split('=');
+                    pair[1] = value;
+                    kvp[i] = pair.join('=');
+                    break;
+                }
+            }
+
+            if(i >= kvp.length){
+                kvp[kvp.length] = [key,value].join('=');
+            }
+
+            // can return this or...
+            let params = kvp.join('&');
+
+            // reload page with new params
+            document.location.search = params;
         }
     </script>
 }
