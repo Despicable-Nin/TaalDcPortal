@@ -60,7 +60,7 @@
             </div>
 
             <div class="action-search">
-                <form id="unitSearchForm">
+                <form id="unitSearchForm" class="mb-3">
                     <div class="me-3">
                         <label for="filter" class="form-label">
                             Unit No.
@@ -84,6 +84,10 @@
                         </select>
                     </div>
                 </form>
+
+                <a target="_blank" class="btn btn-primary" href="@Url.Action("UnitsReport","Properties")?statusId=1&filter=@filter&unitTypeId=@unitTypeId">
+                    <i class="fa-sharp fa-solid fa-file-excel"></i> Export
+                </a>
             </div>
         </div>
 
